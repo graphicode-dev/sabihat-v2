@@ -1,0 +1,122 @@
+@import "tailwindcss";
+@import url("./assets/fonts/Sk-Modernist-Regular.otf");
+@import url("./assets/fonts/Sk-Modernist-Bold.otf");
+@import url("./assets/fonts/Sk-Modernist-Mono.otf");
+
+@font-face {
+  font-family: "Sk-Modernist";
+  src: url("./assets/fonts/Sk-Modernist-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Sk-Modernist";
+  src: url("./assets/fonts/Sk-Modernist-Bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Sk-Modernist";
+  src: url("./assets/fonts/Sk-Modernist-Mono.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@theme {
+  --color-green-50: #e6f6f2;
+  --color-green-100: #b0e4d5;
+  --color-green-200: #8ad7c1;
+  --color-green-300: #54c5a5;
+  --color-green-400: #33b993;
+  --color-green-500: #00a878;
+  --color-green-600: #00996d;
+  --color-green-700: #007755;
+  --color-green-800: #005c42;
+  --color-green-900: #004732;
+
+  --color-primary-50: #ffefec;
+  --color-primary-100: #ffcdc4;
+  --color-primary-200: #ffb5a8;
+  --color-primary-300: #fe9380;
+  --color-primary-400: #fe7e67;
+  --color-primary-500: #fe5e41;
+  --color-primary-600: #e7563b;
+  --color-primary-700: #b4432e;
+  --color-primary-800: #8c3424;
+  --color-primary-900: #6b271b;
+
+  --color-yellow-50: #fdfbf7;
+  --color-yellow-100: #f8f1e6;
+  --color-yellow-200: #f4eada;
+  --color-yellow-300: #f0e1c9;
+  --color-yellow-400: #eddbbe;
+  --color-yellow-500: #e8d2ae;
+  --color-yellow-600: #d3bf9e;
+  --color-yellow-700: #a5957c;
+  --color-yellow-800: #807460;
+  --color-yellow-900: #615849;
+
+  --color-blue-50: #e8ebec;
+  --color-blue-100: #b6c1c4;
+  --color-blue-200: #93a3a8;
+  --color-blue-300: #627880;
+  --color-blue-400: #435e68;
+  --color-blue-500: #143642;
+  --color-blue-600: #12313c;
+  --color-blue-700: #0e262f;
+  --color-blue-800: #0b1e24;
+  --color-blue-900: #08171c;
+
+  --color-dark-50: #e7e8e9;
+  --color-dark-100: #b4b7ba;
+  --color-dark-200: #909599;
+  --color-dark-300: #5d646a;
+  --color-dark-400: #3d464d;
+  --color-dark-500: #0d1821;
+  --color-dark-600: #0c161e;
+  --color-dark-700: #091117;
+  --color-dark-800: #070d12;
+  --color-dark-900: #050a0e;
+}
+
+/* Original styles */
+:root {
+  line-height: 1.5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: "Sk-Modernist", sans-serif;
+}
+
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
