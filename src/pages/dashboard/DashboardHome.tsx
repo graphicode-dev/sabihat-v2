@@ -1,10 +1,11 @@
+import PageLayout from '../../components/layout/PageLayout';
 import { useAuth } from '../../context/useAuth';
 
 export const DashboardHome = () => {
   const { user } = useAuth();
 
   return (
-    <div>
+    <PageLayout>
       <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
       
       <div className="bg-white rounded-lg shadow p-6">
@@ -30,6 +31,6 @@ export const DashboardHome = () => {
           </div>
         </div>
       </div>
-    </div>
+    </PageLayout>
   );
 };

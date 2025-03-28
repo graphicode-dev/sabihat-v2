@@ -2,6 +2,7 @@ import { useState, FormEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
 import axios from "axios";
+import Loading from "../../components/ui/Loading";
 
 export const Login = () => {
     const [phone, setPhone] = useState("");
@@ -49,11 +50,7 @@ export const Login = () => {
 
     // Show loading spinner while checking authentication
     if (authLoading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
-            </div>
-        );
+        return <Loading />;
     }
 
     // Don't render login form if already authenticated (will redirect via useEffect)

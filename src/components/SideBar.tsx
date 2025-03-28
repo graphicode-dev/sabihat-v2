@@ -1,6 +1,7 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import { useRef, useEffect } from "react";
+import { X } from "lucide-react";
 
 interface RouteItem {
     path: string;
@@ -9,7 +10,12 @@ interface RouteItem {
     isMain?: boolean;
 }
 
-const SideBar = () => {
+type Props = {
+    isSidebarOpen: boolean;
+    onToggleSidebar: () => void;
+};
+
+const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
     const { logout, refreshUserProfile } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
@@ -73,7 +79,21 @@ const SideBar = () => {
     ];
 
     return (
-        <div className="fixed inset-y-0 left-0 w-64 bg-white text-gray-700 shadow-md">
+        <div
+            className={`fixed top-0 ${
+                isSidebarOpen ? "left-[35%]" : "left-0"
+            } z-40 w-64 h-screen pt-14 transition-all duration-300 ease-in-out -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 `}
+        >
+            {/* Close Sidebar button */}
+            <button
+                type="button"
+                onClick={onToggleSidebar}
+                className="absolute top-0 right-0 p-2 text-gray-600 rounded-lg cursor-pointer md:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100"
+            >
+                <X className="w-6 h-6" />
+                <span className="sr-only">Toggle sidebar</span>
+            </button>
+
             {/* Logo Section */}
             <div className="p-6 flex justify-center">
                 <div className="bg-green-500 text-white font-bold py-2 px-4 rounded-md">
@@ -82,7 +102,7 @@ const SideBar = () => {
             </div>
 
             {/* System Management Section */}
-            <div className="px-6 py-4">
+            <div className="overflow-y-auto py-5 px-3 h-full bg-white ">
                 <div className="flex items-center text-green-500 font-medium mb-4">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -141,7 +161,7 @@ const SideBar = () => {
             </div>
 
             {/* Logout Button - Hidden at bottom if needed */}
-            <div className="absolute bottom-4 left-0 right-0 px-6 ">
+            <div className="absolute bottom-10 left-0 justify-center p-4 space-x-4 w-full flex bg-white z-20">
                 <button
                     onClick={handleLogout}
                     className="w-full text-left py-2 px-4 bg-red-100 hover:bg-red-200 rounded text-red-600"
