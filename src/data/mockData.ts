@@ -1,0 +1,90 @@
+import { TableColumn, TableData } from "../types/table";
+
+export const columns: TableColumn[] = [
+    { id: "col1", header: "Name", accessorKey: "name", sortable: true },
+    { id: "col2", header: "Status", accessorKey: "status", sortable: true },
+    { id: "col3", header: "Role", accessorKey: "role", sortable: true },
+    { id: "col4", header: "Team", accessorKey: "team", sortable: true },
+    { id: "col5", header: "Project", accessorKey: "project", sortable: true },
+    { id: "col6", header: "Email", accessorKey: "email", sortable: true },
+    { id: "col7", header: "Phone", accessorKey: "phone", sortable: true },
+    { id: "col8", header: "Location", accessorKey: "location", sortable: true },
+];
+
+export const mockData: TableData[] = [
+    {
+        id: "1",
+        avatar: "/images/default-user.png",
+        columns: {
+            name: "Alex Johnson",
+            status: "Active",
+            role: "Developer",
+            team: "Engineering",
+            project: "Dashboard UI",
+            email: "alex@example.com",
+            phone: "123-456-7890",
+            location: "New York",
+        },
+        group: "Design",
+    },
+    {
+        id: "2",
+        avatar: "/images/default-user.png",
+        columns: {
+            name: "Sarah Smith",
+            status: "Inactive",
+            role: "Designer",
+            team: "Design",
+            project: "Mobile App",
+            email: "sarah@example.com",
+            phone: "123-456-7891",
+            location: "San Francisco",
+        },
+        group: "Design",
+    },
+    {
+        id: "3",
+        avatar: "/images/default-user.png",
+        columns: {
+            name: "Michael Brown",
+            status: "Active",
+            role: "Manager",
+            team: "Product",
+            project: "API Integration",
+            email: "michael@example.com",
+            phone: "123-456-7892",
+            location: "Boston",
+        },
+        group: "Product",
+    },
+    {
+        id: "4",
+        avatar: "/images/default-user.png",
+        columns: {
+            name: "Emily Wilson",
+            status: "Active",
+            role: "Designer",
+            team: "Design",
+            project: "Landing Page",
+            email: "emily@example.com",
+            phone: "123-456-7893",
+            location: "Chicago",
+        },
+        group: "Design",
+    },
+    {
+        id: "5",
+        avatar: "/images/default-user.png",
+        columns: {
+            name: "David Lee",
+            status: "Inactive",
+            role: "Developer",
+            team: "Engineering",
+            project: "Authentication",
+            email: "david@example.com",
+            phone: "123-456-7894",
+            location: "Seattle",
+        },
+        group: "Product",
+    },
+];

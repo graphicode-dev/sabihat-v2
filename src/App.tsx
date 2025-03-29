@@ -8,9 +8,10 @@ import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Login } from "./pages/auth/Login";
 import { DashboardWrapper } from "./pages/dashboard/DashboardWrapper";
-import  DashboardHome  from "./pages/dashboard/DashboardHome";
+import DashboardHome from "./pages/dashboard/DashboardHome";
 import { useAuth } from "./context/useAuth";
 import Loading from "./components/ui/Loading";
+import NotFound from "./pages/NotFound";
 
 // Component to handle root path redirection
 const RootRedirect = () => {
@@ -43,8 +44,8 @@ function App() {
                     {/* Root path - redirect based on auth status */}
                     <Route path="/" element={<RootRedirect />} />
 
-                    {/* Catch all - redirect to root for proper handling */}
-                    <Route path="*" element={<Navigate to="/" replace />} />
+                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </Router>
         </AuthProvider>
