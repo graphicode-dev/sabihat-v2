@@ -8,7 +8,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Login } from "./pages/auth/Login";
 import { DashboardWrapper } from "./pages/dashboard/DashboardWrapper";
-import { DashboardHome } from "./pages/dashboard/DashboardHome";
+import  DashboardHome  from "./pages/dashboard/DashboardHome";
 import { useAuth } from "./context/useAuth";
 import Loading from "./components/ui/Loading";
 

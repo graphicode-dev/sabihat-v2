@@ -1,36 +1,69 @@
-import PageLayout from '../../components/layout/PageLayout';
-import { useAuth } from '../../context/useAuth';
+import PageLayout from "../../components/layout/PageLayout";
+import CompaniesTable from "../../components/tables/CompaniesTable";
+import { TableGroup } from "../../context/TableContext";
 
-export const DashboardHome = () => {
-  const { user } = useAuth();
+function DashboardHome() {
+    // Sample data for the table
+    const companiesData: TableGroup[] = [
+        {
+            id: "group1",
+            title: "Group1",
+            value: "********",
+            rows: [
+                {
+                    id: "1",
+                    name: "Company Name",
+                    email: "info@companyname.com",
+                    phone: "+1 234 567 890",
+                    address: "123 Street Name, City, Country",
+                },
+                {
+                    id: "2",
+                    name: "Another Company",
+                    email: "contact@anothercompany.com",
+                    phone: "+1 987 654 321",
+                    address: "456 Avenue Name, City, Country",
+                },
+                {
+                    id: "3",
+                    name: "Third Company",
+                    email: "hello@thirdcompany.com",
+                    phone: "+1 555 123 456",
+                    address: "789 Boulevard, City, Country",
+                },
+            ],
+        },
+        {
+            id: "group2",
+            title: "Group2",
+            value: "********",
+            rows: [
+                {
+                    id: "4",
+                    name: "Fourth Company",
+                    email: "info@fourthcompany.com",
+                    phone: "+1 111 222 333",
+                    address: "101 Main Street, City, Country",
+                },
+                {
+                    id: "5",
+                    name: "Fifth Company",
+                    email: "contact@fifthcompany.com",
+                    phone: "+1 444 555 666",
+                    address: "202 Second Avenue, City, Country",
+                },
+            ],
+        },
+    ];
 
-  return (
-    <PageLayout>
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-      
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-semibold mb-4">Welcome back, {user?.name}!</h2>
-        <p className="text-gray-600">
-          This is your dashboard home page. You can add widgets, statistics, and other important information here.
-        </p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-          <div className="bg-[var(--color-green-50)] p-6 rounded-lg shadow">
-            <h3 className="font-bold text-[var(--color-green-700)]">Analytics</h3>
-            <p className="mt-2 text-[var(--color-green-800)]">View your analytics and performance metrics</p>
-          </div>
-          
-          <div className="bg-[var(--color-primary-50)] p-6 rounded-lg shadow">
-            <h3 className="font-bold text-[var(--color-primary-700)]">Reports</h3>
-            <p className="mt-2 text-[var(--color-primary-800)]">Access your latest reports and data</p>
-          </div>
-          
-          <div className="bg-[var(--color-blue-50)] p-6 rounded-lg shadow">
-            <h3 className="font-bold text-[var(--color-blue-700)]">Settings</h3>
-            <p className="mt-2 text-[var(--color-blue-800)]">Configure your dashboard preferences</p>
-          </div>
-        </div>
-      </div>
-    </PageLayout>
-  );
-};
+    return (
+        <PageLayout>
+            <CompaniesTable 
+                initialGroups={companiesData} 
+                initialExpandedGroups={["group1"]} 
+            />
+        </PageLayout>
+    );
+}
+
+export default DashboardHome;
