@@ -1,3 +1,4 @@
+import { NotificationItem } from "../types";
 import { TableColumn, TableData } from "../types/table";
 import { faker } from "@faker-js/faker";
 
@@ -65,3 +66,12 @@ export const mockData: TableData[] = Array.from({ length: 100 }, (_, index) => {
         group,
     };
 });
+
+export const notificationsData: NotificationItem[] = Array.from(
+    { length: 10 },
+    () => ({
+        title: faker.lorem.sentence(),
+        message: faker.lorem.paragraph(),
+        time: `${faker.number.int({ min: 1, max: 60 })}m ago`,
+    })
+);

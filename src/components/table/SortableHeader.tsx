@@ -25,7 +25,7 @@ export const SortableHeader = ({
 
     return (
         <button
-            className="flex items-center gap-1 hover:text-emerald-600 focus:outline-none"
+            className="flex items-center gap-1 hover:text-green-600 focus:outline-none"
             onClick={() => onSort(column)}
             type="button"
         >
@@ -34,7 +34,7 @@ export const SortableHeader = ({
                 {direction === "asc" ? (
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-emerald-500"
+                        className="h-4 w-4 text-green-500"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -49,7 +49,7 @@ export const SortableHeader = ({
                 ) : direction === "desc" ? (
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-emerald-500"
+                        className="h-4 w-4 text-green-500"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"

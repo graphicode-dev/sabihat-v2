@@ -78,7 +78,7 @@ export const TableFilter = ({
                 onClick={() => setIsOpen(!isOpen)}
                 className={`flex justify-center items-center gap-1 p-3 w-12 h-12 text-sm font-medium rounded-full ${
                     activeFilters.length > 0
-                        ? "bg-emerald-100 text-emerald-800"
+                        ? "bg-green-100 text-green-800"
                         : "bg-white border border-dark-50 text-dark-200 hover:bg-gray-50"
                 }`}
                 aria-expanded={isOpen}
@@ -177,7 +177,7 @@ export const TableFilter = ({
                                                     e.target.value
                                                 )
                                             }
-                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
                                         >
                                             {columns.map((column) => (
                                                 <option
@@ -200,7 +200,7 @@ export const TableFilter = ({
                                                         .value as FilterOperator
                                                 )
                                             }
-                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
                                         >
                                             {operators.map((op) => (
                                                 <option
@@ -223,7 +223,7 @@ export const TableFilter = ({
                                                 )
                                             }
                                             placeholder="Filter value"
-                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
                                         />
                                     </div>
                                 </div>
@@ -234,7 +234,7 @@ export const TableFilter = ({
                     <div className="mt-4 flex justify-between flex-wrap">
                         <button
                             onClick={addFilter}
-                            className="inline-flex items-center gap-1 rounded-md bg-white px-3 py-2 text-sm font-medium text-emerald-600 hover:bg-emerald-50 border border-emerald-200"
+                            className="inline-flex items-center gap-1 rounded-md bg-white px-3 py-2 text-sm font-medium text-green-600 hover:bg-green-50 border border-green-200"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -262,7 +262,7 @@ export const TableFilter = ({
                             </button>
                             <button
                                 onClick={handleApply}
-                                className="rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700"
+                                className="rounded-md bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-700"
                             >
                                 Apply filters
                             </button>

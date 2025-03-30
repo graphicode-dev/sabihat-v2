@@ -40,11 +40,12 @@ export const TableToolbar = ({
         onSearch(value);
     };
 
-    const { currentPage: paginationPage, goToNextPage, goToPreviousPage, setPage } = usePagination(
-        currentPage,
-        onPageChange,
-        totalPages
-    );
+    const {
+        currentPage: paginationPage,
+        goToNextPage,
+        goToPreviousPage,
+        setPage,
+    } = usePagination(currentPage, onPageChange, totalPages);
 
     return (
         <div className="flex flex-1 flex-row flex-wrap justify-between items-center gap-4 mt-4">
@@ -79,7 +80,7 @@ export const TableToolbar = ({
                             handleSearch(value);
                         }}
                         placeholder="Search..."
-                        className="py-3.5 px-10 rounded-[100px] border border-dark-50 placeholder:text-dark-200 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 w-64 md:w-full"
+                        className="py-3.5 px-10 rounded-[100px] border border-dark-50 placeholder:text-dark-200 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 w-64 md:w-full"
                     />
                 </div>
 
@@ -93,7 +94,7 @@ export const TableToolbar = ({
             {/* Pagination & Action Buttons */}
             <div className="flex items-center justify-center flex-wrap gap-5">
                 {/* Pagination */}
-                <Pagination 
+                <Pagination
                     currentPage={paginationPage}
                     totalPages={totalPages}
                     goToNextPage={goToNextPage}

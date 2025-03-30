@@ -1,7 +1,10 @@
 import { useAuth } from "../hooks/useAuth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bell, Menu } from "lucide-react";
 import DefaultUser from "../assets/images/default-user.png";
+import NotificationBox from "./NotificationBox";
+import { NotificationItem } from "../types/notifications.types";
+import { notificationsData } from "../data/mockData";
 
 type Props = {
     onToggleSidebar: () => void;
@@ -9,10 +12,19 @@ type Props = {
 
 const Navbar = ({ onToggleSidebar }: Props) => {
     const { user } = useAuth();
-    const [notificationsCount] = useState(1);
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+
+    const handleNotifications = () => {
+        setShowNotifications(!showNotifications);
+    };
+
+    useEffect(() => {
+        setNotifications(notificationsData);
+    }, []);
 
     return (
-        <nav className=" md:px-20 lg:px-10 py-2.5 fixed w-[85vw] lg:w-[80vw] top-0  flex justify-between">
+        <nav className=" md:px-20 lg:px-10 py-2.5 fixed w-[85vw] lg:w-[80vw] top-0  flex justify-between z-50">
             {/* Left side - Greeting */}
             <div className="flex justify-start items-center w-1/3">
                 {/* Sidebar toggle button */}
@@ -33,9 +45,13 @@ const Navbar = ({ onToggleSidebar }: Props) => {
             <div className="flex items-center space-x-4">
                 {/* Notifications */}
                 <div className="relative w-8 h-8 rounded-full bg-transparent border border-dark-50">
-                    <button className="p-1 relative">
+                    <button
+                        type="button"
+                        onClick={handleNotifications}
+                        className="p-1 relative"
+                    >
                         <Bell className="w-5 h-5 text-dark-200" />
-                        {notificationsCount > 0 && (
+                        {notifications.length > 0 && (
                             <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-2 w-2 flex items-center justify-center" />
                         )}
                     </button>
@@ -58,6 +74,13 @@ const Navbar = ({ onToggleSidebar }: Props) => {
                     )}
                 </div>
             </div>
+
+            {showNotifications && (
+                <NotificationBox
+                    onClose={handleNotifications}
+                    notifications={notifications}
+                />
+            )}
         </nav>
     );
 };

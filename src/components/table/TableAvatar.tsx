@@ -21,7 +21,7 @@ export const TableAvatar: FC<TableAvatarProps> = ({
 
     return (
         <div
-            className={`relative inline-flex ${sizeClass} items-center justify-center rounded-full bg-emerald-100 text-emerald-800 font-medium overflow-hidden`}
+            className={`relative inline-flex ${sizeClass} items-center justify-center rounded-full bg-green-100 text-green-800 font-medium overflow-hidden`}
         >
             {src ? (
                 <img

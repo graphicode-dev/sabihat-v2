@@ -165,7 +165,7 @@ export const DynamicTable = ({
                         {selectedCount > 0 && onBulkAction && (
                             <button
                                 onClick={handleBulkAction}
-                                className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-md"
+                                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md"
                             >
                                 {bulkActionLabel}
                             </button>
@@ -173,7 +173,7 @@ export const DynamicTable = ({
                         {onAddClick && (
                             <button
                                 onClick={onAddClick}
-                                className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-4 rounded-[100px] flex items-center"
+                                className="bg-green-500 hover:bg-green-600 text-white px-4 py-4 rounded-[100px] flex items-center"
                             >
                                 <div className="w-6 h-6 rounded-full flex justify-center items-center mr-2 border border-white text-white">
                                     <svg
