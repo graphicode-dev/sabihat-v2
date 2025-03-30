@@ -1,4 +1,5 @@
 import { TableColumn, TableData } from "../types/table";
+import { faker } from "@faker-js/faker";
 
 export const columns: TableColumn[] = [
     { id: "col1", header: "Name", accessorKey: "name", sortable: true },
@@ -11,80 +12,56 @@ export const columns: TableColumn[] = [
     { id: "col8", header: "Location", accessorKey: "location", sortable: true },
 ];
 
-export const mockData: TableData[] = [
-    {
-        id: "1",
-        avatar: "/images/default-user.png",
-        columns: {
-            name: "Alex Johnson",
-            status: "Active",
-            role: "Developer",
-            team: "Engineering",
-            project: "Dashboard UI",
-            email: "alex@example.com",
-            phone: "123-456-7890",
-            location: "New York",
-        },
-        group: "Design",
-    },
-    {
-        id: "2",
-        avatar: "/images/default-user.png",
-        columns: {
-            name: "Sarah Smith",
-            status: "Inactive",
-            role: "Designer",
-            team: "Design",
-            project: "Mobile App",
-            email: "sarah@example.com",
-            phone: "123-456-7891",
-            location: "San Francisco",
-        },
-        group: "Design",
-    },
-    {
-        id: "3",
-        avatar: "/images/default-user.png",
-        columns: {
-            name: "Michael Brown",
-            status: "Active",
-            role: "Manager",
-            team: "Product",
-            project: "API Integration",
-            email: "michael@example.com",
-            phone: "123-456-7892",
-            location: "Boston",
-        },
-        group: "Product",
-    },
-    {
-        id: "4",
-        avatar: "/images/default-user.png",
-        columns: {
-            name: "Emily Wilson",
-            status: "Active",
-            role: "Designer",
-            team: "Design",
-            project: "Landing Page",
-            email: "emily@example.com",
-            phone: "123-456-7893",
-            location: "Chicago",
-        },
-        group: "Design",
-    },
-    {
-        id: "5",
-        avatar: "/images/default-user.png",
-        columns: {
-            name: "David Lee",
-            status: "Inactive",
-            role: "Developer",
-            team: "Engineering",
-            project: "Authentication",
-            email: "david@example.com",
-            phone: "123-456-7894",
-            location: "Seattle",
-        },
-        group: "Product",
-    },
+// Define possible values for certain fields
+const roles = [
+    "Developer",
+    "Designer",
+    "Product Manager",
+    "QA Engineer",
+    "DevOps Engineer",
+    "Data Analyst",
 ];
+const teams = [
+    "Engineering",
+    "Design",
+    "Product",
+    "Marketing",
+    "Sales",
+    "Support",
+];
+const projects = [
+    "Dashboard UI",
+    "Mobile App",
+    "API Integration",
+    "Landing Page",
+    "Authentication",
+    "Analytics Platform",
+    "E-commerce Site",
+    "CRM System",
+];
+const statuses = ["Active", "Inactive", "On Leave", "Pending"];
+const groups = ["Design", "Product", "Engineering", "Marketing", "Sales"];
+
+// Generate mock data using Faker
+export const mockData: TableData[] = Array.from({ length: 100 }, (_, index) => {
+    const firstName = faker.person.firstName();
+    const lastName = faker.person.lastName();
+    const fullName = `${firstName} ${lastName}`;
+    const group = faker.helpers.arrayElement(groups);
+
+    return {
+        id: (index + 1).toString(),
+        avatar: faker.image.avatar(),
+        columns: {
+            name: fullName,
+            status: faker.helpers.arrayElement(statuses),
+            role: faker.helpers.arrayElement(roles),
+            team: faker.helpers.arrayElement(teams),
+            project: faker.helpers.arrayElement(projects),
+            email: faker.internet.email({ firstName, lastName }).toLowerCase(),
+            phone: faker.phone.number(),
+            location: faker.location.city(),
+        },
+        group,
+    };
+});

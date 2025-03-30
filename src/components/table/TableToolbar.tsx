@@ -2,6 +2,8 @@ import { useState } from "react";
 import { ViewMode, TableColumn, FilterConfig } from "../../types/table";
 import { TableFilter } from "./TableFilter";
 import { FileExportIcon, PDFIcon, VerticalFilter, XFile } from "../ui/icons";
+import Pagination from "../ui/Pagination";
+import { usePagination } from "../../hooks/usePagination";
 
 interface TableToolbarProps {
     totalItems: number;
@@ -34,23 +36,15 @@ export const TableToolbar = ({
 }: TableToolbarProps) => {
     const [searchValue, setSearchValue] = useState("");
 
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setSearchValue(value);
+    const handleSearch = (value: string) => {
         onSearch(value);
     };
 
-    const handlePrevPage = () => {
-        if (currentPage > 1) {
-            onPageChange(currentPage - 1);
-        }
-    };
-
-    const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            onPageChange(currentPage + 1);
-        }
-    };
+    const { currentPage: paginationPage, goToNextPage, goToPreviousPage, setPage } = usePagination(
+        currentPage,
+        onPageChange,
+        totalPages
+    );
 
     return (
         <div className="flex flex-1 flex-row flex-wrap justify-between items-center gap-4 mt-4">
@@ -79,7 +73,11 @@ export const TableToolbar = ({
                     <input
                         type="text"
                         value={searchValue}
-                        onChange={handleSearchChange}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            setSearchValue(value);
+                            handleSearch(value);
+                        }}
                         placeholder="Search..."
                         className="py-3.5 px-10 rounded-[100px] border border-dark-50 placeholder:text-dark-200 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 w-64 md:w-full"
                     />
@@ -95,159 +93,15 @@ export const TableToolbar = ({
             {/* Pagination & Action Buttons */}
             <div className="flex items-center justify-center flex-wrap gap-5">
                 {/* Pagination */}
-                <div className="flex flex-row justify-between items-center text-sm text-gray-500">
-                    <div className="flex items-center gap-4">
-                        {/* Page Navigation */}
-                        <div className="flex items-center">
-                            {/* Previous Button */}
-                            <div
-                                className={`w-10 h-10 rounded-full flex justify-center items-center border ${
-                                    currentPage === 1
-                                        ? "border-dark-50 text-dark-200 cursor-not-allowed"
-                                        : "border-dark-200 hover:bg-dark-50 text-dark-200"
-                                }`}
-                            >
-                                <button
-                                    type="button"
-                                    title="Previous page"
-                                    onClick={handlePrevPage}
-                                    disabled={currentPage === 1}
-                                    className={`flex items-center justify-center w-10 h-10 rounded-full ${
-                                        currentPage === 1
-                                            ? "text-gray-300 cursor-not-allowed"
-                                            : "hover:bg-dark-50 text-dark-200"
-                                    }`}
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="h-5 w-5"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M15 19l-7-7 7-7"
-                                        />
-                                    </svg>
-                                </button>
-                            </div>
-
-                            {/* Page Numbers */}
-                            <div className="flex items-center">
-                                {/* First Page */}
-                                <div
-                                    className={`w-10 h-10 rounded-full flex justify-center items-center mx-1 ${
-                                        currentPage === 1
-                                            ? "bg-emerald-500 text-white"
-                                            : "border border-dark-50 text-dark-200 hover:bg-dark-50"
-                                    }`}
-                                >
-                                    <button
-                                        type="button"
-                                        onClick={() => onPageChange(1)}
-                                        className={`flex items-center justify-center w-full h-full rounded-full font-bold`}
-                                    >
-                                        01
-                                    </button>
-                                </div>
-
-                                {/* Show second page or ellipsis */}
-                                {totalPages > 1 && (
-                                    <div
-                                        className={`w-10 h-10 rounded-full flex justify-center items-center mx-1 ${
-                                            currentPage === 2
-                                                ? "bg-emerald-500 text-white"
-                                                : "border border-dark-50 text-dark-200 hover:bg-dark-50"
-                                        }`}
-                                    >
-                                        <button
-                                            type="button"
-                                            onClick={() => onPageChange(2)}
-                                            className={`flex items-center justify-center w-full h-full rounded-full font-bold`}
-                                        >
-                                            02
-                                        </button>
-                                    </div>
-                                )}
-
-                                {/* Ellipsis if many pages */}
-                                {totalPages > 3 && (
-                                    <div className="w-10 h-10 rounded-full flex justify-center items-center mx-1 border border-dark-50 text-dark-200 hover:bg-dark-50">
-                                        <button
-                                            type="button"
-                                            className={`flex items-center justify-center w-full h-full rounded-full font-bold`}
-                                            disabled
-                                        >
-                                            ...
-                                        </button>
-                                    </div>
-                                )}
-
-                                {/* Last page if not already shown */}
-                                {totalPages > 2 && (
-                                    <div
-                                        className={`w-10 h-10 rounded-full flex justify-center items-center mx-1 ${
-                                            currentPage === totalPages
-                                                ? "bg-emerald-500 text-white"
-                                                : "border border-dark-50 text-dark-200 hover:bg-dark-50"
-                                        }`}
-                                    >
-                                        <button
-                                            type="button"
-                                            onClick={() =>
-                                                onPageChange(totalPages)
-                                            }
-                                            className={`flex items-center justify-center w-full h-full rounded-full font-bold`}
-                                        >
-                                            {totalPages < 10
-                                                ? `0${totalPages}`
-                                                : totalPages}
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Next Button */}
-                            <div
-                                className={`w-10 h-10 rounded-full flex justify-center items-center border ${
-                                    currentPage === totalPages
-                                        ? "border-dark-50 text-dark-200 cursor-not-allowed"
-                                        : "border-dark-200 hover:bg-dark-50 text-dark-200"
-                                }`}
-                            >
-                                <button
-                                    type="button"
-                                    title="Next page"
-                                    onClick={handleNextPage}
-                                    disabled={currentPage === totalPages}
-                                    className={`flex items-center justify-center w-10 h-10 rounded-full ${
-                                        currentPage === totalPages
-                                            ? "text-gray-300 cursor-not-allowed"
-                                            : "hover:bg-gray-100 text-gray-500"
-                                    }`}
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="h-5 w-5"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M9 5l7 7-7 7"
-                                        />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Pagination 
+                    currentPage={paginationPage}
+                    totalPages={totalPages}
+                    goToNextPage={goToNextPage}
+                    goToPreviousPage={goToPreviousPage}
+                    setPage={setPage}
+                    itemsPerPage={itemsPerPage}
+                    totalItems={totalItems}
+                />
 
                 <div className="flex items-center justify-center flex-wrap gap-2">
                     {/* View Mode */}
