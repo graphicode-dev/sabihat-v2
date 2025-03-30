@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import SideBar from "../SideBar";
 import Navbar from "../Navbar";
-import { useAuth } from "../../context/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 import Loading from "../ui/Loading";
 
 interface DashboardLayoutProps {

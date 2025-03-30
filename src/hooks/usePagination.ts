@@ -10,19 +10,16 @@ export const usePagination = (
     const [internalPage, setInternalPage] = useState(() => {
         // Initialize from URL or use initialPage
         const pageFromURL = Number(searchParams.get("page"));
-        return pageFromURL > 0 && pageFromURL <= totalPages ? pageFromURL : initialPage;
+        return pageFromURL > 0 && pageFromURL <= totalPages
+            ? pageFromURL
+            : initialPage;
     });
 
     // Update URL when page changes
     const updateURL = useCallback(
         (page: number) => {
             const newParams = new URLSearchParams(searchParams.toString());
-            if (page === 1) {
-                // Remove page parameter if it's page 1 (default)
-                newParams.delete("page");
-            } else {
-                newParams.set("page", page.toString());
-            }
+            newParams.set("page", page.toString());
             setSearchParams(newParams);
         },
         [searchParams, setSearchParams]
@@ -31,19 +28,19 @@ export const usePagination = (
     // Handle external URL changes
     useEffect(() => {
         const pageFromURL = Number(searchParams.get("page")) || 1;
-        if (pageFromURL !== internalPage && pageFromURL > 0 && pageFromURL <= totalPages) {
+        if (pageFromURL > 0 && pageFromURL <= totalPages) {
             setInternalPage(pageFromURL);
             onPageChange(pageFromURL);
         }
-    }, [searchParams, internalPage, totalPages, onPageChange]);
+    }, [searchParams, totalPages, onPageChange]);
 
     // Sync internal state with initialPage (from parent component)
     useEffect(() => {
-        if (initialPage !== internalPage && initialPage > 0 && initialPage <= totalPages) {
+        if (initialPage > 0 && initialPage <= totalPages) {
             setInternalPage(initialPage);
             updateURL(initialPage);
         }
-    }, [initialPage, internalPage, totalPages, updateURL]);
+    }, [initialPage, totalPages, updateURL]);
 
     const goToNextPage = () => {
         if (internalPage < totalPages) {

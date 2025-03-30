@@ -1,4 +1,4 @@
-import { useAuth } from "../context/useAuth";
+import { useAuth } from "../hooks/useAuth";
 import { useState } from "react";
 import { Bell, Menu } from "lucide-react";
 import DefaultUser from "../assets/images/default-user.png";
