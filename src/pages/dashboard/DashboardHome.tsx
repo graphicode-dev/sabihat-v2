@@ -9,7 +9,7 @@ function DashboardHome() {
                 title="All companies"
                 data={mockData}
                 columns={columns}
-                initialView="group"
+                initialView="grid"
                 itemsPerPage={10}
                 onAddClick={() => {
                     console.log("Add company clicked");

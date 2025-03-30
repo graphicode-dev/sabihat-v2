@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ViewMode, TableColumn, FilterConfig } from "../../types/table";
 import { TableFilter } from "./TableFilter";
+import { FileExportIcon, PDFIcon, VerticalFilter, XFile } from "../ui/icons";
 
 interface TableToolbarProps {
     totalItems: number;
@@ -315,10 +316,45 @@ export const TableToolbar = ({
                         )}
                     </button>
 
-                    <div className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"></div>
-                    <div className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"></div>
-                    <div className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"></div>
-                    <div className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"></div>
+                    {/* Export */}
+                    <button
+                        type="button"
+                        onClick={() => {}}
+                        className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"
+                    >
+                        <FileExportIcon width={20} height={20} />
+                        <span className="sr-only">Export</span>
+                    </button>
+
+                    {/* PDF */}
+                    <button
+                        type="button"
+                        onClick={() => {}}
+                        className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"
+                    >
+                        <PDFIcon width={22} height={22} />
+                        <span className="sr-only">PDF</span>
+                    </button>
+
+                    {/* X File */}
+                    <button
+                        type="button"
+                        onClick={() => {}}
+                        className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"
+                    >
+                        <XFile width={22} height={22} />
+                        <span className="sr-only">X File</span>
+                    </button>
+
+                    {/* Vertical Filter */}
+                    <button
+                        type="button"
+                        onClick={() => {}}
+                        className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"
+                    >
+                        <VerticalFilter width={22} height={22} />
+                        <span className="sr-only">Vertical Filter</span>
+                    </button>
                 </div>
             </div>
         </div>

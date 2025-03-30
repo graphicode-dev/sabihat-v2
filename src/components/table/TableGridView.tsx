@@ -26,7 +26,7 @@ export const TableGridView: FC<TableGridViewProps> = ({
     return (
         <div className="overflow-hidden">
             <div className="overflow-x-auto">
-                <table className="min-w-full">
+                <table className="min-w-full border-separate border-spacing-y-2">
                     <thead>
                         <tr>
                             <th
@@ -78,7 +78,7 @@ export const TableGridView: FC<TableGridViewProps> = ({
                                             : "hover:bg-green-50"
                                     }
                                 >
-                                    <td className="px-6 py-4 whitespace-nowrap">
+                                    <td className="px-6 py-4 whitespace-nowrap rounded-l-xl">
                                         <TableCheckbox
                                             checked={!!item.selected}
                                             onChange={() =>
@@ -90,7 +90,9 @@ export const TableGridView: FC<TableGridViewProps> = ({
                                     {columns.map((column, index) => (
                                         <td
                                             key={column.id}
-                                            className="px-6 py-4 whitespace-nowrap text-dark-200"
+                                            className={`px-6 py-4 whitespace-nowrap text-dark-200 ${
+                                                index === columns.length - 1 ? "rounded-r-xl" : ""
+                                            }`}
                                         >
                                             {index === 0 &&
                                             item.avatar ? (

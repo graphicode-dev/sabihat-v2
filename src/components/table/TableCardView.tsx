@@ -1,19 +1,13 @@
 import { TableData, TableColumn } from "../../types/table";
 import { TableAvatar } from "./TableAvatar";
 import { getInitials } from "../../lib/tableUtils";
-import { TableCheckbox } from "./TableCheckbox";
 
 interface TableCardViewProps {
     data: TableData[];
     columns: TableColumn[];
-    onRowSelection: (id: string) => void;
 }
 
-export const TableCardView = ({
-    data,
-    columns,
-    onRowSelection,
-}: TableCardViewProps) => {
+export const TableCardView = ({ data, columns }: TableCardViewProps) => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {data.length === 0 ? (
@@ -26,20 +20,14 @@ export const TableCardView = ({
                     return (
                         <div
                             key={row.id}
-                            className={`bg-white rounded-lg border p-4 relative group transition-all ${
+                            className={`bg-white rounded-3xl border p-4 relative group transition-all ${
                                 row.selected
-                                    ? "border-emerald-500 bg-emerald-50/30"
-                                    : "border-gray-200 hover:border-emerald-200"
+                                    ? "border-green-500 bg-green-50/30"
+                                    : "border-gray-200 hover:border-green-200"
                             }`}
                         >
-                            <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-emerald-500 rounded-tr-md" />
-                            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-emerald-500 rounded-br-md" />
-                            <div className="absolute top-2 left-2">
-                                <TableCheckbox
-                                    checked={!!row.selected}
-                                    onChange={() => onRowSelection(row.id)}
-                                />
-                            </div>
+                            <div className="absolute top-0 right-0 w-8 h-8 border-t-3 border-r-3 border-green-500 rounded-tr-3xl" />
+                            <div className="absolute bottom-0 left-0 w-8 h-8 border-b-3 border-l-3 border-green-500 rounded-bl-3xl" />
 
                             <div className="flex flex-col gap-3 pt-6">
                                 <div className="flex items-center gap-3">

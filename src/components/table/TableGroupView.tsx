@@ -107,7 +107,7 @@ export const TableGroupView = ({
                 </div>
             ) : (
                 <div className="overflow-x-auto">
-                    <table className="min-w-full">
+                    <table className="min-w-full border-separate border-spacing-y-2">
                         <thead>
                             <tr>
                                 <th
@@ -227,13 +227,13 @@ export const TableGroupView = ({
                                                 return (
                                                     <tr
                                                         key={row.id}
-                                                        className={
+                                                        className={`${
                                                             row.selected
                                                                 ? "bg-green-50"
                                                                 : "hover:bg-green-50"
-                                                        }
+                                                        }`}
                                                     >
-                                                        <td className="px-2 py-4 whitespace-nowrap">
+                                                        <td className="px-2 py-4 whitespace-nowrap rounded-l-xl">
                                                             <TableCheckbox
                                                                 checked={
                                                                     !!row.selected
@@ -250,7 +250,13 @@ export const TableGroupView = ({
                                                             (column, index) => (
                                                                 <td
                                                                     key={`${row.id}-${column.id}`}
-                                                                    className="py-4 whitespace-nowrap text-dark-200 text-left"
+                                                                    className={`py-4 whitespace-nowrap text-dark-200 text-left ${
+                                                                        index ===
+                                                                        columns.length -
+                                                                            1
+                                                                            ? "rounded-r-xl"
+                                                                            : ""
+                                                                    }`}
                                                                 >
                                                                     {index ===
                                                                         0 &&
