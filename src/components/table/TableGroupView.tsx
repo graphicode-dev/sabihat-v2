@@ -1,19 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
-import { TableData, TableColumn } from "../../types/table";
+import React, { useState, useEffect } from "react";
+import { TableHead } from "./TableHead";
+import { SortConfig, TableColumn, TableData } from "../../types/table";
+import { TableCheckbox } from "./TableCheckbox";
 import { TableAvatar } from "./TableAvatar";
 import { getInitials } from "../../lib/tableUtils";
-import { TableCheckbox } from "./TableCheckbox";
-import { SortableHeader } from "./SortableHeader";
-import { SortConfig } from "../../types/table";
 
 interface TableGroupViewProps {
     data: TableData[];
     columns: TableColumn[];
-    onRowSelection: (id: string) => void;
+    onRowSelection?: (rowId: string, selected: boolean) => void;
     onSelectAll: (selected: boolean) => void;
     sortConfig?: SortConfig | null;
     onSort?: (column: string) => void;
+    columnWidths: number[];
+    onColumnResize: (index: number, width: number) => void;
 }
 
 export const TableGroupView = ({
@@ -23,12 +24,11 @@ export const TableGroupView = ({
     onSelectAll,
     sortConfig,
     onSort,
+    columnWidths,
+    onColumnResize,
 }: TableGroupViewProps) => {
     // Group the data by group property
     const groupedData: Record<string, TableData[]> = {};
-    const [groupSelectState, setGroupSelectState] = useState<
-        Record<string, boolean>
-    >({});
     const [expandedGroups, setExpandedGroups] = useState<
         Record<string, boolean>
     >({});
@@ -67,31 +67,10 @@ export const TableGroupView = ({
                 );
             }
         });
-
-        setGroupSelectState(newGroupState);
     }, [data]);
 
-    // Handle selection of all rows in a group
-    const handleGroupSelect = (groupName: string) => {
-        const newState = !groupSelectState[groupName];
-        const groupRowIds = groupedData[groupName].map((row) => row.id);
-
-        // Update the group's checkbox state
-        setGroupSelectState({
-            ...groupSelectState,
-            [groupName]: newState,
-        });
-
-        // For each row in the group, call the onRowSelection if its state is different
-        groupRowIds.forEach((id) => {
-            const row = data.find((r) => r.id === id);
-            if (row && !!row.selected !== newState) {
-                onRowSelection(id);
-            }
-        });
-    };
-
     // Handle toggling group expansion
+
     const toggleGroupExpansion = (groupName: string) => {
         setExpandedGroups((prev) => ({
             ...prev,
@@ -108,38 +87,16 @@ export const TableGroupView = ({
             ) : (
                 <div className="overflow-x-auto">
                     <table className="min-w-full border-separate border-spacing-y-2">
-                        <thead>
-                            <tr>
-                                <th
-                                    scope="col"
-                                    className="w-12 px-2 py-3 text-left"
-                                >
-                                    <TableCheckbox
-                                        checked={allSelected}
-                                        onChange={() =>
-                                            onSelectAll(!allSelected)
-                                        }
-                                    />
-                                </th>
+                        <TableHead
+                            allSelected={allSelected}
+                            onSelectAll={onSelectAll}
+                            columns={columns}
+                            sortConfig={sortConfig}
+                            onSort={onSort}
+                            columnWidths={columnWidths}
+                            onColumnResize={onColumnResize}
+                        />
 
-                                {columns.map((column) => (
-                                    <th
-                                        key={column.id}
-                                        scope="col"
-                                        className="px-6 py-3 text-left text-xs font-medium text-dark-200 uppercase tracking-wider"
-                                    >
-                                        <SortableHeader
-                                            column={column.accessorKey}
-                                            sortable={column.sortable !== false}
-                                            sortConfig={sortConfig || null}
-                                            onSort={onSort || (() => {})}
-                                        >
-                                            {column.header}
-                                        </SortableHeader>
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
                         <tbody>
                             {Object.entries(groupedData).map(
                                 ([groupName, groupRows]) => (
@@ -239,8 +196,10 @@ export const TableGroupView = ({
                                                                     !!row.selected
                                                                 }
                                                                 onChange={() =>
+                                                                    onRowSelection &&
                                                                     onRowSelection(
-                                                                        row.id
+                                                                        row.id,
+                                                                        !!row.selected
                                                                     )
                                                                 }
                                                             />
@@ -250,50 +209,42 @@ export const TableGroupView = ({
                                                             (column, index) => (
                                                                 <td
                                                                     key={`${row.id}-${column.id}`}
-                                                                    className={`py-4 whitespace-nowrap text-dark-200 text-left ${
+                                                                    className={`py-4 text-dark-200 text-left ${
                                                                         index ===
                                                                         columns.length -
                                                                             1
                                                                             ? "rounded-r-xl"
                                                                             : ""
                                                                     }`}
+                                                                    style={{
+                                                                        width: columnWidths[index] ? `${columnWidths[index]}px` : '200px',
+                                                                        minWidth: '50px',
+                                                                        maxWidth: columnWidths[index] ? `${columnWidths[index]}px` : '200px',
+                                                                        overflow: 'hidden',
+                                                                        whiteSpace: 'nowrap',
+                                                                        textOverflow: 'ellipsis',
+                                                                        padding: '0 16px'
+                                                                    }}
                                                                 >
-                                                                    {index ===
-                                                                        0 &&
-                                                                    row.avatar ? (
-                                                                        <div className="flex items-center gap-2">
-                                                                            <TableAvatar
-                                                                                src={
-                                                                                    row.avatar
-                                                                                }
-                                                                                initials={getInitials(
-                                                                                    name
+                                                                    <div className="truncate">
+                                                                        {index === 0 ? (
+                                                                            <div className="flex items-center gap-2">
+                                                                                {row.avatar && (
+                                                                                    <TableAvatar
+                                                                                        src={row.avatar}
+                                                                                        initials={getInitials(name)}
+                                                                                    />
                                                                                 )}
-                                                                                size="sm"
-                                                                            />
+                                                                                <span className="text-sm font-medium text-gray-900">
+                                                                                    {row.columns[column.accessorKey]}
+                                                                                </span>
+                                                                            </div>
+                                                                        ) : (
                                                                             <span className="text-sm text-dark-500">
-                                                                                {String(
-                                                                                    row
-                                                                                        .columns[
-                                                                                        column
-                                                                                            .accessorKey
-                                                                                    ] ||
-                                                                                        ""
-                                                                                )}
+                                                                                {row.columns[column.accessorKey]}
                                                                             </span>
-                                                                        </div>
-                                                                    ) : (
-                                                                        <span className="text-sm text-dark-500">
-                                                                            {String(
-                                                                                row
-                                                                                    .columns[
-                                                                                    column
-                                                                                        .accessorKey
-                                                                                ] ||
-                                                                                    ""
-                                                                            )}
-                                                                        </span>
-                                                                    )}
+                                                                        )}
+                                                                    </div>
                                                                 </td>
                                                             )
                                                         )}

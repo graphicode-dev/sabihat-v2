@@ -8,3 +8,4 @@ export { TableFilter } from "./TableFilter";
 export { TableCheckbox } from "./TableCheckbox";
 export { TableAvatar } from "./TableAvatar";
 export { SortableHeader } from "./SortableHeader";
+export { TableHead } from "./TableHead";

@@ -53,6 +53,9 @@ export const DynamicTable = ({
         data.map((item) => ({ ...item, selected: false }))
     );
     const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
+    const [columnWidths, setColumnWidths] = useState<number[]>(
+        columns.map(() => 200) // Default width of 200px
+    );
 
     // Update tableData when data prop changes
     useMemo(() => {
@@ -104,11 +107,15 @@ export const DynamicTable = ({
         );
     }, []);
 
-    const handleSelectAll = useCallback((selected: boolean) => {
-        setTableData((currentTableData) =>
-            toggleSelectAll(currentTableData, selected)
-        );
-    }, []);
+    const handleSelectAll = useCallback(
+        (selected: boolean) => {
+            const currentPageIds = currentData.map((item) => item.id);
+            setTableData((currentTableData) =>
+                toggleSelectAll(currentTableData, selected, currentPageIds)
+            );
+        },
+        [currentData]
+    );
 
     const selectedCount = useMemo(() => {
         return getSelectedCount(tableData);
@@ -124,6 +131,37 @@ export const DynamicTable = ({
         }
     };
 
+    // Handle column resize
+    const handleColumnResize = useCallback((index: number, width: number) => {
+        console.log('DynamicTable: Resizing column', index, 'to width', width);
+        
+        // Update the column widths state
+        setColumnWidths(prevWidths => {
+            const newWidths = [...prevWidths];
+            newWidths[index] = width;
+            return newWidths;
+        });
+        
+        // Try to update all cells in the column for immediate visual feedback
+        try {
+            const table = document.querySelector('table');
+            if (table) {
+                const rows = table.querySelectorAll('tbody tr');
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    // +1 because of the checkbox column
+                    if (cells.length > index + 1) {
+                        const cell = cells[index + 1] as HTMLTableCellElement;
+                        cell.style.width = `${width}px`;
+                        cell.style.minWidth = `${width}px`;
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error updating table cells:', error);
+        }
+    }, []);
+
     const renderTableView = () => {
         const viewProps = {
             data: currentData,
@@ -132,6 +170,8 @@ export const DynamicTable = ({
             onSelectAll: handleSelectAll,
             sortConfig,
             onSort: handleSort,
+            columnWidths,
+            onColumnResize: handleColumnResize,
         };
 
         switch (viewMode) {

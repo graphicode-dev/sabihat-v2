@@ -4,7 +4,6 @@ import {
     Route,
     Navigate,
 } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Login } from "./pages/auth/Login";
 import { DashboardWrapper } from "./pages/dashboard/DashboardWrapper";
@@ -12,6 +11,7 @@ import DashboardHome from "./pages/dashboard/DashboardHome";
 import { useAuth } from "./hooks/useAuth";
 import Loading from "./components/ui/Loading";
 import NotFound from "./pages/NotFound";
+import Providers from "./providers";
 
 // Component to handle root path redirection
 const RootRedirect = () => {
@@ -28,7 +28,7 @@ const RootRedirect = () => {
 
 function App() {
     return (
-        <AuthProvider>
+        <Providers>
             <Router>
                 <Routes>
                     {/* Public routes */}
@@ -48,7 +48,7 @@ function App() {
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </Router>
-        </AuthProvider>
+        </Providers>
     );
 }
 

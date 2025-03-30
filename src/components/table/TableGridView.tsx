@@ -1,106 +1,103 @@
-import { FC } from "react";
-import { TableData, TableColumn, SortConfig } from "../../types/table";
-import { TableCheckbox } from "./TableCheckbox";
+import { TableHead } from "./TableHead";
+import { SortConfig, TableColumn, TableData } from "../../types/table";
 import { TableAvatar } from "./TableAvatar";
-import { SortableHeader } from "./SortableHeader";
 
 interface TableGridViewProps {
     data: TableData[];
     columns: TableColumn[];
-    onRowSelection: (id: string) => void;
+    onRowSelection?: (rowId: string, selected: boolean) => void;
     onSelectAll: (selected: boolean) => void;
     sortConfig?: SortConfig | null;
     onSort?: (column: string) => void;
+    columnWidths: number[];
+    onColumnResize: (index: number, width: number) => void;
 }
 
-export const TableGridView: FC<TableGridViewProps> = ({
+export const TableGridView = ({
     data,
     columns,
     onRowSelection,
     onSelectAll,
     sortConfig,
     onSort,
-}) => {
-    const allSelected = data.length > 0 && data.every((item) => item.selected);
+    columnWidths,
+    onColumnResize,
+}: TableGridViewProps) => {
+    // Check if all rows are selected
+    const allSelected = data.length > 0 && data.every((row) => row.selected);
+
+    // Handle row selection
+    const handleRowSelection = (rowId: string, selected: boolean) => {
+        if (onRowSelection) {
+            onRowSelection(rowId, selected);
+        }
+    };
 
     return (
-        <div className="overflow-hidden">
-            <div className="overflow-x-auto">
-                <table className="min-w-full border-separate border-spacing-y-2">
-                    <thead>
+        <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+                <TableHead
+                    allSelected={allSelected}
+                    onSelectAll={onSelectAll}
+                    columns={columns}
+                    sortConfig={sortConfig}
+                    onSort={onSort}
+                    columnWidths={columnWidths}
+                    onColumnResize={onColumnResize}
+                />
+                <tbody className="bg-white divide-y divide-gray-200">
+                    {data.length === 0 ? (
                         <tr>
-                            <th
-                                scope="col"
-                                className="w-12 px-6 py-3 text-left"
+                            <td
+                                colSpan={columns.length + 1}
+                                className="px-6 py-4 whitespace-nowrap text-center text-gray-500"
                             >
-                                <TableCheckbox
-                                    checked={allSelected}
-                                    onChange={() => onSelectAll(!allSelected)}
-                                />
-                            </th>
-
-                            {columns.map((column) => (
-                                <th
-                                    key={column.id}
-                                    scope="col"
-                                    className="px-6 py-3 text-left text-xs font-medium text-dark-200 uppercase tracking-wider"
-                                >
-                                    <SortableHeader
-                                        column={column.accessorKey}
-                                        sortable={column.sortable !== false}
-                                        sortConfig={sortConfig || null}
-                                        onSort={onSort}
-                                    >
-                                        {column.header}
-                                    </SortableHeader>
-                                </th>
-                            ))}
+                                No results.
+                            </td>
                         </tr>
-                    </thead>
-
-                    <tbody>
-                        {data.length === 0 ? (
-                            <tr>
-                                <td
-                                    colSpan={columns.length + 1}
-                                    className="px-6 py-4 whitespace-nowrap text-center text-gray-500"
-                                >
-                                    No results.
+                    ) : (
+                        data.map((row) => (
+                            <tr
+                                key={row.id}
+                                className={`${
+                                    row.selected ? "bg-green-50" : ""
+                                } hover:bg-gray-50`}
+                            >
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <input
+                                        type="checkbox"
+                                        className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                                        checked={row.selected || false}
+                                        onChange={(e) =>
+                                            handleRowSelection(
+                                                row.id,
+                                                e.target.checked
+                                            )
+                                        }
+                                        aria-label={`Select row ${row.id}`}
+                                        title={`Select row ${row.id}`}
+                                    />
                                 </td>
-                            </tr>
-                        ) : (
-                            data.map((item) => (
-                                <tr
-                                    key={item.id}
-                                    className={
-                                        item.selected
-                                            ? "bg-green-50"
-                                            : "hover:bg-green-50"
-                                    }
-                                >
-                                    <td className="px-6 py-4 whitespace-nowrap rounded-l-xl">
-                                        <TableCheckbox
-                                            checked={!!item.selected}
-                                            onChange={() =>
-                                                onRowSelection(item.id)
-                                            }
-                                        />
-                                    </td>
-
-                                    {columns.map((column, index) => (
-                                        <td
-                                            key={column.id}
-                                            className={`px-6 py-4 whitespace-nowrap text-dark-200 ${
-                                                index === columns.length - 1 ? "rounded-r-xl" : ""
-                                            }`}
-                                        >
-                                            {index === 0 &&
-                                            item.avatar ? (
+                                {columns.map((column, index) => (
+                                    <td
+                                        key={`${row.id}-${column.id}`}
+                                        className="px-6 py-4 text-sm text-gray-500"
+                                        style={{ 
+                                            width: columnWidths[index] ? `${columnWidths[index]}px` : '200px',
+                                            minWidth: '50px',
+                                            maxWidth: columnWidths[index] ? `${columnWidths[index]}px` : '200px',
+                                            overflow: 'hidden',
+                                            whiteSpace: 'nowrap',
+                                            textOverflow: 'ellipsis'
+                                        }}
+                                    >
+                                        <div className="truncate">
+                                            {index === 0 && row.avatar ? (
                                                 <div className="flex items-center gap-2">
                                                     <TableAvatar
-                                                        src={item.avatar}
+                                                        src={row.avatar}
                                                         initials={String(
-                                                            item.columns[
+                                                            row.columns[
                                                                 column
                                                                     .accessorKey
                                                             ] || ""
@@ -108,7 +105,7 @@ export const TableGridView: FC<TableGridViewProps> = ({
                                                     />
                                                     <span className="text-sm font-medium text-gray-900">
                                                         {
-                                                            item.columns[
+                                                            row.columns[
                                                                 column
                                                                     .accessorKey
                                                             ]
@@ -117,21 +114,17 @@ export const TableGridView: FC<TableGridViewProps> = ({
                                                 </div>
                                             ) : (
                                                 <span className="text-sm text-dark-500">
-                                                    {
-                                                        item.columns[
-                                                            column.accessorKey
-                                                        ]
-                                                    }
+                                                    {row.columns[column.accessorKey]}
                                                 </span>
                                             )}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-            </div>
+                                        </div>
+                                    </td>
+                                ))}
+                            </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
         </div>
     );
 };
