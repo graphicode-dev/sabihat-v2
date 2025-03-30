@@ -101,7 +101,7 @@ export const TableFilter = ({
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 z-10 mt-2 w-96 rounded-md bg-white p-4 shadow-lg ring-1 ring-black ring-opacity-5">
+                <div className="absolute right-0 z-10 mt-2 w-32 md:w-80 rounded-md bg-white p-4 shadow-lg ring-1 ring-black ring-opacity-5">
                     <div className="flex justify-between items-center mb-4">
                         <h3 className="text-sm font-medium">Filter data</h3>
                         <button
@@ -231,7 +231,7 @@ export const TableFilter = ({
                         )}
                     </div>
 
-                    <div className="mt-4 flex justify-between">
+                    <div className="mt-4 flex justify-between flex-wrap">
                         <button
                             onClick={addFilter}
                             className="inline-flex items-center gap-1 rounded-md bg-white px-3 py-2 text-sm font-medium text-emerald-600 hover:bg-emerald-50 border border-emerald-200"
@@ -253,7 +253,7 @@ export const TableFilter = ({
                             Add filter
                         </button>
 
-                        <div className="flex gap-2">
+                        <div className="flex  flex-wrap gap-2">
                             <button
                                 onClick={handleClear}
                                 className="rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300"

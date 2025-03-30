@@ -112,11 +112,13 @@ export const TableGroupView = ({
                             <tr>
                                 <th
                                     scope="col"
-                                    className="w-12 px-6 py-3 text-left"
+                                    className="w-12 px-2 py-3 text-left"
                                 >
                                     <TableCheckbox
                                         checked={allSelected}
-                                        onChange={() => onSelectAll(!allSelected)}
+                                        onChange={() =>
+                                            onSelectAll(!allSelected)
+                                        }
                                     />
                                 </th>
 
@@ -139,115 +141,162 @@ export const TableGroupView = ({
                             </tr>
                         </thead>
                         <tbody>
-                            {Object.entries(groupedData).map(([groupName, groupRows]) => (
-                                <React.Fragment key={groupName}>
-                                    {/* Group Header Row */}
-                                    <tr className="hover:bg-green-50 cursor-pointer">
-                                        <td colSpan={columns.length + 1} className="px-6 py-3">
-                                            <div className="flex items-center gap-3">
-                                                <TableCheckbox
-                                                    checked={groupSelectState[groupName] || false}
-                                                    onChange={() => handleGroupSelect(groupName)}
-                                                />
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-1 h-4 bg-emerald-500 rounded" />
-                                                    <div
-                                                        className="flex items-center gap-1"
-                                                        onClick={() => toggleGroupExpansion(groupName)}
-                                                    >
-                                                        {expandedGroups[groupName] ? (
-                                                            <svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                className="h-4 w-4"
-                                                                fill="none"
-                                                                viewBox="0 0 24 24"
-                                                                stroke="currentColor"
-                                                            >
-                                                                <path
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                    strokeWidth={2}
-                                                                    d="M19 9l-7 7-7-7"
-                                                                />
-                                                            </svg>
-                                                        ) : (
-                                                            <svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                className="h-4 w-4"
-                                                                fill="none"
-                                                                viewBox="0 0 24 24"
-                                                                stroke="currentColor"
-                                                            >
-                                                                <path
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                    strokeWidth={2}
-                                                                    d="M9 5l7 7-7 7"
-                                                                />
-                                                            </svg>
-                                                        )}
-                                                        <h3 className="font-medium">
-                                                            {groupName}
-                                                        </h3>
-                                                    </div>
-                                                    <span className="text-xs text-dark-200">
-                                                        ({groupRows.length})
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    {/* Group Data Rows */}
-                                    {expandedGroups[groupName] && groupRows.map((row) => {
-                                        const name = String(row.columns.name || "");
-                                        return (
-                                            <tr
-                                                key={row.id}
-                                                className={
-                                                    row.selected
-                                                        ? "bg-green-50"
-                                                        : "hover:bg-green-50"
-                                                }
+                            {Object.entries(groupedData).map(
+                                ([groupName, groupRows]) => (
+                                    <React.Fragment key={groupName}>
+                                        {/* Group Header Row */}
+                                        <tr
+                                            className={`${
+                                                expandedGroups[groupName]
+                                                    ? "bg-green-50"
+                                                    : ""
+                                            } hover:bg-green-50 cursor-pointer`}
+                                        >
+                                            <td
+                                                colSpan={columns.length + 1}
+                                                className="py-3 px-2 rounded-xl"
                                             >
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <TableCheckbox
-                                                        checked={!!row.selected}
-                                                        onChange={() => onRowSelection(row.id)}
-                                                    />
-                                                </td>
-                                                {columns.map((column, index) => (
-                                                    <td
-                                                        key={`${row.id}-${column.id}`}
-                                                        className="px-6 py-4 whitespace-nowrap text-dark-200"
+                                                <div className="flex justify-between items-center gap-3">
+                                                    <div className="flex items-center gap-2">
+                                                        <div
+                                                            className="flex items-center gap-1"
+                                                            onClick={() =>
+                                                                toggleGroupExpansion(
+                                                                    groupName
+                                                                )
+                                                            }
+                                                        >
+                                                            {expandedGroups[
+                                                                groupName
+                                                            ] ? (
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    className="h-4 w-4"
+                                                                    fill="none"
+                                                                    viewBox="0 0 24 24"
+                                                                    stroke="currentColor"
+                                                                >
+                                                                    <path
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                        strokeWidth={
+                                                                            2
+                                                                        }
+                                                                        d="M19 9l-7 7-7-7"
+                                                                    />
+                                                                </svg>
+                                                            ) : (
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    className="h-4 w-4"
+                                                                    fill="none"
+                                                                    viewBox="0 0 24 24"
+                                                                    stroke="currentColor"
+                                                                >
+                                                                    <path
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                        strokeWidth={
+                                                                            2
+                                                                        }
+                                                                        d="M9 5l7 7-7 7"
+                                                                    />
+                                                                </svg>
+                                                            )}
+                                                            <h3 className="font-medium">
+                                                                {groupName}
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex items-center gap-2">
+                                                        <p>
+                                                            {groupRows.length}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        {/* Group Data Rows */}
+                                        {expandedGroups[groupName] &&
+                                            groupRows.map((row) => {
+                                                const name = String(
+                                                    row.columns.name || ""
+                                                );
+                                                return (
+                                                    <tr
+                                                        key={row.id}
+                                                        className={
+                                                            row.selected
+                                                                ? "bg-green-50"
+                                                                : "hover:bg-green-50"
+                                                        }
                                                     >
-                                                        {index === 0 && row.avatar ? (
-                                                            <div className="flex items-center gap-2">
-                                                                <TableAvatar
-                                                                    src={row.avatar}
-                                                                    initials={getInitials(name)}
-                                                                    size="sm"
-                                                                />
-                                                                <span className="text-sm text-dark-500">
-                                                                    {String(
-                                                                        row.columns[column.accessorKey] || ""
+                                                        <td className="px-2 py-4 whitespace-nowrap">
+                                                            <TableCheckbox
+                                                                checked={
+                                                                    !!row.selected
+                                                                }
+                                                                onChange={() =>
+                                                                    onRowSelection(
+                                                                        row.id
+                                                                    )
+                                                                }
+                                                            />
+                                                        </td>
+
+                                                        {columns.map(
+                                                            (column, index) => (
+                                                                <td
+                                                                    key={`${row.id}-${column.id}`}
+                                                                    className="py-4 whitespace-nowrap text-dark-200 text-left"
+                                                                >
+                                                                    {index ===
+                                                                        0 &&
+                                                                    row.avatar ? (
+                                                                        <div className="flex items-center gap-2">
+                                                                            <TableAvatar
+                                                                                src={
+                                                                                    row.avatar
+                                                                                }
+                                                                                initials={getInitials(
+                                                                                    name
+                                                                                )}
+                                                                                size="sm"
+                                                                            />
+                                                                            <span className="text-sm text-dark-500">
+                                                                                {String(
+                                                                                    row
+                                                                                        .columns[
+                                                                                        column
+                                                                                            .accessorKey
+                                                                                    ] ||
+                                                                                        ""
+                                                                                )}
+                                                                            </span>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <span className="text-sm text-dark-500">
+                                                                            {String(
+                                                                                row
+                                                                                    .columns[
+                                                                                    column
+                                                                                        .accessorKey
+                                                                                ] ||
+                                                                                    ""
+                                                                            )}
+                                                                        </span>
                                                                     )}
-                                                                </span>
-                                                            </div>
-                                                        ) : (
-                                                            <span className="text-sm text-dark-500">
-                                                                {String(
-                                                                    row.columns[column.accessorKey] || ""
-                                                                )}
-                                                            </span>
+                                                                </td>
+                                                            )
                                                         )}
-                                                    </td>
-                                                ))}
-                                            </tr>
-                                        );
-                                    })}
-                                </React.Fragment>
-                            ))}
+                                                    </tr>
+                                                );
+                                            })}
+                                    </React.Fragment>
+                                )
+                            )}
                         </tbody>
                     </table>
                 </div>

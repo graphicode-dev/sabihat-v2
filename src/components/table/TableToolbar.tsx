@@ -52,9 +52,9 @@ export const TableToolbar = ({
     };
 
     return (
-        <div className="flex flex-1 flex-row justify-between items-center gap-4 mt-4 space-y-4">
+        <div className="flex flex-1 flex-row flex-wrap justify-between items-center gap-4 mt-4">
             {/* Search & Filter */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center flex-wrap gap-2">
                 {/* Search */}
                 <div className="relative">
                     {/* Search Icon */}
@@ -80,7 +80,7 @@ export const TableToolbar = ({
                         value={searchValue}
                         onChange={handleSearchChange}
                         placeholder="Search..."
-                        className="py-3.5 px-10 rounded-[100px] border border-dark-50 placeholder:text-dark-200 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 w-full sm:w-64"
+                        className="py-3.5 px-10 rounded-[100px] border border-dark-50 placeholder:text-dark-200 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 w-64 md:w-full"
                     />
                 </div>
 
@@ -92,10 +92,10 @@ export const TableToolbar = ({
             </div>
 
             {/* Pagination & Action Buttons */}
-            <div className="flex items-center gap-5">
+            <div className="flex items-center justify-center flex-wrap gap-5">
                 {/* Pagination */}
-                <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-500">
-                    <div className="flex items-center gap-4 mt-4 sm:mt-0">
+                <div className="flex flex-row justify-between items-center text-sm text-gray-500">
+                    <div className="flex items-center gap-4">
                         {/* Page Navigation */}
                         <div className="flex items-center">
                             {/* Previous Button */}
@@ -248,76 +248,78 @@ export const TableToolbar = ({
                     </div>
                 </div>
 
-                {/* View Mode */}
-                <button
-                    type="button"
-                    onClick={() => {
-                        // Cycle through view modes: grid -> cards -> group -> grid
-                        const nextView =
-                            currentView === "grid"
-                                ? "cards"
-                                : currentView === "cards"
-                                ? "group"
-                                : "grid";
-                        onViewChange(nextView);
-                    }}
-                    className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"
-                    title={`Current: ${currentView} view (click to change)`}
-                >
-                    {currentView === "grid" && (
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M4 6h16M4 12h16M4 18h7"
-                            />
-                        </svg>
-                    )}
-                    {currentView === "cards" && (
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-                            />
-                        </svg>
-                    )}
-                    {currentView === "group" && (
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                            />
-                        </svg>
-                    )}
-                </button>
+                <div className="flex items-center justify-center flex-wrap gap-2">
+                    {/* View Mode */}
+                    <button
+                        type="button"
+                        onClick={() => {
+                            // Cycle through view modes: grid -> cards -> group -> grid
+                            const nextView =
+                                currentView === "grid"
+                                    ? "cards"
+                                    : currentView === "cards"
+                                    ? "group"
+                                    : "grid";
+                            onViewChange(nextView);
+                        }}
+                        className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"
+                        title={`Current: ${currentView} view (click to change)`}
+                    >
+                        {currentView === "grid" && (
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M4 6h16M4 12h16M4 18h7"
+                                />
+                            </svg>
+                        )}
+                        {currentView === "cards" && (
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                                />
+                            </svg>
+                        )}
+                        {currentView === "group" && (
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                                />
+                            </svg>
+                        )}
+                    </button>
 
-                <div className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"></div>
-                <div className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"></div>
-                <div className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"></div>
-                <div className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"></div>
+                    <div className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"></div>
+                    <div className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"></div>
+                    <div className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"></div>
+                    <div className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"></div>
+                </div>
             </div>
         </div>
     );
