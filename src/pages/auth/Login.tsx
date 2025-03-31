@@ -3,15 +3,22 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import axios from "axios";
 import Loading from "../../components/ui/Loading";
+import { useToast } from "../../hooks/useToast";
 
 export const Login = () => {
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const { addToast } = useToast();
 
     const navigate = useNavigate();
-    const { login, isAuthenticated, isLoading: authLoading } = useAuth();
+    const {
+        login,
+        isAuthenticated,
+        isLoading: authLoading,
+        error,
+        setError,
+    } = useAuth();
 
     // Redirect to dashboard if already authenticated
     useEffect(() => {
@@ -26,21 +33,22 @@ export const Login = () => {
         setIsLoading(true);
 
         try {
-            const success = await login(phone, password);
-            if (success) {
+            const formattedPhone = phone.startsWith("0")
+                ? phone.replace("0", "20")
+                : `20${phone}`;
+            const response = await login(formattedPhone, password);
+            if (response) {
+                addToast({
+                    title: "Login successful",
+                    message: "You have successfully logged in.",
+                    type: "success",
+                });
                 navigate("/dashboard");
-            } else {
-                setError("Invalid phone number or password");
             }
         } catch (err) {
             if (axios.isAxiosError(err) && err.response) {
-                // Handle specific API error messages
-                const errorMessage =
-                    err.response.data?.message ||
-                    "An error occurred during login";
+                const errorMessage = err.response.data?.message;
                 setError(errorMessage);
-            } else {
-                setError("An error occurred during login");
             }
             console.error(err);
         } finally {
@@ -66,7 +74,7 @@ export const Login = () => {
                 </h1>
 
                 {error && (
-                    <div className="mb-4 p-3 bg-primary-100 text-primary-700 rounded">
+                    <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
                         {error}
                     </div>
                 )}

@@ -1,14 +1,27 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useState, ReactNode, useEffect, useRef } from "react";
-import { authService } from "../services/auth";
-import { User } from "../types";
+import Cookies from "js-cookie";
+import axios from "axios";
+import api from "../services/api";
+import { User, LoginResponse, ProfileResponse } from "../types";
+
+const AUTH_COOKIE_NAME =
+    import.meta.env.VITE_AUTH_COOKIE_NAME || "sabihat_auth_token";
+const AUTH_COOKIE_EXPIRES_DAYS = parseInt(
+    import.meta.env.VITE_AUTH_COOKIE_EXPIRES_DAYS || "7",
+    10
+);
 
 interface AuthContextType {
     user: User | null;
     isAuthenticated: boolean;
     login: (phone: string, password: string) => Promise<boolean>;
-    logout: () => void;
+    logout: () => Promise<void>;
     refreshUserProfile: () => Promise<void>;
     isLoading: boolean;
+    getToken: () => string | undefined;
+    error: string | null;
+    setError: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,35 +34,40 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState<User | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
     const profileFetchedRef = useRef<boolean>(false);
 
-    // Initialize auth state and fetch profile if authenticated
+    const checkIsAuthenticated = (): boolean => {
+        return !!Cookies.get(AUTH_COOKIE_NAME);
+    };
+
+    const getToken = (): string | undefined => {
+        return Cookies.get(AUTH_COOKIE_NAME);
+    };
+
     useEffect(() => {
         const initAuth = async () => {
-            // Skip if we've already fetched the profile
             if (profileFetchedRef.current) return;
 
             setIsLoading(true);
             try {
-                const isAuth = authService.isAuthenticated();
+                const isAuth = checkIsAuthenticated();
                 setIsAuthenticated(isAuth);
 
                 if (isAuth) {
-                    // Get profile from API to ensure session is valid
-                    const profileData = await authService.getProfile();
+                    const profileData = await getProfile();
 
                     if (profileData) {
                         setUser(profileData);
-                        // Mark that we've fetched the profile
                         profileFetchedRef.current = true;
                     } else {
-                        // If profile fetch fails, user might be logged out on server
-                        authService.logout();
+                        await logout();
                         setIsAuthenticated(false);
                     }
                 }
             } catch (error) {
                 console.error("Auth initialization error:", error);
+                setError("Failed to initialize authentication");
             } finally {
                 setIsLoading(false);
             }
@@ -58,12 +76,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
         initAuth();
     }, []);
 
-    // Function to refresh user profile data
+    const getProfile = async (): Promise<User | null> => {
+        try {
+            const response = await api.get<ProfileResponse>("/auth/profile");
+
+            if (response.data.success) {
+                localStorage.setItem(
+                    "user",
+                    JSON.stringify(response.data.data)
+                );
+                return response.data.data;
+            }
+
+            return null;
+        } catch (error) {
+            console.error("Get profile error:", error);
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                await logout();
+            }
+            return null;
+        }
+    };
+
     const refreshUserProfile = async (): Promise<void> => {
         if (!isAuthenticated) return;
 
         try {
-            const profileData = await authService.getProfile();
+            const profileData = await getProfile();
             if (profileData) {
                 setUser(profileData);
             }
@@ -75,31 +114,61 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const login = async (phone: string, password: string): Promise<boolean> => {
         try {
             setIsLoading(true);
-            const userData = await authService.login(phone, password);
 
-            if (userData) {
-                setUser(userData);
+            const formattedPhone = phone.startsWith("20")
+                ? phone
+                : `20${phone}`;
+
+            const response = await api.post<LoginResponse>("/auth/login", {
+                phone: formattedPhone,
+                password,
+            });
+
+            if (response.data.success && response.data.data.token) {
+                Cookies.set(AUTH_COOKIE_NAME, response.data.data.token, {
+                    expires: AUTH_COOKIE_EXPIRES_DAYS,
+                    secure: import.meta.env.PROD,
+                    sameSite: "strict",
+                });
+
+                localStorage.setItem(
+                    "user",
+                    JSON.stringify(response.data.data.result)
+                );
+
+                setUser(response.data.data.result);
                 setIsAuthenticated(true);
-                // Mark that we've fetched the profile (via login)
                 profileFetchedRef.current = true;
                 return true;
             }
 
             return false;
-        } catch (error) {
-            console.error("Login error:", error);
+        } catch (error: any) {
+            setError(error.response?.data?.message);
             return false;
         } finally {
             setIsLoading(false);
         }
     };
 
-    const logout = async () => {
-        await authService.logout();
-        setUser(null);
-        setIsAuthenticated(false);
-        // Reset the profile fetched flag
-        profileFetchedRef.current = false;
+    const logout = async (): Promise<void> => {
+        try {
+            const response = await api.post("/auth/logout");
+            if (response.data.success) {
+                Cookies.remove(AUTH_COOKIE_NAME);
+                localStorage.removeItem("user");
+                setUser(null);
+                setIsAuthenticated(false);
+                profileFetchedRef.current = false;
+            }
+        } catch (error) {
+            console.error("Logout error:", error);
+            Cookies.remove(AUTH_COOKIE_NAME);
+            localStorage.removeItem("user");
+            setUser(null);
+            setIsAuthenticated(false);
+            profileFetchedRef.current = false;
+        }
     };
 
     const value = {
@@ -109,6 +178,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         logout,
         refreshUserProfile,
         isLoading,
+        getToken,
+        error,
+        setError,
     };
 
     return (
