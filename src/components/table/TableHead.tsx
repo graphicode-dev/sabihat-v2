@@ -191,7 +191,7 @@ export function TableHead({
                                     role="button"
                                     tabIndex={0}
                                 >
-                                    <div className="w-full h-4/5 bg-gray-300 group-hover:bg-green-500"></div>
+                                    <div className="w-full h-4/5 bg-gray-300 group-hover:bg-primary-500"></div>
                                 </div>
                             )}
                         </div>

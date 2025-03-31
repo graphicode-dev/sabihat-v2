@@ -35,13 +35,13 @@ function NotificationBox({ onClose, notifications }: NotificationBoxProps) {
                 <h2 className="text-lg text-dark-200 font-bold m-0">
                     Notifications
                 </h2>
-                <div className="bg-green-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] ml-2">
+                <div className="bg-primary-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] ml-2">
                     {notifications.length}
                 </div>
             </div>
 
-            <div className="absolute top-0 right-0 w-8 h-8 border-t-3 border-r-3 border-green-500 rounded-tr-3xl" />
-            <div className="absolute bottom-0 left-0 w-8 h-8 border-b-3 border-l-3 border-green-500 rounded-bl-3xl" />
+            <div className="absolute top-0 right-0 w-8 h-8 border-t-3 border-r-3 border-primary-500 rounded-tr-3xl" />
+            <div className="absolute bottom-0 left-0 w-8 h-8 border-b-3 border-l-3 border-primary-500 rounded-bl-3xl" />
 
             <div className="flex flex-col overflow-y-auto max-h-[400px] custom-scrollbar">
                 {notifications.length > 0 ? (

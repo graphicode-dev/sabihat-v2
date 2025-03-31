@@ -96,14 +96,14 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
 
             {/* Logo Section */}
             <div className="p-6 flex justify-center">
-                <div className="bg-green-500 text-white font-bold py-2 px-4 rounded-md">
+                <div className="bg-primary-500 text-white font-bold py-2 px-4 rounded-md">
                     Logo
                 </div>
             </div>
 
             {/* System Management Section */}
             <div className="overflow-y-auto py-5 px-3 h-full bg-white ">
-                <div className="flex items-center text-green-500 font-medium mb-4">
+                <div className="flex items-center text-primary-500 font-medium mb-4">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5 mr-2"
@@ -122,7 +122,7 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
                             <li key={route.path}>
                                 <Link
                                     to={route.path}
-                                    className={`flex items-center py-2 px-4 rounded-md hover:bg-green-50 ${
+                                    className={`flex items-center py-2 px-4 rounded-md hover:bg-primary-50 ${
                                         !route.isMain ? "pl-8" : ""
                                     } ${
                                         route.isMain
@@ -131,18 +131,18 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
                                                   !location.pathname.includes(
                                                       "/dashboard/"
                                                   )
-                                                      ? "bg-green-50 text-green-500"
+                                                      ? "bg-primary-50 text-primary-500"
                                                       : "hover:bg-gray-100"
                                               }`
                                             : isActive(route.path)
-                                            ? "text-green-500"
+                                            ? "text-primary-500"
                                             : "text-gray-500 hover:text-gray-700"
                                     }`}
                                 >
                                     <span
                                         className={`${
                                             route.isMain
-                                                ? "w-2 h-2 bg-green-500"
+                                                ? "w-2 h-2 bg-primary-500"
                                                 : "w-1 h-1 bg-gray-400"
                                         } rounded-full mr-2`}
                                     ></span>

@@ -80,7 +80,7 @@ export const TableToolbar = ({
                             handleSearch(value);
                         }}
                         placeholder="Search..."
-                        className="py-3.5 px-10 rounded-[100px] border border-dark-50 placeholder:text-dark-200 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 w-64 md:w-full"
+                        className="py-3.5 px-10 rounded-[100px] border border-dark-50 placeholder:text-dark-200 focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500 w-64 md:w-full"
                     />
                 </div>
 

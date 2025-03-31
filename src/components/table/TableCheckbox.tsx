@@ -15,7 +15,7 @@ export const TableCheckbox: FC<TableCheckboxProps> = ({
         <div
             className={`flex h-4 w-4 items-center justify-center rounded border cursor-pointer ${
                 checked
-                    ? "border-green-500 bg-green-500"
+                    ? "border-primary-500 bg-primary-500"
                     : "border-dark-200 bg-white"
             } ${className}`}
             onClick={onChange}

@@ -22,12 +22,12 @@ export const TableCardView = ({ data, columns }: TableCardViewProps) => {
                             key={row.id}
                             className={`bg-white rounded-3xl border p-4 relative group transition-all ${
                                 row.selected
-                                    ? "border-green-500 bg-green-50/30"
-                                    : "border-gray-200 hover:border-green-200"
+                                    ? "border-primary-500 bg-primary-50/30"
+                                    : "border-gray-200 hover:border-primary-200"
                             }`}
                         >
-                            <div className="absolute top-0 right-0 w-8 h-8 border-t-3 border-r-3 border-green-500 rounded-tr-3xl" />
-                            <div className="absolute bottom-0 left-0 w-8 h-8 border-b-3 border-l-3 border-green-500 rounded-bl-3xl" />
+                            <div className="absolute top-0 right-0 w-8 h-8 border-t-3 border-r-3 border-primary-500 rounded-tr-3xl" />
+                            <div className="absolute bottom-0 left-0 w-8 h-8 border-b-3 border-l-3 border-primary-500 rounded-bl-3xl" />
 
                             <div className="flex flex-col gap-3 pt-6">
                                 <div className="flex items-center gap-3">

@@ -105,9 +105,9 @@ export const TableGroupView = ({
                                         <tr
                                             className={`${
                                                 expandedGroups[groupName]
-                                                    ? "bg-green-50"
+                                                    ? "bg-primary-50"
                                                     : ""
-                                            } hover:bg-green-50 cursor-pointer`}
+                                            } hover:bg-primary-50 cursor-pointer`}
                                         >
                                             <td
                                                 colSpan={columns.length + 1}
@@ -186,8 +186,8 @@ export const TableGroupView = ({
                                                         key={row.id}
                                                         className={`${
                                                             row.selected
-                                                                ? "bg-green-50"
-                                                                : "hover:bg-green-50"
+                                                                ? "bg-primary-50"
+                                                                : "hover:bg-primary-50"
                                                         }`}
                                                     >
                                                         <td className="px-2 py-4 whitespace-nowrap rounded-l-xl">
@@ -217,31 +217,62 @@ export const TableGroupView = ({
                                                                             : ""
                                                                     }`}
                                                                     style={{
-                                                                        width: columnWidths[index] ? `${columnWidths[index]}px` : '200px',
-                                                                        minWidth: '50px',
-                                                                        maxWidth: columnWidths[index] ? `${columnWidths[index]}px` : '200px',
-                                                                        overflow: 'hidden',
-                                                                        whiteSpace: 'nowrap',
-                                                                        textOverflow: 'ellipsis',
-                                                                        padding: '0 16px'
+                                                                        width: columnWidths[
+                                                                            index
+                                                                        ]
+                                                                            ? `${columnWidths[index]}px`
+                                                                            : "200px",
+                                                                        minWidth:
+                                                                            "50px",
+                                                                        maxWidth:
+                                                                            columnWidths[
+                                                                                index
+                                                                            ]
+                                                                                ? `${columnWidths[index]}px`
+                                                                                : "200px",
+                                                                        overflow:
+                                                                            "hidden",
+                                                                        whiteSpace:
+                                                                            "nowrap",
+                                                                        textOverflow:
+                                                                            "ellipsis",
+                                                                        padding:
+                                                                            "0 16px",
                                                                     }}
                                                                 >
                                                                     <div className="truncate">
-                                                                        {index === 0 ? (
+                                                                        {index ===
+                                                                        0 ? (
                                                                             <div className="flex items-center gap-2">
                                                                                 {row.avatar && (
                                                                                     <TableAvatar
-                                                                                        src={row.avatar}
-                                                                                        initials={getInitials(name)}
+                                                                                        src={
+                                                                                            row.avatar
+                                                                                        }
+                                                                                        initials={getInitials(
+                                                                                            name
+                                                                                        )}
                                                                                     />
                                                                                 )}
                                                                                 <span className="text-sm font-medium text-gray-900">
-                                                                                    {row.columns[column.accessorKey]}
+                                                                                    {
+                                                                                        row
+                                                                                            .columns[
+                                                                                            column
+                                                                                                .accessorKey
+                                                                                        ]
+                                                                                    }
                                                                                 </span>
                                                                             </div>
                                                                         ) : (
                                                                             <span className="text-sm text-dark-500">
-                                                                                {row.columns[column.accessorKey]}
+                                                                                {
+                                                                                    row
+                                                                                        .columns[
+                                                                                        column
+                                                                                            .accessorKey
+                                                                                    ]
+                                                                                }
                                                                             </span>
                                                                         )}
                                                                     </div>

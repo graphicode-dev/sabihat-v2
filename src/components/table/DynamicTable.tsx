@@ -133,22 +133,22 @@ export const DynamicTable = ({
 
     // Handle column resize
     const handleColumnResize = useCallback((index: number, width: number) => {
-        console.log('DynamicTable: Resizing column', index, 'to width', width);
-        
+        console.log("DynamicTable: Resizing column", index, "to width", width);
+
         // Update the column widths state
-        setColumnWidths(prevWidths => {
+        setColumnWidths((prevWidths) => {
             const newWidths = [...prevWidths];
             newWidths[index] = width;
             return newWidths;
         });
-        
+
         // Try to update all cells in the column for immediate visual feedback
         try {
-            const table = document.querySelector('table');
+            const table = document.querySelector("table");
             if (table) {
-                const rows = table.querySelectorAll('tbody tr');
-                rows.forEach(row => {
-                    const cells = row.querySelectorAll('td');
+                const rows = table.querySelectorAll("tbody tr");
+                rows.forEach((row) => {
+                    const cells = row.querySelectorAll("td");
                     // +1 because of the checkbox column
                     if (cells.length > index + 1) {
                         const cell = cells[index + 1] as HTMLTableCellElement;
@@ -158,7 +158,7 @@ export const DynamicTable = ({
                 });
             }
         } catch (error) {
-            console.error('Error updating table cells:', error);
+            console.error("Error updating table cells:", error);
         }
     }, []);
 
@@ -205,7 +205,7 @@ export const DynamicTable = ({
                         {selectedCount > 0 && onBulkAction && (
                             <button
                                 onClick={handleBulkAction}
-                                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md"
+                                className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md"
                             >
                                 {bulkActionLabel}
                             </button>
@@ -213,7 +213,7 @@ export const DynamicTable = ({
                         {onAddClick && (
                             <button
                                 onClick={onAddClick}
-                                className="bg-green-500 hover:bg-green-600 text-white px-4 py-4 rounded-[100px] flex items-center"
+                                className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-4 rounded-[100px] flex items-center"
                             >
                                 <div className="w-6 h-6 rounded-full flex justify-center items-center mr-2 border border-white text-white">
                                     <svg

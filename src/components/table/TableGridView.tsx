@@ -60,7 +60,7 @@ export const TableGridView = ({
                             <tr
                                 key={row.id}
                                 className={`${
-                                    row.selected ? "bg-green-50" : ""
+                                    row.selected ? "bg-primary-50" : ""
                                 } hover:bg-gray-50`}
                             >
                                 <td className="px-6 py-4 whitespace-nowrap">
@@ -82,13 +82,17 @@ export const TableGridView = ({
                                     <td
                                         key={`${row.id}-${column.id}`}
                                         className="px-6 py-4 text-sm text-gray-500"
-                                        style={{ 
-                                            width: columnWidths[index] ? `${columnWidths[index]}px` : '200px',
-                                            minWidth: '50px',
-                                            maxWidth: columnWidths[index] ? `${columnWidths[index]}px` : '200px',
-                                            overflow: 'hidden',
-                                            whiteSpace: 'nowrap',
-                                            textOverflow: 'ellipsis'
+                                        style={{
+                                            width: columnWidths[index]
+                                                ? `${columnWidths[index]}px`
+                                                : "200px",
+                                            minWidth: "50px",
+                                            maxWidth: columnWidths[index]
+                                                ? `${columnWidths[index]}px`
+                                                : "200px",
+                                            overflow: "hidden",
+                                            whiteSpace: "nowrap",
+                                            textOverflow: "ellipsis",
                                         }}
                                     >
                                         <div className="truncate">
@@ -114,7 +118,11 @@ export const TableGridView = ({
                                                 </div>
                                             ) : (
                                                 <span className="text-sm text-dark-500">
-                                                    {row.columns[column.accessorKey]}
+                                                    {
+                                                        row.columns[
+                                                            column.accessorKey
+                                                        ]
+                                                    }
                                                 </span>
                                             )}
                                         </div>
