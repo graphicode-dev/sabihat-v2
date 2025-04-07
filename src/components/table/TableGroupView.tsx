@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { TableHead } from "./TableHead";
 import { SortConfig, TableColumn, TableData } from "../../types/table";
-import { TableCheckbox } from "./TableCheckbox";
+import { CheckBox } from "../ui/CheckBox";
 import { TableAvatar } from "./TableAvatar";
 import { getInitials } from "../../lib/tableUtils";
 
@@ -191,7 +191,7 @@ export const TableGroupView = ({
                                                         }`}
                                                     >
                                                         <td className="px-2 py-4 whitespace-nowrap rounded-l-xl">
-                                                            <TableCheckbox
+                                                            <CheckBox
                                                                 checked={
                                                                     !!row.selected
                                                                 }

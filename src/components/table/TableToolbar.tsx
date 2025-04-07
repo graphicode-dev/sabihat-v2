@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ViewMode, TableColumn, FilterConfig } from "../../types/table";
 import { TableFilter } from "./TableFilter";
 import { FileExportIcon, PDFIcon, VerticalFilter, XFile } from "../ui/icons";
 import Pagination from "../ui/Pagination";
 import { usePagination } from "../../hooks/usePagination";
+import { CheckBox } from ".";
 
 interface TableToolbarProps {
     totalItems: number;
@@ -18,6 +19,8 @@ interface TableToolbarProps {
     onPageChange: (page: number) => void;
     itemsPerPage: number;
     onItemsPerPageChange: (count: number) => void;
+    onColumnVisibilityChange?: (visibleColumns: string[]) => void;
+    visibleColumns?: string[];
 }
 
 export const TableToolbar = ({
@@ -32,12 +35,69 @@ export const TableToolbar = ({
     totalPages,
     onPageChange,
     itemsPerPage,
+    // @ts-expect-error - Prop is required by interface but not used in this component
     onItemsPerPageChange,
+    onColumnVisibilityChange,
+    visibleColumns = [],
 }: TableToolbarProps) => {
     const [searchValue, setSearchValue] = useState("");
+    const [showColumnMenu, setShowColumnMenu] = useState(false);
+    const [localVisibleColumns, setLocalVisibleColumns] = useState<string[]>(
+        visibleColumns.length > 0
+            ? visibleColumns
+            : columns.map((col) => col.id)
+    );
+    const columnMenuRef = useRef<HTMLDivElement>(null);
+
+    // Update local state when prop changes
+    useEffect(() => {
+        if (visibleColumns.length > 0) {
+            setLocalVisibleColumns(visibleColumns);
+        }
+    }, [visibleColumns]);
+
+    useEffect(() => {
+        // Close the menu when clicking outside
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                columnMenuRef.current &&
+                !columnMenuRef.current.contains(event.target as Node)
+            ) {
+                setShowColumnMenu(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const handleSearch = (value: string) => {
         onSearch(value);
+    };
+
+    const handleColumnToggle = (columnId: string) => {
+        let updatedVisibleColumns: string[];
+
+        if (localVisibleColumns.includes(columnId)) {
+            // Don't allow removing the last visible column
+            if (localVisibleColumns.length === 1) {
+                return;
+            }
+            updatedVisibleColumns = localVisibleColumns.filter(
+                (id) => id !== columnId
+            );
+        } else {
+            updatedVisibleColumns = [...localVisibleColumns, columnId];
+        }
+
+        setLocalVisibleColumns(updatedVisibleColumns);
+
+        // Notify parent component about column visibility changes
+        if (onColumnVisibilityChange) {
+            onColumnVisibilityChange(updatedVisibleColumns);
+        }
     };
 
     const {
@@ -202,14 +262,55 @@ export const TableToolbar = ({
                     </button>
 
                     {/* Vertical Filter */}
-                    <button
-                        type="button"
-                        onClick={() => {}}
-                        className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"
-                    >
-                        <VerticalFilter width={22} height={22} />
-                        <span className="sr-only">Vertical Filter</span>
-                    </button>
+                    <div className="relative">
+                        <button
+                            type="button"
+                            onClick={() => setShowColumnMenu(!showColumnMenu)}
+                            className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"
+                        >
+                            <VerticalFilter width={22} height={22} />
+                            <span className="sr-only">Column Visibility</span>
+                        </button>
+
+                        {/* Column Visibility Menu */}
+                        {showColumnMenu && (
+                            <div
+                                ref={columnMenuRef}
+                                className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-dark-50 z-10"
+                            >
+                                <div className="p-3 border-b border-dark-50">
+                                    <h3 className="text-sm font-medium text-dark-900">
+                                        Show/Hide Columns
+                                    </h3>
+                                </div>
+                                <div className="max-h-60 overflow-y-auto">
+                                    {columns.map((column) => (
+                                        <div
+                                            key={column.id}
+                                            className="flex items-center px-3 py-2 hover:bg-dark-50"
+                                        >
+                                            <CheckBox
+                                                checked={localVisibleColumns.includes(
+                                                    column.id
+                                                )}
+                                                onChange={() => {
+                                                    handleColumnToggle(
+                                                        column.id
+                                                    );
+                                                }}
+                                            />
+                                            <label
+                                                htmlFor={`column-${column.id}`}
+                                                className="ml-2 block text-sm text-dark-900"
+                                            >
+                                                {column.header}
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

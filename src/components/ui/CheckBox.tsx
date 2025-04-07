@@ -1,16 +1,16 @@
 import { FC } from "react";
 
-interface TableCheckboxProps {
+interface CheckBoxProps {
     checked: boolean;
     onChange: () => void;
     className?: string;
 }
 
-export const TableCheckbox: FC<TableCheckboxProps> = ({
+export const CheckBox: FC<CheckBoxProps> = ({
     checked,
     onChange,
     className = "",
-}: TableCheckboxProps) => {
+}: CheckBoxProps) => {
     return (
         <div
             className={`flex h-4 w-4 items-center justify-center rounded border cursor-pointer ${

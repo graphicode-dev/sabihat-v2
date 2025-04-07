@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useMemo, useCallback } from "react";
 import {
     TableData,
@@ -55,6 +54,9 @@ export const DynamicTable = ({
     const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
     const [columnWidths, setColumnWidths] = useState<number[]>(
         columns.map(() => 200) // Default width of 200px
+    );
+    const [visibleColumns, setVisibleColumns] = useState<string[]>(
+        columns.map((col) => col.id)
     );
 
     // Update tableData when data prop changes
@@ -131,6 +133,16 @@ export const DynamicTable = ({
         }
     };
 
+    // Handle column visibility change
+    const handleColumnVisibilityChange = useCallback((columnIds: string[]) => {
+        setVisibleColumns(columnIds);
+    }, []);
+
+    // Filter columns based on visibility
+    const visibleColumnsData = useMemo(() => {
+        return columns.filter((column) => visibleColumns.includes(column.id));
+    }, [columns, visibleColumns]);
+
     // Handle column resize
     const handleColumnResize = useCallback((index: number, width: number) => {
         console.log("DynamicTable: Resizing column", index, "to width", width);
@@ -165,7 +177,7 @@ export const DynamicTable = ({
     const renderTableView = () => {
         const viewProps = {
             data: currentData,
-            columns,
+            columns: visibleColumnsData,
             onRowSelection: handleRowSelection,
             onSelectAll: handleSelectAll,
             sortConfig,
@@ -250,6 +262,8 @@ export const DynamicTable = ({
                     onPageChange={setCurrentPage}
                     itemsPerPage={itemsPerPage}
                     onItemsPerPageChange={setItemsPerPage}
+                    onColumnVisibilityChange={handleColumnVisibilityChange}
+                    visibleColumns={visibleColumns}
                 />
 
                 <div className="mt-2">{renderTableView()}</div>

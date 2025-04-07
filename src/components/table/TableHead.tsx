@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { TableCheckbox } from "./TableCheckbox";
+import { CheckBox } from "../ui/CheckBox";
 import { SortConfig, TableColumn } from "../../types/table";
 import { SortableHeader } from "./SortableHeader";
 
@@ -144,7 +144,7 @@ export function TableHead({
         <thead>
             <tr>
                 <th scope="col" className="w-12 px-6 py-3 text-left">
-                    <TableCheckbox
+                    <CheckBox
                         checked={allSelected}
                         onChange={() => onSelectAll(!allSelected)}
                     />
