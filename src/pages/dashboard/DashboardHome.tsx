@@ -6,25 +6,25 @@ import { useToast } from "../../hooks/useToast";
 function DashboardHome() {
     const { addToast } = useToast();
 
-    const addErrorToast = () => {
-        addToast({
-            type: "error",
-            title: "Error message",
-            message: "This is an error message",
-            duration: 5000,
-            position: "top-right",
-        });
-    };
+    // const addErrorToast = () => {
+    //     addToast({
+    //         type: "error",
+    //         title: "Error message",
+    //         message: "This is an error message",
+    //         duration: 5000,
+    //         position: "top-right",
+    //     });
+    // };
 
-    const addWarningToast = () => {
-        addToast({
-            type: "warning",
-            title: "Warning message",
-            message: "This is a warning message",
-            duration: 5000,
-            position: "top-right",
-        });
-    };
+    // const addWarningToast = () => {
+    //     addToast({
+    //         type: "warning",
+    //         title: "Warning message",
+    //         message: "This is a warning message",
+    //         duration: 5000,
+    //         position: "top-right",
+    //     });
+    // };
 
     const addSuccessToast = () => {
         addToast({
@@ -58,7 +58,7 @@ function DashboardHome() {
                     addSuccessToast();
                 }}
                 addLabel="Add company"
-                onBulkAction={(ids) => {
+                onBulkAction={() => {
                     addInfoToast();
                 }}
                 bulkActionLabel="Process selected"

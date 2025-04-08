@@ -17,7 +17,14 @@ export const TableFilter = ({
     selectedGroups = [],
     onGroupSelect,
 }: TableFilterProps) => {
-    const [showFilterMenu, setShowFilterMenu] = useState(true);
+    const [showFilterMenu, setShowFilterMenu] = useState(false);
+    
+    // Group columns by their category for better organization
+    const groupableColumns = columns.filter(col => 
+        // You can customize this logic based on which columns should be groupable
+        col.id !== 'actions' && col.id !== 'avatar'
+    );
+    
     return (
         <div className="relative">
             <button
@@ -44,6 +51,11 @@ export const TableFilter = ({
                         d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
                     />
                 </svg>
+                {(activeFilters.length > 0 || selectedGroups.length > 0) && (
+                    <span className="absolute -top-1 -right-1 bg-primary-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+                        {activeFilters.length + selectedGroups.length}
+                    </span>
+                )}
                 <span className="sr-only">Filter</span>
             </button>
 
@@ -89,9 +101,11 @@ export const TableFilter = ({
                                             className="flex items-center px-3 py-2 hover:bg-dark-50 cursor-pointer"
                                             onClick={() => {
                                                 // Clear all groups
-                                                selectedGroups.forEach(groupId => {
-                                                    onGroupSelect(groupId);
-                                                });
+                                                selectedGroups.forEach(
+                                                    (groupId) => {
+                                                        onGroupSelect(groupId);
+                                                    }
+                                                );
                                             }}
                                         >
                                             <span className="text-sm text-dark-900">
@@ -99,8 +113,8 @@ export const TableFilter = ({
                                             </span>
                                         </div>
                                     )}
-                                    
-                                    {columns.map((column) => (
+
+                                    {groupableColumns.map((column) => (
                                         <div
                                             key={column.id}
                                             className="flex items-center px-3 py-2 hover:bg-dark-50"

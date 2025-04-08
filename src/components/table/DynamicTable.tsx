@@ -16,6 +16,7 @@ import {
     sortData,
     toggleSort,
 } from "../../lib/tableUtils";
+import { TableGroupView } from "./TableGroupView";
 
 interface DynamicTableProps {
     title?: string;
@@ -55,6 +56,7 @@ export const DynamicTable = ({
         columns.map((col) => col.id)
     );
     const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+    const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
 
     // Update tableData when data prop changes
     useMemo(() => {
@@ -87,13 +89,33 @@ export const DynamicTable = ({
         });
     }, []);
 
-    // Filter data based on selected filters
-    const filteredData = useMemo(() => {
-        let result = tableData;
+    // Handle group selection
+    const handleGroupSelect = useCallback((groupId: string) => {
+        setSelectedGroups((prev) => {
+            const newSelectedGroups = prev.includes(groupId)
+                ? prev.filter((id) => id !== groupId)
+                : [groupId]; // For simplicity, we'll only allow one group at a time
+            
+            // Switch view mode based on the new selected groups
+            if (newSelectedGroups.length > 0) {
+                // Switch to group view when a group is selected
+                setViewMode("group");
+            } else if (viewMode === "group") {
+                // Switch back to grid view when all groups are cleared
+                setViewMode("grid");
+            }
+            
+            return newSelectedGroups;
+        });
+    }, [viewMode]);
+
+    // Process data with grouping
+    const processedData = useMemo(() => {
+        const result = tableData;
 
         // Apply search query filter
         if (searchQuery) {
-            result = result.filter((item) => {
+            return result.filter((item) => {
                 // Search across all column values
                 return Object.values(item.columns).some((value) =>
                     String(value)
@@ -103,7 +125,33 @@ export const DynamicTable = ({
             });
         }
 
-        // Apply column filters - only if filters are selected
+        // Apply grouping if any groups are selected
+        if (selectedGroups.length > 0) {
+            // Add group information to each row based on selected group columns
+            return result.map(item => {
+                const groupValues = selectedGroups.map(groupId => {
+                    const column = columns.find(col => col.id === groupId);
+                    if (column) {
+                        const value = item.columns[column.accessorKey];
+                        return `${column.header}: ${value}`;
+                    }
+                    return null;
+                }).filter(Boolean);
+                
+                return {
+                    ...item,
+                    group: groupValues.join(' | ') || 'Ungrouped'
+                };
+            });
+        }
+
+        return result;
+    }, [tableData, searchQuery, selectedGroups, columns]);
+
+    // Apply column filters - only if filters are selected
+    const filteredData = useMemo(() => {
+        const result = processedData;
+        
         if (selectedFilters.length > 0) {
             // Don't filter the data, just keep all rows
             // This allows the selected filters to be displayed in the UI
@@ -112,7 +160,7 @@ export const DynamicTable = ({
         }
 
         return result;
-    }, [tableData, searchQuery, selectedFilters]);
+    }, [processedData, selectedFilters]);
 
     const sortedData = useMemo(() => {
         return sortData(filteredData, sortConfig);
@@ -217,6 +265,8 @@ export const DynamicTable = ({
                 return <TableGridView {...viewProps} />;
             case "cards":
                 return <TableCardView {...viewProps} />;
+            case "group":
+                return <TableGroupView {...viewProps} />;
             default:
                 return <TableGridView {...viewProps} />;
         }
@@ -288,6 +338,8 @@ export const DynamicTable = ({
                     visibleColumns={visibleColumns}
                     selectedFilters={selectedFilters}
                     onFilterSelect={handleFilterSelect}
+                    selectedGroups={selectedGroups}
+                    onGroupSelect={handleGroupSelect}
                 />
 
                 <div className="mt-2">{renderTableView()}</div>
