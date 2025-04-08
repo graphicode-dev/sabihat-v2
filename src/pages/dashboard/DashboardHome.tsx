@@ -1,69 +1,38 @@
-import PageLayout from "../../components/layout/PageLayout";
-import { DynamicTable } from "../../components/table";
-import { columns, mockData } from "../../data/mockData";
-import { useToast } from "../../hooks/useToast";
+import HomeBg from "../../assets/images/HomeBg.png";
+import { Links } from "../../lib/LinksUtils";
 
 function DashboardHome() {
-    const { addToast } = useToast();
-
-    // const addErrorToast = () => {
-    //     addToast({
-    //         type: "error",
-    //         title: "Error message",
-    //         message: "This is an error message",
-    //         duration: 5000,
-    //         position: "top-right",
-    //     });
-    // };
-
-    // const addWarningToast = () => {
-    //     addToast({
-    //         type: "warning",
-    //         title: "Warning message",
-    //         message: "This is a warning message",
-    //         duration: 5000,
-    //         position: "top-right",
-    //     });
-    // };
-
-    const addSuccessToast = () => {
-        addToast({
-            type: "success",
-            title: "Success message",
-            message: "This is a success message",
-            duration: 5000,
-            position: "top-right",
-        });
-    };
-
-    const addInfoToast = () => {
-        addToast({
-            type: "info",
-            title: "Info message",
-            message: "This is an info message",
-            duration: 5000,
-            position: "top-right",
-        });
-    };
-
     return (
-        <PageLayout>
-            <DynamicTable
-                title="All companies"
-                data={mockData}
-                columns={columns}
-                initialView="grid"
-                itemsPerPage={10}
-                onAddClick={() => {
-                    addSuccessToast();
-                }}
-                addLabel="Add company"
-                onBulkAction={() => {
-                    addInfoToast();
-                }}
-                bulkActionLabel="Process selected"
-            />
-        </PageLayout>
+        <div
+            style={{
+                backgroundImage: `url(${HomeBg})`,
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+            }}
+            className="w-full h-full"
+        >
+            <div className="w-full h-full flex flex-col items-center justify-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 p-8">
+                    {Links.map((link, index) => (
+                        <a
+                            key={index}
+                            href={link.path}
+                            className="flex flex-col items-center justify-center p-4 transition-all duration-300 hover:scale-105"
+                        >
+                            <div className="bg-white/[0.23] rounded-full p-4 mb-2 w-32 h-32 flex items-center justify-center shadow-lg shadow-black/25 border border-white">
+                                <div className="w-24 h-24 rounded-full flex items-center justify-center bg-primary-500">
+                                    <link.icon width={60} height={60} />
+                                </div>
+                            </div>
+                            <p className="text-center text-sm font-bold mt-2 max-w-[150px]">
+                                {link.title}
+                            </p>
+                        </a>
+                    ))}
+                </div>
+            </div>
+        </div>
     );
 }
 

@@ -12,6 +12,7 @@ import { useAuth } from "./hooks/useAuth";
 import Loading from "./components/ui/Loading";
 import NotFound from "./pages/NotFound";
 import Providers from "./providers";
+import { Links } from "./lib/LinksUtils";
 
 // Component to handle root path redirection
 const RootRedirect = () => {
@@ -23,7 +24,7 @@ const RootRedirect = () => {
     }
 
     // Redirect based on authentication status
-    return <Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />;
+    return <Navigate to={isAuthenticated ? "/" : "/login"} replace />;
 };
 
 function App() {
@@ -36,9 +37,21 @@ function App() {
 
                     {/* Protected routes */}
                     <Route element={<ProtectedRoute />}>
-                        <Route path="/dashboard" element={<DashboardWrapper />}>
+                        <Route path="/" element={<DashboardWrapper />}>
                             <Route index element={<DashboardHome />} />
                         </Route>
+                        {Links.map((link, i) => (
+                            <Route
+                                key={i}
+                                path={link.path}
+                                element={<DashboardWrapper />}
+                            >
+                                <Route index element={<link.component />} />
+                                {link.sideBar?.links?.map((route, j) => (
+                                    <Route key={j} path={route.path} element={<route.component />} />
+                                ))}
+                            </Route>
+                        ))}
                     </Route>
 
                     {/* Root path - redirect based on auth status */}

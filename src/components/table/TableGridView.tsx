@@ -56,8 +56,9 @@ export const TableGridView = ({
                             </td>
                         </tr>
                     ) : (
-                        data.map((row) => (
+                        data.map((row, index) => (
                             <TableRow
+                                key={index}
                                 row={row}
                                 columns={columns}
                                 columnWidths={columnWidths}

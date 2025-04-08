@@ -1,14 +1,9 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { X } from "lucide-react";
-
-interface RouteItem {
-    path: string;
-    name: string;
-    icon?: React.ReactNode;
-    isMain?: boolean;
-}
+import { Links } from "../lib/LinksUtils";
+import { SideBar as SideBarType } from "../types";
 
 type Props = {
     isSidebarOpen: boolean;
@@ -20,6 +15,9 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
     const navigate = useNavigate();
     const location = useLocation();
     const profileRefreshedRef = useRef(false);
+    const [currentSideBar, setCurrentSideBar] = useState<SideBarType | null>(
+        null
+    );
 
     // Refresh user profile when sidebar mounts, but only once
     useEffect(() => {
@@ -42,41 +40,28 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
         );
     };
 
-    const routes: RouteItem[] = [
-        {
-            path: "/dashboard",
-            name: "All",
-            isMain: true,
-        },
-        {
-            path: "/dashboard/companies",
-            name: "Companies",
-        },
-        {
-            path: "/dashboard/marine-agent",
-            name: "Marine Agent",
-        },
-        {
-            path: "/dashboard/commercial-agent",
-            name: "Commercial Agent",
-        },
-        {
-            path: "/dashboard/subagent",
-            name: "Subagent",
-        },
-        {
-            path: "/dashboard/user-roles",
-            name: "Create User Roles & Permissions",
-        },
-        {
-            path: "/dashboard/classification",
-            name: "Classification",
-        },
-        {
-            path: "/dashboard/employee",
-            name: "Employee",
-        },
-    ];
+    useEffect(() => {
+        console.log("Current pathname:", window.location.pathname);
+
+        // Find the link that matches the current path or is a parent path
+        const foundLink = Links.find(
+            (link) =>
+                window.location.pathname === link.path ||
+                (window.location.pathname !== "/" &&
+                    window.location.pathname.startsWith(link.path + "/"))
+        );
+
+        console.log(
+            "Found link:",
+            foundLink ? JSON.stringify(foundLink, null, 2) : "Not found"
+        );
+        setCurrentSideBar(foundLink?.sideBar || null);
+    }, [location.pathname]);
+
+    // Log currentSideBar whenever it changes
+    useEffect(() => {
+        console.log(JSON.stringify(currentSideBar, null, 2));
+    }, [currentSideBar]);
 
     return (
         <div
@@ -104,28 +89,32 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
             {/* System Management Section */}
             <div className="overflow-y-auto py-5 px-3 h-full bg-white ">
                 <div className="flex items-center text-primary-500 font-medium mb-4">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 mr-2"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                    >
-                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-                    </svg>
-                    <span>System Management & Administration</span>
+                    {currentSideBar?.titleSection?.icon ? (
+                        <currentSideBar.titleSection.icon
+                            width={20}
+                            height={20}
+                        />
+                    ) : (
+                        <div className="w-5 h-5 bg-primary-500 rounded-full"></div>
+                    )}
+                    <span className="ml-2">
+                        {currentSideBar?.titleSection?.title || "Navigation"}
+                    </span>
                 </div>
 
                 {/* Navigation Menu */}
                 <nav>
                     <ul className="space-y-2">
-                        {routes.map((route) => (
+                        {currentSideBar?.links.map((route) => (
                             <li key={route.path}>
                                 <Link
                                     to={route.path}
                                     className={`flex items-center py-2 px-4 rounded-md hover:bg-primary-50 ${
-                                        !route.isMain ? "pl-8" : ""
+                                        route.path !== "/dashboard"
+                                            ? "pl-8"
+                                            : ""
                                     } ${
-                                        route.isMain
+                                        route.path === "/dashboard"
                                             ? ` ${
                                                   isActive(route.path) &&
                                                   !location.pathname.includes(
@@ -141,17 +130,19 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
                                 >
                                     <span
                                         className={`${
-                                            route.isMain
+                                            route.path === "/dashboard"
                                                 ? "w-2 h-2 bg-primary-500"
                                                 : "w-1 h-1 bg-gray-400"
                                         } rounded-full mr-2`}
                                     ></span>
                                     <span
                                         className={
-                                            route.isMain ? "font-medium" : ""
+                                            route.path === "/dashboard"
+                                                ? "font-medium"
+                                                : ""
                                         }
                                     >
-                                        {route.name}
+                                        {route.title}
                                     </span>
                                 </Link>
                             </li>

@@ -15,7 +15,6 @@ function TableRow({
 }) {
     return (
         <tr
-            key={row.id}
             className={`${
                 row.selected ? "bg-primary-50" : ""
             } hover:bg-gray-50`}

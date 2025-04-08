@@ -23,7 +23,7 @@ export const Login = () => {
     // Redirect to dashboard if already authenticated
     useEffect(() => {
         if (isAuthenticated && !authLoading) {
-            navigate("/dashboard");
+            navigate("/");
         }
     }, [isAuthenticated, authLoading, navigate]);
 
@@ -43,7 +43,7 @@ export const Login = () => {
                     message: "You have successfully logged in.",
                     type: "success",
                 });
-                navigate("/dashboard");
+                navigate("/");
             }
         } catch (err) {
             if (axios.isAxiosError(err) && err.response) {
