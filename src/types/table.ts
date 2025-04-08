@@ -6,7 +6,7 @@ export interface TableData {
   selected?: boolean;
 }
 
-export type ViewMode = 'grid' | 'cards' | 'group';
+export type ViewMode = 'grid' | 'cards';
 
 export interface TableColumn {
   id: string;

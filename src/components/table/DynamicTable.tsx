@@ -3,15 +3,12 @@ import {
     TableData,
     TableColumn,
     ViewMode,
-    FilterConfig,
     SortConfig,
 } from "../../types/table";
 import { TableToolbar } from "./TableToolbar";
 import { TableGridView } from "./TableGridView";
 import { TableCardView } from "./TableCardView";
-import { TableGroupView } from "./TableGroupView";
 import {
-    filterData,
     paginateData,
     toggleSelectRow,
     toggleSelectAll,
@@ -47,7 +44,6 @@ export const DynamicTable = ({
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage);
     const [searchQuery, setSearchQuery] = useState("");
-    const [activeFilters, setActiveFilters] = useState<FilterConfig[]>([]);
     const [tableData, setTableData] = useState<TableData[]>(
         data.map((item) => ({ ...item, selected: false }))
     );
@@ -58,6 +54,7 @@ export const DynamicTable = ({
     const [visibleColumns, setVisibleColumns] = useState<string[]>(
         columns.map((col) => col.id)
     );
+    const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
     // Update tableData when data prop changes
     useMemo(() => {
@@ -75,18 +72,47 @@ export const DynamicTable = ({
         });
     }, [data]);
 
-    const handleApplyFilters = useCallback((filters: FilterConfig[]) => {
-        setActiveFilters(filters);
-        setCurrentPage(1); // Reset to first page when filters change
-    }, []);
-
     const handleSort = useCallback((column: string) => {
         setSortConfig((current) => toggleSort(column, current));
     }, []);
 
+    // Handle filter selection
+    const handleFilterSelect = useCallback((filterId: string) => {
+        setSelectedFilters((prev) => {
+            if (prev.includes(filterId)) {
+                return prev.filter((id) => id !== filterId);
+            } else {
+                return [...prev, filterId];
+            }
+        });
+    }, []);
+
+    // Filter data based on selected filters
     const filteredData = useMemo(() => {
-        return filterData(tableData, searchQuery, activeFilters);
-    }, [tableData, searchQuery, activeFilters]);
+        let result = tableData;
+
+        // Apply search query filter
+        if (searchQuery) {
+            result = result.filter((item) => {
+                // Search across all column values
+                return Object.values(item.columns).some((value) =>
+                    String(value)
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase())
+                );
+            });
+        }
+
+        // Apply column filters - only if filters are selected
+        if (selectedFilters.length > 0) {
+            // Don't filter the data, just keep all rows
+            // This allows the selected filters to be displayed in the UI
+            // without affecting the data shown in the table
+            console.log("Selected filters:", selectedFilters);
+        }
+
+        return result;
+    }, [tableData, searchQuery, selectedFilters]);
 
     const sortedData = useMemo(() => {
         return sortData(filteredData, sortConfig);
@@ -191,8 +217,6 @@ export const DynamicTable = ({
                 return <TableGridView {...viewProps} />;
             case "cards":
                 return <TableCardView {...viewProps} />;
-            case "group":
-                return <TableGroupView {...viewProps} />;
             default:
                 return <TableGridView {...viewProps} />;
         }
@@ -255,8 +279,6 @@ export const DynamicTable = ({
                     onViewChange={setViewMode}
                     onSearch={setSearchQuery}
                     columns={columns}
-                    onApplyFilters={handleApplyFilters}
-                    activeFilters={activeFilters}
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
@@ -264,6 +286,8 @@ export const DynamicTable = ({
                     onItemsPerPageChange={setItemsPerPage}
                     onColumnVisibilityChange={handleColumnVisibilityChange}
                     visibleColumns={visibleColumns}
+                    selectedFilters={selectedFilters}
+                    onFilterSelect={handleFilterSelect}
                 />
 
                 <div className="mt-2">{renderTableView()}</div>

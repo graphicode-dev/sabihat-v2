@@ -1,10 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { TableHead } from "./TableHead";
 import { SortConfig, TableColumn, TableData } from "../../types/table";
-import { CheckBox } from "../ui/CheckBox";
-import { TableAvatar } from "./TableAvatar";
-import { getInitials } from "../../lib/tableUtils";
+import TableRow from "./TableRow";
 
 interface TableGroupViewProps {
     data: TableData[];
@@ -37,7 +34,28 @@ export const TableGroupView = ({
     const allSelected = data.length > 0 && data.every((item) => item.selected);
 
     data.forEach((row) => {
-        const groupName = row.group || "Ungrouped";
+        // Extract a cleaner group name from the row.group property
+        let groupName = row.group || "Ungrouped";
+        
+        // If the group name contains column labels (e.g., "Name: John | Status: Active")
+        // Extract just the values for a cleaner display
+        if (groupName.includes(':')) {
+            // Split by the pipe separator if there are multiple groups
+            const parts = groupName.split(' | ');
+            
+            // For each part, extract just the value after the colon
+            const values = parts.map(part => {
+                const colonIndex = part.indexOf(':');
+                if (colonIndex !== -1) {
+                    return part.substring(colonIndex + 1).trim();
+                }
+                return part.trim();
+            });
+            
+            // Join the values with a separator
+            groupName = values.join(' | ');
+        }
+        
         if (!groupedData[groupName]) {
             groupedData[groupName] = [];
         }
@@ -178,108 +196,25 @@ export const TableGroupView = ({
                                         {/* Group Data Rows */}
                                         {expandedGroups[groupName] &&
                                             groupRows.map((row) => {
-                                                const name = String(
-                                                    row.columns.name || ""
-                                                );
                                                 return (
-                                                    <tr
+                                                    <TableRow
                                                         key={row.id}
-                                                        className={`${
-                                                            row.selected
-                                                                ? "bg-primary-50"
-                                                                : "hover:bg-primary-50"
-                                                        }`}
-                                                    >
-                                                        <td className="px-2 py-4 whitespace-nowrap rounded-l-xl">
-                                                            <CheckBox
-                                                                checked={
-                                                                    !!row.selected
-                                                                }
-                                                                onChange={() =>
-                                                                    onRowSelection &&
-                                                                    onRowSelection(
-                                                                        row.id,
-                                                                        !!row.selected
-                                                                    )
-                                                                }
-                                                            />
-                                                        </td>
-
-                                                        {columns.map(
-                                                            (column, index) => (
-                                                                <td
-                                                                    key={`${row.id}-${column.id}`}
-                                                                    className={`py-4 text-dark-200 text-left ${
-                                                                        index ===
-                                                                        columns.length -
-                                                                            1
-                                                                            ? "rounded-r-xl"
-                                                                            : ""
-                                                                    }`}
-                                                                    style={{
-                                                                        width: columnWidths[
-                                                                            index
-                                                                        ]
-                                                                            ? `${columnWidths[index]}px`
-                                                                            : "200px",
-                                                                        minWidth:
-                                                                            "50px",
-                                                                        maxWidth:
-                                                                            columnWidths[
-                                                                                index
-                                                                            ]
-                                                                                ? `${columnWidths[index]}px`
-                                                                                : "200px",
-                                                                        overflow:
-                                                                            "hidden",
-                                                                        whiteSpace:
-                                                                            "nowrap",
-                                                                        textOverflow:
-                                                                            "ellipsis",
-                                                                        padding:
-                                                                            "0 16px",
-                                                                    }}
-                                                                >
-                                                                    <div className="truncate">
-                                                                        {index ===
-                                                                        0 ? (
-                                                                            <div className="flex items-center gap-2">
-                                                                                {row.avatar && (
-                                                                                    <TableAvatar
-                                                                                        src={
-                                                                                            row.avatar
-                                                                                        }
-                                                                                        initials={getInitials(
-                                                                                            name
-                                                                                        )}
-                                                                                    />
-                                                                                )}
-                                                                                <span className="text-sm font-medium text-gray-900">
-                                                                                    {
-                                                                                        row
-                                                                                            .columns[
-                                                                                            column
-                                                                                                .accessorKey
-                                                                                        ]
-                                                                                    }
-                                                                                </span>
-                                                                            </div>
-                                                                        ) : (
-                                                                            <span className="text-sm text-dark-500">
-                                                                                {
-                                                                                    row
-                                                                                        .columns[
-                                                                                        column
-                                                                                            .accessorKey
-                                                                                    ]
-                                                                                }
-                                                                            </span>
-                                                                        )}
-                                                                    </div>
-                                                                </td>
+                                                        row={row}
+                                                        columns={columns}
+                                                        columnWidths={
+                                                            columnWidths
+                                                        }
+                                                        handleRowSelection={(
+                                                            rowId,
+                                                            selected
+                                                        ) =>
+                                                            onRowSelection &&
+                                                            onRowSelection(
+                                                                rowId,
+                                                                selected
                                                             )
-                                                        )}
-                                                    </tr>
+                                                        }
+                                                    />
                                                 );
                                             })}
                                     </React.Fragment>
