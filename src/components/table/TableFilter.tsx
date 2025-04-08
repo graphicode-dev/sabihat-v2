@@ -25,6 +25,16 @@ export const TableFilter = ({
         col.id !== 'actions' && col.id !== 'avatar'
     );
     
+    // Handle clearing all group selections at once
+    const handleClearAllGroups = () => {
+        if (onGroupSelect) {
+            // Call onGroupSelect for each selected group to clear them all
+            selectedGroups.forEach(groupId => {
+                onGroupSelect(groupId);
+            });
+        }
+    };
+    
     return (
         <div className="relative">
             <button
@@ -99,14 +109,7 @@ export const TableFilter = ({
                                     {selectedGroups.length > 0 && (
                                         <div
                                             className="flex items-center px-3 py-2 hover:bg-dark-50 cursor-pointer"
-                                            onClick={() => {
-                                                // Clear all groups
-                                                selectedGroups.forEach(
-                                                    (groupId) => {
-                                                        onGroupSelect(groupId);
-                                                    }
-                                                );
-                                            }}
+                                            onClick={handleClearAllGroups}
                                         >
                                             <span className="text-sm text-dark-900">
                                                 Clear all groups

@@ -92,13 +92,19 @@ export const DynamicTable = ({
     // Handle group selection
     const handleGroupSelect = useCallback((groupId: string) => {
         setSelectedGroups((prev) => {
-            const newSelectedGroups = prev.includes(groupId)
-                ? prev.filter((id) => id !== groupId)
-                : [groupId]; // For simplicity, we'll only allow one group at a time
+            let newSelectedGroups;
+            
+            if (prev.includes(groupId)) {
+                // Remove the group if it's already selected
+                newSelectedGroups = prev.filter((id) => id !== groupId);
+            } else {
+                // Add the group to the existing selection
+                newSelectedGroups = [...prev, groupId];
+            }
             
             // Switch view mode based on the new selected groups
             if (newSelectedGroups.length > 0) {
-                // Switch to group view when a group is selected
+                // Switch to group view when groups are selected
                 setViewMode("group");
             } else if (viewMode === "group") {
                 // Switch back to grid view when all groups are cleared
@@ -138,6 +144,7 @@ export const DynamicTable = ({
                     return null;
                 }).filter(Boolean);
                 
+                // For multiple group selections, we'll create a composite group key
                 return {
                     ...item,
                     group: groupValues.join(' | ') || 'Ungrouped'
