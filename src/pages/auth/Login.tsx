@@ -5,7 +5,7 @@ import axios from "axios";
 import Loading from "../../components/ui/Loading";
 import { useToast } from "../../hooks/useToast";
 
-export const Login = () => {
+const Login = () => {
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -142,3 +142,5 @@ export const Login = () => {
         </div>
     );
 };
+
+export default Login;

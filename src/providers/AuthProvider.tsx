@@ -1,16 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useState, ReactNode, useEffect, useRef } from "react";
-import Cookies from "js-cookie";
 import axios from "axios";
-import api from "../services/api";
-import { User, LoginResponse, ProfileResponse } from "../types";
-
-const AUTH_COOKIE_NAME =
-    import.meta.env.VITE_AUTH_COOKIE_NAME || "sabihat_auth_token";
-const AUTH_COOKIE_EXPIRES_DAYS = parseInt(
-    import.meta.env.VITE_AUTH_COOKIE_EXPIRES_DAYS || "7",
-    10
-);
+import { User } from "../types";
+import { apiRequest } from "../hooks/useApiRequest";
+import {
+    formatPhoneForSubmission,
+    isAuthenticated,
+    removeToken,
+    setToken,
+} from "../lib/utils";
 
 interface AuthContextType {
     user: User | null;
@@ -19,7 +16,6 @@ interface AuthContextType {
     logout: () => Promise<void>;
     refreshUserProfile: () => Promise<void>;
     isLoading: boolean;
-    getToken: () => string | undefined;
     error: string | null;
     setError: React.Dispatch<React.SetStateAction<string | null>>;
 }
@@ -32,18 +28,10 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState<User | null>(null);
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [isAuthenticatedState, setIsAuthenticated] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const profileFetchedRef = useRef<boolean>(false);
-
-    const checkIsAuthenticated = (): boolean => {
-        return !!Cookies.get(AUTH_COOKIE_NAME);
-    };
-
-    const getToken = (): string | undefined => {
-        return Cookies.get(AUTH_COOKIE_NAME);
-    };
 
     useEffect(() => {
         const initAuth = async () => {
@@ -51,7 +39,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
             setIsLoading(true);
             try {
-                const isAuth = checkIsAuthenticated();
+                const isAuth = isAuthenticated();
+
                 setIsAuthenticated(isAuth);
 
                 if (isAuth) {
@@ -78,14 +67,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const getProfile = async (): Promise<User | null> => {
         try {
-            const response = await api.get<ProfileResponse>("/auth/profile");
+            const response = await apiRequest("/auth/profile", "GET");
 
-            if (response.data.success) {
-                localStorage.setItem(
-                    "user",
-                    JSON.stringify(response.data.data)
-                );
-                return response.data.data;
+            if (response.success) {
+                localStorage.setItem("user", JSON.stringify(response.data));
+                return response.data;
             }
 
             return null;
@@ -99,7 +85,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     };
 
     const refreshUserProfile = async (): Promise<void> => {
-        if (!isAuthenticated) return;
+        if (!isAuthenticatedState) return;
 
         try {
             const profileData = await getProfile();
@@ -115,28 +101,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
         try {
             setIsLoading(true);
 
-            const formattedPhone = phone.startsWith("20")
-                ? phone
-                : `20${phone}`;
-
-            const response = await api.post<LoginResponse>("/auth/login", {
-                phone: formattedPhone,
+            const response = await apiRequest("/auth/login", "POST", {
+                phone: formatPhoneForSubmission(phone),
                 password,
             });
 
-            if (response.data.success && response.data.data.token) {
-                Cookies.set(AUTH_COOKIE_NAME, response.data.data.token, {
-                    expires: AUTH_COOKIE_EXPIRES_DAYS,
-                    secure: import.meta.env.PROD,
-                    sameSite: "strict",
-                });
+            if (response.success && response.data.token) {
+                setToken(response.data.token);
 
                 localStorage.setItem(
                     "user",
-                    JSON.stringify(response.data.data.result)
+                    JSON.stringify(response.data.result)
                 );
 
-                setUser(response.data.data.result);
+                setUser(response.data.result);
                 setIsAuthenticated(true);
                 profileFetchedRef.current = true;
                 return true;
@@ -153,9 +131,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const logout = async (): Promise<void> => {
         try {
-            const response = await api.post("/auth/logout");
-            if (response.data.success) {
-                Cookies.remove(AUTH_COOKIE_NAME);
+            const response = await apiRequest("/auth/logout", "POST");
+            if (response.success) {
+                removeToken();
                 localStorage.removeItem("user");
                 setUser(null);
                 setIsAuthenticated(false);
@@ -163,7 +141,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             }
         } catch (error) {
             console.error("Logout error:", error);
-            Cookies.remove(AUTH_COOKIE_NAME);
+            removeToken();
             localStorage.removeItem("user");
             setUser(null);
             setIsAuthenticated(false);
@@ -173,12 +151,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const value = {
         user,
-        isAuthenticated,
+        isAuthenticated: isAuthenticatedState,
         login,
         logout,
         refreshUserProfile,
         isLoading,
-        getToken,
         error,
         setError,
     };

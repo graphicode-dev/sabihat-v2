@@ -6,11 +6,12 @@ export * from "./toast.types";
 export type Icon = {
     width?: number;
     height?: number;
+    color?: string;
 };
 
 export type SideBar = {
     titleSection: {
-        icon: ({ width, height }: Icon) => React.JSX.Element;
+        icon: ({ width, height, color }: Icon) => React.JSX.Element;
         title: string;
     };
     links: {

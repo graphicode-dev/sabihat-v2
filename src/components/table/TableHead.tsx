@@ -39,15 +39,6 @@ export function TableHead({
             const diff = e.clientX - startPositionRef.current;
             const newWidth = Math.max(startWidthRef.current + diff, MIN_WIDTH);
 
-            console.log(
-                "Resize move:",
-                currentColumnRef.current,
-                "diff:",
-                diff,
-                "new width:",
-                newWidth
-            );
-
             // Find all th and td elements for this column and update their width
             const table = document.querySelector("table");
             if (table) {
@@ -86,8 +77,6 @@ export function TableHead({
     const handleResizeEnd = useCallback(() => {
         if (!resizingRef.current) return;
 
-        console.log("Resize end:", currentColumnRef.current);
-
         resizingRef.current = false;
         currentColumnRef.current = null;
 
@@ -109,8 +98,6 @@ export function TableHead({
         if (!th) return;
 
         const width = th.getBoundingClientRect().width;
-
-        console.log("Resize start:", index, e.clientX, "current width:", width);
 
         resizingRef.current = true;
         currentColumnRef.current = index;

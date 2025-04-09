@@ -90,30 +90,33 @@ export const DynamicTable = ({
     }, []);
 
     // Handle group selection
-    const handleGroupSelect = useCallback((groupId: string) => {
-        setSelectedGroups((prev) => {
-            let newSelectedGroups;
-            
-            if (prev.includes(groupId)) {
-                // Remove the group if it's already selected
-                newSelectedGroups = prev.filter((id) => id !== groupId);
-            } else {
-                // Add the group to the existing selection
-                newSelectedGroups = [...prev, groupId];
-            }
-            
-            // Switch view mode based on the new selected groups
-            if (newSelectedGroups.length > 0) {
-                // Switch to group view when groups are selected
-                setViewMode("group");
-            } else if (viewMode === "group") {
-                // Switch back to grid view when all groups are cleared
-                setViewMode("grid");
-            }
-            
-            return newSelectedGroups;
-        });
-    }, [viewMode]);
+    const handleGroupSelect = useCallback(
+        (groupId: string) => {
+            setSelectedGroups((prev) => {
+                let newSelectedGroups;
+
+                if (prev.includes(groupId)) {
+                    // Remove the group if it's already selected
+                    newSelectedGroups = prev.filter((id) => id !== groupId);
+                } else {
+                    // Add the group to the existing selection
+                    newSelectedGroups = [...prev, groupId];
+                }
+
+                // Switch view mode based on the new selected groups
+                if (newSelectedGroups.length > 0) {
+                    // Switch to group view when groups are selected
+                    setViewMode("group");
+                } else if (viewMode === "group") {
+                    // Switch back to grid view when all groups are cleared
+                    setViewMode("grid");
+                }
+
+                return newSelectedGroups;
+            });
+        },
+        [viewMode]
+    );
 
     // Process data with grouping
     const processedData = useMemo(() => {
@@ -134,20 +137,24 @@ export const DynamicTable = ({
         // Apply grouping if any groups are selected
         if (selectedGroups.length > 0) {
             // Add group information to each row based on selected group columns
-            return result.map(item => {
-                const groupValues = selectedGroups.map(groupId => {
-                    const column = columns.find(col => col.id === groupId);
-                    if (column) {
-                        const value = item.columns[column.accessorKey];
-                        return `${column.header}: ${value}`;
-                    }
-                    return null;
-                }).filter(Boolean);
-                
+            return result.map((item) => {
+                const groupValues = selectedGroups
+                    .map((groupId) => {
+                        const column = columns.find(
+                            (col) => col.id === groupId
+                        );
+                        if (column) {
+                            const value = item.columns[column.accessorKey];
+                            return `${column.header}: ${value}`;
+                        }
+                        return null;
+                    })
+                    .filter(Boolean);
+
                 // For multiple group selections, we'll create a composite group key
                 return {
                     ...item,
-                    group: groupValues.join(' | ') || 'Ungrouped'
+                    group: groupValues.join(" | ") || "Ungrouped",
                 };
             });
         }
@@ -158,13 +165,6 @@ export const DynamicTable = ({
     // Apply column filters - only if filters are selected
     const filteredData = useMemo(() => {
         const result = processedData;
-        
-        if (selectedFilters.length > 0) {
-            // Don't filter the data, just keep all rows
-            // This allows the selected filters to be displayed in the UI
-            // without affecting the data shown in the table
-            console.log("Selected filters:", selectedFilters);
-        }
 
         return result;
     }, [processedData, selectedFilters]);
@@ -226,8 +226,6 @@ export const DynamicTable = ({
 
     // Handle column resize
     const handleColumnResize = useCallback((index: number, width: number) => {
-        console.log("DynamicTable: Resizing column", index, "to width", width);
-
         // Update the column widths state
         setColumnWidths((prevWidths) => {
             const newWidths = [...prevWidths];

@@ -1,10 +1,12 @@
 import { Outlet } from 'react-router-dom';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 
-export const DashboardWrapper = () => {
+const DashboardWrapper = () => {
   return (
     <DashboardLayout>
       <Outlet />
     </DashboardLayout>
   );
 };
+
+export default DashboardWrapper;

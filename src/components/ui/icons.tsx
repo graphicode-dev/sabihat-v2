@@ -1,7 +1,11 @@
 import { Icon } from "../../types";
 
 // Home Icons
-export const Administration = ({ width = 51, height = 44 }: Icon) => (
+export const Administration = ({
+    width = 51,
+    height = 44,
+    color = "white",
+}: Icon) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width={width}
@@ -11,14 +15,14 @@ export const Administration = ({ width = 51, height = 44 }: Icon) => (
     >
         <path
             d="M31.4167 42.4168V38.771C31.4167 32.7306 25.8196 27.8335 18.9158 27.8335H14.7508C7.84708 27.8335 2.25 32.7306 2.25 38.771V42.4168M38.0842 27.8335H42.2492M37.25 2.07932C38.5695 1.6144 39.9813 1.47265 41.3669 1.66597C42.7525 1.8593 44.0716 2.38206 45.2135 3.1904C46.3553 3.99875 47.2867 5.06912 47.9295 6.31174C48.5723 7.55436 48.9078 8.933 48.9078 10.332C48.9078 11.7311 48.5723 13.1097 47.9295 14.3523C47.2867 15.5949 46.3553 16.6653 45.2135 17.4737C44.0716 18.282 42.7525 18.8048 41.3669 18.9981C39.9813 19.1914 38.5695 19.0497 37.25 18.5847M25.5833 10.3335C25.5833 12.6541 24.6615 14.8797 23.0205 16.5207C21.3796 18.1616 19.154 19.0835 16.8333 19.0835C14.5127 19.0835 12.2871 18.1616 10.6461 16.5207C9.00521 14.8797 8.08333 12.6541 8.08333 10.3335C8.08333 8.01285 9.00521 5.78725 10.6461 4.14631C12.2871 2.50536 14.5127 1.58349 16.8333 1.58349C19.154 1.58349 21.3796 2.50536 23.0205 4.14631C24.6615 5.78725 25.5833 8.01285 25.5833 10.3335Z"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
     </svg>
 );
-export const Ship = ({ width = 70, height = 70 }: Icon) => (
+export const Ship = ({ width = 70, height = 70, color = "white" }: Icon) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width={width}
@@ -28,14 +32,14 @@ export const Ship = ({ width = 70, height = 70 }: Icon) => (
     >
         <path
             d="M55.4167 46.6667L61.25 35L49.5833 32.4071M49.5833 32.4071L35 29.1667M49.5833 32.4071L52.5 17.5H40.8333M35 29.1667V43.75M35 29.1667L20.4167 32.4071M20.4167 32.4071L8.75 35L14.5833 46.6667M20.4167 32.4071L17.5 17.5H29.1667M29.1667 17.5V8.75H40.8333V17.5M29.1667 17.5H40.8333M8.75 58.3333L12.3812 56.8808C13.5102 56.4294 14.7321 56.2593 15.9414 56.3853C17.1507 56.5113 18.3113 56.9296 19.3229 57.6042C20.8362 58.6132 22.6647 59.0376 24.4678 58.7983C26.2708 58.559 27.9253 57.6722 29.1229 56.3033L29.225 56.1867C29.945 55.3631 30.8328 54.7031 31.8288 54.2509C32.8249 53.7987 33.9061 53.5647 35 53.5647C36.0939 53.5647 37.1751 53.7987 38.1712 54.2509C39.1672 54.7031 40.055 55.3631 40.775 56.1867L40.88 56.3033C42.0776 57.6722 43.7321 58.559 45.5352 58.7983C47.3382 59.0376 49.1667 58.6132 50.68 57.6042C51.6916 56.9296 52.8522 56.5113 54.0615 56.3853C55.2709 56.2593 56.4927 56.4294 57.6217 56.8808L61.25 58.3333"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
     </svg>
 );
-export const Sales = ({ width = 71, height = 70 }: Icon) => (
+export const Sales = ({ width = 71, height = 70, color = "white" }: Icon) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width={width}
@@ -45,49 +49,49 @@ export const Sales = ({ width = 71, height = 70 }: Icon) => (
     >
         <path
             d="M2.6875 67.8125H68.3125"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M18 47.3955H9.25C8.67218 47.4031 8.12017 47.6358 7.71155 48.0445C7.30295 48.4531 7.07005 49.0052 7.0625 49.583V67.8122H20.1875V49.583C20.1799 49.0052 19.9471 48.4531 19.5385 48.0445C19.1298 47.6358 18.5778 47.4031 18 47.3955Z"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M39.875 35.7295H31.125C30.5472 35.7371 29.9951 35.9698 29.5865 36.3785C29.178 36.7871 28.9451 37.3392 28.9375 37.917V67.8128H42.0625V37.917C42.0549 37.3392 41.8222 36.7871 41.4135 36.3785C41.0049 35.9698 40.4528 35.7371 39.875 35.7295Z"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M61.75 24.0625H53C52.4222 24.0701 51.8701 24.303 51.4615 24.7115C51.0528 25.1202 50.8201 25.6722 50.8125 26.25V67.8125H63.9375V26.25C63.9299 25.6722 63.6972 25.1202 63.2885 24.7115C62.8799 24.303 62.3278 24.0701 61.75 24.0625Z"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M12.6918 26.9499L59.5628 5.6582"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M56.0914 14.9625L59.5622 5.65833L50.2872 2.1875"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
     </svg>
 );
-export const Cargo = ({ width = 70, height = 70 }: Icon) => (
+export const Cargo = ({ width = 70, height = 70, color = "white" }: Icon) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width={width}
@@ -98,57 +102,57 @@ export const Cargo = ({ width = 70, height = 70 }: Icon) => (
         <g clipPath="url(#clip0_104_434)">
             <path
                 d="M2.1875 67.8128C4.67066 67.8732 7.13624 67.3812 9.40608 66.3723C11.6759 65.3634 13.6933 63.8631 15.3125 61.9795C19.6875 66.3545 20.4167 67.8128 24.7917 67.8128C29.1667 67.8128 30.625 66.3545 35 61.9795C39.375 66.3545 40.8333 67.8128 45.2083 67.8128C49.5833 67.8128 50.3125 66.3545 54.6875 61.9795C56.3068 63.8631 58.324 65.3634 60.594 66.3723C62.8638 67.3812 65.3293 67.8732 67.8125 67.8128"
-                stroke="white"
-                strokeWidth="3"
+                stroke={color}
+                strokeWidth="5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
             <path
                 d="M66.7331 58.9169L67.4914 52.7627C67.5547 52.4635 67.5509 52.154 67.4803 51.8565C67.4097 51.559 67.2741 51.2808 67.0831 51.0419C66.8801 50.8091 66.6289 50.6233 66.3469 50.4973C66.0648 50.3713 65.7586 50.3083 65.4497 50.3127H4.37488C4.07396 50.3142 3.77655 50.3772 3.50075 50.4976C3.22498 50.6178 2.97657 50.7931 2.77069 51.0127C2.55814 51.2364 2.39609 51.5033 2.29546 51.7953C2.19482 52.0869 2.15796 52.397 2.18736 52.7044C2.39681 54.9651 2.92713 57.1847 3.76238 59.296"
-                stroke="white"
-                strokeWidth="3"
+                stroke={color}
+                strokeWidth="5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
             <path
                 d="M63.4375 50.3125H45.9375V15.3125C45.9375 14.1522 46.3983 13.0394 47.2188 12.2189C48.0393 11.3985 49.1523 10.9375 50.3125 10.9375H59.0625C60.2228 10.9375 61.3357 11.3985 62.1562 12.2189C62.9767 13.0394 63.4375 14.1522 63.4375 15.3125V50.3125Z"
-                stroke="white"
-                strokeWidth="3"
+                stroke={color}
+                strokeWidth="5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
             <path
                 d="M54.6875 21.1455H45.9375"
-                stroke="white"
-                strokeWidth="3"
+                stroke={color}
+                strokeWidth="5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
             <path
                 d="M56.875 10.9375V2.1875"
-                stroke="white"
-                strokeWidth="3"
+                stroke={color}
+                strokeWidth="5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
             <path
                 d="M10.9375 25.5205H45.9375V50.3122H6.5625V29.8955C6.5625 28.7352 7.02345 27.6224 7.84391 26.8019C8.66437 25.9815 9.77719 25.5205 10.9375 25.5205Z"
-                stroke="white"
-                strokeWidth="3"
+                stroke={color}
+                strokeWidth="5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
             <path
                 d="M24.0625 25.5205V50.3122"
-                stroke="white"
-                strokeWidth="3"
+                stroke={color}
+                strokeWidth="5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
             <path
                 d="M6.5625 37.917H45.1792"
-                stroke="white"
-                strokeWidth="3"
+                stroke={color}
+                strokeWidth="5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
@@ -160,7 +164,11 @@ export const Cargo = ({ width = 70, height = 70 }: Icon) => (
         </defs>
     </svg>
 );
-export const Auditing = ({ width = 106, height = 106 }: Icon) => (
+export const Auditing = ({
+    width = 106,
+    height = 106,
+    color = "white",
+}: Icon) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width={width}
@@ -180,49 +188,53 @@ export const Auditing = ({ width = 106, height = 106 }: Icon) => (
         />
         <path
             d="M46.6219 36.1481V33.6953"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M46.6219 58.2089V55.7607"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M53.0368 40.8005C53.0368 38.2834 50.966 36.1436 46.6219 36.1436C42.2732 36.1436 40.207 38.1591 40.207 40.8005C40.207 42.8575 42.2778 44.8363 46.6219 45.4575C50.9706 46.0788 54.017 47.5099 54.017 50.6115C54.017 53.4094 50.9706 55.7517 46.6219 55.7517C42.2732 55.7517 39.2269 53.7545 39.2269 51.0947"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M68.1398 52.512C68.5724 50.5011 68.7932 48.3106 68.7932 45.9499C68.7932 31.7443 60.8046 23.751 46.5989 23.751C32.3932 23.751 24.4 31.7443 24.4 45.9499C24.4 56.6996 28.9787 63.8876 37.3631 66.7499"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M40.2393 83.1689C40.2393 83.1689 51.0948 68.8251 55.9083 69.2163C59.7738 69.5292 60.1189 77.748 63.7037 76.2662C66.0966 75.2768 79.7363 62.9027 83.0909 59.8379"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M71.6187 58.8122C75.1897 57.9194 79.8283 58.2784 83.2152 59.7095C84.1079 63.2759 83.749 67.9145 82.3224 71.306"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
     </svg>
 );
-export const PartnersManagement = ({ width = 70, height = 70 }: Icon) => (
+export const PartnersManagement = ({
+    width = 70,
+    height = 70,
+    color = "white",
+}: Icon) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width={width}
@@ -232,70 +244,74 @@ export const PartnersManagement = ({ width = 70, height = 70 }: Icon) => (
     >
         <path
             d="M6.23438 53.2383H11.457L25.1289 61.1133C28.1337 62.8319 31.5385 63.7279 35 63.7109"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeMiterlimit="10"
             strokeLinecap="round"
         />
         <path
             d="M54.6055 55.5078L58.543 53.2383H63.7656"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeMiterlimit="10"
             strokeLinecap="round"
         />
         <path
             d="M35 63.7107C38.4327 63.7058 41.8055 62.8107 44.7891 61.1131L50.2578 57.9412L40.1406 42.7927L32.8945 44.5974C32.1865 44.7632 31.4615 44.8458 30.7344 44.8435C29.3676 44.8425 28.0198 44.5242 26.7969 43.9138C26.1107 43.5777 25.5321 43.0565 25.1263 42.4091C24.7205 41.7617 24.5036 41.0138 24.5 40.2498C24.5065 39.4478 24.7448 38.6648 25.1863 37.9952C25.6279 37.3257 26.2537 36.7982 26.9883 36.4763L40.8789 30.5427C42.4541 29.8758 44.1699 29.6092 45.8732 29.7667C47.5765 29.9241 49.2144 30.5007 50.6406 31.4451L55.918 34.9998H63.7656"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeMiterlimit="10"
             strokeLinecap="round"
         />
         <path
             d="M6.23438 34.9998H14.082L19.332 31.4451C20.7583 30.5007 22.3961 29.9241 24.0994 29.7667C25.8028 29.6092 27.5185 29.8758 29.0937 30.5427L35 33.0857"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeMiterlimit="10"
             strokeLinecap="round"
         />
         <path
             d="M63.7656 29.7227V58.4883"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeMiterlimit="10"
             strokeLinecap="round"
         />
         <path
             d="M6.23438 29.7227V58.4883"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeMiterlimit="10"
             strokeLinecap="round"
         />
         <path
             d="M34.737 9.05755V7"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M34.737 27.5635V25.5098"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M40.1183 12.9604C40.1183 10.8488 38.3811 9.05371 34.737 9.05371C31.089 9.05371 29.3557 10.7445 29.3557 12.9604C29.3557 14.6859 31.0928 16.3459 34.737 16.867C38.385 17.3882 40.9405 18.5887 40.9405 21.1906C40.9405 23.5376 38.385 25.5026 34.737 25.5026C31.089 25.5026 28.5334 23.8272 28.5334 21.5959"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
     </svg>
 );
-export const Boarding = ({ width = 70, height = 70 }: Icon) => (
+export const Boarding = ({
+    width = 70,
+    height = 70,
+    color = "white",
+}: Icon) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width={width}
@@ -305,30 +321,34 @@ export const Boarding = ({ width = 70, height = 70 }: Icon) => (
     >
         <path
             d="M27.1542 42.8747L31.5292 47.2497L43.1958 35.583"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M29.1667 17.4997H40.8333C46.6667 17.4997 46.6667 14.583 46.6667 11.6663C46.6667 5.83301 43.75 5.83301 40.8333 5.83301H29.1667C26.25 5.83301 23.3333 5.83301 23.3333 11.6663C23.3333 17.4997 26.25 17.4997 29.1667 17.4997Z"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeMiterlimit="10"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M46.6667 11.7246C56.3792 12.2496 61.25 15.8371 61.25 29.1663V46.6663C61.25 58.3329 58.3333 64.1663 43.75 64.1663H26.25C11.6667 64.1663 8.75 58.3329 8.75 46.6663V29.1663C8.75 15.8663 13.6208 12.2496 23.3333 11.7246"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeMiterlimit="10"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
     </svg>
 );
-export const PaymentProcessing = ({ width = 106, height = 106 }: Icon) => (
+export const PaymentProcessing = ({
+    width = 106,
+    height = 106,
+    color = "white",
+}: Icon) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width={width}
@@ -348,45 +368,49 @@ export const PaymentProcessing = ({ width = 106, height = 106 }: Icon) => (
         />
         <path
             d="M31.7965 63.8741L63.8747 31.7959"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeMiterlimit="10"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M51.0476 70.316L54.2689 67.0947"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeMiterlimit="10"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M58.2732 63.0943L64.6888 56.6787"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeMiterlimit="10"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M30.9149 48.7337L48.7391 30.9095C54.43 25.2186 57.2754 25.1918 62.9126 30.8289L76.0928 44.0092C81.73 49.6463 81.7031 52.4918 76.0123 58.1826L58.1881 76.0068C52.4972 81.6977 49.6518 81.7245 44.0146 76.0873L30.8344 62.9071C25.1972 57.2699 25.1972 54.4514 30.9149 48.7337Z"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M26.6165 80.2998H80.3039"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
     </svg>
 );
-export const QuotaManagement = ({ width = 70, height = 70 }: Icon) => (
+export const QuotaManagement = ({
+    width = 70,
+    height = 70,
+    color = "white",
+}: Icon) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width={width}
@@ -396,14 +420,18 @@ export const QuotaManagement = ({ width = 70, height = 70 }: Icon) => (
     >
         <path
             d="M29.132 29.1324L28.1641 28.1645M41.8469 41.8473L40.8789 40.8793M28.1641 41.8363L41.8359 28.1645M28.7465 12.141C30.3352 10.7875 31.1309 10.1094 31.9621 9.7129C32.9107 9.25966 33.9487 9.02441 35 9.02441C36.0513 9.02441 37.0893 9.25966 38.0379 9.7129C38.8691 10.1094 39.6648 10.7875 41.2535 12.141C42.8914 13.5356 44.5539 14.241 46.7414 14.4133C48.8223 14.5801 49.8641 14.6649 50.7336 14.9711C52.7406 15.682 54.3211 17.2598 55.0293 19.2695C55.3355 20.1363 55.4203 21.1781 55.5871 23.2617C55.7594 25.4492 56.4621 27.109 57.8566 28.7469C59.2129 30.3356 59.891 31.1313 60.2875 31.9625C61.2062 33.8848 61.2062 36.1188 60.2875 38.0383C59.891 38.8695 59.2129 39.6652 57.8594 41.2539C56.5054 42.7751 55.7048 44.7088 55.5871 46.7418C55.4203 48.8227 55.3355 49.8645 55.0293 50.734C54.6787 51.7254 54.1107 52.6257 53.367 53.369C52.6232 54.1123 51.7225 54.6798 50.7309 55.0297C49.8641 55.3359 48.8223 55.4207 46.7387 55.5875C44.5512 55.7598 42.8914 56.4625 41.2535 57.857C39.6648 59.2133 38.8691 59.8914 38.0379 60.2879C37.0893 60.7411 36.0513 60.9764 35 60.9764C33.9487 60.9764 32.9107 60.7411 31.9621 60.2879C31.1309 59.8914 30.3352 59.2133 28.7465 57.8598C27.2253 56.5058 25.2916 55.7052 23.2586 55.5875C21.1777 55.4207 20.1359 55.3359 19.2664 55.0297C18.275 54.6791 17.3747 54.1111 16.6314 53.3674C15.8881 52.6236 15.3206 51.7229 14.9707 50.7313C14.6644 49.8645 14.5797 48.8227 14.4129 46.7391C14.2956 44.7073 13.4959 42.7746 12.1434 41.2539C10.7871 39.6652 10.109 38.8695 9.70976 38.0383C9.25695 37.0895 9.02217 36.0514 9.02264 35.0001C9.02312 33.9488 9.25883 32.9109 9.7125 31.9625C10.109 31.1313 10.7871 30.3356 12.1406 28.7469C13.5625 27.0762 14.2434 25.4027 14.4129 23.259C14.5797 21.1781 14.6644 20.1363 14.9707 19.2668C15.3213 18.2754 15.8893 17.3751 16.633 16.6318C17.3768 15.8885 18.2775 15.321 19.2691 14.9711C20.1359 14.6649 21.1777 14.5801 23.2613 14.4133C25.2931 14.296 27.2258 13.4936 28.7465 12.141Z"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
     </svg>
 );
-export const Security = ({ width = 71, height = 70 }: Icon) => (
+export const Security = ({
+    width = 71,
+    height = 70,
+    color = "white",
+}: Icon) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width={width}
@@ -413,28 +441,32 @@ export const Security = ({ width = 71, height = 70 }: Icon) => (
     >
         <path
             d="M35.5 10.3906C41.887 16.0414 50.2232 18.9836 58.7422 18.5938C59.9825 22.8129 60.362 27.2384 59.8581 31.6071C59.3543 35.9759 57.9774 40.1988 55.8093 44.0249C53.6412 47.851 50.7261 51.2022 47.2372 53.8794C43.7483 56.5567 39.7568 58.5052 35.5 59.6094C31.2431 58.5052 27.2517 56.5567 23.7628 53.8794C20.2739 51.2022 17.3588 47.851 15.1907 44.0249C13.0226 40.1988 11.6457 35.9759 11.1418 31.6071C10.638 27.2384 11.0175 22.8129 12.2578 18.5938C20.7768 18.9836 29.113 16.0414 35.5 10.3906Z"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M32.7656 32.2656C32.7656 32.9908 33.0537 33.6863 33.5665 34.1991C34.0793 34.7119 34.7748 35 35.5 35C36.2252 35 36.9207 34.7119 37.4335 34.1991C37.9463 33.6863 38.2344 32.9908 38.2344 32.2656C38.2344 31.5404 37.9463 30.8449 37.4335 30.3321C36.9207 29.8193 36.2252 29.5312 35.5 29.5312C34.7748 29.5312 34.0793 29.8193 33.5665 30.3321C33.0537 30.8449 32.7656 31.5404 32.7656 32.2656Z"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M35.5 35V41.8359"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
     </svg>
 );
-export const Settings = ({ width = 66, height = 65 }: Icon) => (
+export const Settings = ({
+    width = 66,
+    height = 65,
+    color = "white",
+}: Icon) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width={width}
@@ -444,16 +476,16 @@ export const Settings = ({ width = 66, height = 65 }: Icon) => (
     >
         <path
             d="M33 40.5134C37.4476 40.5134 41.0531 36.9079 41.0531 32.4603C41.0531 28.0127 37.4476 24.4072 33 24.4072C28.5524 24.4072 24.9469 28.0127 24.9469 32.4603C24.9469 36.9079 28.5524 40.5134 33 40.5134Z"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeMiterlimit="10"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
             d="M6.15634 34.8228V30.0983C6.15634 27.3065 8.43805 24.998 11.2566 24.998C16.1153 24.998 18.1018 21.562 15.659 17.3475C14.2631 14.9316 15.0953 11.7909 17.5381 10.395L22.182 7.7375C24.3027 6.47585 27.0407 7.22747 28.3024 9.34812L28.5976 9.85815C31.0136 14.0726 34.9864 14.0726 37.4292 9.85815L37.7245 9.34812C38.9861 7.22747 41.7242 6.47585 43.8448 7.7375L48.4888 10.395C50.9316 11.7909 51.7637 14.9316 50.3678 17.3475C47.9251 21.562 49.9115 24.998 54.7702 24.998C57.5619 24.998 59.8705 27.2797 59.8705 30.0983V34.8228C59.8705 37.6145 57.5888 39.923 54.7702 39.923C49.9115 39.923 47.9251 43.359 50.3678 47.5735C51.7637 50.0163 50.9316 53.1301 48.4888 54.526L43.8448 57.1835C41.7242 58.4452 38.9861 57.6936 37.7245 55.5729L37.4292 55.0629C35.0133 50.8484 31.0404 50.8484 28.5976 55.0629L28.3024 55.5729C27.0407 57.6936 24.3027 58.4452 22.182 57.1835L17.5381 54.526C15.0953 53.1301 14.2631 49.9894 15.659 47.5735C18.1018 43.359 16.1153 39.923 11.2566 39.923C8.43805 39.923 6.15634 37.6145 6.15634 34.8228Z"
-            stroke="white"
-            strokeWidth="3"
+            stroke={color}
+            strokeWidth="5"
             strokeMiterlimit="10"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -609,7 +641,7 @@ export const ErrorIcon = () => (
                 filterUnits="userSpaceOnUse"
                 color-interpolation-filters="sRGB"
             >
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feColorMatrix
                     in="SourceAlpha"
                     type="matrix"
@@ -683,7 +715,7 @@ export const WarningIcon = () => (
                 filterUnits="userSpaceOnUse"
                 color-interpolation-filters="sRGB"
             >
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feColorMatrix
                     in="SourceAlpha"
                     type="matrix"
@@ -748,7 +780,7 @@ export const SuccessIcon = () => (
                 filterUnits="userSpaceOnUse"
                 color-interpolation-filters="sRGB"
             >
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feColorMatrix
                     in="SourceAlpha"
                     type="matrix"
@@ -820,7 +852,7 @@ export const InfoIcon = () => (
                 filterUnits="userSpaceOnUse"
                 color-interpolation-filters="sRGB"
             >
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feColorMatrix
                     in="SourceAlpha"
                     type="matrix"

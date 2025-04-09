@@ -41,8 +41,6 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
     };
 
     useEffect(() => {
-        console.log("Current pathname:", window.location.pathname);
-
         // Find the link that matches the current path or is a parent path
         const foundLink = Links.find(
             (link) =>
@@ -51,17 +49,8 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
                     window.location.pathname.startsWith(link.path + "/"))
         );
 
-        console.log(
-            "Found link:",
-            foundLink ? JSON.stringify(foundLink, null, 2) : "Not found"
-        );
         setCurrentSideBar(foundLink?.sideBar || null);
     }, [location.pathname]);
-
-    // Log currentSideBar whenever it changes
-    useEffect(() => {
-        console.log(JSON.stringify(currentSideBar, null, 2));
-    }, [currentSideBar]);
 
     return (
         <div
@@ -89,13 +78,12 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
             {/* System Management Section */}
             <div className="overflow-y-auto py-5 px-3 h-full bg-white ">
                 <div className="flex items-center text-primary-500 font-medium mb-4">
-                    {currentSideBar?.titleSection?.icon ? (
+                    {currentSideBar?.titleSection?.icon && (
                         <currentSideBar.titleSection.icon
-                            width={20}
-                            height={20}
+                            color="#00a878 "
+                            width={25}
+                            height={25}
                         />
-                    ) : (
-                        <div className="w-5 h-5 bg-primary-500 rounded-full"></div>
                     )}
                     <span className="ml-2">
                         {currentSideBar?.titleSection?.title || "Navigation"}
