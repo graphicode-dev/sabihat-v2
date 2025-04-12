@@ -8,6 +8,7 @@ import {
     removeToken,
     setToken,
 } from "../lib/utils";
+import { useToast } from "../hooks/useToast";
 
 interface AuthContextType {
     user: User | null;
@@ -27,6 +28,7 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+    const { addToast } = useToast();
     const [user, setUser] = useState<User | null>(null);
     const [isAuthenticatedState, setIsAuthenticated] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -117,12 +119,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 setUser(response.data.result);
                 setIsAuthenticated(true);
                 profileFetchedRef.current = true;
+                addToast({
+                    title: "Login successful",
+                    type: "success",
+                });
                 return true;
+            } else {
+                addToast({
+                    title: "Login failed",
+                    type: "error",
+                });
+                return false;
             }
-
-            return false;
         } catch (error: any) {
             setError(error.response?.data?.message);
+            addToast({
+                title: "Login failed",
+                type: "error",
+            });
             return false;
         } finally {
             setIsLoading(false);

@@ -1,5 +1,5 @@
 import HomeBg from "../../assets/images/HomeBg.png";
-import { Links } from "../../lib/LinksUtils";
+import { navigationConfig } from "../../config/navigationConfig";
 
 function DashboardHome() {
     return (
@@ -14,7 +14,7 @@ function DashboardHome() {
         >
             <div className="w-full h-full flex flex-col items-center justify-center">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 p-8">
-                    {Links.map((link, index) => (
+                    {navigationConfig.map((link, index) => (
                         <a
                             key={index}
                             href={link.path}

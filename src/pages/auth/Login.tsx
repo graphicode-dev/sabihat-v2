@@ -3,13 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import axios from "axios";
 import Loading from "../../components/ui/Loading";
-import { useToast } from "../../hooks/useToast";
 
 const Login = () => {
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const { addToast } = useToast();
 
     const navigate = useNavigate();
     const {
@@ -38,11 +36,6 @@ const Login = () => {
                 : `20${phone}`;
             const response = await login(formattedPhone, password);
             if (response) {
-                addToast({
-                    title: "Login successful",
-                    message: "You have successfully logged in.",
-                    type: "success",
-                });
                 navigate("/");
             }
         } catch (err) {

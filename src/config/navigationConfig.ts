@@ -15,7 +15,14 @@ import SystemManagementAdministration from "../pages/dashboard/system-management
 import PlaceholderPage from "../pages/PlaceholderPage";
 import { TabLink } from "../types";
 
-export const Links: TabLink[] = [
+/**
+ * Returns the application's navigation configuration including routes,
+ * sidebar links, and associated components.
+ *
+ * This configuration is used to generate the main navigation and sidebar
+ * throughout the application.
+ */
+export const navigationConfig: TabLink[] = [
     {
         icon: Administration,
         title: "System Management & Administration",

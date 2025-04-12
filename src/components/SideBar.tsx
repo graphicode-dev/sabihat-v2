@@ -2,7 +2,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useRef, useEffect, useState } from "react";
 import { X } from "lucide-react";
-import { Links } from "../lib/LinksUtils";
+import { navigationConfig } from "../config/navigationConfig";
 import { SideBar as SideBarType } from "../types";
 
 type Props = {
@@ -42,7 +42,7 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
 
     useEffect(() => {
         // Find the link that matches the current path or is a parent path
-        const foundLink = Links.find(
+        const foundLink = navigationConfig.find(
             (link) =>
                 window.location.pathname === link.path ||
                 (window.location.pathname !== "/" &&
@@ -69,11 +69,11 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
             </button>
 
             {/* Logo Section */}
-            <div className="p-6 flex justify-center">
+            <Link to="/" className="p-6 flex justify-center">
                 <div className="bg-primary-500 text-white font-bold py-2 px-4 rounded-md">
                     Logo
                 </div>
-            </div>
+            </Link>
 
             {/* System Management Section */}
             <div className="overflow-y-auto py-5 px-3 h-full bg-white ">

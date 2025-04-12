@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import Loading from "../components/ui/Loading";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { Links } from "../lib/LinksUtils";
+import { navigationConfig } from "../config/navigationConfig";
 import { useAuth } from "../hooks/useAuth";
 const DashboardWrapper = lazy(
     () => import("../pages/dashboard/DashboardWrapper")
@@ -37,7 +37,7 @@ function AppRoutes() {
                         <Route index element={<DashboardHome />} />
                     </Route>
 
-                    {Links.map((link, i) => (
+                    {navigationConfig.map((link, i) => (
                         <Route
                             key={i}
                             path={link.path}
