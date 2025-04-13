@@ -4,122 +4,120 @@
 @import url("./assets/fonts/Sk-Modernist-Mono.otf");
 
 @font-face {
-  font-family: "Sk-Modernist";
-  src: url("./assets/fonts/Sk-Modernist-Regular.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
+    font-family: "Sk-Modernist";
+    src: url("./assets/fonts/Sk-Modernist-Regular.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: "Sk-Modernist";
-  src: url("./assets/fonts/Sk-Modernist-Bold.otf") format("opentype");
-  font-weight: bold;
-  font-style: normal;
+    font-family: "Sk-Modernist";
+    src: url("./assets/fonts/Sk-Modernist-Bold.otf") format("opentype");
+    font-weight: bold;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: "Sk-Modernist";
-  src: url("./assets/fonts/Sk-Modernist-Mono.otf") format("opentype");
-  font-weight: 300;
-  font-style: normal;
+    font-family: "Sk-Modernist";
+    src: url("./assets/fonts/Sk-Modernist-Mono.otf") format("opentype");
+    font-weight: 300;
+    font-style: normal;
 }
 
 @theme {
-  --color-primary-50: #e6f6f2;
-  --color-primary-100: #b0e4d5;
-  --color-primary-200: #8ad7c1;
-  --color-primary-300: #54c5a5;
-  --color-primary-400: #33b993;
-  --color-primary-500: #00a878;
-  --color-primary-600: #00996d;
-  --color-primary-700: #007755;
-  --color-primary-800: #005c42;
-  --color-primary-900: #004732;
+    --color-primary-50: #e6f6f2;
+    --color-primary-100: #b0e4d5;
+    --color-primary-200: #8ad7c1;
+    --color-primary-300: #54c5a5;
+    --color-primary-400: #33b993;
+    --color-primary-500: #00a878;
+    --color-primary-600: #00996d;
+    --color-primary-700: #007755;
+    --color-primary-800: #005c42;
+    --color-primary-900: #004732;
 
-  --color-red-50: #ffefec;
-  --color-red-100: #ffcdc4;
-  --color-red-200: #ffb5a8;
-  --color-red-300: #fe9380;
-  --color-red-400: #fe7e67;
-  --color-red-500: #fe5e41;
-  --color-red-600: #e7563b;
-  --color-red-700: #b4432e;
-  --color-red-800: #8c3424;
-  --color-red-900: #6b271b;
+    --color-red-50: #ffefec;
+    --color-red-100: #ffcdc4;
+    --color-red-200: #ffb5a8;
+    --color-red-300: #fe9380;
+    --color-red-400: #fe7e67;
+    --color-red-500: #fe5e41;
+    --color-red-600: #e7563b;
+    --color-red-700: #b4432e;
+    --color-red-800: #8c3424;
+    --color-red-900: #6b271b;
 
-  --color-yellow-50: #fdfbf7;
-  --color-yellow-100: #f8f1e6;
-  --color-yellow-200: #f4eada;
-  --color-yellow-300: #f0e1c9;
-  --color-yellow-400: #eddbbe;
-  --color-yellow-500: #e8d2ae;
-  --color-yellow-600: #d3bf9e;
-  --color-yellow-700: #a5957c;
-  --color-yellow-800: #807460;
-  --color-yellow-900: #615849;
+    --color-yellow-50: #fdfbf7;
+    --color-yellow-100: #f8f1e6;
+    --color-yellow-200: #f4eada;
+    --color-yellow-300: #f0e1c9;
+    --color-yellow-400: #eddbbe;
+    --color-yellow-500: #e8d2ae;
+    --color-yellow-600: #d3bf9e;
+    --color-yellow-700: #a5957c;
+    --color-yellow-800: #807460;
+    --color-yellow-900: #615849;
 
-  --color-blue-50: #e8ebec;
-  --color-blue-100: #b6c1c4;
-  --color-blue-200: #93a3a8;
-  --color-blue-300: #627880;
-  --color-blue-400: #435e68;
-  --color-blue-500: #143642;
-  --color-blue-600: #12313c;
-  --color-blue-700: #0e262f;
-  --color-blue-800: #0b1e24;
-  --color-blue-900: #08171c;
+    --color-blue-50: #e8ebec;
+    --color-blue-100: #b6c1c4;
+    --color-blue-200: #93a3a8;
+    --color-blue-300: #627880;
+    --color-blue-400: #435e68;
+    --color-blue-500: #143642;
+    --color-blue-600: #12313c;
+    --color-blue-700: #0e262f;
+    --color-blue-800: #0b1e24;
+    --color-blue-900: #08171c;
 
-  --color-dark-50: #e7e8e9;
-  --color-dark-100: #b4b7ba;
-  --color-dark-200: #909599;
-  --color-dark-300: #5d646a;
-  --color-dark-400: #3d464d;
-  --color-dark-500: #0d1821;
-  --color-dark-600: #0c161e;
-  --color-dark-700: #091117;
-  --color-dark-800: #070d12;
-  --color-dark-900: #050a0e;
+    --color-dark-50: #e7e8e9;
+    --color-dark-100: #b4b7ba;
+    --color-dark-200: #909599;
+    --color-dark-300: #5d646a;
+    --color-dark-400: #3d464d;
+    --color-dark-500: #0d1821;
+    --color-dark-600: #0c161e;
+    --color-dark-700: #091117;
+    --color-dark-800: #070d12;
+    --color-dark-900: #050a0e;
 }
 
-@layer components{
-  .page-wrapper {
-    @apply container mx-auto mt-1 h-[90vh] overflow-y-auto;
-  }
+@layer components {
+    .page-wrapper {
+        @apply container mx-auto mt-1 h-[90vh] overflow-y-auto;
+    }
 }
 
 /* Original styles */
 :root {
-  line-height: 1.5;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  font-family: "Sk-Modernist", sans-serif;
+    line-height: 1.5;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    font-family: "Sk-Modernist", sans-serif;
 
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: var(--color-primary-500);
+        border-radius: 50px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--color-dark-50);
+        border-left: 2px solid transparent;
+        border-right: 2px solid transparent;
+        background-clip: padding-box;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: var(--color-primary-600);
+    }
 }
 
-button{
-  cursor: pointer;
+button {
+    cursor: pointer;
 }
-
-.custom-scrollbar::-webkit-scrollbar {
-  width: 5px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: var(--color-primary-500);
-  border-radius: 50px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: var(--color-dark-50);
-  border-left: 2px solid transparent;
-  border-right: 2px solid transparent;
-  background-clip: padding-box;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-primary-600);
-}
-

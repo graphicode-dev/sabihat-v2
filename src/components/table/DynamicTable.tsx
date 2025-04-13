@@ -278,7 +278,7 @@ export const DynamicTable = ({
     };
 
     return (
-        <div className="w-full">
+        <div className="w-full p-6 bg-white rounded-lg shadow">
             <div className="p-4">
                 <div className="flex justify-between items-center">
                     {/* Title */}
