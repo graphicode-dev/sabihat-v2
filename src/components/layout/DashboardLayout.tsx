@@ -46,7 +46,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     />
                     {/* Main content area */}
                     <main className="md:ml-64 pt-[2vh] px-10 h-screen flex justify-center items-center ">
-                        <div className="w-[85vw] lg:w-[80vw] h-[80vh] antialiased flex flex-col justify-center items-center relative  overflow-hidden">
+                        <div className="w-[85vw] lg:w-[80vw] h-full antialiased flex flex-col justify-center items-center relative overflow-hidden">
                             {/* Navbar */}
                             <Navbar onToggleSidebar={toggleSidebar} />
                             {children}
