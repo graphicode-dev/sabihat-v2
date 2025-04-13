@@ -51,6 +51,13 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
 
         setCurrentSideBar(foundLink?.sideBar || null);
     }, [location.pathname]);
+    
+    // Handle logo click to navigate to dashboard home
+    const handleLogoClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        // Force a reload to ensure the dashboard home page is displayed correctly
+        window.location.href = '/';
+    };
 
     return (
         <div
@@ -69,11 +76,14 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
             </button>
 
             {/* Logo Section */}
-            <Link to="/" className="p-6 flex justify-center">
-                <div className="bg-primary-500 text-white font-bold py-2 px-4 rounded-md">
+            <div className="p-6 flex justify-center">
+                <div 
+                    onClick={handleLogoClick}
+                    className="bg-primary-500 text-white font-bold py-2 px-4 rounded-md cursor-pointer"
+                >
                     Logo
                 </div>
-            </Link>
+            </div>
 
             {/* System Management Section */}
             <div className="overflow-y-auto py-5 px-3 h-full bg-white ">

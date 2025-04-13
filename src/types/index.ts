@@ -18,6 +18,11 @@ export type SideBar = {
         title: string;
         path: string;
         component: React.ComponentType;
+        subLinks?: {
+            title: string;
+            path: string;
+            component: React.ComponentType;
+        }[];
     }[];
 };
 

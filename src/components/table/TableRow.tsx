@@ -1,25 +1,60 @@
 import { TableColumn, TableData } from "../../types/table";
 import { CheckBox } from "../ui/CheckBox";
 import { TableAvatar } from "./TableAvatar";
+import { useNavigate, useLocation } from "react-router-dom";
+
+interface TableRowProps {
+    row: TableData;
+    columns: TableColumn[];
+    columnWidths: number[];
+    handleRowSelection: (rowId: string, selected: boolean) => void;
+    onRowClick?: (rowId: string) => void;
+}
 
 function TableRow({
     row,
     columns,
     columnWidths,
     handleRowSelection,
-}: {
-    row: TableData;
-    columns: TableColumn[];
-    columnWidths: number[];
-    handleRowSelection: (rowId: string, selected: boolean) => void;
-}) {
+    onRowClick,
+}: TableRowProps) {
+    const navigate = useNavigate();
+    const location = useLocation();
+    
+    const handleRowClick = () => {
+        if (onRowClick) {
+            // Use the provided click handler if available
+            onRowClick(row.id);
+        } else {
+            // Default behavior: navigate to the view page
+            // Check if we're already on a view page to prevent path duplication
+            if (location.pathname.includes('/view/')) {
+                // Already on a view page, just update the ID parameter
+                const basePath = location.pathname.split('/view/')[0];
+                navigate(`${basePath}/view/${row.id}`);
+            } else {
+                // Not on a view page, navigate to the view page
+                const currentPath = location.pathname.endsWith('/')
+                    ? location.pathname.slice(0, -1)
+                    : location.pathname;
+                navigate(`${currentPath}/view/${row.id}`);
+            }
+        }
+    };
+    
+    const handleCheckboxClick = (e: React.MouseEvent) => {
+        // Stop propagation to prevent row click when checkbox is clicked
+        e.stopPropagation();
+    };
+
     return (
         <tr
             className={`${
                 row.selected ? "bg-primary-50" : ""
-            } hover:bg-gray-50`}
+            } hover:bg-gray-50 cursor-pointer`}
+            onClick={handleRowClick}
         >
-            <td className="px-6 py-4 whitespace-nowrap">
+            <td className="px-6 py-4 whitespace-nowrap" onClick={handleCheckboxClick}>
                 <CheckBox
                     checked={!!row.selected}
                     onChange={() => handleRowSelection(row.id, !!row.selected)}

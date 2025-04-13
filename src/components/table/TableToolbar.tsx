@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { ViewMode, TableColumn } from "../../types/table";
 import { TableFilter } from "./TableFilter";
-import { FileExportIcon, PDFIcon, VerticalFilter, XFile } from "../ui/icons";
+import { PDFIcon, VerticalFilter, XFile } from "../ui/icons";
 import Pagination from "../ui/Pagination";
 import { usePagination } from "../../hooks/usePagination";
 import { CheckBox } from "../ui/CheckBox";
@@ -277,16 +277,6 @@ export const TableToolbar = ({
                             )}
                         </button>
 
-                        {/* Export */}
-                        <button
-                            type="button"
-                            onClick={() => {}}
-                            className="w-10 h-10 rounded-full flex justify-center items-center border border-dark-50 text-dark-200 hover:bg-dark-50"
-                        >
-                            <FileExportIcon width={20} height={20} />
-                            <span className="sr-only">Export</span>
-                        </button>
-
                         {/* PDF */}
                         <button
                             type="button"
@@ -297,7 +287,7 @@ export const TableToolbar = ({
                             <span className="sr-only">PDF</span>
                         </button>
 
-                        {/* X File */}
+                        {/* Excel File */}
                         <button
                             type="button"
                             onClick={() => {}}

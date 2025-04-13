@@ -12,6 +12,7 @@ import {
     Settings,
 } from "../components/ui/icons";
 import SystemManagementAdministration from "../pages/dashboard/system-management-administration/SystemManagementAdministration";
+import SysMgmtAdminViewPage from "../pages/dashboard/system-management-administration/view";
 import PlaceholderPage from "../pages/PlaceholderPage";
 import { TabLink } from "../types";
 
@@ -38,6 +39,13 @@ export const navigationConfig: TabLink[] = [
                     title: "All",
                     path: "/system-management-administration",
                     component: SystemManagementAdministration,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: SysMgmtAdminViewPage,
+                        },
+                    ],
                 },
                 {
                     title: "Companies",

@@ -1,13 +1,12 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import Loading from "../components/ui/Loading";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { navigationConfig } from "../config/navigationConfig";
 import { useAuth } from "../hooks/useAuth";
 const DashboardWrapper = lazy(
     () => import("../pages/dashboard/DashboardWrapper")
 );
-const DashboardHome = lazy(() => import("../pages/dashboard/DashboardHome"));
 const Login = lazy(() => import("../pages/auth/Login"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 
@@ -24,35 +23,91 @@ const RootRedirect = () => {
     return <Navigate to={isAuthenticated ? "/" : "/login"} replace />;
 };
 
+// Helper function to get clean path without leading/trailing slashes
+const cleanPath = (path: string) => path.replace(/^\/|\/$/g, "");
+
+// Debug component to log routes
+const RouteLogger = () => {
+    const location = useLocation();
+
+    useEffect(() => {
+        console.log("Current location:", location);
+    }, [location]);
+
+    return null;
+};
+
 function AppRoutes() {
+    // Extract all view routes with ID parameters
+    const viewRoutes = navigationConfig.flatMap((link) =>
+        (link.sideBar?.links || []).flatMap((route) =>
+            (route.subLinks || [])
+                .filter((subLink) => subLink.path.includes(":id"))
+                .map((subLink) => {
+                    const basePath = cleanPath(route.path);
+                    return {
+                        path: `${basePath}/${cleanPath(subLink.path)}`,
+                        component: subLink.component,
+                    };
+                })
+        )
+    );
+
     return (
         <Suspense fallback={<Loading />}>
+            <RouteLogger />
             <Routes>
                 {/* Public routes */}
                 <Route path="/login" element={<Login />} />
 
                 {/* Protected routes */}
                 <Route element={<ProtectedRoute />}>
+                    {/* Dashboard wrapper */}
                     <Route path="/" element={<DashboardWrapper />}>
-                        <Route index element={<DashboardHome />} />
-                    </Route>
+                        {/* Dynamic view routes with ID parameters */}
+                        {viewRoutes.map((route, i) => (
+                            <Route
+                                key={`view-${i}`}
+                                path={route.path}
+                                element={<route.component />}
+                            />
+                        ))}
 
-                    {navigationConfig.map((link, i) => (
-                        <Route
-                            key={i}
-                            path={link.path}
-                            element={<DashboardWrapper />}
-                        >
-                            <Route index element={<link.component />} />
-                            {link.sideBar?.links?.map((route, j) => (
-                                <Route
-                                    key={j}
-                                    path={route.path}
-                                    element={<route.component />}
-                                />
-                            ))}
-                        </Route>
-                    ))}
+                        {/* Main navigation routes */}
+                        {navigationConfig.map((link, i) => (
+                            <Route
+                                key={`main-${i}`}
+                                path={cleanPath(link.path)}
+                                element={<link.component />}
+                            />
+                        ))}
+
+                        {/* Sidebar routes */}
+                        {navigationConfig.flatMap((link, i) =>
+                            (link.sideBar?.links || [])
+                                .filter(
+                                    (route) =>
+                                        !route.subLinks?.some((subLink) =>
+                                            subLink.path.includes(":id")
+                                        )
+                                )
+                                .map((route, j) => {
+                                    const routePath = route.path.startsWith("/")
+                                        ? cleanPath(route.path)
+                                        : `${cleanPath(link.path)}/${cleanPath(
+                                              route.path
+                                          )}`;
+
+                                    return (
+                                        <Route
+                                            key={`sidebar-${i}-${j}`}
+                                            path={routePath}
+                                            element={<route.component />}
+                                        />
+                                    );
+                                })
+                        )}
+                    </Route>
                 </Route>
 
                 {/* Root path - redirect based on auth status */}
