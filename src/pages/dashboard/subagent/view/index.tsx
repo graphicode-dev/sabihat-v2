@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 import { mockData } from "../../../../data/mockData";
 import { TableData } from "../../../../types/table";
 import { ViewCardData } from "../../../../types";
-
-function SysMgmtAdminViewPage() {
+function SubagentViewPage() {
     const { id } = useParams();
 
     const [userData, setUserData] = useState<TableData | null>(null);
@@ -42,4 +41,4 @@ function SysMgmtAdminViewPage() {
     );
 }
 
-export default SysMgmtAdminViewPage;
+export default SubagentViewPage;

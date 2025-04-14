@@ -1,9 +1,9 @@
-import PageLayout from "../../../components/layout/PageLayout";
+import PageLayout from "../../../layout/PageLayout";
 import { DynamicTable } from "../../../components/table";
 import { columns, mockData } from "../../../data/mockData";
 import { useToast } from "../../../hooks/useToast";
 
-function SystemManagementAdministration() {
+function SystemManagementAdministrationPage() {
     const { addToast } = useToast();
 
     // const addErrorToast = () => {
@@ -36,20 +36,20 @@ function SystemManagementAdministration() {
         });
     };
 
-    const addInfoToast = () => {
-        addToast({
-            type: "info",
-            title: "Info message",
-            message: "This is an info message",
-            duration: 5000,
-            position: "top-right",
-        });
-    };
+    // const addInfoToast = () => {
+    //     addToast({
+    //         type: "info",
+    //         title: "Info message",
+    //         message: "This is an info message",
+    //         duration: 5000,
+    //         position: "top-right",
+    //     });
+    // };
 
     return (
         <PageLayout>
             <DynamicTable
-                title="All companies"
+                title="All Users"
                 data={mockData}
                 columns={columns}
                 initialView="grid"
@@ -57,14 +57,10 @@ function SystemManagementAdministration() {
                 onAddClick={() => {
                     addSuccessToast();
                 }}
-                addLabel="Add company"
-                onBulkAction={() => {
-                    addInfoToast();
-                }}
-                bulkActionLabel="Process selected"
+                addLabel="Add User"
             />
         </PageLayout>
     );
 }
 
-export default SystemManagementAdministration;
+export default SystemManagementAdministrationPage;

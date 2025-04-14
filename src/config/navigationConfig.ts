@@ -11,8 +11,22 @@ import {
     Security,
     Settings,
 } from "../components/ui/icons";
-import SystemManagementAdministration from "../pages/dashboard/system-management-administration/SystemManagementAdministration";
+import ClassificationPage from "../pages/dashboard/classification";
+import ClassificationViewPage from "../pages/dashboard/classification/view";
+import CommercialAgentPage from "../pages/dashboard/commercial-agent";
+import CommercialAgentViewPage from "../pages/dashboard/commercial-agent/view";
+import CompaniesPage from "../pages/dashboard/companies";
+import CompaniesViewPage from "../pages/dashboard/companies/view";
+import EmployeePage from "../pages/dashboard/employee";
+import EmployeeViewPage from "../pages/dashboard/employee/view";
+import MarineAgentPage from "../pages/dashboard/marine-agent";
+import MarineAgentViewPage from "../pages/dashboard/marine-agent/view";
+import SubagentPage from "../pages/dashboard/subagent";
+import SubagentViewPage from "../pages/dashboard/subagent/view";
+import SystemManagementAdministrationPage from "../pages/dashboard/system-management-administration";
 import SysMgmtAdminViewPage from "../pages/dashboard/system-management-administration/view";
+import UserRolesPage from "../pages/dashboard/user-roles";
+import UserRolesViewPage from "../pages/dashboard/user-roles/view";
 import PlaceholderPage from "../pages/PlaceholderPage";
 import { TabLink } from "../types";
 
@@ -28,7 +42,7 @@ export const navigationConfig: TabLink[] = [
         icon: Administration,
         title: "System Management & Administration",
         path: "/system-management-administration",
-        component: SystemManagementAdministration,
+        component: SystemManagementAdministrationPage,
         sideBar: {
             titleSection: {
                 icon: Administration,
@@ -38,7 +52,7 @@ export const navigationConfig: TabLink[] = [
                 {
                     title: "All",
                     path: "/system-management-administration",
-                    component: SystemManagementAdministration,
+                    component: SystemManagementAdministrationPage,
                     subLinks: [
                         {
                             title: "View",
@@ -50,37 +64,86 @@ export const navigationConfig: TabLink[] = [
                 {
                     title: "Companies",
                     path: "/system-management-administration/companies",
-                    component: PlaceholderPage,
+                    component: CompaniesPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: CompaniesViewPage,
+                        },
+                    ],
                 },
                 {
                     title: "Marine Agent",
                     path: "/system-management-administration/marine-agent",
-                    component: PlaceholderPage,
+                    component: MarineAgentPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: MarineAgentViewPage,
+                        },
+                    ],
                 },
                 {
                     title: "Commercial Agent",
                     path: "/system-management-administration/commercial-agent",
-                    component: PlaceholderPage,
+                    component: CommercialAgentPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: CommercialAgentViewPage,
+                        },
+                    ],
                 },
                 {
                     title: "Subagent",
                     path: "/system-management-administration/subagent",
-                    component: PlaceholderPage,
+                    component: SubagentPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: SubagentViewPage,
+                        },
+                    ],
                 },
                 {
                     title: "Create User Roles & Permissions",
                     path: "/system-management-administration/user-roles",
-                    component: PlaceholderPage,
+                    component: UserRolesPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: UserRolesViewPage,
+                        },
+                    ],
                 },
                 {
                     title: "Classification",
                     path: "/system-management-administration/classification",
-                    component: PlaceholderPage,
+                    component: ClassificationPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: ClassificationViewPage,
+                        },
+                    ],
                 },
                 {
                     title: "Employee",
                     path: "/system-management-administration/employee",
-                    component: PlaceholderPage,
+                    component: EmployeePage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: EmployeeViewPage,
+                        },
+                    ],
                 },
             ],
         },

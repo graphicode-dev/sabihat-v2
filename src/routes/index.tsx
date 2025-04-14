@@ -82,30 +82,34 @@ function AppRoutes() {
                             />
                         ))}
 
-                        {/* Sidebar routes */}
-                        {navigationConfig.flatMap((link, i) =>
-                            (link.sideBar?.links || [])
-                                .filter(
-                                    (route) =>
-                                        !route.subLinks?.some((subLink) =>
-                                            subLink.path.includes(":id")
-                                        )
-                                )
-                                .map((route, j) => {
-                                    const routePath = route.path.startsWith("/")
-                                        ? cleanPath(route.path)
-                                        : `${cleanPath(link.path)}/${cleanPath(
-                                              route.path
-                                          )}`;
+                        {/* Sidebar routes - FIXED to handle all sidebar links properly */}
+                        {navigationConfig.flatMap(
+                            (link, i) =>
+                                (link.sideBar?.links || [])
+                                    .map((route, j) => {
+                                        // Skip routes that are already handled by main navigation
+                                        if (route.path === link.path) {
+                                            return null;
+                                        }
 
-                                    return (
-                                        <Route
-                                            key={`sidebar-${i}-${j}`}
-                                            path={routePath}
-                                            element={<route.component />}
-                                        />
-                                    );
-                                })
+                                        // Get the clean path for this route
+                                        const routePath = route.path.startsWith(
+                                            "/"
+                                        )
+                                            ? cleanPath(route.path)
+                                            : `${cleanPath(
+                                                  link.path
+                                              )}/${cleanPath(route.path)}`;
+
+                                        return (
+                                            <Route
+                                                key={`sidebar-${i}-${j}`}
+                                                path={routePath}
+                                                element={<route.component />}
+                                            />
+                                        );
+                                    })
+                                    .filter(Boolean) // Remove null entries
                         )}
                     </Route>
                 </Route>

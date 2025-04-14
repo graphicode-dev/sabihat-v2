@@ -1,5 +1,9 @@
-import PageLayout from "../layout/PageLayout";
+import PageLayout from "../../layout/PageLayout";
 import ViewCard from "./ViewCard";
+import React from "react";
+import { TableColumn } from "../../types/table";
+import { DynamicTable } from "../table/DynamicTable";
+import { Eye, Download, Trash, Edit } from "lucide-react";
 
 function ViewCardUsageExample() {
     // Example data for user view card
@@ -82,6 +86,179 @@ function ViewCardUsageExample() {
         ],
     };
 
+    // Example data
+    const exampleData = [
+        {
+            id: "1",
+            avatar: "/images/default-user.png",
+            columns: {
+                name: "John Doe",
+                email: "john.doe@example.com",
+                phone: "+1 234 567 890",
+                status: "Active",
+                role: "Admin",
+                file: "https://example.com/files/document.pdf",
+                message:
+                    "This is a sample message that would be shown in a modal when clicked.",
+            },
+        },
+        {
+            id: "2",
+            avatar: "/images/default-user.png",
+            columns: {
+                name: "Jane Smith",
+                email: "jane.smith@example.com",
+                phone: "+1 987 654 321",
+                status: "Inactive",
+                role: "User",
+                file: "https://example.com/files/report.xlsx",
+                message: "Another sample message for demonstration purposes.",
+            },
+        },
+    ];
+
+    // Example of how to create a table schema with custom cell rendering
+    const createTableSchema = (
+        setSelectedMessage: (message: string) => void
+    ) => {
+        const columns: TableColumn[] = [
+            {
+                id: "col1",
+                header: "Name",
+                accessorKey: "name",
+                sortable: true,
+            },
+            {
+                id: "col2",
+                header: "Email",
+                accessorKey: "email",
+                sortable: true,
+            },
+            {
+                id: "col3",
+                header: "Phone",
+                accessorKey: "phone",
+                sortable: true,
+            },
+            {
+                id: "col4",
+                header: "Status",
+                accessorKey: "status",
+                sortable: true,
+                // Custom cell rendering for status
+                cell: ({ row }) => {
+                    const status = row.original.columns.status;
+                    return (
+                        <span
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                status === "Active"
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-red-100 text-red-800"
+                            }`}
+                        >
+                            {status}
+                        </span>
+                    );
+                },
+            },
+            {
+                id: "col5",
+                header: "File",
+                accessorKey: "file",
+                sortable: false,
+                // Custom cell rendering for file download
+                cell: ({ row }) => {
+                    const filePath = row.original.columns.file;
+                    const fileName = filePath.split("/").pop();
+
+                    return (
+                        <a
+                            href={filePath}
+                            download={fileName}
+                            className="text-primary-500 flex items-center gap-1 hover:underline"
+                            onClick={(e) => e.stopPropagation()} // Prevent row click
+                        >
+                            <Download size={16} />
+                            <span>Download</span>
+                        </a>
+                    );
+                },
+            },
+            {
+                id: "col6",
+                header: "Message",
+                accessorKey: "message",
+                sortable: false,
+                // Custom cell rendering for message viewing
+                cell: ({ row }) => {
+                    const message = row.original.columns.message;
+
+                    return (
+                        <button
+                            className="text-primary-500 flex items-center gap-1 hover:underline"
+                            onClick={(e) => {
+                                e.stopPropagation(); // Prevent row click
+                                setSelectedMessage(message);
+                            }}
+                            type="button"
+                            title="View Message"
+                        >
+                            <Eye size={16} />
+                            <span>View</span>
+                        </button>
+                    );
+                },
+            },
+            {
+                id: "col7",
+                header: "Actions",
+                accessorKey: "actions",
+                sortable: false,
+                // Custom cell rendering for actions
+                cell: ({ row }) => {
+                    const id = row.original.id;
+
+                    return (
+                        <div className="flex items-center gap-2">
+                            <button
+                                className="text-primary-500 hover:text-primary-700"
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Prevent row click
+                                    console.log(`Edit item ${id}`);
+                                }}
+                                type="button"
+                                title="Edit"
+                            >
+                                <Edit size={16} />
+                            </button>
+                            <button
+                                className="text-red-500 hover:text-red-700"
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Prevent row click
+                                    console.log(`Delete item ${id}`);
+                                }}
+                                type="button"
+                                title="Delete"
+                            >
+                                <Trash size={16} />
+                            </button>
+                        </div>
+                    );
+                },
+            },
+        ];
+
+        return columns;
+    };
+
+    // Example component using the table schema
+    const [selectedMessage, setSelectedMessage] = React.useState<string | null>(
+        null
+    );
+
+    // Create columns with the message handler
+    const columns = createTableSchema((message) => setSelectedMessage(message));
+
     return (
         <PageLayout>
             <div className="flex flex-col gap-6">
@@ -110,6 +287,36 @@ function ViewCardUsageExample() {
                     data={defaultData}
                     buttons
                 />
+
+                <div className="space-y-4">
+                    <DynamicTable
+                        title="Users"
+                        data={exampleData}
+                        columns={columns}
+                    />
+
+                    {/* Simple modal for displaying messages */}
+                    {selectedMessage && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+                                <h3 className="text-lg font-medium mb-4">
+                                    Message
+                                </h3>
+                                <p className="text-gray-700">
+                                    {selectedMessage}
+                                </p>
+                                <div className="mt-6 flex justify-end">
+                                    <button
+                                        className="px-4 py-2 bg-primary-500 text-white rounded-md"
+                                        onClick={() => setSelectedMessage(null)}
+                                    >
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
         </PageLayout>
     );

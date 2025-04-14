@@ -1,9 +1,9 @@
 import { ReactNode, useEffect, useState } from "react";
-import SideBar from "../SideBar";
-import Navbar from "../Navbar";
-import { useAuth } from "../../hooks/useAuth";
-import Loading from "../ui/Loading";
-import DashboardHome from "../../pages/dashboard/DashboardHome";
+import SideBar from "../components/SideBar";
+import Navbar from "../components/Navbar";
+import { useAuth } from "../hooks/useAuth";
+import Loading from "../components/ui/Loading";
+import DashboardHome from "../pages/dashboard/DashboardHome";
 
 interface DashboardLayoutProps {
     children: ReactNode;
