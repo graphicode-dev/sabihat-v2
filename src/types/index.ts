@@ -31,6 +31,5 @@ export type TabLink = {
     icon: ({ width, height }: Icon) => React.JSX.Element;
     title: string;
     path: string;
-    component?: React.ComponentType;
     sideBar: SideBar;
 };
