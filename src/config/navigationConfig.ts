@@ -11,32 +11,32 @@ import {
     Security,
     Settings,
 } from "../components/ui/icons";
-import ClassificationPage from "../pages/dashboard/system-management-administration/sidePages/classification";
-import ClassificationViewPage from "../pages/dashboard/system-management-administration/sidePages/classification/view";
-import CommercialAgentPage from "../pages/dashboard/system-management-administration/sidePages/commercial-agent";
-import CommercialAgentViewPage from "../pages/dashboard/system-management-administration/sidePages/commercial-agent/view";
-import CompaniesPage from "../pages/dashboard/system-management-administration/sidePages/companies";
-import CompaniesViewPage from "../pages/dashboard/system-management-administration/sidePages/companies/view";
-import EmployeePage from "../pages/dashboard/system-management-administration/sidePages/employee";
-import EmployeeViewPage from "../pages/dashboard/system-management-administration/sidePages/employee/view";
-import MarineAgentPage from "../pages/dashboard/system-management-administration/sidePages/marine-agent";
-import MarineAgentViewPage from "../pages/dashboard/system-management-administration/sidePages/marine-agent/view";
-import SubagentPage from "../pages/dashboard/system-management-administration/sidePages/subagent";
-import SubagentViewPage from "../pages/dashboard/system-management-administration/sidePages/subagent/view";
-import SystemManagementAdministrationPage from "../pages/dashboard/system-management-administration";
-import SysMgmtAdminViewPage from "../pages/dashboard/system-management-administration/view";
-import UserRolesPage from "../pages/dashboard/system-management-administration/sidePages/user-roles";
-import UserRolesViewPage from "../pages/dashboard/system-management-administration/sidePages/user-roles/view";
+import ClassificationPage from "../pages/dashboard/system-management-administration/classification";
+import ClassificationViewPage from "../pages/dashboard/system-management-administration/classification/view";
+import CommercialAgentPage from "../pages/dashboard/system-management-administration/commercial-agent";
+import CommercialAgentViewPage from "../pages/dashboard/system-management-administration/commercial-agent/view";
+import CompaniesPage from "../pages/dashboard/system-management-administration/companies";
+import CompaniesViewPage from "../pages/dashboard/system-management-administration/companies/view";
+import EmployeePage from "../pages/dashboard/system-management-administration/employee";
+import EmployeeViewPage from "../pages/dashboard/system-management-administration/employee/view";
+import MarineAgentPage from "../pages/dashboard/system-management-administration/marine-agent";
+import MarineAgentViewPage from "../pages/dashboard/system-management-administration/marine-agent/view";
+import SubagentPage from "../pages/dashboard/system-management-administration/subagent";
+import SubagentViewPage from "../pages/dashboard/system-management-administration/subagent/view";
+import SystemManagementAdministrationPage from "../pages/dashboard/system-management-administration/all";
+import SysMgmtAdminViewPage from "../pages/dashboard/system-management-administration/all/view";
+import UserRolesPage from "../pages/dashboard/system-management-administration/user-roles";
+import UserRolesViewPage from "../pages/dashboard/system-management-administration/user-roles/view";
 
 import { TabLink } from "../types";
-import CabinsPage from "../pages/dashboard/ship-trip-management";
-import CabinsViewPage from "../pages/dashboard/ship-trip-management/view";
-import PortPage from "../pages/dashboard/ship-trip-management/sidePages/port";
-import PortViewPage from "../pages/dashboard/ship-trip-management/sidePages/port/view";
-import ScheduleNewTripsPage from "../pages/dashboard/ship-trip-management/sidePages/schedule-new-trips";
-import ScheduleNewTripsViewPage from "../pages/dashboard/ship-trip-management/sidePages/schedule-new-trips/view";
-import ScheduleNewShipsPage from "../pages/dashboard/ship-trip-management/sidePages/schedule-new-ships";
-import ScheduleNewShipsViewPage from "../pages/dashboard/ship-trip-management/sidePages/schedule-new-ships/view";
+import CabinsPage from "../pages/dashboard/ship-trip-management/cabins";
+import CabinsViewPage from "../pages/dashboard/ship-trip-management/cabins/view";
+import PortPage from "../pages/dashboard/ship-trip-management/port";
+import PortViewPage from "../pages/dashboard/ship-trip-management/port/view";
+import ScheduleNewTripsPage from "../pages/dashboard/ship-trip-management/schedule-new-trips";
+import ScheduleNewTripsViewPage from "../pages/dashboard/ship-trip-management/schedule-new-trips/view";
+import ScheduleNewShipsPage from "../pages/dashboard/ship-trip-management/schedule-new-ships";
+import ScheduleNewShipsViewPage from "../pages/dashboard/ship-trip-management/schedule-new-ships/view";
 import PlaceholderPage from "../pages/PlaceholderPage";
 
 export const navigationConfig: TabLink[] = [

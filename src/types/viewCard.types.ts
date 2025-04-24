@@ -7,7 +7,11 @@ export interface ViewCardFieldItem {
 }
 
 // Type for section data (array of field items)
-export type ViewCardSectionData = ViewCardFieldItem[];
+export type ViewCardSectionData = {
+    title?: string;
+    mainTitle?: string; // Optional main title that appears above the section
+    fields: ViewCardFieldItem[];
+};
 
 // Generic data structure for ViewCard
 export interface ViewCardData {

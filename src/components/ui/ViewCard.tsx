@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { PenIcon, TrashIcon } from "./icons";
 import {
     ViewCardProps,
     ViewCardSectionProps,
     ViewCardFieldProps,
     ViewCardButtonsProps,
+    ViewCardSectionData,
 } from "../../types/viewCard.types";
 
 const ViewCardSection: React.FC<ViewCardSectionProps> = ({
@@ -12,7 +13,7 @@ const ViewCardSection: React.FC<ViewCardSectionProps> = ({
     children,
 }) => (
     <div className="mb-8 text-left">
-        <h3 className="text-sm text-left font-medium text-primary-500 mb-2">
+        <h3 className="text-sm text-left font-bold text-primary-500 mb-2">
             {title}
         </h3>
         {children}
@@ -103,6 +104,27 @@ const ViewCard: React.FC<ViewCardProps> = ({
     onDelete,
     onTicket,
 }) => {
+    // State to track if all content is shown or limited
+    const [showAllContent, setShowAllContent] = useState(false);
+
+    // Default number of sections to show initially
+    const initialSectionsToShow = 2;
+
+    // Get all section keys (keys that have objects with fields property)
+    const sectionKeys = Object.entries(data)
+        .filter(
+            ([_, value]) =>
+                typeof value === "object" && value !== null && "fields" in value
+        )
+        .map(([key]) => key);
+
+    // Determine if we need a show more button
+    const needsShowMore = sectionKeys.length > initialSectionsToShow;
+
+    // Get the sections to display based on current state
+    const visibleSectionKeys = showAllContent
+        ? sectionKeys
+        : sectionKeys.slice(0, initialSectionsToShow);
     // Render different layouts based on variant
     const renderContent = () => {
         switch (variant) {
@@ -209,7 +231,9 @@ const ViewCard: React.FC<ViewCardProps> = ({
                                     {Object.entries(data)
                                         .filter(
                                             ([_, value]) =>
-                                                !Array.isArray(value)
+                                                typeof value !== "object" ||
+                                                value === null ||
+                                                !("fields" in value)
                                         )
                                         .map(([key, value], index) => (
                                             <ViewCardField
@@ -221,24 +245,66 @@ const ViewCard: React.FC<ViewCardProps> = ({
                                 </div>
                             </ViewCardSection>
 
-                            {Object.entries(data).map(([key, value], index) => {
-                                // Skip non-array values which would be the regular fields
-                                if (!Array.isArray(value)) return null;
+                            {/* Section data with fields */}
+                            {Object.entries(data)
+                                .filter(([key, value]) => {
+                                    // Only process objects with fields property
+                                    if (
+                                        typeof value !== "object" ||
+                                        value === null ||
+                                        !("fields" in value)
+                                    ) {
+                                        return false;
+                                    }
 
-                                return (
-                                    <ViewCardSection key={index} title={key}>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                            {value.map((field, fieldIndex) => (
-                                                <ViewCardField
-                                                    key={fieldIndex}
-                                                    label={field.label}
-                                                    value={field.value}
-                                                />
-                                            ))}
-                                        </div>
-                                    </ViewCardSection>
-                                );
-                            })}
+                                    const sectionData =
+                                        value as ViewCardSectionData;
+
+                                    // Skip if fields is not an array or is empty
+                                    if (
+                                        !Array.isArray(sectionData.fields) ||
+                                        sectionData.fields.length === 0
+                                    ) {
+                                        return false;
+                                    }
+
+                                    // Only show sections that are in the visible keys list
+                                    return visibleSectionKeys.includes(key);
+                                })
+                                .map(([key, value], index) => {
+                                    // Safe to cast now
+                                    const sectionData =
+                                        value as ViewCardSectionData;
+
+                                    return (
+                                        <React.Fragment key={index}>
+                                            {sectionData.mainTitle && (
+                                                <h2 className="text-left text-2xl font-bold text-gray-900 mb-4">
+                                                    {sectionData.mainTitle}
+                                                </h2>
+                                            )}
+                                            <ViewCardSection
+                                                title={sectionData.title || key}
+                                            >
+                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                    {sectionData.fields.map(
+                                                        (field, fieldIndex) => (
+                                                            <ViewCardField
+                                                                key={fieldIndex}
+                                                                label={
+                                                                    field.label
+                                                                }
+                                                                value={
+                                                                    field.value
+                                                                }
+                                                            />
+                                                        )
+                                                    )}
+                                                </div>
+                                            </ViewCardSection>
+                                        </React.Fragment>
+                                    );
+                                })}
                         </div>
                     </div>
                 );
@@ -266,7 +332,10 @@ const ViewCard: React.FC<ViewCardProps> = ({
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 {Object.entries(data)
                                     .filter(
-                                        ([_, value]) => !Array.isArray(value)
+                                        ([_, value]) =>
+                                            typeof value !== "object" ||
+                                            value === null ||
+                                            !("fields" in value)
                                     )
                                     .map(([key, value], index) => (
                                         <ViewCardField
@@ -278,25 +347,62 @@ const ViewCard: React.FC<ViewCardProps> = ({
                             </div>
                         </ViewCardSection>
 
-                        {/* Section data */}
-                        {Object.entries(data).map(([key, value], index) => {
-                            // Skip non-array values which would be the regular fields
-                            if (!Array.isArray(value)) return null;
+                        {/* Section data with fields */}
+                        {Object.entries(data)
+                            .filter(([key, value]) => {
+                                // Only process objects with fields property
+                                if (
+                                    typeof value !== "object" ||
+                                    value === null ||
+                                    !("fields" in value)
+                                ) {
+                                    return false;
+                                }
 
-                            return (
-                                <ViewCardSection key={index} title={key}>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        {value.map((field, fieldIndex) => (
-                                            <ViewCardField
-                                                key={fieldIndex}
-                                                label={field.label}
-                                                value={field.value}
-                                            />
-                                        ))}
-                                    </div>
-                                </ViewCardSection>
-                            );
-                        })}
+                                const sectionData =
+                                    value as ViewCardSectionData;
+
+                                // Skip if fields is not an array or is empty
+                                if (
+                                    !Array.isArray(sectionData.fields) ||
+                                    sectionData.fields.length === 0
+                                ) {
+                                    return false;
+                                }
+
+                                // Only show sections that are in the visible keys list
+                                return visibleSectionKeys.includes(key);
+                            })
+                            .map(([key, value], index) => {
+                                // Safe to cast now
+                                const sectionData =
+                                    value as ViewCardSectionData;
+
+                                return (
+                                    <React.Fragment key={index}>
+                                        {sectionData.mainTitle && (
+                                            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                                                {sectionData.mainTitle}
+                                            </h2>
+                                        )}
+                                        <ViewCardSection
+                                            title={sectionData.title || key}
+                                        >
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                {sectionData.fields.map(
+                                                    (field, fieldIndex) => (
+                                                        <ViewCardField
+                                                            key={fieldIndex}
+                                                            label={field.label}
+                                                            value={field.value}
+                                                        />
+                                                    )
+                                                )}
+                                            </div>
+                                        </ViewCardSection>
+                                    </React.Fragment>
+                                );
+                            })}
                     </div>
                 );
         }
@@ -305,6 +411,34 @@ const ViewCard: React.FC<ViewCardProps> = ({
     return (
         <div className="bg-white shadow-sm rounded-lg p-6 border border-gray-100">
             {renderContent()}
+
+            {/* Global Show More button */}
+            {needsShowMore && (
+                <div className="flex justify-center bg-dark-50 py-3 mt-6">
+                    <button
+                        onClick={() => setShowAllContent(!showAllContent)}
+                        className="text-primary-500 font-medium flex items-center gap-1 hover:text-primary-600 transition-colors"
+                    >
+                        {showAllContent ? "Show Less" : "Show More"}
+                        <svg
+                            className={`w-4 h-4 transition-transform ${
+                                showAllContent ? "rotate-180" : ""
+                            }`}
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 9l-7 7-7-7"
+                            />
+                        </svg>
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
