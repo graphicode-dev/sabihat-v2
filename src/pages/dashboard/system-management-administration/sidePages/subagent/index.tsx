@@ -1,9 +1,9 @@
-import { DynamicTable } from "../../../components/table";
-import { columns, mockData } from "../../../data/mockData";
-import { useToast } from "../../../hooks/useToast";
-import PageLayout from "../../../layout/PageLayout";
+import { DynamicTable } from "../../../../../components/table";
+import { columns, mockData } from "../../../../../data/mockData";
+import { useToast } from "../../../../../hooks/useToast";
+import PageLayout from "../../../../../layout/PageLayout";
 
-function CommercialAgentPage() {
+function SubagentPage() {
     const { addToast } = useToast();
 
     const addSuccessToast = () => {
@@ -19,7 +19,7 @@ function CommercialAgentPage() {
     return (
         <PageLayout>
             <DynamicTable
-                title="All Commercial Agents"
+                title="All Subagents"
                 data={mockData}
                 columns={columns}
                 initialView="grid"
@@ -27,10 +27,10 @@ function CommercialAgentPage() {
                 onAddClick={() => {
                     addSuccessToast();
                 }}
-                addLabel="Add Commercial Agent"
+                addLabel="Add Subagent"
             />
         </PageLayout>
     );
 }
 
-export default CommercialAgentPage;
+export default SubagentPage;

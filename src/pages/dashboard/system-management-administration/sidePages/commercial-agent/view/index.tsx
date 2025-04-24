@@ -1,10 +1,10 @@
-import PageLayout from "../../../../layout/PageLayout";
-import ViewCard from "../../../../components/ui/ViewCard";
+import PageLayout from "../../../../../../layout/PageLayout";
+import ViewCard from "../../../../../../components/ui/ViewCard";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { mockData } from "../../../../data/mockData";
-import { TableData } from "../../../../types/table";
-import { ViewCardData } from "../../../../types";
+import { mockData } from "../../../../../../data/mockData";
+import { TableData } from "../../../../../../types/table";
+import { ViewCardData } from "../../../../../../types";
 function CommercialAgentViewPage() {
     const { id } = useParams();
 

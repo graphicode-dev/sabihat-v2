@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { CheckBox, DynamicTable } from "../../../components/table";
-import PageLayout from "../../../layout/PageLayout";
+import { CheckBox, DynamicTable } from "../../../../../components/table";
+import PageLayout from "../../../../../layout/PageLayout";
 
 // Define the permission types
 type Permission = "read" | "write" | "create" | "delete";

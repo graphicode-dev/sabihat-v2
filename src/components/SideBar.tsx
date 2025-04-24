@@ -33,7 +33,14 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
     };
 
     // Check if a menu item is active
-    const isActive = (path: string) => {
+    const isActive = (path: string, index?: number) => {
+        // For main routes (index 0), only consider them active if there's an exact match
+        // This prevents the main route from being active when a sub-route is active
+        if (index === 0) {
+            return location.pathname === path;
+        }
+
+        // For other routes, check if current path matches or starts with the route path
         return (
             location.pathname === path ||
             location.pathname.startsWith(`${path}/`)
@@ -51,12 +58,12 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
 
         setCurrentSideBar(foundLink?.sideBar || null);
     }, [location.pathname]);
-    
+
     // Handle logo click to navigate to dashboard home
     const handleLogoClick = (e: React.MouseEvent) => {
         e.preventDefault();
         // Force a reload to ensure the dashboard home page is displayed correctly
-        window.location.href = '/';
+        window.location.href = "/";
     };
 
     return (
@@ -77,7 +84,7 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
 
             {/* Logo Section */}
             <div className="p-6 flex justify-center">
-                <div 
+                <div
                     onClick={handleLogoClick}
                     className="bg-primary-500 text-white font-bold py-2 px-4 rounded-md cursor-pointer"
                 >
@@ -103,41 +110,26 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
                 {/* Navigation Menu */}
                 <nav>
                     <ul className="space-y-2">
-                        {currentSideBar?.links.map((route) => (
+                        {currentSideBar?.links.map((route, index) => (
                             <li key={route.path}>
                                 <Link
                                     to={route.path}
-                                    className={`flex items-center py-2 px-4 rounded-md hover:bg-primary-50 ${
-                                        route.path !== "/dashboard"
-                                            ? "pl-8"
-                                            : ""
-                                    } ${
-                                        route.path === "/dashboard"
-                                            ? ` ${
-                                                  isActive(route.path) &&
-                                                  !location.pathname.includes(
-                                                      "/dashboard/"
-                                                  )
-                                                      ? "bg-primary-50 text-primary-500"
-                                                      : "hover:bg-gray-100"
-                                              }`
-                                            : isActive(route.path)
-                                            ? "text-primary-500"
+                                    className={`flex items-center py-2 px-4 rounded-md hover:bg-primary-50  ${
+                                        isActive(route.path, index)
+                                            ? "bg-primary-50"
                                             : "text-gray-500 hover:text-gray-700"
                                     }`}
                                 >
                                     <span
                                         className={`${
-                                            route.path === "/dashboard"
+                                            index === 0
                                                 ? "w-2 h-2 bg-primary-500"
                                                 : "w-1 h-1 bg-gray-400"
                                         } rounded-full mr-2`}
                                     ></span>
                                     <span
                                         className={
-                                            route.path === "/dashboard"
-                                                ? "font-medium"
-                                                : ""
+                                            index === 0 ? "font-bold" : ""
                                         }
                                     >
                                         {route.title}
@@ -150,11 +142,25 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
             </div>
 
             {/* Logout Button - Hidden at bottom if needed */}
-            <div className="absolute bottom-10 left-0 justify-center p-4 space-x-4 w-full flex bg-white z-20">
+            <div className="absolute bottom-10 left-0 justify-center p-4 w-full flex bg-white z-20">
                 <button
                     onClick={handleLogout}
-                    className="w-full text-left py-2 px-4 bg-red-100 hover:bg-red-200 rounded text-red-600"
+                    className="w-full flex items-center justify-center py-2 px-4 rounded-md text-red-600 hover:bg-red-50 transition-colors duration-200 font-medium"
                 >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 mr-2"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    >
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
                     Logout
                 </button>
             </div>

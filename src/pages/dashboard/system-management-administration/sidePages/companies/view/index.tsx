@@ -1,11 +1,11 @@
-import PageLayout from "../../../../layout/PageLayout";
-import ViewCard from "../../../../components/ui/ViewCard";
+import PageLayout from "../../../../../../layout/PageLayout";
+import ViewCard from "../../../../../../components/ui/ViewCard";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { mockData } from "../../../../data/mockData";
-import { TableData } from "../../../../types/table";
-import { ViewCardData } from "../../../../types";
-function UserRolesViewPage() {
+import { mockData } from "../../../../../../data/mockData";
+import { TableData } from "../../../../../../types/table";
+import { ViewCardData } from "../../../../../../types";
+function CompaniesViewPage() {
     const { id } = useParams();
 
     const [userData, setUserData] = useState<TableData | null>(null);
@@ -41,4 +41,4 @@ function UserRolesViewPage() {
     );
 }
 
-export default UserRolesViewPage;
+export default CompaniesViewPage;

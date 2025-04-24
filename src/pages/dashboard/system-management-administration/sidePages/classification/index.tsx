@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
-import PageLayout from "../../../layout/PageLayout";
-import { CheckBox, DynamicTable } from "../../../components/table";
-import { useToast } from "../../../hooks/useToast";
+import PageLayout from "../../../../../layout/PageLayout";
+import { CheckBox, DynamicTable } from "../../../../../components/table";
+import { useToast } from "../../../../../hooks/useToast";
 
 // Define the permission types
 type Classification = "a" | "b" | "c";

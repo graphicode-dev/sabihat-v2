@@ -11,32 +11,27 @@ import {
     Security,
     Settings,
 } from "../components/ui/icons";
-import ClassificationPage from "../pages/dashboard/classification";
-import ClassificationViewPage from "../pages/dashboard/classification/view";
-import CommercialAgentPage from "../pages/dashboard/commercial-agent";
-import CommercialAgentViewPage from "../pages/dashboard/commercial-agent/view";
-import CompaniesPage from "../pages/dashboard/companies";
-import CompaniesViewPage from "../pages/dashboard/companies/view";
-import EmployeePage from "../pages/dashboard/employee";
-import EmployeeViewPage from "../pages/dashboard/employee/view";
-import MarineAgentPage from "../pages/dashboard/marine-agent";
-import MarineAgentViewPage from "../pages/dashboard/marine-agent/view";
-import SubagentPage from "../pages/dashboard/subagent";
-import SubagentViewPage from "../pages/dashboard/subagent/view";
+import ClassificationPage from "../pages/dashboard/system-management-administration/sidePages/classification";
+import ClassificationViewPage from "../pages/dashboard/system-management-administration/sidePages/classification/view";
+import CommercialAgentPage from "../pages/dashboard/system-management-administration/sidePages/commercial-agent";
+import CommercialAgentViewPage from "../pages/dashboard/system-management-administration/sidePages/commercial-agent/view";
+import CompaniesPage from "../pages/dashboard/system-management-administration/sidePages/companies";
+import CompaniesViewPage from "../pages/dashboard/system-management-administration/sidePages/companies/view";
+import EmployeePage from "../pages/dashboard/system-management-administration/sidePages/employee";
+import EmployeeViewPage from "../pages/dashboard/system-management-administration/sidePages/employee/view";
+import MarineAgentPage from "../pages/dashboard/system-management-administration/sidePages/marine-agent";
+import MarineAgentViewPage from "../pages/dashboard/system-management-administration/sidePages/marine-agent/view";
+import SubagentPage from "../pages/dashboard/system-management-administration/sidePages/subagent";
+import SubagentViewPage from "../pages/dashboard/system-management-administration/sidePages/subagent/view";
 import SystemManagementAdministrationPage from "../pages/dashboard/system-management-administration";
 import SysMgmtAdminViewPage from "../pages/dashboard/system-management-administration/view";
-import UserRolesPage from "../pages/dashboard/user-roles";
-import UserRolesViewPage from "../pages/dashboard/user-roles/view";
+import UserRolesPage from "../pages/dashboard/system-management-administration/sidePages/user-roles";
+import UserRolesViewPage from "../pages/dashboard/system-management-administration/sidePages/user-roles/view";
 import PlaceholderPage from "../pages/PlaceholderPage";
 import { TabLink } from "../types";
+import ShipTripManagementPage from "../pages/ship-trip-management";
+import ShipTripManagementViewPage from "../pages/ship-trip-management/view";
 
-/**
- * Returns the application's navigation configuration including routes,
- * sidebar links, and associated components.
- *
- * This configuration is used to generate the main navigation and sidebar
- * throughout the application.
- */
 export const navigationConfig: TabLink[] = [
     {
         icon: Administration,
@@ -152,13 +147,26 @@ export const navigationConfig: TabLink[] = [
         icon: Ship,
         title: "Ship & Trip Management",
         path: "/ship-trip-management",
-        component: PlaceholderPage,
+        component: ShipTripManagementPage,
         sideBar: {
             titleSection: {
                 icon: Ship,
                 title: "Ship & Trip Management",
             },
-            links: [],
+            links: [
+                {
+                    title: "All",
+                    path: "/ship-trip-management",
+                    component: ShipTripManagementPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: ShipTripManagementViewPage,
+                        },
+                    ],
+                },
+            ],
         },
     },
     {
