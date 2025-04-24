@@ -44,7 +44,8 @@ function AppRoutes() {
             (route.subLinks || [])
                 .filter((subLink) => subLink.path.includes(":id"))
                 .map((subLink) => {
-                    const basePath = cleanPath(route.path);
+                    // Get the base path without parent prefix
+                    const basePath = cleanPath(route.path.startsWith("/") ? route.path : route.path);
                     return {
                         path: `${basePath}/${cleanPath(subLink.path)}`,
                         component: subLink.component,
@@ -52,6 +53,22 @@ function AppRoutes() {
                 })
         )
     );
+    
+    // Create redirects from main paths to first sidebar item
+    const mainPathRedirects = navigationConfig.map((link) => {
+        const firstSidebarLink = link.sideBar?.links?.[0];
+        if (firstSidebarLink) {
+            // Remove any leading slashes from the sidebar path
+            const sidebarPath = firstSidebarLink.path.replace(/^\/+/, "");
+            
+            return {
+                path: cleanPath(link.path),
+                // Use the direct path without any prefixing
+                redirectTo: sidebarPath,
+            };
+        }
+        return null;
+    }).filter(Boolean) as Array<{ path: string; redirectTo: string }>;
 
     return (
         <Suspense fallback={<Loading />}>
@@ -73,16 +90,16 @@ function AppRoutes() {
                             />
                         ))}
 
-                        {/* Main navigation routes */}
-                        {navigationConfig.map((link, i) => (
+                        {/* Main navigation routes - redirects to first sidebar item */}
+                        {mainPathRedirects.map((redirect, i) => (
                             <Route
-                                key={`main-${i}`}
-                                path={cleanPath(link.path)}
-                                element={<link.component />}
+                                key={`main-redirect-${i}`}
+                                path={redirect.path}
+                                element={<Navigate to={`/${redirect.redirectTo}`} replace />}
                             />
                         ))}
 
-                        {/* Sidebar routes - FIXED to handle all sidebar links properly */}
+                        {/* Sidebar routes - Updated to handle direct paths */}
                         {navigationConfig.flatMap(
                             (link, i) =>
                                 (link.sideBar?.links || [])
@@ -92,14 +109,8 @@ function AppRoutes() {
                                             return null;
                                         }
 
-                                        // Get the clean path for this route
-                                        const routePath = route.path.startsWith(
-                                            "/"
-                                        )
-                                            ? cleanPath(route.path)
-                                            : `${cleanPath(
-                                                  link.path
-                                              )}/${cleanPath(route.path)}`;
+                                        // Get the clean path for this route - no longer prefixing with parent path
+                                        const routePath = cleanPath(route.path);
 
                                         return (
                                             <Route

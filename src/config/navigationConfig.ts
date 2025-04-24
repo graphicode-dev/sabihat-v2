@@ -27,17 +27,23 @@ import SystemManagementAdministrationPage from "../pages/dashboard/system-manage
 import SysMgmtAdminViewPage from "../pages/dashboard/system-management-administration/view";
 import UserRolesPage from "../pages/dashboard/system-management-administration/sidePages/user-roles";
 import UserRolesViewPage from "../pages/dashboard/system-management-administration/sidePages/user-roles/view";
-import PlaceholderPage from "../pages/PlaceholderPage";
+
 import { TabLink } from "../types";
-import ShipTripManagementPage from "../pages/ship-trip-management";
-import ShipTripManagementViewPage from "../pages/ship-trip-management/view";
+import CabinsPage from "../pages/dashboard/ship-trip-management";
+import CabinsViewPage from "../pages/dashboard/ship-trip-management/view";
+import PortPage from "../pages/dashboard/ship-trip-management/sidePages/port";
+import PortViewPage from "../pages/dashboard/ship-trip-management/sidePages/port/view";
+import ScheduleNewTripsPage from "../pages/dashboard/ship-trip-management/sidePages/schedule-new-trips";
+import ScheduleNewTripsViewPage from "../pages/dashboard/ship-trip-management/sidePages/schedule-new-trips/view";
+import ScheduleNewShipsPage from "../pages/dashboard/ship-trip-management/sidePages/schedule-new-ships";
+import ScheduleNewShipsViewPage from "../pages/dashboard/ship-trip-management/sidePages/schedule-new-ships/view";
+import PlaceholderPage from "../pages/PlaceholderPage";
 
 export const navigationConfig: TabLink[] = [
     {
         icon: Administration,
         title: "System Management & Administration",
         path: "/system-management-administration",
-        component: SystemManagementAdministrationPage,
         sideBar: {
             titleSection: {
                 icon: Administration,
@@ -46,7 +52,7 @@ export const navigationConfig: TabLink[] = [
             links: [
                 {
                     title: "All",
-                    path: "/system-management-administration",
+                    path: "/system-management-administration/all",
                     component: SystemManagementAdministrationPage,
                     subLinks: [
                         {
@@ -147,7 +153,6 @@ export const navigationConfig: TabLink[] = [
         icon: Ship,
         title: "Ship & Trip Management",
         path: "/ship-trip-management",
-        component: ShipTripManagementPage,
         sideBar: {
             titleSection: {
                 icon: Ship,
@@ -155,14 +160,50 @@ export const navigationConfig: TabLink[] = [
             },
             links: [
                 {
-                    title: "All",
-                    path: "/ship-trip-management",
-                    component: ShipTripManagementPage,
+                    title: "Cabins",
+                    path: "/ship-trip-management/cabins",
+                    component: CabinsPage,
                     subLinks: [
                         {
                             title: "View",
                             path: "view/:id",
-                            component: ShipTripManagementViewPage,
+                            component: CabinsViewPage,
+                        },
+                    ],
+                },
+                {
+                    title: "Port",
+                    path: "/ship-trip-management/port",
+                    component: PortPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: PortViewPage,
+                        },
+                    ],
+                },
+                {
+                    title: "Schedule New Ships",
+                    path: "/ship-trip-management/schedule-new-ships",
+                    component: ScheduleNewShipsPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: ScheduleNewShipsViewPage,
+                        },
+                    ],
+                },
+                {
+                    title: "Schedule New Trips",
+                    path: "/ship-trip-management/schedule-new-trips",
+                    component: ScheduleNewTripsPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: ScheduleNewTripsViewPage,
                         },
                     ],
                 },
@@ -173,117 +214,162 @@ export const navigationConfig: TabLink[] = [
         icon: Sales,
         title: "Sales & Bookings",
         path: "/sales-bookings",
-        component: PlaceholderPage,
         sideBar: {
             titleSection: {
                 icon: Sales,
                 title: "Sales & Bookings",
             },
-            links: [],
+            links: [
+                {
+                    title: "All",
+                    path: "/sales-bookings/all",
+                    component: PlaceholderPage,
+                },
+            ],
         },
     },
     {
         icon: Cargo,
         title: "Cargo & Vehicle Handling",
         path: "/cargo-vehicle-handling",
-        component: PlaceholderPage,
         sideBar: {
             titleSection: {
                 icon: Cargo,
                 title: "Cargo & Vehicle Handling",
             },
-            links: [],
+            links: [
+                {
+                    title: "All",
+                    path: "/cargo-vehicle-handling/all",
+                    component: PlaceholderPage,
+                },
+            ],
         },
     },
     {
         icon: Auditing,
         title: "Financial Reporting & Auditing",
         path: "/financial-reporting-auditing",
-        component: PlaceholderPage,
         sideBar: {
             titleSection: {
                 icon: Auditing,
                 title: "Financial Reporting & Auditing",
             },
-            links: [],
+            links: [
+                {
+                    title: "All",
+                    path: "/financial-reporting-auditing/all",
+                    component: PlaceholderPage,
+                },
+            ],
         },
     },
     {
         icon: PartnersManagement,
         title: "Business Partners Management",
         path: "/business-partners-management",
-        component: PlaceholderPage,
         sideBar: {
             titleSection: {
                 icon: PartnersManagement,
                 title: "Business Partners Management",
             },
-            links: [],
+            links: [
+                {
+                    title: "All",
+                    path: "/business-partners-management/all",
+                    component: PlaceholderPage,
+                },
+            ],
         },
     },
     {
         icon: Boarding,
         title: "Check-in & Boarding",
         path: "/check-in-boarding",
-        component: PlaceholderPage,
         sideBar: {
             titleSection: {
                 icon: Boarding,
                 title: "Check-in & Boarding",
             },
-            links: [],
+            links: [
+                {
+                    title: "All",
+                    path: "/check-in-boarding/all",
+                    component: PlaceholderPage,
+                },
+            ],
         },
     },
     {
         icon: PaymentProcessing,
         title: "Payment Processing & Financial Transactions",
         path: "/payment-processing-financial-transactions",
-        component: PlaceholderPage,
         sideBar: {
             titleSection: {
                 icon: PaymentProcessing,
                 title: "Payment Processing & Financial Transactions",
             },
-            links: [],
+            links: [
+                {
+                    title: "All",
+                    path: "/payment-processing-financial-transactions/all",
+                    component: PlaceholderPage,
+                },
+            ],
         },
     },
     {
         icon: QuotaManagement,
         title: "Quota Management",
         path: "/quota-management",
-        component: PlaceholderPage,
         sideBar: {
             titleSection: {
                 icon: QuotaManagement,
                 title: "Quota Management",
             },
-            links: [],
+            links: [
+                {
+                    title: "All",
+                    path: "/quota-management/all",
+                    component: PlaceholderPage,
+                },
+            ],
         },
     },
     {
         icon: Security,
         title: "Security & Compliance",
         path: "/security-compliance",
-        component: PlaceholderPage,
         sideBar: {
             titleSection: {
                 icon: Security,
                 title: "Security & Compliance",
             },
-            links: [],
+            links: [
+                {
+                    title: "All",
+                    path: "/security-compliance/all",
+                    component: PlaceholderPage,
+                },
+            ],
         },
     },
     {
         icon: Settings,
         title: "Settings",
         path: "/settings",
-        component: PlaceholderPage,
         sideBar: {
             titleSection: {
                 icon: Settings,
                 title: "Settings",
             },
-            links: [],
+            links: [
+                {
+                    title: "All",
+                    path: "/settings/all",
+                    component: PlaceholderPage,
+                },
+            ],
         },
     },
 ];
