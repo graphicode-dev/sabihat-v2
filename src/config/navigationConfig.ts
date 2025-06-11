@@ -2,14 +2,11 @@ import {
     Administration,
     Ship,
     Sales,
-    Cargo,
-    Auditing,
+    Reporting,
     PartnersManagement,
     Boarding,
     PaymentProcessing,
-    QuotaManagement,
     Security,
-    Settings,
 } from "../components/ui/icons";
 import ClassificationPage from "../pages/dashboard/system-management-administration/classification";
 import ClassificationViewPage from "../pages/dashboard/system-management-administration/classification/view";
@@ -229,36 +226,18 @@ export const navigationConfig: TabLink[] = [
         },
     },
     {
-        icon: Cargo,
-        title: "Cargo & Vehicle Handling",
-        path: "/cargo-vehicle-handling",
+        icon: Security,
+        title: "Security & Compliance",
+        path: "/security-compliance",
         sideBar: {
             titleSection: {
-                icon: Cargo,
-                title: "Cargo & Vehicle Handling",
+                icon: Security,
+                title: "Security & Compliance",
             },
             links: [
                 {
                     title: "All",
-                    path: "/cargo-vehicle-handling/all",
-                    component: PlaceholderPage,
-                },
-            ],
-        },
-    },
-    {
-        icon: Auditing,
-        title: "Financial Reporting & Auditing",
-        path: "/financial-reporting-auditing",
-        sideBar: {
-            titleSection: {
-                icon: Auditing,
-                title: "Financial Reporting & Auditing",
-            },
-            links: [
-                {
-                    title: "All",
-                    path: "/financial-reporting-auditing/all",
+                    path: "/security-compliance/all",
                     component: PlaceholderPage,
                 },
             ],
@@ -302,71 +281,35 @@ export const navigationConfig: TabLink[] = [
     },
     {
         icon: PaymentProcessing,
-        title: "Payment Processing & Financial Transactions",
-        path: "/payment-processing-financial-transactions",
+        title: "Financial Transactions",
+        path: "/financial-transactions",
         sideBar: {
             titleSection: {
                 icon: PaymentProcessing,
-                title: "Payment Processing & Financial Transactions",
+                title: "Financial Transactions",
             },
             links: [
                 {
                     title: "All",
-                    path: "/payment-processing-financial-transactions/all",
+                    path: "/financial-transactions/all",
                     component: PlaceholderPage,
                 },
             ],
         },
     },
     {
-        icon: QuotaManagement,
-        title: "Quota Management",
-        path: "/quota-management",
+        icon: Reporting,
+        title: "Reporting",
+        path: "/reporting",
         sideBar: {
             titleSection: {
-                icon: QuotaManagement,
-                title: "Quota Management",
+                icon: Reporting,
+                title: "Reporting",
             },
             links: [
                 {
                     title: "All",
-                    path: "/quota-management/all",
-                    component: PlaceholderPage,
-                },
-            ],
-        },
-    },
-    {
-        icon: Security,
-        title: "Security & Compliance",
-        path: "/security-compliance",
-        sideBar: {
-            titleSection: {
-                icon: Security,
-                title: "Security & Compliance",
-            },
-            links: [
-                {
-                    title: "All",
-                    path: "/security-compliance/all",
-                    component: PlaceholderPage,
-                },
-            ],
-        },
-    },
-    {
-        icon: Settings,
-        title: "Settings",
-        path: "/settings",
-        sideBar: {
-            titleSection: {
-                icon: Settings,
-                title: "Settings",
-            },
-            links: [
-                {
-                    title: "All",
-                    path: "/settings/all",
+                    path: "/reporting/all",
                     component: PlaceholderPage,
                 },
             ],
