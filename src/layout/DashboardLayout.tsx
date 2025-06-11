@@ -1,16 +1,18 @@
 import { ReactNode, useEffect, useState } from "react";
 import SideBar from "../components/SideBar";
 import Navbar from "../components/Navbar";
-import { useAuth } from "../hooks/useAuth";
 import Loading from "../components/ui/Loading";
 import DashboardHome from "../pages/dashboard/DashboardHome";
+import { selectLoading } from "../store/slices/auth/authSlice";
+import { useAppSelector } from "../store/hooks";
 
 interface DashboardLayoutProps {
     children: ReactNode;
 }
 
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
-    const { isLoading } = useAuth();
+    const isLoading = useAppSelector(selectLoading);
+
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const toggleSidebar = () => {

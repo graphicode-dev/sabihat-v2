@@ -1,17 +1,19 @@
-import { useAuth } from "../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { Bell, Menu } from "lucide-react";
 import DefaultUser from "../assets/images/default-user.png";
 import NotificationBox from "./NotificationBox";
 import { NotificationItem } from "../types/notifications.types";
 import { notificationsData } from "../data/mockData";
+import { useAppSelector } from "../store/hooks";
+import { selectUser } from "../store/slices/auth/authSlice";
 
 type Props = {
     onToggleSidebar: () => void;
 };
 
 const Navbar = ({ onToggleSidebar }: Props) => {
-    const { user } = useAuth();
+    const user = useAppSelector(selectUser);
+
     const [showNotifications, setShowNotifications] = useState(false);
     const [notifications, setNotifications] = useState<NotificationItem[]>([]);
 

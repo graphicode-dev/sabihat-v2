@@ -85,6 +85,27 @@
     .page-wrapper {
         @apply container mx-auto mt-1 h-[90vh] overflow-y-auto;
     }
+
+    .tab {
+        @apply px-4 py-2 text-sm font-medium cursor-pointer relative transition-all duration-300 ease-in-out;
+        /* Add a transparent bottom border to all tabs so they don't shift when active */
+        border-bottom: 2px solid transparent;
+    }
+
+    .tab-active {
+        @apply text-primary-500;
+        border-bottom: 2px solid var(--color-primary-500);
+    }
+
+    .tab-inactive {
+        @apply text-gray-500;
+        /* Create a pseudo-element for the hover effect */
+    }
+    
+    .tab-inactive:hover {
+        @apply text-gray-700;
+        border-bottom: 2px solid var(--color-gray-300);
+    }
 }
 
 /* Original styles */

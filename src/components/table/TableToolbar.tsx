@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, SetStateAction, Dispatch } from "react";
 import { ViewMode, TableColumn } from "../../types/table";
 import { TableFilter } from "./TableFilter";
 import { PDFIcon, VerticalFilter, XFile } from "../ui/icons";
@@ -14,7 +14,7 @@ interface TableToolbarProps {
     columns: TableColumn[];
     currentPage: number;
     totalPages: number;
-    onPageChange: (page: number) => void;
+    onPageChange: Dispatch<SetStateAction<number>>;
     itemsPerPage: number;
     onItemsPerPageChange: (count: number) => void;
     onColumnVisibilityChange?: (visibleColumns: string[]) => void;

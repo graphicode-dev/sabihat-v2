@@ -1,9 +1,14 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense } from "react";
 import Loading from "../components/ui/Loading";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { navigationConfig } from "../config/navigationConfig";
-import { useAuth } from "../hooks/useAuth";
+import UnauthorizedPage from "../pages/UnauthorizedPage";
+import { useAppSelector } from "../store/hooks";
+import {
+    selectIsAuthenticated,
+    selectLoading,
+} from "../store/slices/auth/authSlice";
 const DashboardWrapper = lazy(
     () => import("../pages/dashboard/DashboardWrapper")
 );
@@ -12,7 +17,8 @@ const NotFound = lazy(() => import("../pages/NotFound"));
 
 // Component to handle root path redirection
 const RootRedirect = () => {
-    const { isAuthenticated, isLoading } = useAuth();
+    const isLoading = useAppSelector(selectLoading);
+    const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
     // Show loading spinner while checking authentication
     if (isLoading) {
@@ -27,15 +33,15 @@ const RootRedirect = () => {
 const cleanPath = (path: string) => path.replace(/^\/|\/$/g, "");
 
 // Debug component to log routes
-const RouteLogger = () => {
-    const location = useLocation();
+// const RouteLogger = () => {
+//     const location = useLocation();
 
-    useEffect(() => {
-        console.log("Current location:", location);
-    }, [location]);
+//     useEffect(() => {
+//         console.log("Current location:", location);
+//     }, [location]);
 
-    return null;
-};
+//     return null;
+// };
 
 function AppRoutes() {
     // Extract all view routes with ID parameters
@@ -45,7 +51,9 @@ function AppRoutes() {
                 .filter((subLink) => subLink.path.includes(":id"))
                 .map((subLink) => {
                     // Get the base path without parent prefix
-                    const basePath = cleanPath(route.path.startsWith("/") ? route.path : route.path);
+                    const basePath = cleanPath(
+                        route.path.startsWith("/") ? route.path : route.path
+                    );
                     return {
                         path: `${basePath}/${cleanPath(subLink.path)}`,
                         component: subLink.component,
@@ -53,26 +61,28 @@ function AppRoutes() {
                 })
         )
     );
-    
+
     // Create redirects from main paths to first sidebar item
-    const mainPathRedirects = navigationConfig.map((link) => {
-        const firstSidebarLink = link.sideBar?.links?.[0];
-        if (firstSidebarLink) {
-            // Remove any leading slashes from the sidebar path
-            const sidebarPath = firstSidebarLink.path.replace(/^\/+/, "");
-            
-            return {
-                path: cleanPath(link.path),
-                // Use the direct path without any prefixing
-                redirectTo: sidebarPath,
-            };
-        }
-        return null;
-    }).filter(Boolean) as Array<{ path: string; redirectTo: string }>;
+    const mainPathRedirects = navigationConfig
+        .map((link) => {
+            const firstSidebarLink = link.sideBar?.links?.[0];
+            if (firstSidebarLink) {
+                // Remove any leading slashes from the sidebar path
+                const sidebarPath = firstSidebarLink.path.replace(/^\/+/, "");
+
+                return {
+                    path: cleanPath(link.path),
+                    // Use the direct path without any prefixing
+                    redirectTo: sidebarPath,
+                };
+            }
+            return null;
+        })
+        .filter(Boolean) as Array<{ path: string; redirectTo: string }>;
 
     return (
         <Suspense fallback={<Loading />}>
-            <RouteLogger />
+            {/* <RouteLogger /> */}
             <Routes>
                 {/* Public routes */}
                 <Route path="/login" element={<Login />} />
@@ -95,7 +105,12 @@ function AppRoutes() {
                             <Route
                                 key={`main-redirect-${i}`}
                                 path={redirect.path}
-                                element={<Navigate to={`/${redirect.redirectTo}`} replace />}
+                                element={
+                                    <Navigate
+                                        to={`/${redirect.redirectTo}`}
+                                        replace
+                                    />
+                                }
                             />
                         ))}
 
@@ -130,6 +145,9 @@ function AppRoutes() {
 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
+
+                {/* Unauthorized Page */}
+                <Route path="/unauthorized" element={<UnauthorizedPage />} />
             </Routes>
         </Suspense>
     );

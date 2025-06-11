@@ -1,56 +1,63 @@
 import { useState, FormEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
 import axios from "axios";
 import Loading from "../../components/ui/Loading";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+    login,
+    selectError,
+    selectIsAuthenticated,
+    selectLoading,
+    setError,
+} from "../../store/slices/auth/authSlice";
+import { formatPhone } from "../../lib/utils";
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
-    const {
-        login,
-        isAuthenticated,
-        isLoading: authLoading,
-        error,
-        setError,
-    } = useAuth();
+
+    const dispatch = useAppDispatch();
+    const isLoading = useAppSelector(selectLoading);
+    const isAuthenticated = useAppSelector(selectIsAuthenticated);
+    const error = useAppSelector(selectError);
 
     // Redirect to dashboard if already authenticated
     useEffect(() => {
-        if (isAuthenticated && !authLoading) {
+        if (isAuthenticated && !isLoading) {
             navigate("/");
         }
-    }, [isAuthenticated, authLoading, navigate]);
+    }, [isAuthenticated, isLoading, navigate]);
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        setError("");
-        setIsLoading(true);
+        dispatch(setError(""));
 
         try {
-            const formattedPhone = phone.startsWith("0")
-                ? phone.replace("0", "20")
-                : `20${phone}`;
-            const response = await login(formattedPhone, password);
-            if (response) {
+            const response = await dispatch(
+                login({ phone: formatPhone(phone), password })
+            );
+            if (response.meta.requestStatus === "fulfilled") {
                 navigate("/");
             }
         } catch (err) {
             if (axios.isAxiosError(err) && err.response) {
                 const errorMessage = err.response.data?.message;
-                setError(errorMessage);
+                dispatch(setError(errorMessage));
             }
             console.error(err);
-        } finally {
-            setIsLoading(false);
         }
     };
 
+    const handleShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+
     // Show loading spinner while checking authentication
-    if (authLoading) {
+    if (isLoading) {
         return <Loading />;
     }
 
@@ -106,7 +113,7 @@ const Login = () => {
                         </p>
                     </div>
 
-                    <div className="mb-6">
+                    <div className="relative mb-6">
                         <label
                             htmlFor="password"
                             className="block text-sm font-medium text-primary-500 mb-1"
@@ -115,12 +122,23 @@ const Login = () => {
                         </label>
                         <input
                             id="password"
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-300)]"
                             required
                         />
+                        <button
+                            type="button"
+                            onClick={handleShowPassword}
+                            className="absolute right-3 transform translate-y-1/2"
+                        >
+                            {showPassword ? (
+                                <EyeOff className="w-5 h-5 text-gray-500" />
+                            ) : (
+                                <Eye className="w-5 h-5 text-gray-500" />
+                            )}
+                        </button>
                     </div>
 
                     <button

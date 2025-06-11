@@ -1,9 +1,10 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
 import { useRef, useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { navigationConfig } from "../config/navigationConfig";
 import { SideBar as SideBarType } from "../types";
+import { logout, refreshUserProfile } from "../store/slices/auth/authSlice";
+import { useAppDispatch } from "../store/hooks";
 
 type Props = {
     isSidebarOpen: boolean;
@@ -11,7 +12,8 @@ type Props = {
 };
 
 const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
-    const { logout, refreshUserProfile } = useAuth();
+    const dispatch = useAppDispatch();
+
     const navigate = useNavigate();
     const location = useLocation();
     const profileRefreshedRef = useRef(false);
@@ -22,13 +24,13 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
     // Refresh user profile when sidebar mounts, but only once
     useEffect(() => {
         if (!profileRefreshedRef.current) {
-            refreshUserProfile();
+            dispatch(refreshUserProfile());
             profileRefreshedRef.current = true;
         }
-    }, [refreshUserProfile]);
+    }, [dispatch]); // Only depend on dispatch, not refreshUserProfile
 
     const handleLogout = async () => {
-        await logout();
+        await dispatch(logout());
         navigate("/login");
     };
 

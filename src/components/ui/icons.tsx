@@ -317,37 +317,37 @@ export const Reporting = ({
         <path
             d="M49.4466 5.13392C50.942 5.59892 55.7416 7.5034 62.6743 14.2644C69.2088 20.6372 71.3191 25.1618 71.9391 26.8817C72.0786 30.6173 72.1663 34.9668 72.1663 40.0002C72.1663 53.4408 71.5415 62.0068 70.9717 67.024C70.555 70.6932 67.8005 73.4373 64.1326 73.8652C59.441 74.4127 51.778 75.0002 40.4998 75.0002C29.2216 75.0002 21.5586 74.4127 16.8669 73.8652C13.1991 73.4373 10.4446 70.6932 10.0279 67.024C9.45813 62.0068 8.83331 53.4408 8.83331 40.0002C8.83331 26.5593 9.45813 17.9933 10.0279 12.9761C10.4446 9.30705 13.1991 6.56285 16.8669 6.13495C21.5586 5.58758 29.2216 5 40.4998 5C43.7831 5 46.7603 5.0498 49.4466 5.13392Z"
             stroke={color}
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
         />
         <path
             d="M22.1666 61.6665H58.8333"
             stroke={color}
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
         />
         <path
             d="M22.1666 50H58.8333"
             stroke={color}
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
         />
         <path
             d="M22.1666 38.1135C26.4525 31.5631 30.0276 28.6868 31.9933 27.4793C32.9221 26.9086 34.0445 27.2825 34.5266 28.2601C35.6323 30.5016 36.6753 33.5823 37.4223 36.0253C37.8611 37.46 39.9548 37.7691 40.877 36.5858C44.587 31.8248 49.6666 27.5001 49.6666 27.5001"
             stroke={color}
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
         />
         <path
             d="M56.4456 30.5343C57.1796 26.6602 57.2059 23.262 57.1456 21.4622C57.1189 20.6685 56.498 20.0475 55.7043 20.0208C53.9045 19.9605 50.5064 19.9868 46.6321 20.7208C45.375 20.959 44.9588 22.4902 45.8636 23.395L53.7714 31.3028C54.6763 32.2077 56.2075 31.7915 56.4456 30.5343Z"
             stroke={color}
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
         />
     </svg>
 );
@@ -498,7 +498,7 @@ export const ErrorIcon = () => (
                 width="121"
                 height="121"
                 filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
+                colorInterpolationFilters="sRGB"
             >
                 <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feColorMatrix
@@ -572,7 +572,7 @@ export const WarningIcon = () => (
                 width="141.8"
                 height="141.8"
                 filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
+                colorInterpolationFilters="sRGB"
             >
                 <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feColorMatrix
@@ -637,7 +637,7 @@ export const SuccessIcon = () => (
                 width="141.536"
                 height="143.622"
                 filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
+                colorInterpolationFilters="sRGB"
             >
                 <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feColorMatrix
@@ -709,7 +709,7 @@ export const InfoIcon = () => (
                 width="118.167"
                 height="118.167"
                 filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
+                colorInterpolationFilters="sRGB"
             >
                 <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feColorMatrix

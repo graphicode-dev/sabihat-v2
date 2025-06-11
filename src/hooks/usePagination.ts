@@ -1,75 +1,58 @@
-import { useSearchParams } from "react-router-dom";
-import { useEffect, useCallback, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, Dispatch, SetStateAction } from "react";
 
 export const usePagination = (
-    initialPage: number = 1,
-    onPageChange: (page: number) => void,
+    currentPage: number = 1,
+    setCurrentPage: Dispatch<SetStateAction<number>>,
     totalPages: number = 1
 ) => {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [internalPage, setInternalPage] = useState(() => {
-        // Initialize from URL or use initialPage
-        const pageFromURL = Number(searchParams.get("page"));
-        return pageFromURL > 0 && pageFromURL <= totalPages
-            ? pageFromURL
-            : initialPage;
-    });
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [searchParams] = useSearchParams();
 
-    // Update URL when page changes
-    const updateURL = useCallback(
-        (page: number) => {
-            const newParams = new URLSearchParams(searchParams.toString());
-            newParams.set("page", page.toString());
-            setSearchParams(newParams);
-        },
-        [searchParams, setSearchParams]
-    );
+    const updateURL = (page: number) => {
+        const tab = searchParams.get("tab"); // Preserve tab
+        const newParams = new URLSearchParams(searchParams.toString());
 
-    // Handle external URL changes
+        if (tab) {
+            newParams.set("tab", tab);
+        }
+        newParams.set("page", page.toString());
+
+        navigate(`${location.pathname}?${newParams.toString()}`);
+    };
+
+    // Sync currentPage with URL when the page loads
     useEffect(() => {
         const pageFromURL = Number(searchParams.get("page")) || 1;
-        if (pageFromURL > 0 && pageFromURL <= totalPages) {
-            setInternalPage(pageFromURL);
-            onPageChange(pageFromURL);
+        if (pageFromURL !== currentPage) {
+            setCurrentPage(pageFromURL);
         }
-    }, [searchParams, totalPages, onPageChange]);
-
-    // Sync internal state with initialPage (from parent component)
-    useEffect(() => {
-        if (initialPage > 0 && initialPage <= totalPages) {
-            setInternalPage(initialPage);
-            updateURL(initialPage);
-        }
-    }, [initialPage, totalPages, updateURL]);
+    }, [searchParams, setCurrentPage]);
 
     const goToNextPage = () => {
-        if (internalPage < totalPages) {
-            const nextPage = internalPage + 1;
-            setInternalPage(nextPage);
-            updateURL(nextPage);
-            onPageChange(nextPage);
+        if (currentPage < totalPages) {
+            updateURL(currentPage + 1);
+            setCurrentPage((prev) => prev + 1);
         }
     };
 
     const goToPreviousPage = () => {
-        if (internalPage > 1) {
-            const prevPage = internalPage - 1;
-            setInternalPage(prevPage);
-            updateURL(prevPage);
-            onPageChange(prevPage);
+        if (currentPage > 1) {
+            updateURL(currentPage - 1);
+            setCurrentPage((prev) => prev - 1);
         }
     };
 
     const setPage = (page: number) => {
         if (page > 0 && page <= totalPages) {
-            setInternalPage(page);
             updateURL(page);
-            onPageChange(page);
+            setCurrentPage(page);
         }
     };
 
     return {
-        currentPage: internalPage,
+        currentPage,
         totalPages,
         goToNextPage,
         goToPreviousPage,

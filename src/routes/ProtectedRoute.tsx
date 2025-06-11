@@ -1,6 +1,10 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
 import Loading from "../components/ui/Loading";
+import { useAppSelector } from "../store/hooks";
+import {
+    selectIsAuthenticated,
+    selectLoading,
+} from "../store/slices/auth/authSlice";
 
 interface ProtectedRouteProps {
     redirectPath?: string;
@@ -9,14 +13,16 @@ interface ProtectedRouteProps {
 export const ProtectedRoute = ({
     redirectPath = "/login",
 }: ProtectedRouteProps) => {
-    const { isAuthenticated, isLoading } = useAuth();
+    const isLoading = useAppSelector(selectLoading);
+    const isAuth = useAppSelector(selectIsAuthenticated);
 
-    // Show loading indicator while checking authentication
-    if (isLoading) {
+    // Only show loading indicator during initial authentication check
+    // Don't show loading for navigation between protected routes
+    if (isLoading && !isAuth) {
         return <Loading />;
     }
 
-    if (!isAuthenticated) {
+    if (!isAuth) {
         return <Navigate to={redirectPath} replace />;
     }
 

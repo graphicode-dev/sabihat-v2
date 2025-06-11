@@ -1,15 +1,16 @@
 import { ReactNode } from "react";
-import { AuthProvider } from "./AuthProvider";
 import { ToastProvider } from "./ToastProvider";
 import QueryProvider from "./QueryProvider";
+import { Provider } from "react-redux";
+import { store } from "../store";
 
 function Providers({ children }: { children: ReactNode }) {
     return (
-        <ToastProvider maxToasts={5}>
-            <AuthProvider>
+        <Provider store={store}>
+            <ToastProvider maxToasts={5}>
                 <QueryProvider>{children}</QueryProvider>
-            </AuthProvider>
-        </ToastProvider>
+            </ToastProvider>
+        </Provider>
     );
 }
 
