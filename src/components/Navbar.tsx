@@ -6,6 +6,8 @@ import { NotificationItem } from "../types/notifications.types";
 import { notificationsData } from "../data/mockData";
 import { useAppSelector } from "../store/hooks";
 import { selectUser } from "../store/slices/auth/authSlice";
+import ImgWithSpinner from "./ui/image";
+import ProfileBox from "./ProfileBox";
 
 type Props = {
     onToggleSidebar: () => void;
@@ -16,14 +18,47 @@ const Navbar = ({ onToggleSidebar }: Props) => {
 
     const [showNotifications, setShowNotifications] = useState(false);
     const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
 
     const handleNotifications = () => {
         setShowNotifications(!showNotifications);
+        setIsProfileOpen(false);
     };
 
     useEffect(() => {
         setNotifications(notificationsData);
     }, []);
+
+    const toggleProfileMenu = () => {
+        setIsProfileOpen(!isProfileOpen);
+        setShowNotifications(false);
+    };
+
+    // Close dropdowns when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            if (
+                !target.closest("#notification-dropdown") &&
+                !target.closest("#notification-button") &&
+                showNotifications
+            ) {
+                setShowNotifications(false);
+            }
+            if (
+                !target.closest("#profile-dropdown") &&
+                !target.closest("#user-menu-button") &&
+                isProfileOpen
+            ) {
+                setIsProfileOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [showNotifications, isProfileOpen]);
 
     return (
         <nav className=" md:px-20 lg:px-10 py-2.5 fixed w-[85vw] lg:w-[80vw] top-0  flex justify-between z-50">
@@ -61,22 +96,20 @@ const Navbar = ({ onToggleSidebar }: Props) => {
                     </button>
                 </div>
 
-                {/* Profile Avatar */}
-                <div className="h-8 w-8 rounded-full bg-blue-500 overflow-hidden flex items-center justify-center">
-                    {user?.avatar ? (
-                        <img
-                            src={user.avatar}
-                            alt={user.name}
-                            className="h-full w-full object-cover"
-                        />
-                    ) : (
-                        <img
-                            src={DefaultUser}
-                            alt={"User"}
-                            className="h-full w-full object-cover"
-                        />
-                    )}
-                </div>
+                {/* Profile Toggle Button */}
+                <button
+                    onClick={toggleProfileMenu}
+                    type="button"
+                    className="h-10 w-10 rounded-full overflow-hidden flex items-center justify-center"
+                    id="user-menu-button"
+                >
+                    <span className="sr-only">Open user menu</span>
+                    <ImgWithSpinner
+                        src={(user?.avatar as string) || DefaultUser}
+                        alt="user photo"
+                        rounded
+                    />
+                </button>
             </div>
 
             {showNotifications && (
@@ -85,6 +118,9 @@ const Navbar = ({ onToggleSidebar }: Props) => {
                     notifications={notifications}
                 />
             )}
+
+            {/* Dropdown profile */}
+            {isProfileOpen && <ProfileBox />}
         </nav>
     );
 };
