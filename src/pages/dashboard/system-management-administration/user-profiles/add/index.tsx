@@ -1,5 +1,151 @@
+import PageLayout from "../../../../../layout/PageLayout";
+import FormLayout from "../../../../../layout/FormLayout";
+import FormInput from "../../../../../components/ui/FormInput";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useToast } from "../../../../../hooks/useToast";
+import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
+import FormButtons from "../../../../../components/form/FormButtons";
+import { useNavigate } from "react-router-dom";
+
+type Error = {
+    numCode?: string;
+    code?: string;
+    name?: string;
+};
+
+type Service = {
+    id?: string;
+    numCode: string;
+    code: string;
+    name: string;
+    type?: string;
+};
+
+const medicalServiceSchema = z.object({
+    id: z.string().optional(),
+    numCode: z.string(),
+    code: z.string(),
+    name: z.string(),
+    type: z.string().optional(),
+});
+
 function UserProfilesAddPage() {
-    return <div>UserProfilesAddPage</div>;
+    const { addToast } = useToast();
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+    const [errors, setErrors] = useState<Error>({
+        numCode: "",
+        code: "",
+        name: "",
+    });
+
+    const { control, handleSubmit, reset } = useForm<Service>({
+        resolver: zodResolver(medicalServiceSchema),
+        defaultValues: {
+            numCode: "",
+            code: "",
+            name: "",
+        },
+
+        mode: "onChange",
+    });
+
+    const onSubmit = async (formData: Service) => {
+        setIsLoading(true);
+        try {
+            const validatedData = medicalServiceSchema.parse(formData);
+            console.log("Validated data:", validatedData);
+
+            // Create data object with the correct field names the API expects
+            const serviceData = {
+                num_code: validatedData.numCode,
+                code: validatedData.code,
+                name: validatedData.name,
+            };
+
+            console.log("Sending to API:", serviceData);
+            addToast({
+                message: "Medical service created successfully",
+                type: "success",
+                title: "Success!",
+            });
+
+            reset();
+            navigate(-1);
+        } catch (error: any) {
+            console.error("Error creating medical service:", error);
+            if (error?.errors) {
+                // Map API error fields to our frontend field names
+                const mappedErrors: any = {};
+
+                if (error.errors.num_code) {
+                    mappedErrors.numCode = error.errors.num_code[0];
+                }
+                if (error.errors.name) {
+                    mappedErrors.name = error.errors.name[0];
+                }
+                if (error.errors.code) {
+                    mappedErrors.code = error.errors.code[0];
+                }
+
+                console.log("Mapped errors:", mappedErrors);
+                setErrors(mappedErrors);
+            } else {
+                addToast({
+                    message: "An unexpected error occurred. Please try again.",
+                    type: "error",
+                    title: "Error!",
+                });
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    return (
+        <PageLayout>
+            <FormLayout handleSubmit={handleSubmit} handleFormSubmit={onSubmit}>
+                <FormFieldsLayout title="User Profiles Add" separator>
+                    {/* Num Code */}
+                    <FormInput
+                        name="numCode"
+                        control={control}
+                        label="Num Code"
+                        type="number"
+                        required
+                        error={errors.numCode}
+                    />
+                </FormFieldsLayout>
+
+                <FormFieldsLayout title="User Profiles Add">
+                    {/* Code */}
+                    <FormInput
+                        name="code"
+                        control={control}
+                        label="Short Name"
+                        type="text"
+                        required
+                        error={errors.code}
+                    />
+
+                    {/* Name */}
+                    <FormInput
+                        name="name"
+                        control={control}
+                        label="Name (English)"
+                        type="text"
+                        required
+                        error={errors.name}
+                    />
+                </FormFieldsLayout>
+
+                <FormButtons isLoading={isLoading} submitText="add" />
+            </FormLayout>
+        </PageLayout>
+    );
 }
 
 export default UserProfilesAddPage;

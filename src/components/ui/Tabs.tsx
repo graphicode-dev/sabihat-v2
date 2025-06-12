@@ -126,7 +126,7 @@ function Tabs<T extends string>({ children }: TabsProps<T>) {
     }
 
     return (
-        <section className="relative p-3 sm:p-5 antialiased flex-1 w-full">
+        <section className="relative p-3 sm:p-5 antialiased flex-1 w-full border-wrapper">
             {/* Tabs Navigation */}
             <nav
                 className={`p-3 flex flex-col items-center md:items-start space-x-4 space-y-4 ${

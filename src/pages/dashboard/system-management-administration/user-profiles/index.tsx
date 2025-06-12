@@ -65,6 +65,7 @@ function UserProfilesPage() {
                         onBulkAction={(selectedIds) => {
                             console.log("Selected IDs:", selectedIds);
                         }}
+                        hideBorder
                     />
                 </Tabs.Item>
                 <Tabs.Item value="active" label="Active">

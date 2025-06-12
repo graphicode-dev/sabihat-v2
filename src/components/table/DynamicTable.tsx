@@ -29,6 +29,7 @@ interface DynamicTableProps {
     onBulkAction?: (selectedIds: string[]) => void;
     bulkActionLabel?: string;
     onRowClick?: (rowId: string) => void;
+    hideBorder?: boolean;
 }
 
 export const DynamicTable = ({
@@ -42,6 +43,7 @@ export const DynamicTable = ({
     onBulkAction,
     bulkActionLabel = "Action",
     onRowClick,
+    hideBorder = false,
 }: DynamicTableProps) => {
     const [viewMode, setViewMode] = useState<ViewMode>(initialView);
     const [currentPage, setCurrentPage] = useState(1);
@@ -281,7 +283,9 @@ export const DynamicTable = ({
     };
 
     return (
-        <div className="w-full bg-white rounded-lg shadow">
+        <div
+            className={`w-full bg-white ${hideBorder ? "" : "border-wrapper"}`}
+        >
             <div className="p-10">
                 <div className="flex justify-between items-center">
                     {/* Title */}

@@ -6,9 +6,11 @@ import { mockData } from "../../../../../data/mockData";
 import { TableData } from "../../../../../types/table";
 import { ViewCardData } from "../../../../../types";
 import { useToast } from "../../../../../hooks/useToast";
+import { useNavigate } from "react-router-dom";
 
 function UserProfilesViewPage() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const { addAlertToast, addToast } = useToast();
 
     const [userData, setUserData] = useState<TableData | null>(null);
@@ -39,6 +41,11 @@ function UserProfilesViewPage() {
                     } as ViewCardData
                 }
                 buttons
+                onEdit={() => {
+                    navigate(
+                        `/system-management-administration/user-profiles/${id}/add`
+                    );
+                }}
                 onDelete={() => {
                     addAlertToast(
                         "Are you sure you want to delete this user?",
