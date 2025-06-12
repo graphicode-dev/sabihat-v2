@@ -12,6 +12,7 @@ interface TableGroupViewProps {
     onSort?: (column: string) => void;
     columnWidths: number[];
     onColumnResize: (index: number, width: number) => void;
+    onRowClick?: (rowId: string) => void;
 }
 
 export const TableGroupView = ({
@@ -23,11 +24,18 @@ export const TableGroupView = ({
     onSort,
     columnWidths,
     onColumnResize,
+    onRowClick,
 }: TableGroupViewProps) => {
     // Group the data by group property
-    const [groupedData, setGroupedData] = useState<Record<string, TableData[]>>({});
-    const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
-    const [groupStats, setGroupStats] = useState<Record<string, { count: number, selected: number }>>({});
+    const [groupedData, setGroupedData] = useState<Record<string, TableData[]>>(
+        {}
+    );
+    const [expandedGroups, setExpandedGroups] = useState<
+        Record<string, boolean>
+    >({});
+    const [groupStats, setGroupStats] = useState<
+        Record<string, { count: number; selected: number }>
+    >({});
 
     // Check if all data is selected
     const allSelected = data.length > 0 && data.every((item) => item.selected);
@@ -35,49 +43,49 @@ export const TableGroupView = ({
     // Process and group the data
     useEffect(() => {
         const newGroupedData: Record<string, TableData[]> = {};
-        const stats: Record<string, { count: number, selected: number }> = {};
-        
+        const stats: Record<string, { count: number; selected: number }> = {};
+
         data.forEach((row) => {
             // Extract a cleaner group name from the row.group property
             let groupName = row.group || "Ungrouped";
-            
+
             // If the group name contains column labels (e.g., "Name: John | Status: Active")
             // Extract just the values for a cleaner display
-            if (groupName.includes(':')) {
+            if (groupName.includes(":")) {
                 // Split by the pipe separator if there are multiple groups
-                const parts = groupName.split(' | ');
-                
+                const parts = groupName.split(" | ");
+
                 // For each part, extract just the value after the colon
-                const values = parts.map(part => {
-                    const colonIndex = part.indexOf(':');
+                const values = parts.map((part) => {
+                    const colonIndex = part.indexOf(":");
                     if (colonIndex !== -1) {
                         return part.substring(colonIndex + 1).trim();
                     }
                     return part.trim();
                 });
-                
+
                 // Join the values with a separator
-                groupName = values.join(' | ');
+                groupName = values.join(" | ");
             }
-            
+
             if (!newGroupedData[groupName]) {
                 newGroupedData[groupName] = [];
                 stats[groupName] = { count: 0, selected: 0 };
             }
-            
+
             newGroupedData[groupName].push(row);
             stats[groupName].count++;
-            
+
             if (row.selected) {
                 stats[groupName].selected++;
             }
         });
-        
+
         setGroupedData(newGroupedData);
         setGroupStats(stats);
-        
+
         // Initialize expanded state for all groups if they don't exist yet
-        setExpandedGroups(prev => {
+        setExpandedGroups((prev) => {
             const initialExpandedState = { ...prev };
             Object.keys(newGroupedData).forEach((groupName) => {
                 if (initialExpandedState[groupName] === undefined) {
@@ -100,7 +108,7 @@ export const TableGroupView = ({
     // Handle selecting/deselecting all rows in a group
     const handleGroupSelection = (groupName: string, selected: boolean) => {
         if (onRowSelection) {
-            groupedData[groupName].forEach(row => {
+            groupedData[groupName].forEach((row) => {
                 if (row.selected !== selected) {
                     onRowSelection(row.id, selected);
                 }
@@ -161,24 +169,46 @@ export const TableGroupView = ({
                                                 <div className="flex items-center gap-2">
                                                     {/* Checkbox for group selection */}
                                                     {onRowSelection && (
-                                                        <div 
+                                                        <div
                                                             className="ml-2"
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-                                                                const isAllSelected = groupStats[groupName].selected === groupStats[groupName].count;
-                                                                handleGroupSelection(groupName, !isAllSelected);
+                                                                const isAllSelected =
+                                                                    groupStats[
+                                                                        groupName
+                                                                    ]
+                                                                        .selected ===
+                                                                    groupStats[
+                                                                        groupName
+                                                                    ].count;
+                                                                handleGroupSelection(
+                                                                    groupName,
+                                                                    !isAllSelected
+                                                                );
                                                             }}
                                                         >
                                                             <input
                                                                 type="checkbox"
-                                                                checked={groupStats[groupName].selected === groupStats[groupName].count && groupStats[groupName].count > 0}
+                                                                checked={
+                                                                    groupStats[
+                                                                        groupName
+                                                                    ]
+                                                                        .selected ===
+                                                                        groupStats[
+                                                                            groupName
+                                                                        ]
+                                                                            .count &&
+                                                                    groupStats[
+                                                                        groupName
+                                                                    ].count > 0
+                                                                }
                                                                 className="h-4 w-4 text-primary-600 rounded"
                                                                 onChange={() => {}} // Handled by onClick
                                                                 aria-label={`Select all items in ${groupName} group`}
                                                             />
                                                         </div>
                                                     )}
-                                                    
+
                                                     <div
                                                         className="flex items-center gap-1"
                                                         onClick={() =>
@@ -233,13 +263,23 @@ export const TableGroupView = ({
                                                 </div>
 
                                                 <div className="flex items-center gap-2">
-                                                    {groupStats[groupName].selected > 0 && (
+                                                    {groupStats[groupName]
+                                                        .selected > 0 && (
                                                         <span className="text-sm text-primary-600">
-                                                            {groupStats[groupName].selected} selected
+                                                            {
+                                                                groupStats[
+                                                                    groupName
+                                                                ].selected
+                                                            }{" "}
+                                                            selected
                                                         </span>
                                                     )}
                                                     <span className="px-2 py-1 bg-primary-100 text-primary-800 rounded-full text-xs">
-                                                        {groupStats[groupName].count}
+                                                        {
+                                                            groupStats[
+                                                                groupName
+                                                            ].count
+                                                        }
                                                     </span>
                                                 </div>
                                             </div>
@@ -254,7 +294,10 @@ export const TableGroupView = ({
                                                 row={row}
                                                 columns={columns}
                                                 columnWidths={columnWidths}
-                                                handleRowSelection={handleRowSelection}
+                                                handleRowSelection={
+                                                    handleRowSelection
+                                                }
+                                                onRowClick={onRowClick}
                                             />
                                         ))}
                                 </React.Fragment>

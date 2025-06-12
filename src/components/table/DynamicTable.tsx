@@ -28,6 +28,7 @@ interface DynamicTableProps {
     addLabel?: string;
     onBulkAction?: (selectedIds: string[]) => void;
     bulkActionLabel?: string;
+    onRowClick?: (rowId: string) => void;
 }
 
 export const DynamicTable = ({
@@ -40,6 +41,7 @@ export const DynamicTable = ({
     addLabel = "Add new",
     onBulkAction,
     bulkActionLabel = "Action",
+    onRowClick,
 }: DynamicTableProps) => {
     const [viewMode, setViewMode] = useState<ViewMode>(initialView);
     const [currentPage, setCurrentPage] = useState(1);
@@ -263,6 +265,7 @@ export const DynamicTable = ({
             onSort: handleSort,
             columnWidths,
             onColumnResize: handleColumnResize,
+            onRowClick,
         };
 
         switch (viewMode) {

@@ -1,6 +1,7 @@
 import { ToastItem } from "./ToastItem";
 import { ToastPosition } from "../../../types/toast.types";
 import { useToast } from "../../../hooks/useToast";
+import AlertToast from "./AlertToast";
 
 // Position class mapping
 const positionClasses: Record<ToastPosition, string> = {
@@ -12,10 +13,11 @@ const positionClasses: Record<ToastPosition, string> = {
         "fixed top-4 left-1/2 -translate-x-1/2 flex flex-col gap-4 z-50",
     "bottom-center":
         "fixed bottom-4 left-1/2 -translate-x-1/2 flex flex-col gap-4 z-50",
+    center: "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 z-50",
 };
 
 export const ToastsList = () => {
-    const { toasts, position, spacing } = useToast();
+    const { toasts, position, spacing, removeToast } = useToast();
 
     // Group toasts by position
     const toastsByPosition: Record<ToastPosition, typeof toasts> = {
@@ -25,6 +27,7 @@ export const ToastsList = () => {
         "bottom-left": [],
         "top-center": [],
         "bottom-center": [],
+        center: [],
     };
 
     // Sort toasts into position groups
@@ -46,21 +49,48 @@ export const ToastsList = () => {
                         className={positionClasses[pos as ToastPosition]}
                         style={{ gap: `${spacing * 0.25}rem` }}
                     >
-                        {positionToasts.map((toast) => (
-                            <div
-                                key={toast.id}
-                                className="pointer-events-auto w-full"
-                            >
-                                <ToastItem
-                                    id={toast.id}
-                                    type={toast.type}
-                                    title={toast.title}
-                                    message={toast.message}
-                                    duration={toast.duration}
-                                    position={toast.position}
-                                />
-                            </div>
-                        ))}
+                        {positionToasts.map((toast) => {
+                            // Handle alert toasts with buttons separately
+                            if (
+                                toast.type === "alert" &&
+                                toast.buttons &&
+                                toast.buttons.length > 0
+                            ) {
+                                return (
+                                    <div key={toast.id} className="my-2">
+                                        <AlertToast
+                                            id={toast.id || ""}
+                                            title={toast.title || ""}
+                                            message={toast.message || ""}
+                                            onClose={() => {
+                                                if (toast.id) {
+                                                    removeToast(toast.id);
+                                                    toast.onCloseToast?.();
+                                                }
+                                            }}
+                                            buttons={toast.buttons}
+                                        />
+                                    </div>
+                                );
+                            }
+
+                            // Regular toasts
+                            return (
+                                <div
+                                    key={toast.id}
+                                    className="pointer-events-auto w-full"
+                                >
+                                    <ToastItem
+                                        id={toast.id}
+                                        type={toast.type}
+                                        title={toast.title}
+                                        message={toast.message}
+                                        duration={toast.duration}
+                                        position={toast.position}
+                                    />
+                                </div>
+                            );
+                        })}
                     </div>
                 );
             })}

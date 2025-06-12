@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import { mockData } from "../../../../../data/mockData";
 import { TableData } from "../../../../../types/table";
 import { ViewCardData } from "../../../../../types";
+import { useToast } from "../../../../../hooks/useToast";
 
 function UserProfilesViewPage() {
     const { id } = useParams();
+    const { addAlertToast, addToast } = useToast();
 
     const [userData, setUserData] = useState<TableData | null>(null);
 
@@ -37,6 +39,36 @@ function UserProfilesViewPage() {
                     } as ViewCardData
                 }
                 buttons
+                onDelete={() => {
+                    addAlertToast(
+                        "Are you sure you want to delete this user?",
+                        [
+                            {
+                                text: "Cancel",
+                                onClick: () => {
+                                    console.log("Cancel");
+                                },
+                                variant: "secondary",
+                            },
+                            {
+                                text: "Delete",
+                                onClick: () => {
+                                    addToast({
+                                        type: "success",
+                                        title: "Success message",
+                                        message: "User deleted successfully",
+                                        duration: 5000,
+                                        position: "top-right",
+                                    });
+                                },
+                                variant: "danger",
+                            },
+                        ],
+                        {
+                            position: "center",
+                        }
+                    );
+                }}
             />
         </PageLayout>
     );

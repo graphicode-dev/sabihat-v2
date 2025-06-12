@@ -26,6 +26,11 @@ const toastTypeConfig = {
         bgColor: "bg-[#F5FBFF]",
         borderColor: "border-[#4EA3E0]",
     },
+    alert: {
+        icon: <InfoIcon />,
+        bgColor: "bg-[#F5FBFF]",
+        borderColor: "border-[#4EA3E0]",
+    },
 };
 
 export const ToastItem: React.FC<ToastProps & { position?: string }> = ({

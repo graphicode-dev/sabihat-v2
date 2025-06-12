@@ -7,6 +7,12 @@ import {
 } from "../types/toast.types";
 import { ToastsList } from "../components/ui/toast/ToastsList";
 
+// Store button handlers globally
+type ButtonHandlerMap = Record<string, () => void>;
+// Use window object to ensure handlers persist across renders
+window._buttonHandlers = window._buttonHandlers || {};
+const buttonHandlers: ButtonHandlerMap = window._buttonHandlers;
+
 // Create the context
 const ToastContext = createContext<ToastContextValue | undefined>(undefined);
 
@@ -66,6 +72,43 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
         []
     );
 
+    // Create a helper function specifically for alert toasts with buttons
+    const addAlertToast = (
+        message: string,
+        buttons: Array<{
+            text: string;
+            onClick: () => void;
+            variant?: "primary" | "secondary" | "danger";
+        }>,
+        options?: Partial<Omit<Toast, "message" | "buttons" | "type">>
+    ) => {
+        // Create unique IDs for each button handler
+        const buttonsWithHandlers = buttons.map((button) => {
+            const handlerId = uuidv4();
+            // Store the handler function in the global map
+            buttonHandlers[handlerId] = button.onClick;
+
+            return {
+                text: button.text,
+                handlerId,
+                variant: button.variant,
+            };
+        });
+
+        // Add the alert toast
+        return addToast({
+            type: "alert",
+            message,
+            buttons: buttonsWithHandlers,
+            ...options,
+        });
+    };
+
+    const getButtonHandler = (handlerId: string): (() => void) | undefined => {
+        const handler = buttonHandlers[handlerId];
+        return handler;
+    };
+
     // Context value
     const contextValue: ToastContextValue = {
         toasts,
@@ -76,6 +119,8 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
         removeToast,
         removeAllToasts,
         updateToast,
+        addAlertToast,
+        getButtonHandler,
     };
 
     return (
@@ -87,3 +132,9 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
 };
 
 export { ToastContext };
+
+declare global {
+    interface Window {
+        _buttonHandlers: ButtonHandlerMap;
+    }
+}

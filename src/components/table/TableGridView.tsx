@@ -11,6 +11,7 @@ interface TableGridViewProps {
     onSort?: (column: string) => void;
     columnWidths: number[];
     onColumnResize: (index: number, width: number) => void;
+    onRowClick?: (rowId: string) => void;
 }
 
 export const TableGridView = ({
@@ -22,6 +23,7 @@ export const TableGridView = ({
     onSort,
     columnWidths,
     onColumnResize,
+    onRowClick,
 }: TableGridViewProps) => {
     // Check if all rows are selected
     const allSelected = data.length > 0 && data.every((row) => row.selected);
@@ -63,6 +65,7 @@ export const TableGridView = ({
                                 columns={columns}
                                 columnWidths={columnWidths}
                                 handleRowSelection={handleRowSelection}
+                                onRowClick={onRowClick}
                             />
                         ))
                     )}

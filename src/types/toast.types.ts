@@ -1,4 +1,4 @@
-export type ToastType = "error" | "warning" | "success" | "info";
+export type ToastType = "error" | "warning" | "success" | "info" | "alert";
 
 export interface ToastProps {
     id: string;
@@ -15,6 +15,13 @@ export interface Toast {
     message?: string;
     duration?: number;
     position?: ToastPosition;
+    buttons?: Array<{
+        text: string;
+        onClick?: () => void;
+        variant?: "primary" | "secondary" | "danger";
+        handlerId?: string;
+    }>;
+    onCloseToast?: () => void;
 }
 
 export type ToastPosition =
@@ -23,7 +30,8 @@ export type ToastPosition =
     | "bottom-right"
     | "bottom-left"
     | "top-center"
-    | "bottom-center";
+    | "bottom-center"
+    | "center";
 
 export interface ToastContextValue {
     toasts: Toast[];
@@ -34,6 +42,16 @@ export interface ToastContextValue {
     removeToast: (id: string) => void;
     removeAllToasts: () => void;
     updateToast: (id: string, toast: Partial<Omit<Toast, "id">>) => void;
+    addAlertToast: (
+        message: string,
+        buttons: Array<{
+            text: string;
+            onClick: () => void;
+            variant?: "primary" | "secondary" | "danger";
+        }>,
+        options?: Partial<Omit<Toast, "message" | "buttons" | "type">>
+    ) => void;
+    getButtonHandler: (handlerId: string) => (() => void) | undefined;
 }
 
 export interface ToastProviderProps {

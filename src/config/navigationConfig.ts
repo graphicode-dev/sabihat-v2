@@ -13,12 +13,17 @@ import PlaceholderPage from "../pages/PlaceholderPage";
 import { lazy } from "react";
 
 // #region System Management & Administration
+
+// #region Tax
 const TaxPage = lazy(
     () => import("../pages/dashboard/system-management-administration/tax")
 );
 const TaxViewPage = lazy(
     () => import("../pages/dashboard/system-management-administration/tax/view")
 );
+// #endregion Tax
+
+// #region Contact Messages
 const ContactMessagesPage = lazy(
     () =>
         import(
@@ -31,6 +36,9 @@ const ContactMessagesViewPage = lazy(
             "../pages/dashboard/system-management-administration/contact-messages/view"
         )
 );
+// #endregion Contact Messages
+
+// #region Currency
 const CurrencyPage = lazy(
     () => import("../pages/dashboard/system-management-administration/currency")
 );
@@ -40,6 +48,9 @@ const CurrencyViewPage = lazy(
             "../pages/dashboard/system-management-administration/currency/view"
         )
 );
+// #endregion Currency
+
+// #region Payment Methods
 const PaymentMethodsPage = lazy(
     () =>
         import(
@@ -52,6 +63,9 @@ const PaymentMethodsViewPage = lazy(
             "../pages/dashboard/system-management-administration/payment-methods/view"
         )
 );
+// #endregion Payment Methods
+
+// #region Company Profile
 const CompanyProfilePage = lazy(
     () =>
         import(
@@ -64,6 +78,9 @@ const CompanyProfileViewPage = lazy(
             "../pages/dashboard/system-management-administration/company-profile/view"
         )
 );
+// #endregion Company Profile
+
+// #region Partners Classification
 const PartnersClassificationPage = lazy(
     () =>
         import(
@@ -76,6 +93,9 @@ const PartnersClassificationViewPage = lazy(
             "../pages/dashboard/system-management-administration/partners-classification/view"
         )
 );
+// #endregion Partners Classification
+
+// #region User Profiles
 const UserProfilesPage = lazy(
     () =>
         import(
@@ -88,6 +108,15 @@ const UserProfilesViewPage = lazy(
             "../pages/dashboard/system-management-administration/user-profiles/view"
         )
 );
+const UserProfilesAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/user-profiles/add"
+        )
+);
+//  #endregion User Profiles
+
+//  #region User Roles
 const UserRolesPage = lazy(
     () =>
         import("../pages/dashboard/system-management-administration/user-roles")
@@ -98,6 +127,9 @@ const UserRolesViewPage = lazy(
             "../pages/dashboard/system-management-administration/user-roles/view"
         )
 );
+//  #endregion User Roles
+
+// #region Policies
 const PoliciesPage = lazy(
     () => import("../pages/dashboard/system-management-administration/policies")
 );
@@ -107,6 +139,9 @@ const PoliciesViewPage = lazy(
             "../pages/dashboard/system-management-administration/policies/view"
         )
 );
+// #endregion Policies
+
+// #region Terms & Conditions
 const TermsConditionsPage = lazy(
     () =>
         import(
@@ -119,6 +154,9 @@ const TermsConditionsViewPage = lazy(
             "../pages/dashboard/system-management-administration/terms-conditions/view"
         )
 );
+// #endregion Terms & Conditions
+
+// #region Load Types
 const LoadTypesPage = lazy(
     () =>
         import("../pages/dashboard/system-management-administration/load-types")
@@ -129,6 +167,9 @@ const LoadTypesViewPage = lazy(
             "../pages/dashboard/system-management-administration/load-types/view"
         )
 );
+// #endregion Load Types
+
+// #region Ticket Rules
 const TicketRulesPage = lazy(
     () =>
         import(
@@ -141,6 +182,9 @@ const TicketRulesViewPage = lazy(
             "../pages/dashboard/system-management-administration/ticket-rules/view"
         )
 );
+// #endregion Ticket Rules
+
+// #region Promotion
 const PromotionPage = lazy(
     () =>
         import("../pages/dashboard/system-management-administration/promotion")
@@ -151,21 +195,31 @@ const PromotionViewPage = lazy(
             "../pages/dashboard/system-management-administration/promotion/view"
         )
 );
+// #endregion Promotion
+
 // #endregion System Management & Administration
 
 // #region Ship & Trip Management
+
+// #region Cabins
 const CabinsPage = lazy(
     () => import("../pages/dashboard/ship-trip-management/cabins")
 );
 const CabinsViewPage = lazy(
     () => import("../pages/dashboard/ship-trip-management/cabins/view")
 );
+// #endregion Cabins
+
+// #region Port
 const PortPage = lazy(
     () => import("../pages/dashboard/ship-trip-management/port")
 );
 const PortViewPage = lazy(
     () => import("../pages/dashboard/ship-trip-management/port/view")
 );
+// #endregion Port
+
+// #region Schedule New Trips
 const ScheduleNewTripsPage = lazy(
     () => import("../pages/dashboard/ship-trip-management/schedule-new-trips")
 );
@@ -175,6 +229,9 @@ const ScheduleNewTripsViewPage = lazy(
             "../pages/dashboard/ship-trip-management/schedule-new-trips/view"
         )
 );
+// #endregion Schedule New Trips
+
+// #region Schedule New Ships
 const ScheduleNewShipsPage = lazy(
     () => import("../pages/dashboard/ship-trip-management/schedule-new-ships")
 );
@@ -184,6 +241,8 @@ const ScheduleNewShipsViewPage = lazy(
             "../pages/dashboard/ship-trip-management/schedule-new-ships/view"
         )
 );
+// #endregion Schedule New Ships
+
 // #endregion Ship & Trip Management
 
 export const navigationConfig: TabLink[] = [
@@ -208,6 +267,11 @@ export const navigationConfig: TabLink[] = [
                             title: "View",
                             path: "view/:id",
                             component: UserProfilesViewPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "add",
+                            component: UserProfilesAddPage,
                         },
                     ],
                 },
