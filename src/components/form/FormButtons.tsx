@@ -4,9 +4,15 @@ interface FormButtonProps {
     isLoading?: boolean;
     submitText: string;
     cancelText?: string;
+    disabled?: boolean;
 }
 
-function FormButtons({ isLoading, submitText, cancelText }: FormButtonProps) {
+function FormButtons({
+    isLoading,
+    submitText,
+    cancelText,
+    disabled,
+}: FormButtonProps) {
     const navigate = useNavigate();
     const submitButtonText =
         submitText.charAt(0).toUpperCase() + submitText.slice(1) || "Submit";
@@ -25,7 +31,7 @@ function FormButtons({ isLoading, submitText, cancelText }: FormButtonProps) {
             {/* Submit Button */}
             <button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || disabled}
                 className="form-button-submit disabled:opacity-50 "
             >
                 {isLoading

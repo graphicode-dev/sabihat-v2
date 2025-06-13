@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
+import FormFieldWrapper from "./FormFieldWrapper";
 
 interface FormInputProps<T extends FieldValues> {
     name: Path<T>;
@@ -12,6 +13,15 @@ interface FormInputProps<T extends FieldValues> {
     error?: string;
     className?: string;
     disabled?: boolean;
+    rows?: number;
+    cols?: number;
+    textareaResize?:
+        | "none"
+        | "both"
+        | "horizontal"
+        | "vertical"
+        | "block"
+        | "inline";
 }
 
 const FormInput = <T extends FieldValues>({
@@ -24,6 +34,9 @@ const FormInput = <T extends FieldValues>({
     error,
     className = "",
     disabled = false,
+    rows = 3,
+    cols = 30,
+    textareaResize = "vertical",
 }: FormInputProps<T>) => {
     const [showPassword, setShowPassword] = useState(false);
     const isPasswordField = type === "password";
@@ -36,14 +49,8 @@ const FormInput = <T extends FieldValues>({
         : type;
 
     return (
-        <div className={className}>
-            {label && (
-                <label className="form-label">
-                    {label}
-                    {required && <span className="text-red-500 ml-1">*</span>}
-                </label>
-            )}
-            <div className="relative">
+        <div className={`w-full ${className}`}>
+            <FormFieldWrapper label={label} required={required}>
                 <Controller
                     name={name}
                     control={control}
@@ -52,12 +59,15 @@ const FormInput = <T extends FieldValues>({
                             return (
                                 <textarea
                                     {...field}
-                                    className="form-input"
+                                    className="peer form-input h-auto"
                                     placeholder={placeholder}
                                     required={required}
                                     disabled={disabled}
-                                    cols={30}
-                                    rows={7}
+                                    cols={cols}
+                                    rows={rows}
+                                    style={{
+                                        resize: textareaResize,
+                                    }}
                                 />
                             );
                         } else {
@@ -65,7 +75,7 @@ const FormInput = <T extends FieldValues>({
                                 <input
                                     {...field}
                                     type={inputType}
-                                    className="form-input"
+                                    className="peer form-input"
                                     placeholder={placeholder}
                                     required={required}
                                     disabled={disabled}
@@ -89,7 +99,8 @@ const FormInput = <T extends FieldValues>({
                         )}
                     </button>
                 )}
-            </div>
+            </FormFieldWrapper>
+
             {error && <span className="form-error">{error}</span>}
         </div>
     );

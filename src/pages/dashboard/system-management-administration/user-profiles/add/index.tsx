@@ -9,6 +9,7 @@ import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import FormButtons from "../../../../../components/form/FormButtons";
 import { useNavigate } from "react-router-dom";
+import { SearchedDropDown } from "../../../../../components/SearchedDropDown";
 
 type Error = {
     numCode?: string;
@@ -41,6 +42,7 @@ function UserProfilesAddPage() {
         code: "",
         name: "",
     });
+    const [selectedService, setSelectedService] = useState<string | null>(null);
 
     const { control, handleSubmit, reset } = useForm<Service>({
         resolver: zodResolver(medicalServiceSchema),
@@ -114,35 +116,33 @@ function UserProfilesAddPage() {
                         name="numCode"
                         control={control}
                         label="Num Code"
-                        type="number"
-                        required
+                        type="text"
                         error={errors.numCode}
                     />
-                </FormFieldsLayout>
 
-                <FormFieldsLayout title="User Profiles Add">
-                    {/* Code */}
-                    <FormInput
+                    <SearchedDropDown
+                        control={control}
                         name="code"
-                        control={control}
-                        label="Short Name"
-                        type="text"
+                        label="Services"
                         required
-                        error={errors.code}
-                    />
-
-                    {/* Name */}
-                    <FormInput
-                        name="name"
-                        control={control}
-                        label="Name (English)"
-                        type="text"
-                        required
-                        error={errors.name}
+                        options={[
+                            { key: "Service 1", value: "Service 1" },
+                            { key: "Service 2", value: "Service 2" },
+                            { key: "Service 3", value: "Service 3" },
+                        ]}
+                        value={selectedService || ""}
+                        onChange={(serviceId) => {
+                            setSelectedService(serviceId);
+                        }}
+                        placeholder="Select service"
                     />
                 </FormFieldsLayout>
 
-                <FormButtons isLoading={isLoading} submitText="add" />
+                <FormButtons
+                    isLoading={isLoading}
+                    submitText="add"
+                    disabled={!selectedService}
+                />
             </FormLayout>
         </PageLayout>
     );
