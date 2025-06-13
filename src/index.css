@@ -102,6 +102,10 @@
         @apply bg-transparent h-10 w-full rounded-3xl placeholder-transparent ring-2 px-6 py-3 ring-dark-50 focus:ring-primary-500 focus:outline-none transition-all duration-150 ease-in-out;
     }
 
+    .form-error {
+        @apply text-red-500 ring-red-500 focus:ring-red-500 peer-focus:text-red-500;
+    }
+
     .form-button-submit {
         @apply bg-primary-500 hover:bg-primary-600 text-white py-3 px-6 mt-5 transition duration-300 rounded-3xl disabled:bg-primary-300;
     }

@@ -49,8 +49,8 @@ const FormInput = <T extends FieldValues>({
         : type;
 
     return (
-        <div className={`w-full ${className}`}>
-            <FormFieldWrapper label={label} required={required}>
+        <div className={`w-full text-left ${className}`}>
+            <FormFieldWrapper label={label} required={required} error={error}>
                 <Controller
                     name={name}
                     control={control}
@@ -59,7 +59,9 @@ const FormInput = <T extends FieldValues>({
                             return (
                                 <textarea
                                     {...field}
-                                    className="peer form-input h-auto"
+                                    className={`peer form-input h-auto ${
+                                        error ? "form-error" : ""
+                                    }`}
                                     placeholder={placeholder}
                                     required={required}
                                     disabled={disabled}
@@ -75,7 +77,9 @@ const FormInput = <T extends FieldValues>({
                                 <input
                                     {...field}
                                     type={inputType}
-                                    className="peer form-input"
+                                    className={`peer form-input ${
+                                        error ? "form-error" : ""
+                                    }`}
                                     placeholder={placeholder}
                                     required={required}
                                     disabled={disabled}
@@ -99,9 +103,11 @@ const FormInput = <T extends FieldValues>({
                         )}
                     </button>
                 )}
-            </FormFieldWrapper>
 
-            {error && <span className="form-error">{error}</span>}
+                {error && (
+                    <span className="form-error text-left ml-5">*{error}</span>
+                )}
+            </FormFieldWrapper>
         </div>
     );
 };

@@ -38,7 +38,7 @@ function UserProfilesAddPage() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<Error>({
-        numCode: "",
+        numCode: "Please enter num code is required",
         code: "",
         name: "",
     });
@@ -110,7 +110,7 @@ function UserProfilesAddPage() {
     return (
         <PageLayout>
             <FormLayout handleSubmit={handleSubmit} handleFormSubmit={onSubmit}>
-                <FormFieldsLayout title="User Profiles Add" separator>
+                <FormFieldsLayout title="User Profiles Add" separator cols="2">
                     {/* Num Code */}
                     <FormInput
                         name="numCode"
@@ -121,14 +121,26 @@ function UserProfilesAddPage() {
                     />
 
                     <SearchedDropDown
-                        control={control}
                         name="code"
+                        control={control}
                         label="Services"
                         required
                         options={[
                             { key: "Service 1", value: "Service 1" },
                             { key: "Service 2", value: "Service 2" },
                             { key: "Service 3", value: "Service 3" },
+                            { key: "Service 4", value: "Service 4" },
+                            { key: "Service 5", value: "Service 5" },
+                            { key: "Service 6", value: "Service 6" },
+                            { key: "Service 7", value: "Service 7" },
+                            { key: "Service 8", value: "Service 8" },
+                            { key: "Service 9", value: "Service 9" },
+                            { key: "Service 10", value: "Service 10" },
+                            { key: "Service 11", value: "Service 11" },
+                            { key: "Service 12", value: "Service 12" },
+                            { key: "Service 13", value: "Service 13" },
+                            { key: "Service 14", value: "Service 14" },
+                            { key: "Service 15", value: "Service 15" },
                         ]}
                         value={selectedService || ""}
                         onChange={(serviceId) => {
