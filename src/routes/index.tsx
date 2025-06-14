@@ -9,6 +9,7 @@ import {
     selectIsAuthenticated,
     selectLoading,
 } from "../store/slices/auth/authSlice";
+import CalendarDemo from "../components/ui/Calendar/CalendarDemo";
 const DashboardWrapper = lazy(
     () => import("../pages/dashboard/DashboardWrapper")
 );
@@ -148,6 +149,9 @@ function AppRoutes() {
 
                 {/* Unauthorized Page */}
                 <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
+                {/* Test Route */}
+                <Route path="/test" element={<CalendarDemo />} />
             </Routes>
         </Suspense>
     );

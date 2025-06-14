@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Input } from "./Input";
 import { ChevronDown, Search, X } from "lucide-react";
-import FormFieldWrapper from "../ui/FormFieldWrapper";
+import { FormFieldWrapper } from "../form";
 import { Control, Controller } from "react-hook-form";
 
 interface SearchedDropDownProps {
@@ -35,7 +35,7 @@ export function SearchedDropDown({
     control,
     name,
 }: SearchedDropDownProps) {
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const dropdownRef = useRef<HTMLDivElement>(null);

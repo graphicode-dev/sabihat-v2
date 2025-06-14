@@ -1,13 +1,12 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import FormLayout from "../../../../../layout/FormLayout";
-import FormInput from "../../../../../components/ui/FormInput";
+import { FormInput, FormButtons } from "../../../../../components/form";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
-import FormButtons from "../../../../../components/form/FormButtons";
 import { useNavigate } from "react-router-dom";
 import { SearchedDropDown } from "../../../../../components/SearchedDropDown";
 
@@ -15,6 +14,7 @@ type Error = {
     numCode?: string;
     code?: string;
     name?: string;
+    date?: string;
 };
 
 type Service = {
@@ -22,6 +22,7 @@ type Service = {
     numCode: string;
     code: string;
     name: string;
+    date: Date;
     type?: string;
 };
 
@@ -31,6 +32,7 @@ const medicalServiceSchema = z.object({
     code: z.string(),
     name: z.string(),
     type: z.string().optional(),
+    date: z.date(),
 });
 
 function UserProfilesAddPage() {
@@ -41,6 +43,7 @@ function UserProfilesAddPage() {
         numCode: "Please enter num code is required",
         code: "",
         name: "",
+        date: "",
     });
     const [selectedService, setSelectedService] = useState<string | null>(null);
 
@@ -50,6 +53,7 @@ function UserProfilesAddPage() {
             numCode: "",
             code: "",
             name: "",
+            date: new Date(),
         },
 
         mode: "onChange",
@@ -113,11 +117,11 @@ function UserProfilesAddPage() {
                 <FormFieldsLayout title="User Profiles Add" separator cols="2">
                     {/* Num Code */}
                     <FormInput
-                        name="numCode"
+                        name="date"
                         control={control}
-                        label="Num Code"
-                        type="text"
-                        error={errors.numCode}
+                        label="Date"
+                        type="date"
+                        error={errors.date}
                     />
 
                     <SearchedDropDown

@@ -1,10 +1,12 @@
 function FormFieldWrapper({
     label,
+    activeLabel,
     required,
     children,
     error,
 }: {
     label?: string;
+    activeLabel?: boolean;
     required?: boolean;
     children?: React.ReactNode;
     error?: string;
@@ -18,6 +20,11 @@ function FormFieldWrapper({
                     <label
                         htmlFor={label}
                         className={`form-label ${error ? "form-error" : ""}`}
+                        style={{
+                            color: activeLabel
+                                ? "var(--color-primary-500)"
+                                : "",
+                        }}
                     >
                         {label}
                         {required && (
