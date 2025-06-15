@@ -72,10 +72,28 @@ const CompanyProfilePage = lazy(
             "../pages/dashboard/system-management-administration/company-profile"
         )
 );
-const CompanyProfileViewPage = lazy(
+const CompanyEditPage = lazy(
     () =>
         import(
-            "../pages/dashboard/system-management-administration/company-profile/view"
+            "../pages/dashboard/system-management-administration/company-profile/edit/CompanyEdit"
+        )
+);
+const SettingsEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/company-profile/edit/SettingsEdit"
+        )
+);
+const ContactUsEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/company-profile/edit/ContactUsEdit"
+        )
+);
+const AboutUsEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/company-profile/edit/AboutUsEdit"
         )
 );
 // #endregion Company Profile
@@ -297,9 +315,24 @@ export const navigationConfig: TabLink[] = [
                     component: CompanyProfilePage,
                     subLinks: [
                         {
-                            title: "View",
-                            path: "view/:id",
-                            component: CompanyProfileViewPage,
+                            title: "Edit",
+                            path: "edit/profile",
+                            component: CompanyEditPage,
+                        },
+                        {
+                            title: "About Us",
+                            path: "edit/about-us",
+                            component: AboutUsEditPage,
+                        },
+                        {
+                            title: "Contact Us",
+                            path: "edit/contact-us",
+                            component: ContactUsEditPage,
+                        },
+                        {
+                            title: "Settings",
+                            path: "edit/setting",
+                            component: SettingsEditPage,
                         },
                     ],
                 },

@@ -134,6 +134,10 @@
         @apply text-gray-700;
         border-bottom: 2px solid var(--color-gray-300);
     }
+
+    .separator{
+        @apply border-b border-dark-50 my-4;
+    }
 }
 
 /* Original styles */

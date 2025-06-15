@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 interface FormLayoutProps {
     children: ReactNode;
     title?: string;
+    subtitle?: string;
     className?: string;
     separator?: boolean;
     cols?: string;
@@ -11,6 +12,7 @@ interface FormLayoutProps {
 function FormFieldsLayout({
     children,
     title,
+    subtitle,
     className,
     separator,
     cols,
@@ -39,6 +41,9 @@ function FormFieldsLayout({
         <>
             {title && (
                 <h1 className="text-xl text-left font-bold px-5">{title}</h1>
+            )}
+            {subtitle && (
+                <h2 className="text-left font-bold px-5">{subtitle}</h2>
             )}
             <div
                 className={`grid md:grid-cols-2 ${getGridColsClass()} gap-4 my-5 px-5 pb-5 ${className}`}

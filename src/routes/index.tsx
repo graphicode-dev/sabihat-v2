@@ -38,7 +38,7 @@ const cleanPath = (path: string) => path.replace(/^\/|\/$/g, "");
 //     const location = useLocation();
 
 //     useEffect(() => {
-//         console.log("Current location:", location);
+//         console.log("Current location:", JSON.stringify(location, null, 2));
 //     }, [location]);
 
 //     return null;
@@ -50,6 +50,24 @@ function AppRoutes() {
         (link.sideBar?.links || []).flatMap((route) =>
             (route.subLinks || [])
                 .filter((subLink) => subLink.path.includes(":id"))
+                .map((subLink) => {
+                    // Get the base path without parent prefix
+                    const basePath = cleanPath(
+                        route.path.startsWith("/") ? route.path : route.path
+                    );
+                    return {
+                        path: `${basePath}/${cleanPath(subLink.path)}`,
+                        component: subLink.component,
+                    };
+                })
+        )
+    );
+
+    // Extract all other sublinks (non-ID routes like edit pages)
+    const otherSubRoutes = navigationConfig.flatMap((link) =>
+        (link.sideBar?.links || []).flatMap((route) =>
+            (route.subLinks || [])
+                .filter((subLink) => !subLink.path.includes(":id"))
                 .map((subLink) => {
                     // Get the base path without parent prefix
                     const basePath = cleanPath(
@@ -96,6 +114,15 @@ function AppRoutes() {
                         {viewRoutes.map((route, i) => (
                             <Route
                                 key={`view-${i}`}
+                                path={route.path}
+                                element={<route.component />}
+                            />
+                        ))}
+
+                        {/* Other sublinks like edit pages */}
+                        {otherSubRoutes.map((route, i) => (
+                            <Route
+                                key={`other-${i}`}
                                 path={route.path}
                                 element={<route.component />}
                             />

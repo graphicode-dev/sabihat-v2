@@ -6,7 +6,9 @@ import {
     ViewCardFieldProps,
     ViewCardButtonsProps,
     ViewCardSectionData,
+    ViewCardHeaderProps,
 } from "../../types/viewCard.types";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ViewCardSection: React.FC<ViewCardSectionProps> = ({
     title,
@@ -92,6 +94,29 @@ const ViewCardButtons: React.FC<ViewCardButtonsProps> = ({
     );
 };
 
+const ViewCardHeader: React.FC<ViewCardHeaderProps> = ({
+    title = "View",
+    buttons,
+    ticketButton,
+    onEdit,
+    onDelete,
+    onTicket,
+}) => {
+    return (
+        <div className="flex justify-between items-center gap-2">
+            <h1 className="text-xl font-bold">{title}</h1>
+            {buttons && (
+                <ViewCardButtons
+                    ticketButton={ticketButton}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                    onTicket={onTicket}
+                />
+            )}
+        </div>
+    );
+};
+
 const ViewCard: React.FC<ViewCardProps> = ({
     title,
     subtitle,
@@ -100,6 +125,8 @@ const ViewCard: React.FC<ViewCardProps> = ({
     data = {},
     buttons,
     ticketButton,
+    hideBorder = false,
+    tabs = [],
     onEdit,
     onDelete,
     onTicket,
@@ -125,24 +152,42 @@ const ViewCard: React.FC<ViewCardProps> = ({
     const visibleSectionKeys = showAllContent
         ? sectionKeys
         : sectionKeys.slice(0, initialSectionsToShow);
+    // For tabs variant - handle tab navigation
+    const navigate = useNavigate();
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+
+    // Get active tab from URL or use first tab
+    const activeTabFromURL = searchParams.get("tab");
+    const firstTabValue = tabs.length > 0 ? tabs[0].value : "";
+    const [activeTab, setActiveTab] = useState(
+        activeTabFromURL || firstTabValue
+    );
+
+    // Function to update tab in URL
+    const updateTab = (tab: string) => {
+        searchParams.set("tab", tab);
+        navigate(`${location.pathname}?${searchParams.toString()}`);
+    };
+
+    // Find the active tab content
+    const activeTabItem = tabs.find((tab) => tab.value === activeTab);
+
     // Render different layouts based on variant
     const renderContent = () => {
         switch (variant) {
             case "user":
                 return (
                     <div className="flex flex-col gap-6">
-                        {/* Buttons */}
-                        <div className="flex justify-between items-center gap-2">
-                            <h1 className="text-xl font-bold">View</h1>
-                            {buttons && (
-                                <ViewCardButtons
-                                    ticketButton={ticketButton}
-                                    onEdit={onEdit}
-                                    onDelete={onDelete}
-                                    onTicket={onTicket}
-                                />
-                            )}
-                        </div>
+                        {/* Header */}
+                        <ViewCardHeader
+                            title={title}
+                            buttons={buttons}
+                            ticketButton={ticketButton}
+                            onEdit={onEdit}
+                            onDelete={onDelete}
+                            onTicket={onTicket}
+                        />
 
                         {/* User Avatar and Basic Info */}
                         <div className="flex flex-col md:flex-row items-center gap-4">
@@ -167,7 +212,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
                         </div>
 
                         {/* Separator */}
-                        <div className="border-b border-dark-50 my-4" />
+                        <div className="separator" />
 
                         {/* User Details */}
                         <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 md:mt-0">
@@ -185,18 +230,15 @@ const ViewCard: React.FC<ViewCardProps> = ({
             case "vessel":
                 return (
                     <div className="flex flex-col gap-6">
-                        {/* Buttons */}
-                        <div className="flex justify-between items-center gap-2">
-                            <h1 className="text-xl font-bold">View</h1>
-                            {buttons && (
-                                <ViewCardButtons
-                                    ticketButton={ticketButton}
-                                    onEdit={onEdit}
-                                    onDelete={onDelete}
-                                    onTicket={onTicket}
-                                />
-                            )}
-                        </div>
+                        {/* Header */}
+                        <ViewCardHeader
+                            title={title}
+                            buttons={buttons}
+                            ticketButton={ticketButton}
+                            onEdit={onEdit}
+                            onDelete={onDelete}
+                            onTicket={onTicket}
+                        />
 
                         {/* User Avatar and Basic Info */}
                         <div className="flex flex-col md:flex-row items-center gap-4">
@@ -309,6 +351,64 @@ const ViewCard: React.FC<ViewCardProps> = ({
                     </div>
                 );
 
+            case "tabs":
+                return (
+                    <div className="flex flex-col">
+                        {/* Header with tab-specific buttons */}
+                        {activeTabItem ? (
+                            <ViewCardHeader
+                                title={title}
+                                buttons={activeTabItem.buttons || buttons}
+                                ticketButton={
+                                    activeTabItem.onTicket ? true : ticketButton
+                                }
+                                onEdit={activeTabItem.onEdit || onEdit}
+                                onDelete={activeTabItem.onDelete || onDelete}
+                                onTicket={activeTabItem.onTicket || onTicket}
+                            />
+                        ) : (
+                            <ViewCardHeader
+                                title={title}
+                                buttons={buttons}
+                                ticketButton={ticketButton}
+                                onEdit={onEdit}
+                                onDelete={onDelete}
+                                onTicket={onTicket}
+                            />
+                        )}
+
+                        {/* Tabs Navigation */}
+                        {tabs.length > 0 && (
+                            <>
+                                <nav className="flex border-b border-gray-200 mb-6">
+                                    {tabs.map((tab) => (
+                                        <button
+                                            key={tab.value}
+                                            type="button"
+                                            className={`px-4 py-2 text-sm font-medium ${
+                                                activeTab === tab.value
+                                                    ? "text-primary-500 border-b-2 border-primary-500"
+                                                    : "text-gray-500 hover:text-primary-400 hover:border-b hover:border-primary-300"
+                                            }`}
+                                            onClick={() => {
+                                                setActiveTab(tab.value);
+                                                updateTab(tab.value);
+                                            }}
+                                        >
+                                            {tab.label}
+                                        </button>
+                                    ))}
+                                </nav>
+
+                                {/* Render active tab content */}
+                                <div className="pt-2">
+                                    {activeTabItem && activeTabItem.children}
+                                </div>
+                            </>
+                        )}
+                    </div>
+                );
+
             default:
                 return (
                     <div className="flex flex-col gap-6">
@@ -409,7 +509,11 @@ const ViewCard: React.FC<ViewCardProps> = ({
     };
 
     return (
-        <div className="bg-white shadow-sm rounded-lg p-6 border border-gray-100">
+        <div
+            className={`bg-white shadow-sm rounded-lg p-6 ${
+                !hideBorder ? "border border-gray-100" : ""
+            }`}
+        >
             {renderContent()}
 
             {/* Global Show More button */}

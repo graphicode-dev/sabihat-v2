@@ -19,10 +19,11 @@ export interface ViewCardData {
 }
 
 // Variant type
-export type ViewCardVariant = "user" | "vessel" | "default";
+export type ViewCardVariant = "user" | "vessel" | "tabs" | "default";
 
 // Props for the ViewCard component
 export interface ViewCardProps {
+    headerTitle?: string;
     title: string;
     subtitle?: string;
     variant?: ViewCardVariant;
@@ -30,6 +31,8 @@ export interface ViewCardProps {
     data?: ViewCardData;
     buttons?: boolean;
     ticketButton?: boolean;
+    hideBorder?: boolean;
+    tabs?: ViewCardTabItem[];
     onEdit?: () => void;
     onDelete?: () => void;
     onTicket?: () => void;
@@ -50,6 +53,29 @@ export interface ViewCardFieldProps {
 // Props for the ViewCardButtons component
 export interface ViewCardButtonsProps {
     ticketButton?: boolean;
+    onEdit?: () => void;
+    onDelete?: () => void;
+    onTicket?: () => void;
+}
+
+export interface ViewCardHeaderProps {
+    title?: string;
+    buttons?: boolean;
+    ticketButton?: boolean;
+    onEdit?: () => void;
+    onDelete?: () => void;
+    onTicket?: () => void;
+}
+
+export interface ViewCardTabItem {
+    label: string;
+    value: string;
+    buttonLabel?: string;
+    buttonHref?: string;
+    entity?: string | string[];
+    role?: string | string[];
+    children: React.ReactNode;
+    buttons?: boolean;
     onEdit?: () => void;
     onDelete?: () => void;
     onTicket?: () => void;
