@@ -1,32 +1,56 @@
 import { DynamicTable } from "../../../../components/table";
-import { columns, mockData } from "../../../../data/mockData";
-import { useToast } from "../../../../hooks/useToast";
 import PageLayout from "../../../../layout/PageLayout";
+import { TableColumn, TableData } from "../../../../types/table";
 
 function ContactMessagesPage() {
-    const { addToast } = useToast();
+    const columns: TableColumn[] = [
+        {
+            id: "col1",
+            header: "Full Name",
+            accessorKey: "fullName",
+            sortable: true,
+        },
+        { id: "col2", header: "Email", accessorKey: "email", sortable: true },
+        {
+            id: "col3",
+            header: "Phone Number",
+            accessorKey: "phoneNumber",
+            sortable: true,
+        },
+        {
+            id: "col4",
+            header: "Message",
+            accessorKey: "message",
+            sortable: true,
+        },
+        {
+            id: "col5",
+            header: "Attach File",
+            accessorKey: "attachFile",
+            sortable: true,
+        },
+    ];
 
-    const addSuccessToast = () => {
-        addToast({
-            type: "success",
-            title: "Success message",
-            message: "This is a success message",
-            duration: 5000,
-            position: "top-right",
-        });
-    };
+    const data: TableData[] = [
+        {
+            id: "1",
+            columns: {
+                fullName: "John Doe",
+                email: "john.doe@example.com",
+                phoneNumber: "123-456-7890",
+                message: "Hello, how are you?",
+                attachFile: "file.pdf",
+            },
+        },
+    ];
 
     return (
         <PageLayout>
             <DynamicTable
-                title="All Contact Messages"
-                data={mockData}
+                title="All Messages"
+                data={data}
                 columns={columns}
-                initialView="grid"
                 itemsPerPage={10}
-                onAddClick={() => {
-                    addSuccessToast();
-                }}
                 addLabel="Add Commercial Agent"
             />
         </PageLayout>
