@@ -9,46 +9,46 @@ import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { useNavigate } from "react-router-dom";
 
-type Currency = {
+type Tax = {
     id?: string;
-    currencyName?: string;
-    currencyCode?: string;
-    currencyRate?: string;
-    lastDate?: string;
+    taxName: string;
+    taxType: string;
+    amountValue: string;
+    description: string;
 };
 
-const currencySchema = z.object({
+const taxSchema = z.object({
     id: z.string().optional(),
-    currencyName: z.string().optional(),
-    currencyCode: z.string().optional(),
-    currencyRate: z.string().optional(),
-    lastDate: z.string().optional(),
+    taxName: z.string(),
+    taxType: z.string(),
+    amountValue: z.string(),
+    description: z.string(),
 });
 
-function CurrencyAddPage() {
+function TaxAddPage() {
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState<Currency>({
-        currencyName: "",
-        currencyCode: "",
-        currencyRate: "",
-        lastDate: "",
+    const [errors, setErrors] = useState<Tax>({
+        taxName: "",
+        taxType: "",
+        amountValue: "",
+        description: "",
     });
 
-    const { control, handleSubmit, reset, formState } = useForm<Currency>({
-        resolver: zodResolver(currencySchema),
+    const { control, handleSubmit, reset, formState } = useForm<Tax>({
+        resolver: zodResolver(taxSchema),
         defaultValues: {
             id: "",
-            currencyName: "",
-            currencyCode: "",
-            currencyRate: "",
-            lastDate: "",
+            taxName: "",
+            taxType: "",
+            amountValue: "",
+            description: "",
         },
         mode: "onChange",
     });
 
-    const onSubmit = async (formData: Currency) => {
+    const onSubmit = async (formData: Tax) => {
         setIsLoading(true);
         try {
             // Create FormData object for file upload
@@ -56,25 +56,17 @@ function CurrencyAddPage() {
 
             // Always append all fields, even if they're empty strings
             // This ensures the API receives all fields
-            if (formData.currencyName) {
-                apiFormData.append("currencyName", formData.currencyName);
-            }
-            if (formData.currencyCode) {
-                apiFormData.append("currencyCode", formData.currencyCode);
-            }
-            if (formData.currencyRate) {
-                apiFormData.append("currencyRate", formData.currencyRate);
-            }
-            if (formData.lastDate) {
-                apiFormData.append("lastDate", formData.lastDate);
-            }
+            apiFormData.append("taxName", formData.taxName);
+            apiFormData.append("taxType", formData.taxType);
+            apiFormData.append("amountValue", formData.amountValue);
+            apiFormData.append("description", formData.description);
 
             // Simulate API call success
             // In a real app, you would send apiFormData to your backend
             // const response = await api.post('/company', apiFormData);
 
             addToast({
-                message: "Currency added successfully",
+                message: "Tax added successfully",
                 type: "success",
                 title: "Success!",
             });
@@ -82,22 +74,22 @@ function CurrencyAddPage() {
             reset();
             navigate(-1);
         } catch (error: any) {
-            console.error("Error adding currency:", error);
+            console.error("Error adding tax:", error);
             if (error?.errors) {
                 // Map API error fields to our frontend field names
                 const mappedErrors: any = {};
 
-                if (error.errors.currencyName) {
-                    mappedErrors.currencyName = error.errors.currencyName[0];
+                if (error.errors.taxName) {
+                    mappedErrors.taxName = error.errors.taxName[0];
                 }
-                if (error.errors.currencyCode) {
-                    mappedErrors.currencyCode = error.errors.currencyCode[0];
+                if (error.errors.taxType) {
+                    mappedErrors.taxType = error.errors.taxType[0];
                 }
-                if (error.errors.currencyRate) {
-                    mappedErrors.currencyRate = error.errors.currencyRate[0];
+                if (error.errors.amountValue) {
+                    mappedErrors.amountValue = error.errors.amountValue[0];
                 }
-                if (error.errors.lastDate) {
-                    mappedErrors.lastDate = error.errors.lastDate[0];
+                if (error.errors.description) {
+                    mappedErrors.description = error.errors.description[0];
                 }
 
                 console.log("Mapped errors:", mappedErrors);
@@ -118,40 +110,44 @@ function CurrencyAddPage() {
         <PageLayout>
             <FormLayout handleSubmit={handleSubmit} handleFormSubmit={onSubmit}>
                 <FormFieldsLayout title="Add">
-                    {/* currencyName */}
+                    {/* taxName */}
                     <FormInput
-                        name="currencyName"
+                        name="taxName"
                         control={control}
-                        label="Currency Name"
+                        label="Tax Name"
                         type="text"
-                        error={errors.currencyName}
+                        error={errors.taxName}
+                        required
                     />
 
-                    {/* currencyCode */}
+                    {/* taxType */}
                     <FormInput
-                        name="currencyCode"
+                        name="taxType"
                         control={control}
-                        label="Currency Code"
+                        label="Tax Type"
                         type="text"
-                        error={errors.currencyCode}
+                        error={errors.taxType}
+                        required
                     />
 
-                    {/* currencyRate */}
+                    {/* amountValue */}
                     <FormInput
-                        name="currencyRate"
+                        name="amountValue"
                         control={control}
-                        label="Currency Rate"
+                        label="Amount Value"
                         type="text"
-                        error={errors.currencyRate}
+                        error={errors.amountValue}
+                        required
                     />
 
-                    {/* lastDate */}
+                    {/* description */}
                     <FormInput
-                        name="lastDate"
+                        name="description"
                         control={control}
-                        label="Last Date"
-                        type="date"
-                        error={errors.lastDate}
+                        label="Description"
+                        type="text"
+                        error={errors.description}
+                        required
                     />
                 </FormFieldsLayout>
 
@@ -165,4 +161,4 @@ function CurrencyAddPage() {
     );
 }
 
-export default CurrencyAddPage;
+export default TaxAddPage;

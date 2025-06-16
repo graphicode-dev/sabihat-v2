@@ -9,18 +9,6 @@ import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { useNavigate } from "react-router-dom";
 
-type Error = {
-    facebook?: string;
-    whatsapp?: string;
-    instagram?: string;
-    linkedin?: string;
-    twitter?: string;
-    snapchat?: string;
-    email?: string;
-    hotLine?: string;
-    phone?: string;
-};
-
 type ContactUS = {
     id?: string;
     facebook?: string;
@@ -51,7 +39,7 @@ function ContactUsEditPage() {
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState<Partial<Error>>({
+    const [errors, setErrors] = useState<ContactUS>({
         facebook: "",
         whatsapp: "",
         instagram: "",

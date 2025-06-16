@@ -9,10 +9,6 @@ import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { useNavigate } from "react-router-dom";
 
-type Error = {
-    nameClass?: string;
-};
-
 type Partners = {
     id?: string;
     nameClass?: string;
@@ -27,7 +23,7 @@ function PartnersClassificationAddPage() {
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState<Error>({
+    const [errors, setErrors] = useState<Partners>({
         nameClass: "",
     });
 

@@ -9,13 +9,6 @@ import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { useNavigate } from "react-router-dom";
 
-type Error = {
-    whoWeAre?: string;
-    vision?: string;
-    mission?: string;
-    purpose?: string;
-};
-
 type AboutUS = {
     id?: string;
     whoWeAre?: string;
@@ -36,7 +29,7 @@ function AboutUsEditPage() {
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState<Partial<Error>>({
+    const [errors, setErrors] = useState<AboutUS>({
         whoWeAre: "",
         vision: "",
         mission: "",

@@ -21,6 +21,9 @@ const TaxPage = lazy(
 const TaxViewPage = lazy(
     () => import("../pages/dashboard/system-management-administration/tax/view")
 );
+const TaxAddPage = lazy(
+    () => import("../pages/dashboard/system-management-administration/tax/add")
+);
 // #endregion Tax
 
 // #region Contact Messages
@@ -412,6 +415,11 @@ export const navigationConfig: TabLink[] = [
                             title: "View",
                             path: "view/:id",
                             component: TaxViewPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: TaxAddPage,
                         },
                     ],
                 },
