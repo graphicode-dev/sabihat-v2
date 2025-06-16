@@ -72,6 +72,12 @@ const PaymentMethodsViewPage = lazy(
             "../pages/dashboard/system-management-administration/payment-methods/view"
         )
 );
+const PaymentMethodsAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/payment-methods/add"
+        )
+);
 // #endregion Payment Methods
 
 // #region Company Profile
@@ -173,6 +179,12 @@ const PoliciesViewPage = lazy(
             "../pages/dashboard/system-management-administration/policies/view"
         )
 );
+const PoliciesAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/policies/add"
+        )
+);
 // #endregion Policies
 
 // #region Terms & Conditions
@@ -188,6 +200,12 @@ const TermsConditionsViewPage = lazy(
             "../pages/dashboard/system-management-administration/terms-conditions/view"
         )
 );
+const TermsConditionsAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/terms-conditions/add"
+        )
+);
 // #endregion Terms & Conditions
 
 // #region Load Types
@@ -199,6 +217,12 @@ const LoadTypesViewPage = lazy(
     () =>
         import(
             "../pages/dashboard/system-management-administration/load-types/view"
+        )
+);
+const LoadTypesAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/load-types/add"
         )
 );
 // #endregion Load Types
@@ -216,6 +240,12 @@ const TicketRulesViewPage = lazy(
             "../pages/dashboard/system-management-administration/ticket-rules/view"
         )
 );
+const TicketRulesAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/ticket-rules/add"
+        )
+);
 // #endregion Ticket Rules
 
 // #region Promotion
@@ -227,6 +257,12 @@ const PromotionViewPage = lazy(
     () =>
         import(
             "../pages/dashboard/system-management-administration/promotion/view"
+        )
+);
+const PromotionAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/promotion/add"
         )
 );
 // #endregion Promotion
@@ -435,6 +471,11 @@ export const navigationConfig: TabLink[] = [
                             path: "view/:id",
                             component: PaymentMethodsViewPage,
                         },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: PaymentMethodsAddPage,
+                        },
                     ],
                 },
 
@@ -448,6 +489,11 @@ export const navigationConfig: TabLink[] = [
                             title: "View",
                             path: "view/:id",
                             component: PoliciesViewPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: PoliciesAddPage,
                         },
                     ],
                 },
@@ -463,6 +509,11 @@ export const navigationConfig: TabLink[] = [
                             path: "view/:id",
                             component: TermsConditionsViewPage,
                         },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: TermsConditionsAddPage,
+                        },
                     ],
                 },
 
@@ -476,6 +527,11 @@ export const navigationConfig: TabLink[] = [
                             title: "View",
                             path: "view/:id",
                             component: LoadTypesViewPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: LoadTypesAddPage,
                         },
                     ],
                 },
@@ -491,6 +547,11 @@ export const navigationConfig: TabLink[] = [
                             path: "view/:id",
                             component: TicketRulesViewPage,
                         },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: TicketRulesAddPage,
+                        },
                     ],
                 },
 
@@ -504,6 +565,11 @@ export const navigationConfig: TabLink[] = [
                             title: "View",
                             path: "view/:id",
                             component: PromotionViewPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: PromotionAddPage,
                         },
                     ],
                 },

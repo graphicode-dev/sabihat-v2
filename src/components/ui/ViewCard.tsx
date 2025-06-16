@@ -476,7 +476,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
 
             default:
                 return (
-                    <div className="flex flex-col gap-6 overflow-hidden">
+                    <div className="flex flex-col overflow-hidden">
                         <div className="flex justify-between items-start">
                             <h1 className="text-xl font-bold text-gray-900">
                                 {title}

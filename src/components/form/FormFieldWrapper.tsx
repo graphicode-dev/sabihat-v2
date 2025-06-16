@@ -19,7 +19,9 @@ function FormFieldWrapper({
                 {label && (
                     <label
                         htmlFor={label}
-                        className={`form-label ${error ? "form-error" : ""}`}
+                        className={`form-label ${
+                            error ? "form-error" : ""
+                        } z-0`}
                         style={{
                             color: activeLabel
                                 ? "var(--color-primary-500)"

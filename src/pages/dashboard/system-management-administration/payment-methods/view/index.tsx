@@ -1,41 +1,69 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { mockData } from "../../../../../data/mockData";
+// import { useParams } from "react-router-dom";
 import { TableData } from "../../../../../types/table";
-import { ViewCardData } from "../../../../../types";
 
 function PaymentMethodsViewPage() {
-    const { id } = useParams();
+    // const { id } = useParams();
 
-    const [userData, setUserData] = useState<TableData | null>(null);
-
-    useEffect(() => {
-        // Fetch user data from API
-        const fetchUserData = async () => {
-            const user = mockData.find((item: TableData) => item.id === id);
-            setUserData(user || null);
-        };
-        fetchUserData();
-    }, []);
+    const data: TableData = {
+        id: "1",
+        columns: {
+            partner: "*******",
+            accountName: "*******",
+            accountType: "*******",
+            currency: "*******",
+            accountNumber: "*******",
+            accountStatus: "*******",
+            note: "*******",
+        },
+    };
 
     return (
         <PageLayout>
             <ViewCard
-                title={userData?.columns.name as string}
-                subtitle={userData?.columns.role as string}
-                variant="user"
-                image={userData?.avatar}
-                data={
-                    {
-                        Email: userData?.columns.email,
-                        Phone: userData?.columns.phone,
-                        "User ID": userData?.id,
-                        Status: userData?.columns.status,
-                        "Last Login": userData?.columns.lastLogin,
-                    } as ViewCardData
-                }
+                variant="default"
+                data={{
+                    rows: [
+                        {
+                            fields: [
+                                {
+                                    label: "Partner",
+                                    value: data?.columns.partner.toString(),
+                                },
+                                {
+                                    label: "Account Name",
+                                    value: data?.columns.accountName.toString(),
+                                },
+                                {
+                                    label: "Account Type",
+                                    value: data?.columns.accountType.toString(),
+                                },
+                                {
+                                    label: "Currency",
+                                    value: data?.columns.currency.toString(),
+                                },
+                                {
+                                    label: "Account Number",
+                                    value: data?.columns.accountNumber.toString(),
+                                },
+                                {
+                                    label: "Account Status",
+                                    value: data?.columns.accountStatus.toString(),
+                                },
+                            ],
+                        },
+                        {
+                            fields: [
+                                {
+                                    label: "Note",
+                                    value: data?.columns.note.toString(),
+                                    colSpan: 3,
+                                },
+                            ],
+                        },
+                    ],
+                }}
                 buttons
             />
         </PageLayout>
