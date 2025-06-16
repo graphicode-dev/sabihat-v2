@@ -114,7 +114,6 @@ function CurrencyViewPage() {
                     title="Old History"
                     data={OLD_HISTORY_DATA}
                     columns={OLD_HISTORY_COLUMNS}
-                    initialView="grid"
                     disableRowClick
                 />
             </div>

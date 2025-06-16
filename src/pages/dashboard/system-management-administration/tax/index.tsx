@@ -82,7 +82,6 @@ function TaxPage() {
                 title="All Taxes"
                 data={data}
                 columns={columns}
-                initialView="grid"
                 addLabel="Add Tax"
                 onAddClick={() =>
                     navigate("/system-management-administration/tax/add")

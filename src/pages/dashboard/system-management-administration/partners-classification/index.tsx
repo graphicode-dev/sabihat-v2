@@ -56,7 +56,6 @@ function PartnersClassificationPage() {
                 title="All Subagents"
                 data={data}
                 columns={columns}
-                initialView="grid"
                 addLabel="Add Subagent"
             />
         </PageLayout>

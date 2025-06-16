@@ -62,7 +62,6 @@ function TermsConditionsPage() {
                 title="Terms & Conditions"
                 data={data}
                 columns={columns}
-                initialView="grid"
                 addLabel="Add Terms & Conditions"
                 onAddClick={() =>
                     navigate(

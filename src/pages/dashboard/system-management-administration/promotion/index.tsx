@@ -92,7 +92,6 @@ function PromotionPage() {
                 title="All Promotions"
                 data={data}
                 columns={columns}
-                initialView="grid"
                 addLabel="Add Promotion"
                 onAddClick={() =>
                     navigate("/system-management-administration/promotion/add")

@@ -69,7 +69,6 @@ function PaymentMethodsPage() {
                 title="All Payment Methods"
                 data={data}
                 columns={columns}
-                initialView="grid"
                 onAddClick={() => {
                     navigate(
                         "/system-management-administration/payment-methods/add"

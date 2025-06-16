@@ -60,7 +60,6 @@ function ScheduleNewTripsPage() {
                 title="All Ships"
                 data={data}
                 columns={columns}
-                initialView="grid"
                 addLabel="Add Ship"
             />
         </PageLayout>

@@ -275,7 +275,6 @@ function UserRolesPage() {
                 title="Create User Roles & Permissions"
                 data={data}
                 columns={columns}
-                initialView="grid"
                 hideToolbar
                 customToolbar={
                     <FormLayout

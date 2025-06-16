@@ -64,7 +64,6 @@ function UserProfilesPage() {
                 title="All Users"
                 data={data}
                 columns={columns}
-                initialView="grid"
                 onAddClick={() => {
                     navigate(
                         "/system-management-administration/user-profiles/add"

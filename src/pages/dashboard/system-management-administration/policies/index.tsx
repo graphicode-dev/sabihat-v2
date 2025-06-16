@@ -62,7 +62,6 @@ function PoliciesPage() {
                 title="Policies"
                 data={data}
                 columns={columns}
-                initialView="grid"
                 addLabel="Add Policy"
                 onAddClick={() =>
                     navigate("/system-management-administration/policies/add")

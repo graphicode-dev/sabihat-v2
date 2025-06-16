@@ -213,16 +213,40 @@ const LoadTypesPage = lazy(
     () =>
         import("../pages/dashboard/system-management-administration/load-types")
 );
-const LoadTypesViewPage = lazy(
+const LoadTypesPassengerViewPage = lazy(
     () =>
         import(
-            "../pages/dashboard/system-management-administration/load-types/view"
+            "../pages/dashboard/system-management-administration/load-types/view/view-passenger"
         )
 );
-const LoadTypesAddPage = lazy(
+const LoadTypesCargoViewPage = lazy(
     () =>
         import(
-            "../pages/dashboard/system-management-administration/load-types/add"
+            "../pages/dashboard/system-management-administration/load-types/view/view-cargo"
+        )
+);
+const LoadTypesVehicleViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/load-types/view/view-vehicle"
+        )
+);
+const LoadTypesPassengerAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/load-types/add/add-passenger"
+        )
+);
+const LoadTypesCargoAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/load-types/add/add-cargo"
+        )
+);
+const LoadTypesVehicleAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/load-types/add/add-vehicle"
         )
 );
 // #endregion Load Types
@@ -525,13 +549,33 @@ export const navigationConfig: TabLink[] = [
                     subLinks: [
                         {
                             title: "View",
-                            path: "view/:id",
-                            component: LoadTypesViewPage,
+                            path: "/passenger/view/:id",
+                            component: LoadTypesPassengerViewPage,
+                        },
+                        {
+                            title: "View",
+                            path: "/cargo/view/:id",
+                            component: LoadTypesCargoViewPage,
+                        },
+                        {
+                            title: "View",
+                            path: "/vehicle/view/:id",
+                            component: LoadTypesVehicleViewPage,
                         },
                         {
                             title: "Add",
-                            path: "/add",
-                            component: LoadTypesAddPage,
+                            path: "/passenger/add",
+                            component: LoadTypesPassengerAddPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "/cargo/add",
+                            component: LoadTypesCargoAddPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "/vehicle/add",
+                            component: LoadTypesVehicleAddPage,
                         },
                     ],
                 },

@@ -39,7 +39,6 @@ function PortPage() {
                 title="All Ports"
                 data={data}
                 columns={columns}
-                initialView="grid"
                 addLabel="Add Port"
             />
         </PageLayout>
