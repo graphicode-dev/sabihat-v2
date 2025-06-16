@@ -1,40 +1,34 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { mockData } from "../../../../../data/mockData";
 import { TableData } from "../../../../../types/table";
 import { ViewCardData } from "../../../../../types";
+import { useNavigate } from "react-router-dom";
 
 function PartnersClassificationViewPage() {
     const { id } = useParams();
+    const navigate = useNavigate();
 
-    const [userData, setUserData] = useState<TableData | null>(null);
-
-    useEffect(() => {
-        // Fetch user data from API
-        const fetchUserData = async () => {
-            const user = mockData.find((item: TableData) => item.id === id);
-            setUserData(user || null);
-        };
-        fetchUserData();
-    }, []);
+    const data: TableData = {
+        id: "1",
+        columns: {
+            nameClasses: "asdasdasd",
+        },
+    };
 
     return (
         <PageLayout>
             <ViewCard
-                title={userData?.columns.name as string}
-                subtitle={userData?.columns.role as string}
-                variant="user"
-                image={userData?.avatar}
+                variant="default"
                 data={
                     {
-                        Email: userData?.columns.email,
-                        Phone: userData?.columns.phone,
-                        "User ID": userData?.id,
-                        Status: userData?.columns.status,
-                        "Last Login": userData?.columns.lastLogin,
+                        "Name Classes": data?.columns.nameClasses,
                     } as ViewCardData
+                }
+                onEdit={() =>
+                    navigate(
+                        `/system-management-administration/partners-classification/${id}/add`
+                    )
                 }
                 buttons
             />

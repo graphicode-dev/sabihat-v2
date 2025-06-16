@@ -1,32 +1,63 @@
 import { DynamicTable } from "../../../../components/table";
-import { columns, mockData } from "../../../../data/mockData";
-import { useToast } from "../../../../hooks/useToast";
 import PageLayout from "../../../../layout/PageLayout";
+import { TableColumn, TableData } from "../../../../types/table";
 
 function PartnersClassificationPage() {
-    const { addToast } = useToast();
+    const columns: TableColumn[] = [
+        {
+            id: "1",
+            header: "Name Classes",
+            accessorKey: "nameClasses",
+        },
+    ];
 
-    const addSuccessToast = () => {
-        addToast({
-            type: "success",
-            title: "Success message",
-            message: "This is a success message",
-            duration: 5000,
-            position: "top-right",
-        });
-    };
+    const data: TableData[] = [
+        {
+            id: "1",
+            columns: {
+                nameClasses: "dsfsfsdf",
+            },
+        },
+        {
+            id: "2",
+            columns: {
+                nameClasses: "dsfsfsdf",
+            },
+        },
+        {
+            id: "3",
+            columns: {
+                nameClasses: "dsfsfsdf",
+            },
+        },
+        {
+            id: "4",
+            columns: {
+                nameClasses: "dsfsfsdf",
+            },
+        },
+        {
+            id: "5",
+            columns: {
+                nameClasses: "dsfsfsdf",
+            },
+        },
+        {
+            id: "6",
+            columns: {
+                nameClasses: "dsfsfsdf",
+            },
+        },
+    ];
 
     return (
         <PageLayout>
             <DynamicTable
                 title="All Subagents"
-                data={mockData}
+                data={data}
                 columns={columns}
                 initialView="grid"
                 itemsPerPage={10}
-                onAddClick={() => {
-                    addSuccessToast();
-                }}
                 addLabel="Add Subagent"
             />
         </PageLayout>

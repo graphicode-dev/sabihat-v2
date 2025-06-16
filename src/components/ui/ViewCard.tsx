@@ -136,7 +136,7 @@ const ViewCardHeader: React.FC<ViewCardHeaderProps> = ({
 };
 
 const ViewCard: React.FC<ViewCardProps> = ({
-    title,
+    title = "View",
     subtitle,
     variant = "default",
     image,

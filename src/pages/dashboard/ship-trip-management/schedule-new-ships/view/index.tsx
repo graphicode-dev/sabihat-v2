@@ -50,7 +50,6 @@ function ScheduleNewShipsViewPage() {
     return (
         <PageLayout>
             <ViewCard
-                title="view"
                 variant="default"
                 data={
                     {

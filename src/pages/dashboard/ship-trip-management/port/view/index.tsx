@@ -33,7 +33,6 @@ function PortViewPage() {
     return (
         <PageLayout>
             <ViewCard
-                title="view"
                 variant="default"
                 data={
                     {

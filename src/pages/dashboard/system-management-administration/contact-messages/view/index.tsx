@@ -19,7 +19,6 @@ function ContactMessagesViewPage() {
     return (
         <PageLayout>
             <ViewCard
-                title="View"
                 subtitle={data?.columns.fullName.toString()}
                 variant="default"
                 data={{

@@ -37,7 +37,7 @@ export type ViewCardVariant = "user" | "vessel" | "tabs" | "default";
 // Props for the ViewCard component
 export interface ViewCardProps {
     headerTitle?: string;
-    title: string;
+    title?: string;
     subtitle?: string;
     variant?: ViewCardVariant;
     image?: string;

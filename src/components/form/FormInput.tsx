@@ -1,10 +1,5 @@
 import { useRef, useState } from "react";
-import {
-    Calendar as CalendarIcon,
-    EyeIcon,
-    EyeOffIcon,
-    PaperclipIcon,
-} from "lucide-react";
+import { Calendar as CalendarIcon, EyeIcon, EyeOffIcon } from "lucide-react";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import Calendar from "../ui/Calendar";
 import { format } from "date-fns";
@@ -22,6 +17,7 @@ interface FormInputProps<T extends FieldValues> {
     disabled?: boolean;
     rows?: number;
     cols?: number;
+    colSpan?: number;
     textareaResize?:
         | "none"
         | "both"
@@ -43,6 +39,7 @@ const FormInput = <T extends FieldValues>({
     disabled = false,
     rows = 3,
     cols = 30,
+    colSpan = 1,
     textareaResize = "vertical",
 }: FormInputProps<T>) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -58,7 +55,7 @@ const FormInput = <T extends FieldValues>({
         : type;
 
     return (
-        <div className={`w-full text-left ${className}`}>
+        <div className={`w-full text-left ${className} col-span-${colSpan}`}>
             <FormFieldWrapper
                 label={label}
                 required={required}
@@ -181,38 +178,6 @@ const FormInput = <T extends FieldValues>({
                                         disabled={disabled}
                                     />
                                 </div>
-                            );
-                        } else if (type === "file") {
-                            return (
-                                <>
-                                    <label className="flex items-center gap-2 cursor-pointer text-green-500 hover:text-green-600 transition-colors">
-                                        <PaperclipIcon className="h-5 w-5" />
-                                        <span>Upload Logo</span>
-                                        <input
-                                            type={inputType}
-                                            className="hidden"
-                                            accept="image/*"
-                                            disabled={disabled}
-                                            required={required}
-                                            onChange={(e) => {
-                                                if (
-                                                    e.target.files &&
-                                                    e.target.files.length > 0
-                                                ) {
-                                                    field.onChange(
-                                                        e.target.files[0]
-                                                    );
-                                                }
-                                            }}
-                                        />
-                                    </label>
-                                    {field.value &&
-                                        typeof field.value === "object" && (
-                                            <span className="ml-3 text-sm text-gray-600">
-                                                {(field.value as File).name}
-                                            </span>
-                                        )}
-                                </>
                             );
                         } else {
                             return (

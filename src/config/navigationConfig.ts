@@ -111,6 +111,13 @@ const PartnersClassificationViewPage = lazy(
             "../pages/dashboard/system-management-administration/partners-classification/view"
         )
 );
+const PartnersClassificationAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/partners-classification/add"
+        )
+);
+
 // #endregion Partners Classification
 
 // #region User Profiles
@@ -361,6 +368,11 @@ export const navigationConfig: TabLink[] = [
                             title: "View",
                             path: "view/:id",
                             component: PartnersClassificationViewPage,
+                        },
+                        {
+                            title: "View",
+                            path: "/:id/add",
+                            component: PartnersClassificationAddPage,
                         },
                     ],
                 },

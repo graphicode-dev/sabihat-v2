@@ -15,7 +15,6 @@ function CompanyProfilePage() {
     return (
         <PageLayout>
             <ViewCard
-                title="view"
                 variant="tabs"
                 tabs={[
                     {
