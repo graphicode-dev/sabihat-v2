@@ -42,7 +42,7 @@ const ViewCardField: React.FC<ViewCardFieldProps> = ({
                 <span>{value}</span>
             </a>
         ) : (
-            <p className="text-dark-500 font-medium max-w-full truncate">
+            <p className="text-dark-500 font-medium max-w-full truncate break-words whitespace-pre-wrap">
                 {value || "••••••••••••••••"}
             </p>
         )}
