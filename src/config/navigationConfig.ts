@@ -340,7 +340,7 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Add",
-                            path: "/:id/add",
+                            path: "/add",
                             component: UserProfilesAddPage,
                         },
                     ],

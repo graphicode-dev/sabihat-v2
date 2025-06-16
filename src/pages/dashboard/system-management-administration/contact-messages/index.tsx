@@ -90,7 +90,6 @@ function ContactMessagesPage() {
                 title="All Messages"
                 data={data}
                 columns={columns}
-                itemsPerPage={10}
                 addLabel="Add Commercial Agent"
             />
         </PageLayout>

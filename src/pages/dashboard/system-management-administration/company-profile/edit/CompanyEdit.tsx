@@ -156,7 +156,12 @@ function CompanyEditPage() {
             <FormLayout handleSubmit={handleSubmit} handleFormSubmit={onSubmit}>
                 <FormFieldsLayout title="Add" cols="3">
                     {/* Logo */}
-                    <FormInput name="logo" control={control} type="file" />
+                    <FormInput
+                        name="logo"
+                        control={control}
+                        type="file"
+                        fileLabel="Upload Logo"
+                    />
 
                     {/* Name */}
                     <FormInput

@@ -61,7 +61,6 @@ function PaymentMethodsPage() {
                 note: "*******",
             },
         },
-        
     ];
 
     return (
@@ -71,7 +70,6 @@ function PaymentMethodsPage() {
                 data={data}
                 columns={columns}
                 initialView="grid"
-                itemsPerPage={10}
                 onAddClick={() => {
                     navigate(
                         "/system-management-administration/payment-methods/add"

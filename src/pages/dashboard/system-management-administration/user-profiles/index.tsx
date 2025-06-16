@@ -1,80 +1,77 @@
 import PageLayout from "../../../../layout/PageLayout";
 import { DynamicTable } from "../../../../components/table";
-import { columns, mockData } from "../../../../data/mockData";
-import { useToast } from "../../../../hooks/useToast";
-import Tabs from "../../../../components/ui/Tabs";
+import { useNavigate } from "react-router-dom";
+import { TableColumn, TableData } from "../../../../types/table";
 
 function UserProfilesPage() {
-    const { addToast } = useToast();
+    const navigate = useNavigate();
+    const columns: TableColumn[] = [
+        {
+            id: "1",
+            header: "Name",
+            accessorKey: "name",
+        },
+        {
+            id: "2",
+            header: "Email",
+            accessorKey: "email",
+        },
+        {
+            id: "3",
+            header: "Phone",
+            accessorKey: "phone",
+        },
+        {
+            id: "4",
+            header: "Address",
+            accessorKey: "address",
+        },
+    ];
 
-    // const addErrorToast = () => {
-    //     addToast({
-    //         type: "error",
-    //         title: "Error message",
-    //         message: "This is an error message",
-    //         duration: 5000,
-    //         position: "top-right",
-    //     });
-    // };
-
-    // const addWarningToast = () => {
-    //     addToast({
-    //         type: "warning",
-    //         title: "Warning message",
-    //         message: "This is a warning message",
-    //         duration: 5000,
-    //         position: "top-right",
-    //     });
-    // };
-
-    const addSuccessToast = () => {
-        addToast({
-            type: "success",
-            title: "Success message",
-            message: "This is a success message",
-            duration: 5000,
-            position: "top-right",
-        });
-    };
-
-    // const addInfoToast = () => {
-    //     addToast({
-    //         type: "info",
-    //         title: "Info message",
-    //         message: "This is an info message",
-    //         duration: 5000,
-    //         position: "top-right",
-    //     });
-    // };
+    const data: TableData[] = [
+        {
+            id: "1",
+            columns: {
+                name: "John Doe",
+                email: "john.doe@example.com",
+                phone: "123-456-7890",
+                address: "123 Main St, Anytown, USA",
+            },
+        },
+        {
+            id: "2",
+            columns: {
+                name: "John Doe",
+                email: "john.doe@example.com",
+                phone: "123-456-7890",
+                address: "123 Main St, Anytown, USA",
+            },
+        },
+        {
+            id: "3",
+            columns: {
+                name: "John Doe",
+                email: "john.doe@example.com",
+                phone: "123-456-7890",
+                address: "123 Main St, Anytown, USA",
+            },
+        },
+    ];
 
     return (
         <PageLayout>
-            <Tabs>
-                <Tabs.Item value="all" label="All">
-                    <DynamicTable
-                        title="All Users"
-                        data={mockData}
-                        columns={columns}
-                        initialView="grid"
-                        itemsPerPage={10}
-                        onAddClick={() => {
-                            addSuccessToast();
-                        }}
-                        addLabel="Add User"
-                        bulkActionLabel="Bulk Action"
-                        onBulkAction={(selectedIds) => {
-                            console.log("Selected IDs:", selectedIds);
-                        }}
-                        hideBorder
-                    />
-                </Tabs.Item>
-                <Tabs.Item value="active" label="Active">
-                    Active
-                </Tabs.Item>
-                <Tabs.Item value="inactive" label="Inactive">
-                    Inactive
-                </Tabs.Item>
-            </Tabs>
+            <DynamicTable
+                title="All Users"
+                data={data}
+                columns={columns}
+                initialView="grid"
+                onAddClick={() => {
+                    navigate(
+                        "/system-management-administration/user-profiles/add"
+                    );
+                }}
+                addLabel="Add User"
+            />
         </PageLayout>
     );
 }

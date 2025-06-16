@@ -83,7 +83,6 @@ function CurrencyPage() {
                 data={data}
                 columns={columns}
                 initialView="grid"
-                itemsPerPage={10}
                 onAddClick={() =>
                     navigate("/system-management-administration/currency/add")
                 }

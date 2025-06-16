@@ -96,7 +96,6 @@ function ScheduleNewShipsPage() {
                 data={data}
                 columns={columns}
                 initialView="grid"
-                itemsPerPage={10}
                 addLabel="Add Ship"
             />
         </PageLayout>

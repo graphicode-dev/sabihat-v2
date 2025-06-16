@@ -54,7 +54,7 @@ export interface ViewCardProps {
 
 // Props for the ViewCardSection component
 export interface ViewCardSectionProps {
-    title?: string;
+    label?: string;
     children: React.ReactNode;
 }
 
@@ -74,7 +74,7 @@ export interface ViewCardButtonsProps {
 }
 
 export interface ViewCardHeaderProps {
-    title?: string;
+    headerTitle?: string;
     buttons?: boolean;
     ticketButton?: boolean;
     onEdit?: () => void;

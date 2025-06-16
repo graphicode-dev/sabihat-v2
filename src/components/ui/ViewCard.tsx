@@ -12,12 +12,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { PaperclipIcon } from "lucide-react";
 
 const ViewCardSection: React.FC<ViewCardSectionProps> = ({
-    title,
+    label,
     children,
 }) => (
     <div className="mb-8 text-left">
         <h3 className="text-sm text-left font-bold text-primary-500 mb-2">
-            {title}
+            {label}
         </h3>
         {children}
     </div>
@@ -113,7 +113,7 @@ const ViewCardButtons: React.FC<ViewCardButtonsProps> = ({
 };
 
 const ViewCardHeader: React.FC<ViewCardHeaderProps> = ({
-    title = "View",
+    headerTitle = "View",
     buttons,
     ticketButton,
     onEdit,
@@ -122,7 +122,7 @@ const ViewCardHeader: React.FC<ViewCardHeaderProps> = ({
 }) => {
     return (
         <div className="flex justify-between items-center gap-2">
-            <h1 className="text-xl font-bold">{title}</h1>
+            <h1 className="text-xl font-bold">{headerTitle}</h1>
             {buttons && (
                 <ViewCardButtons
                     ticketButton={ticketButton}
@@ -136,6 +136,7 @@ const ViewCardHeader: React.FC<ViewCardHeaderProps> = ({
 };
 
 const ViewCard: React.FC<ViewCardProps> = ({
+    headerTitle = "View",
     title = "View",
     subtitle,
     variant = "default",
@@ -145,7 +146,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
     ticketButton,
     hideBorder = false,
     tabs = [],
-    gridCols = 3, // Default to 3 columns if not specified
+    gridCols = 3,
     onEdit,
     onDelete,
     onTicket,
@@ -244,7 +245,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
                     <div className="flex flex-col gap-6">
                         {/* Header */}
                         <ViewCardHeader
-                            title={title}
+                            headerTitle={headerTitle}
                             buttons={buttons}
                             ticketButton={ticketButton}
                             onEdit={onEdit}
@@ -297,7 +298,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
                     <div className="flex flex-col gap-6">
                         {/* Header */}
                         <ViewCardHeader
-                            title={title}
+                            headerTitle={headerTitle}
                             buttons={buttons}
                             ticketButton={ticketButton}
                             onEdit={onEdit}
@@ -391,7 +392,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
                                                 </h2>
                                             )}
                                             <ViewCardSection
-                                                title={sectionData.title || key}
+                                                label={sectionData.title || key}
                                             >
                                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                     {sectionData.fields.map(
@@ -422,7 +423,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
                         {/* Header with tab-specific buttons */}
                         {activeTabItem ? (
                             <ViewCardHeader
-                                title={title}
+                                headerTitle={headerTitle}
                                 buttons={activeTabItem.buttons || buttons}
                                 ticketButton={
                                     activeTabItem.onTicket ? true : ticketButton
@@ -433,7 +434,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
                             />
                         ) : (
                             <ViewCardHeader
-                                title={title}
+                                headerTitle={headerTitle}
                                 buttons={buttons}
                                 ticketButton={ticketButton}
                                 onEdit={onEdit}
@@ -586,7 +587,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
                                             </h2>
                                         )}
                                         <ViewCardSection
-                                            title={sectionData.title || key}
+                                            label={sectionData.title || key}
                                         >
                                             <div
                                                 className={`grid grid-cols-1 md:grid-cols-${gridCols} gap-4`}

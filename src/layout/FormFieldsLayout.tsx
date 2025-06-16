@@ -46,7 +46,7 @@ function FormFieldsLayout({
                 <h2 className="text-left font-bold px-5">{subtitle}</h2>
             )}
             <div
-                className={`grid md:grid-cols-2 ${getGridColsClass()} gap-4 my-5 px-5 pb-5 ${className}`}
+                className={`grid md:grid-cols-2 ${getGridColsClass()} gap-4 my-5 px-1  ${className}`}
             >
                 {children}
             </div>

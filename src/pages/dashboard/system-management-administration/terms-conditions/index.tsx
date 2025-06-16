@@ -63,10 +63,11 @@ function TermsConditionsPage() {
                 data={data}
                 columns={columns}
                 initialView="grid"
-                itemsPerPage={10}
                 addLabel="Add Terms & Conditions"
                 onAddClick={() =>
-                    navigate("/system-management-administration/terms-conditions/add")
+                    navigate(
+                        "/system-management-administration/terms-conditions/add"
+                    )
                 }
             />
         </PageLayout>

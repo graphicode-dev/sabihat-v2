@@ -174,7 +174,6 @@ function UserRolesPage() {
                 data={data}
                 columns={columns}
                 initialView="grid"
-                itemsPerPage={10}
             />
         </PageLayout>
     );
