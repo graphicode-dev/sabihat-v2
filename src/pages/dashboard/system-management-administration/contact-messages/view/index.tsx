@@ -1,42 +1,65 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { mockData } from "../../../../../data/mockData";
+// import { useParams } from "react-router-dom";
 import { TableData } from "../../../../../types/table";
-import { ViewCardData } from "../../../../../types";
 
 function ContactMessagesViewPage() {
-    const { id } = useParams();
+    // const { id } = useParams();
 
-    const [userData, setUserData] = useState<TableData | null>(null);
-
-    useEffect(() => {
-        // Fetch user data from API
-        const fetchUserData = async () => {
-            const user = mockData.find((item: TableData) => item.id === id);
-            setUserData(user || null);
-        };
-        fetchUserData();
-    }, []);
-
+    const data: TableData = {
+        id: "1",
+        columns: {
+            fullName: "John Doe",
+            email: "john.doe@example.com",
+            phoneNumber: "123-456-7890",
+            message: "Hello, how are you?",
+            attachFile: "file.pdf",
+        },
+    };
     return (
         <PageLayout>
             <ViewCard
-                title={userData?.columns.name as string}
-                subtitle={userData?.columns.role as string}
-                variant="user"
-                image={userData?.avatar}
-                data={
-                    {
-                        Email: userData?.columns.email,
-                        Phone: userData?.columns.phone,
-                        "User ID": userData?.id,
-                        Status: userData?.columns.status,
-                        "Last Login": userData?.columns.lastLogin,
-                    } as ViewCardData
-                }
-                buttons
+                title="View"
+                subtitle={data?.columns.fullName.toString()}
+                variant="default"
+                data={{
+                    rows: [
+                        {
+                            fields: [
+                                {
+                                    label: "Full Name",
+                                    value: data?.columns.fullName.toString(),
+                                },
+                                {
+                                    label: "Email",
+                                    value: data?.columns.email.toString(),
+                                },
+                                {
+                                    label: "Phone Number",
+                                    value: data?.columns.phoneNumber.toString(),
+                                },
+                            ],
+                        },
+                        {
+                            fields: [
+                                {
+                                    label: "Message",
+                                    value: data?.columns.message.toString(),
+                                    colSpan: 3,
+                                },
+                            ],
+                        },
+                        {
+                            fields: [
+                                {
+                                    label: "Attach File",
+                                    value: data?.columns.attachFile.toString(),
+                                    type: "file",
+                                },
+                            ],
+                        },
+                    ],
+                }}
             />
         </PageLayout>
     );

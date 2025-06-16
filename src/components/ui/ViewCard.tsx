@@ -9,6 +9,7 @@ import {
     ViewCardHeaderProps,
 } from "../../types/viewCard.types";
 import { useLocation, useNavigate } from "react-router-dom";
+import { PaperclipIcon } from "lucide-react";
 
 const ViewCardSection: React.FC<ViewCardSectionProps> = ({
     title,
@@ -22,12 +23,29 @@ const ViewCardSection: React.FC<ViewCardSectionProps> = ({
     </div>
 );
 
-const ViewCardField: React.FC<ViewCardFieldProps> = ({ label, value }) => (
+const ViewCardField: React.FC<ViewCardFieldProps> = ({
+    label,
+    value,
+    type,
+}) => (
     <div className="mb-4 flex flex-col">
         <h4 className="text-sm text-dark-200 mb-1">{label}</h4>
-        <p className="text-dark-500 font-medium">
-            {value || "••••••••••••••••"}
-        </p>
+
+        {type === "file" ? (
+            <a
+                href={value?.toString()}
+                target="_blank"
+                download={value?.toString()}
+                className="flex items-center gap-2 cursor-pointer text-green-500 hover:text-green-600 transition-colors"
+            >
+                <PaperclipIcon className="h-5 w-5" />
+                <span>{value}</span>
+            </a>
+        ) : (
+            <p className="text-dark-500 font-medium max-w-full truncate">
+                {value || "••••••••••••••••"}
+            </p>
+        )}
     </div>
 );
 
@@ -127,6 +145,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
     ticketButton,
     hideBorder = false,
     tabs = [],
+    gridCols = 3, // Default to 3 columns if not specified
     onEdit,
     onDelete,
     onTicket,
@@ -173,6 +192,50 @@ const ViewCard: React.FC<ViewCardProps> = ({
     // Find the active tab content
     const activeTabItem = tabs.find((tab) => tab.value === activeTab);
 
+    const getGridCols = (key: number) => {
+        switch (key) {
+            case 1:
+                return "grid-cols-1";
+
+            case 2:
+                return "grid-cols-2";
+
+            case 3:
+                return "grid-cols-3";
+
+            case 4:
+                return "grid-cols-4";
+
+            case 5:
+                return "grid-cols-5";
+
+            default:
+                return "grid-cols-3";
+        }
+    };
+
+    const getColSpan = (key: number) => {
+        switch (key) {
+            case 1:
+                return "md:col-span-1";
+
+            case 2:
+                return "md:col-span-2";
+
+            case 3:
+                return "md:col-span-3";
+
+            case 4:
+                return "md:col-span-4";
+
+            case 5:
+                return "md:col-span-5";
+
+            default:
+                return "md:col-span-1";
+        }
+    };
+
     // Render different layouts based on variant
     const renderContent = () => {
         switch (variant) {
@@ -215,7 +278,9 @@ const ViewCard: React.FC<ViewCardProps> = ({
                         <div className="separator" />
 
                         {/* User Details */}
-                        <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 md:mt-0">
+                        <div
+                            className={`flex-1 grid grid-cols-1 md:grid-cols-${gridCols} gap-6 mt-6 md:mt-0`}
+                        >
                             {Object.entries(data).map(([key, value], index) => (
                                 <ViewCardField
                                     key={index}
@@ -411,7 +476,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
 
             default:
                 return (
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-6 overflow-hidden">
                         <div className="flex justify-between items-start">
                             <h1 className="text-xl font-bold text-gray-900">
                                 {title}
@@ -427,25 +492,60 @@ const ViewCard: React.FC<ViewCardProps> = ({
                             )}
                         </div>
 
-                        {/* Regular fields */}
-                        <ViewCardSection>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                {Object.entries(data)
-                                    .filter(
-                                        ([_, value]) =>
-                                            typeof value !== "object" ||
-                                            value === null ||
-                                            !("fields" in value)
-                                    )
-                                    .map(([key, value], index) => (
-                                        <ViewCardField
-                                            key={index}
-                                            label={key}
-                                            value={value as string | number}
-                                        />
-                                    ))}
-                            </div>
-                        </ViewCardSection>
+                        {/* Row-based layout if rows are provided */}
+                        {data.rows ? (
+                            data.rows.map((row, rowIndex) => (
+                                <ViewCardSection key={rowIndex}>
+                                    <div
+                                        className={`grid ${getGridCols(
+                                            gridCols
+                                        )} gap-4`}
+                                    >
+                                        {row.fields.map((field, fieldIndex) => (
+                                            <div
+                                                key={fieldIndex}
+                                                className={`col-span-1 ${
+                                                    field.colSpan
+                                                        ? `${getColSpan(
+                                                              field.colSpan
+                                                          )}`
+                                                        : ""
+                                                }`}
+                                            >
+                                                <ViewCardField
+                                                    label={field.label}
+                                                    value={field.value}
+                                                    type={field.type}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </ViewCardSection>
+                            ))
+                        ) : (
+                            /* Regular fields */
+                            <ViewCardSection>
+                                <div
+                                    className={`grid grid-cols-1 md:grid-cols-${gridCols} gap-4`}
+                                >
+                                    {Object.entries(data)
+                                        .filter(
+                                            ([key, value]) =>
+                                                key !== "rows" &&
+                                                (typeof value !== "object" ||
+                                                    value === null ||
+                                                    !("fields" in value))
+                                        )
+                                        .map(([key, value], index) => (
+                                            <ViewCardField
+                                                key={index}
+                                                label={key}
+                                                value={value as string | number}
+                                            />
+                                        ))}
+                                </div>
+                            </ViewCardSection>
+                        )}
 
                         {/* Section data with fields */}
                         {Object.entries(data)
@@ -488,7 +588,9 @@ const ViewCard: React.FC<ViewCardProps> = ({
                                         <ViewCardSection
                                             title={sectionData.title || key}
                                         >
-                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                            <div
+                                                className={`grid grid-cols-1 md:grid-cols-${gridCols} gap-4`}
+                                            >
                                                 {sectionData.fields.map(
                                                     (field, fieldIndex) => (
                                                         <ViewCardField

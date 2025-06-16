@@ -4,6 +4,8 @@
 export interface ViewCardFieldItem {
     label: string;
     value: string | number | null | undefined;
+    colSpan?: number; // Number of columns this field should span (default: 1)
+    type?: string;
 }
 
 // Type for section data (array of field items)
@@ -13,9 +15,20 @@ export type ViewCardSectionData = {
     fields: ViewCardFieldItem[];
 };
 
+// Row structure for ViewCard
+export interface ViewCardRow {
+    fields: ViewCardFieldItem[];
+}
+
 // Generic data structure for ViewCard
 export interface ViewCardData {
-    [key: string]: string | number | ViewCardSectionData | undefined;
+    [key: string]:
+        | string
+        | number
+        | ViewCardSectionData
+        | ViewCardRow[]
+        | undefined;
+    rows?: ViewCardRow[]; // Optional rows-based layout
 }
 
 // Variant type
@@ -33,6 +46,7 @@ export interface ViewCardProps {
     ticketButton?: boolean;
     hideBorder?: boolean;
     tabs?: ViewCardTabItem[];
+    gridCols?: number; // Number of columns for the grid layout (1-6)
     onEdit?: () => void;
     onDelete?: () => void;
     onTicket?: () => void;
@@ -48,6 +62,7 @@ export interface ViewCardSectionProps {
 export interface ViewCardFieldProps {
     label: string;
     value?: string | number | null;
+    type?: string;
 }
 
 // Props for the ViewCardButtons component
