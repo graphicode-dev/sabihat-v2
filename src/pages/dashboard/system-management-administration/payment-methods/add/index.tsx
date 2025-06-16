@@ -45,10 +45,15 @@ function PaymentMethodsAddPage() {
         accountStatus: "",
         note: "",
     });
-    const [selectedAccountType, setSelectedAccountType] = useState<string>("");
-    const [selectedCurrency, setSelectedCurrency] = useState<string>("");
-    const [selectedAccountStatus, setSelectedAccountStatus] =
-        useState<string>("");
+    const [selectedAccountType, setSelectedAccountType] = useState<
+        string | null
+    >(null);
+    const [selectedCurrency, setSelectedCurrency] = useState<string | null>(
+        null
+    );
+    const [selectedAccountStatus, setSelectedAccountStatus] = useState<
+        string | null
+    >(null);
 
     const { control, handleSubmit, reset, formState } = useForm<PaymentMethods>(
         {
@@ -94,6 +99,9 @@ function PaymentMethodsAddPage() {
             });
 
             reset();
+            setSelectedAccountType(null);
+            setSelectedCurrency(null);
+            setSelectedAccountStatus(null);
             navigate(-1);
         } catch (error: any) {
             console.error("Error adding payment method:", error);

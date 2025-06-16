@@ -40,8 +40,9 @@ function PromotionAddPage() {
         fromDate: new Date(),
         toDate: new Date(),
     });
-    const [selectedPromotionType, setSelectedPromotionType] =
-        useState<string>("");
+    const [selectedPromotionType, setSelectedPromotionType] = useState<
+        string | null
+    >(null);
 
     const { control, handleSubmit, reset, formState } = useForm<Promotion>({
         resolver: zodResolver(promotionSchema),
@@ -83,6 +84,7 @@ function PromotionAddPage() {
             });
 
             reset();
+            setSelectedPromotionType(null);
             navigate(-1);
         } catch (error: any) {
             console.error("Error adding promotion:", error);
@@ -95,8 +97,7 @@ function PromotionAddPage() {
                 }
 
                 if (error.errors.promotionType) {
-                    mappedErrors.promotionType =
-                        error.errors.promotionType[0];
+                    mappedErrors.promotionType = error.errors.promotionType[0];
                 }
 
                 if (error.errors.promotionValue) {

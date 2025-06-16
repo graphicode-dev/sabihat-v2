@@ -1,32 +1,40 @@
 import { useNavigate } from "react-router-dom";
 
 interface FormButtonProps {
+    className?: string;
     isLoading?: boolean;
     submitText: string;
     cancelText?: string;
     disabled?: boolean;
+    removeCancel?: boolean;
 }
 
 function FormButtons({
+    className,
     isLoading,
     submitText,
     cancelText,
     disabled,
+    removeCancel,
 }: FormButtonProps) {
     const navigate = useNavigate();
     const submitButtonText =
         submitText.charAt(0).toUpperCase() + submitText.slice(1) || "Submit";
     return (
-        <div className="ps-5 flex justify-start items-center gap-2">
+        <div
+            className={`ps-5 flex justify-start items-center gap-2 ${className}`}
+        >
             {/* Cancel Button */}
-            <button
-                type="button"
-                disabled={isLoading}
-                onClick={() => navigate(-1)}
-                className="form-button-cancel disabled:opacity-50 "
-            >
-                {cancelText || "Cancel"}
-            </button>
+            {!removeCancel && (
+                <button
+                    type="button"
+                    disabled={isLoading}
+                    onClick={() => navigate(-1)}
+                    className="form-button-cancel disabled:opacity-50 "
+                >
+                    {cancelText || "Cancel"}
+                </button>
+            )}
 
             {/* Submit Button */}
             <button

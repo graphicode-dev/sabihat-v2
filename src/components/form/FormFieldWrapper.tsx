@@ -1,10 +1,14 @@
 function FormFieldWrapper({
+    parentClassName,
+    className,
     label,
     activeLabel,
     required,
     children,
     error,
 }: {
+    parentClassName?: string;
+    className?: string;
     label?: string;
     activeLabel?: boolean;
     required?: boolean;
@@ -12,8 +16,8 @@ function FormFieldWrapper({
     error?: string;
 }) {
     return (
-        <div className="bg-white p-4">
-            <div className="relative w-full">
+        <div className={`bg-white p-4 ${parentClassName}`}>
+            <div className={`relative w-full ${className}`}>
                 {children}
 
                 {label && (

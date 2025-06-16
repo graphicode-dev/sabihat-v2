@@ -1,38 +1,31 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { mockData } from "../../../../../data/mockData";
+// import { useParams } from "react-router-dom";
 import { TableData } from "../../../../../types/table";
 import { ViewCardData } from "../../../../../types";
 function UserRolesViewPage() {
-    const { id } = useParams();
+    // const { id } = useParams();
 
-    const [userData, setUserData] = useState<TableData | null>(null);
-
-    useEffect(() => {
-        // Fetch user data from API
-        const fetchUserData = async () => {
-            const user = mockData.find((item: TableData) => item.id === id);
-            setUserData(user || null);
-        };
-        fetchUserData();
-    }, []);
+    const data: TableData = {
+        id: "1",
+        columns: {
+            id: "*****",
+            role: "*****",
+            layer: "*****",
+            nameModule: "*****",
+        },
+    };
 
     return (
         <PageLayout>
             <ViewCard
-                title={userData?.columns.name as string}
-                subtitle={userData?.columns.role as string}
-                variant="user"
-                image={userData?.avatar}
+                variant="default"
                 data={
                     {
-                        Email: userData?.columns.email,
-                        Phone: userData?.columns.phone,
-                        "User ID": userData?.id,
-                        Status: userData?.columns.status,
-                        "Last Login": userData?.columns.lastLogin,
+                        ID: data?.columns.id,
+                        Role: data?.columns.role,
+                        Layer: data?.columns.layer,
+                        "Name Module": data?.columns.nameModule,
                     } as ViewCardData
                 }
                 buttons

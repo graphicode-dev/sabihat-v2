@@ -107,11 +107,11 @@
     }
 
     .form-button-submit {
-        @apply bg-primary-500 hover:bg-primary-600 text-white py-3 px-6 mt-5 transition duration-300 rounded-3xl disabled:bg-primary-300;
+        @apply bg-primary-500 hover:bg-primary-600 text-white py-3 px-6 transition duration-300 rounded-3xl disabled:bg-primary-300;
     }
 
     .form-button-cancel {
-        @apply bg-transparent hover:bg-dark-50 border border-dark-50 text-dark-300 hover:text-dark-600 py-3 px-6 mt-5 transition duration-300 rounded-3xl disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-dark-300;
+        @apply bg-transparent hover:bg-dark-50 border border-dark-50 text-dark-300 hover:text-dark-600 py-3 px-6 transition duration-300 rounded-3xl disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-dark-300;
     }
 
     .tab {

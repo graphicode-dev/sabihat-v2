@@ -164,6 +164,13 @@ function UserProfilesAddPage() {
             });
 
             reset();
+            setSelectedLayer(null);
+            setSelectedPartner(null);
+            setSelectedSalesRole(null);
+            setSelectedPaymentLayerId(null);
+            setSelectedCheckInLayerId(null);
+            setSelectedCargoLayerId(null);
+            setSelectedAuditingLayerId(null);
             navigate(-1);
         } catch (error: any) {
             console.error("Error creating user profile:", error);

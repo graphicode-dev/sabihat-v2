@@ -111,6 +111,8 @@ function CompanyEditPage() {
             });
 
             reset();
+            setSelectedCity(null);
+            setSelectedCountry(null);
             navigate(-1);
         } catch (error: any) {
             console.error("Error creating company:", error);

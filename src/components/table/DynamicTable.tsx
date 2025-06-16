@@ -31,6 +31,9 @@ interface DynamicTableProps {
     onRowClick?: (rowId: string) => void;
     disableRowClick?: boolean;
     hideBorder?: boolean;
+    hideHeader?: boolean;
+    hideToolbar?: boolean;
+    customToolbar?: React.ReactNode;
 }
 
 export const DynamicTable = ({
@@ -46,6 +49,9 @@ export const DynamicTable = ({
     disableRowClick = false,
     onRowClick,
     hideBorder = false,
+    hideHeader = false,
+    hideToolbar = false,
+    customToolbar,
 }: DynamicTableProps) => {
     const [viewMode, setViewMode] = useState<ViewMode>(initialView);
     const [currentPage, setCurrentPage] = useState(1);
@@ -290,72 +296,81 @@ export const DynamicTable = ({
             className={`w-full bg-white ${hideBorder ? "" : "border-wrapper"}`}
         >
             <div className="p-10">
-                <div className="flex justify-between items-center">
-                    {/* Title */}
-                    <div>
-                        <h2 className="text-lg font-bold">{title}</h2>
-                        <p className="text-sm text-left text-dark-200">
-                            {selectedCount > 0
-                                ? `${selectedCount} of ${filteredData.length} selected`
-                                : `${filteredData.length} record`}
-                        </p>
-                    </div>
+                {/* Header */}
+                {!hideHeader && (
+                    <div className="flex justify-between items-center">
+                        {/* Title */}
+                        <div>
+                            <h2 className="text-lg font-bold">{title}</h2>
+                            <p className="text-sm text-left text-dark-200">
+                                {selectedCount > 0
+                                    ? `${selectedCount} of ${filteredData.length} selected`
+                                    : `${filteredData.length} record`}
+                            </p>
+                        </div>
 
-                    {/* Actions */}
-                    <div className="flex gap-2">
-                        {selectedCount > 0 && onBulkAction && (
-                            <button
-                                onClick={handleBulkAction}
-                                className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md"
-                            >
-                                {bulkActionLabel}
-                            </button>
-                        )}
-                        {onAddClick && (
-                            <button
-                                onClick={onAddClick}
-                                className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-4 rounded-[100px] flex items-center"
-                            >
-                                <div className="w-6 h-6 rounded-full flex justify-center items-center mr-2 border border-white text-white">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="h-4 w-4"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M12 4v16m8-8H4"
-                                        />
-                                    </svg>
-                                </div>
-                                {addLabel}
-                            </button>
-                        )}
+                        {/* Actions */}
+                        <div className="flex gap-2">
+                            {selectedCount > 0 && onBulkAction && (
+                                <button
+                                    onClick={handleBulkAction}
+                                    className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md"
+                                >
+                                    {bulkActionLabel}
+                                </button>
+                            )}
+                            {onAddClick && (
+                                <button
+                                    onClick={onAddClick}
+                                    className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-4 rounded-[100px] flex items-center"
+                                >
+                                    <div className="w-6 h-6 rounded-full flex justify-center items-center mr-2 border border-white text-white">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-4 w-4"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M12 4v16m8-8H4"
+                                            />
+                                        </svg>
+                                    </div>
+                                    {addLabel}
+                                </button>
+                            )}
+                        </div>
                     </div>
-                </div>
+                )}
 
-                <TableToolbar
-                    totalItems={filteredData.length}
-                    currentView={viewMode}
-                    onViewChange={setViewMode}
-                    onSearch={setSearchQuery}
-                    columns={columns}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                    itemsPerPage={itemsPerPage}
-                    onItemsPerPageChange={setItemsPerPage}
-                    onColumnVisibilityChange={handleColumnVisibilityChange}
-                    visibleColumns={visibleColumns}
-                    selectedFilters={selectedFilters}
-                    onFilterSelect={handleFilterSelect}
-                    selectedGroups={selectedGroups}
-                    onGroupSelect={handleGroupSelect}
-                />
+                {/* Toolbar */}
+                {!hideToolbar && (
+                    <TableToolbar
+                        totalItems={filteredData.length}
+                        currentView={viewMode}
+                        onViewChange={setViewMode}
+                        onSearch={setSearchQuery}
+                        columns={columns}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                        itemsPerPage={itemsPerPage}
+                        onItemsPerPageChange={setItemsPerPage}
+                        onColumnVisibilityChange={handleColumnVisibilityChange}
+                        visibleColumns={visibleColumns}
+                        selectedFilters={selectedFilters}
+                        onFilterSelect={handleFilterSelect}
+                        selectedGroups={selectedGroups}
+                        onGroupSelect={handleGroupSelect}
+                    />
+                )}
+
+                {/* Custom Toolbar */}
+                <div className="w-full my-5">{customToolbar}</div>
 
                 <div className="mt-2">{renderTableView()}</div>
             </div>

@@ -67,6 +67,8 @@ function SettingsEditPage() {
             });
 
             reset();
+            setSelectedTax(null);
+            setSelectedCurrency(null);
             navigate(-1);
         } catch (error: any) {
             console.error("Error updating settings us:", error);
