@@ -13,6 +13,7 @@ interface TableGroupViewProps {
     columnWidths: number[];
     onColumnResize: (index: number, width: number) => void;
     onRowClick?: (rowId: string) => void;
+    disableRowClick?: boolean;
 }
 
 export const TableGroupView = ({
@@ -25,6 +26,7 @@ export const TableGroupView = ({
     columnWidths,
     onColumnResize,
     onRowClick,
+    disableRowClick,
 }: TableGroupViewProps) => {
     // Group the data by group property
     const [groupedData, setGroupedData] = useState<Record<string, TableData[]>>(
@@ -298,6 +300,9 @@ export const TableGroupView = ({
                                                     handleRowSelection
                                                 }
                                                 onRowClick={onRowClick}
+                                                disableRowClick={
+                                                    disableRowClick
+                                                }
                                             />
                                         ))}
                                 </React.Fragment>

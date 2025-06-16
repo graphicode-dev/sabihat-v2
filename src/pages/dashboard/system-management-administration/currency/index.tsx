@@ -1,33 +1,93 @@
+import { useNavigate } from "react-router-dom";
 import { DynamicTable } from "../../../../components/table";
-import { columns, mockData } from "../../../../data/mockData";
-import { useToast } from "../../../../hooks/useToast";
 import PageLayout from "../../../../layout/PageLayout";
+import { TableColumn, TableData } from "../../../../types/table";
 
 function CurrencyPage() {
-    const { addToast } = useToast();
+    const navigate = useNavigate();
+    const columns: TableColumn[] = [
+        {
+            id: "1",
+            header: "Currency Name",
+            accessorKey: "currencyName",
+        },
+        {
+            id: "2",
+            header: "Currency Code",
+            accessorKey: "currencyCode",
+        },
+        {
+            id: "3",
+            header: "Currency Rate",
+            accessorKey: "currencyRate",
+        },
+        {
+            id: "4",
+            header: "Last Date",
+            accessorKey: "lastDate",
+        },
+    ];
 
-    const addSuccessToast = () => {
-        addToast({
-            type: "success",
-            title: "Success message",
-            message: "This is a success message",
-            duration: 5000,
-            position: "top-right",
-        });
-    };
+    const data: TableData[] = [
+        {
+            id: "1",
+            columns: {
+                currencyName: "**********",
+                currencyCode: "**********",
+                currencyRate: "**********",
+                lastDate: "**********",
+            },
+        },
+        {
+            id: "2",
+            columns: {
+                currencyName: "**********",
+                currencyCode: "**********",
+                currencyRate: "**********",
+                lastDate: "**********",
+            },
+        },
+        {
+            id: "3",
+            columns: {
+                currencyName: "**********",
+                currencyCode: "**********",
+                currencyRate: "**********",
+                lastDate: "**********",
+            },
+        },
+        {
+            id: "4",
+            columns: {
+                currencyName: "**********",
+                currencyCode: "**********",
+                currencyRate: "**********",
+                lastDate: "**********",
+            },
+        },
+        {
+            id: "5",
+            columns: {
+                currencyName: "**********",
+                currencyCode: "**********",
+                currencyRate: "**********",
+                lastDate: "**********",
+            },
+        },
+    ];
 
     return (
         <PageLayout>
             <DynamicTable
-                title="All Companies"
-                data={mockData}
+                title="All Currency"
+                data={data}
                 columns={columns}
                 initialView="grid"
                 itemsPerPage={10}
-                onAddClick={() => {
-                    addSuccessToast();
-                }}
-                addLabel="Add Company"
+                onAddClick={() =>
+                    navigate("/system-management-administration/currency/add")
+                }
+                addLabel="Add Currency"
             />
         </PageLayout>
     );

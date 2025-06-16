@@ -9,6 +9,7 @@ interface TableRowProps {
     columnWidths: number[];
     handleRowSelection: (rowId: string, selected: boolean) => void;
     onRowClick?: (rowId: string) => void;
+    disableRowClick?: boolean;
 }
 
 function TableRow({
@@ -17,6 +18,7 @@ function TableRow({
     columnWidths,
     handleRowSelection,
     onRowClick,
+    disableRowClick,
 }: TableRowProps) {
     const navigate = useNavigate();
     const location = useLocation();
@@ -52,7 +54,7 @@ function TableRow({
             className={`text-left ${
                 row.selected ? "bg-primary-50" : ""
             } hover:bg-gray-50 cursor-pointer`}
-            onClick={handleRowClick}
+            onClick={disableRowClick ? undefined : handleRowClick}
         >
             <td
                 className="px-6 py-4 whitespace-nowrap"

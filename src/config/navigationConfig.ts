@@ -48,6 +48,12 @@ const CurrencyViewPage = lazy(
             "../pages/dashboard/system-management-administration/currency/view"
         )
 );
+const CurrencyAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/currency/add"
+        )
+);
 // #endregion Currency
 
 // #region Payment Methods
@@ -387,6 +393,11 @@ export const navigationConfig: TabLink[] = [
                             title: "View",
                             path: "view/:id",
                             component: CurrencyViewPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: CurrencyAddPage,
                         },
                     ],
                 },

@@ -611,11 +611,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
     };
 
     return (
-        <div
-            className={`bg-white shadow-sm rounded-lg p-6 ${
-                !hideBorder ? "border border-gray-100" : ""
-            }`}
-        >
+        <div className={`bg-white p-6 ${!hideBorder ? "border-wrapper" : ""}`}>
             {renderContent()}
 
             {/* Global Show More button */}

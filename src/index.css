@@ -87,7 +87,7 @@
     }
 
     .border-wrapper {
-        @apply shadow rounded-lg;
+        @apply shadow rounded-3xl border border-dark-50;
     }
 
     .form-label {
@@ -135,7 +135,7 @@
         border-bottom: 2px solid var(--color-gray-300);
     }
 
-    .separator{
+    .separator {
         @apply border-b border-dark-50 my-4;
     }
 }

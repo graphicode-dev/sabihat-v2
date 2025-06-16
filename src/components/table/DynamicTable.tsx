@@ -29,6 +29,7 @@ interface DynamicTableProps {
     onBulkAction?: (selectedIds: string[]) => void;
     bulkActionLabel?: string;
     onRowClick?: (rowId: string) => void;
+    disableRowClick?: boolean;
     hideBorder?: boolean;
 }
 
@@ -42,6 +43,7 @@ export const DynamicTable = ({
     addLabel = "Add new",
     onBulkAction,
     bulkActionLabel = "Action",
+    disableRowClick = false,
     onRowClick,
     hideBorder = false,
 }: DynamicTableProps) => {
@@ -268,6 +270,7 @@ export const DynamicTable = ({
             columnWidths,
             onColumnResize: handleColumnResize,
             onRowClick,
+            disableRowClick,
         };
 
         switch (viewMode) {
