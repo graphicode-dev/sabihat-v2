@@ -180,11 +180,7 @@ function ContactInformationEditForm() {
                 />
             </FormFieldsLayout>
 
-            <FormButtons
-                isLoading={isLoading}
-                submitText="Update"
-                disabled={!formState.isDirty}
-            />
+            <FormButtons isLoading={isLoading} disabled={!formState.isDirty} />
         </FormLayout>
     );
 }

@@ -349,6 +349,12 @@ const PortPage = lazy(
 const PortViewPage = lazy(
     () => import("../pages/dashboard/ship-trip-management/port/view")
 );
+const PortAddPage = lazy(
+    () => import("../pages/dashboard/ship-trip-management/port/add")
+);
+const PortEditPage = lazy(
+    () => import("../pages/dashboard/ship-trip-management/port/edit")
+);
 // #endregion Port
 
 // #region Schedule New Trips
@@ -786,6 +792,16 @@ export const navigationConfig: TabLink[] = [
                             title: "View",
                             path: "view/:id",
                             component: PortViewPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "add",
+                            component: PortAddPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "edit/:id",
+                            component: PortEditPage,
                         },
                     ],
                 },

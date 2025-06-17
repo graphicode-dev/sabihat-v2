@@ -1,7 +1,9 @@
 import { DynamicTable } from "../../../../components/table";
 import PageLayout from "../../../../layout/PageLayout";
+import { useNavigate } from "react-router-dom";
 
 function PortPage() {
+    const navigate = useNavigate();
     const data = Array.from({ length: 100 }, (_, index) => {
         return {
             id: (index + 1).toString(),
@@ -40,6 +42,9 @@ function PortPage() {
                 data={data}
                 columns={columns}
                 addLabel="Add Port"
+                onAddClick={() => {
+                    navigate(`/ship-trip-management/port/add`);
+                }}
             />
         </PageLayout>
     );

@@ -199,7 +199,6 @@ function PartnersMasterEditForm() {
 
             <FormButtons
                 isLoading={isLoading}
-                submitText="Update"
                 disabled={!formState.isDirty}
                 cancelText="Cancel"
                 className="mt-4"

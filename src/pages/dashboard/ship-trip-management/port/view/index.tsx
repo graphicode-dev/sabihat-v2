@@ -4,10 +4,11 @@ import { TableData } from "../../../../../types/table";
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
 import { ViewCardData } from "../../../../../types";
+import { useNavigate } from "react-router-dom";
 
 function PortViewPage() {
     const { id } = useParams();
-
+    const navigate = useNavigate();
     const [userData, setUserData] = useState<TableData | null>(null);
 
     useEffect(() => {
@@ -42,6 +43,9 @@ function PortViewPage() {
                         Country: userData?.columns.Country,
                     } as ViewCardData
                 }
+                onEdit={() => {
+                    navigate(`/ship-trip-management/port/edit/${id}`);
+                }}
                 buttons
             />
         </PageLayout>
