@@ -434,10 +434,10 @@ const BusinessPartnersAuthoritiesViewPage = lazy(
             "../pages/dashboard/business-partners-management/authorities/view"
         )
 );
-const BusinessPartnersAuthoritiesAddPage = lazy(
+const BusinessPartnersAuthoritiesEditPage = lazy(
     () =>
         import(
-            "../pages/dashboard/business-partners-management/authorities/add"
+            "../pages/dashboard/business-partners-management/authorities/edit"
         )
 );
 // #endregion Business Partners Management
@@ -935,9 +935,9 @@ export const navigationConfig: TabLink[] = [
                             component: BusinessPartnersAuthoritiesViewPage,
                         },
                         {
-                            title: "Add",
-                            path: "/add",
-                            component: BusinessPartnersAuthoritiesAddPage,
+                            title: "Edit",
+                            path: "/edit/:id",
+                            component: BusinessPartnersAuthoritiesEditPage,
                         },
                     ],
                 },
