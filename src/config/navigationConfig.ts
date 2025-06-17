@@ -258,18 +258,56 @@ const TicketRulesPage = lazy(
             "../pages/dashboard/system-management-administration/ticket-rules"
         )
 );
-const TicketRulesViewPage = lazy(
+const TicketRulesVoidViewPage = lazy(
     () =>
         import(
-            "../pages/dashboard/system-management-administration/ticket-rules/view"
+            "../pages/dashboard/system-management-administration/ticket-rules/view/view-void"
         )
 );
-const TicketRulesAddPage = lazy(
+const TicketRulesVoidAddPage = lazy(
     () =>
         import(
-            "../pages/dashboard/system-management-administration/ticket-rules/add"
+            "../pages/dashboard/system-management-administration/ticket-rules/add/add-void"
         )
 );
+const TicketRulesRefundViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/ticket-rules/view/view-refund"
+        )
+);
+const TicketRulesRefundAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/ticket-rules/add/add-refund"
+        )
+);
+const TicketRulesNoShowViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/ticket-rules/view/view-noShow"
+        )
+);
+const TicketRulesNoShowAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/ticket-rules/add/add-noShow"
+        )
+);
+
+const TicketRulesReissueViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/ticket-rules/view/view-reissue"
+        )
+);
+const TicketRulesReissueAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/ticket-rules/add/add-reissue"
+        )
+);
+
 // #endregion Ticket Rules
 
 // #region Promotion
@@ -588,13 +626,43 @@ export const navigationConfig: TabLink[] = [
                     subLinks: [
                         {
                             title: "View",
-                            path: "view/:id",
-                            component: TicketRulesViewPage,
+                            path: "void/view/:id",
+                            component: TicketRulesVoidViewPage,
                         },
                         {
                             title: "Add",
-                            path: "/add",
-                            component: TicketRulesAddPage,
+                            path: "void/add",
+                            component: TicketRulesVoidAddPage,
+                        },
+                        {
+                            title: "View",
+                            path: "refund/view/:id",
+                            component: TicketRulesRefundViewPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "refund/add",
+                            component: TicketRulesRefundAddPage,
+                        },
+                        {
+                            title: "View",
+                            path: "no-show/view/:id",
+                            component: TicketRulesNoShowViewPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "no-show/add",
+                            component: TicketRulesNoShowAddPage,
+                        },
+                        {
+                            title: "View",
+                            path: "reissue/view/:id",
+                            component: TicketRulesReissueViewPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "reissue/add",
+                            component: TicketRulesReissueAddPage,
                         },
                     ],
                 },
