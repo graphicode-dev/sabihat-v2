@@ -1,51 +1,48 @@
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
-import { useEffect, useState } from "react";
-import { TableData } from "../../../../../types/table";
 import { ViewCardData } from "../../../../../types";
-import { statuses } from "../../../../../components/statusColors";
+import { useNavigate, useParams } from "react-router-dom";
 
 function ScheduleNewShipsViewPage() {
+    const navigate = useNavigate();
     const { id } = useParams();
 
-    const [userData, setUserData] = useState<TableData | null>(null);
-
-    useEffect(() => {
-        // Fetch user data from API
-        const fetchUserData = async () => {
-            const user = data.find((item: TableData) => item.id === id);
-            setUserData(user || null);
-        };
-        fetchUserData();
-    }, []);
-
-    const data = Array.from({ length: 100 }, (_, index) => {
-        const status =
-            Object.keys(statuses)[
-                Math.floor(Math.random() * Object.keys(statuses).length)
-            ];
-        return {
-            id: (index + 1).toString(),
-            statusType:
-                status === "In Transit"
-                    ? "orange"
-                    : status === "Active"
-                    ? "green"
-                    : status === "Maintenance"
-                    ? "red"
-                    : "teal",
-            columns: {
-                "vessel name": "*******",
-                "vessel type": "*******",
-                "registration number": "*******",
-                "IMO number": "*******",
-                "mmsi number": "*******",
-                flag: "*******",
-                "operating status": status,
-            },
-        };
-    });
+    const data = {
+        vesselName: "*******",
+        vesselType: "*******",
+        registrationNumber: "*******",
+        operatingStatus: "*******",
+        callSign: "*******",
+        IMONumber: "*******",
+        mmsiNumber: "*******",
+        flag: "*******",
+        grossWeight: "*******",
+        deadWeight: "*******",
+        breadth: "*******",
+        ISMManager: "*******",
+        shipCommercialManager: "*******",
+        safetyManagementCertificate: "*******",
+        classificationStatus: "*******",
+        builder: "*******",
+        yearOfBuild: "*******",
+        passengersCabins: {
+            cabinName: "*******",
+            numberOfPassengers: "*******",
+        },
+        cargoCompartments: {
+            cabinName: "*******",
+            weight: "*******",
+            size: "*******",
+            quantity: "*******",
+        },
+        vehiclesParking: {
+            cabinName: "*******",
+            weight: "*******",
+            size: "*******",
+            quantity: "*******",
+        },
+    };
 
     return (
         <PageLayout>
@@ -53,24 +50,35 @@ function ScheduleNewShipsViewPage() {
                 variant="default"
                 data={
                     {
-                        "vessel name": userData?.columns["vessel name"],
-                        "vessel type": userData?.columns["vessel type"],
-                        "registration number":
-                            userData?.columns["registration number"],
-                        "operating status":
-                            userData?.columns["operating status"],
-                        "IMO number": userData?.columns["IMO number"],
-                        "mmsi number": userData?.columns["mmsi number"],
-                        flag: userData?.columns.flag,
+                        "vessel name": data?.vesselName,
+                        "vessel type": data?.vesselType,
+                        "registration number": data?.registrationNumber,
+                        "operating status": data?.operatingStatus,
+                        "call sign": data?.callSign,
+                        "IMO number": data?.IMONumber,
+                        "mmsi number": data?.mmsiNumber,
+                        flag: data?.flag,
+                        "gross weight": data?.grossWeight,
+                        "dead weight": data?.deadWeight,
+                        breadth: data?.breadth,
+                        "ISM Manager": data?.ISMManager,
+                        "Ship Commercial Manager": data?.shipCommercialManager,
+                        "Safety Management Certificate":
+                            data?.safetyManagementCertificate,
+                        "Classification Status": data?.classificationStatus,
+                        Builder: data?.builder,
+                        "Year Of Build": data?.yearOfBuild,
+
                         "Passengers Cabins": {
                             fields: [
                                 {
                                     label: "Cabin Name",
-                                    value: "",
+                                    value: data?.passengersCabins.cabinName,
                                 },
                                 {
                                     label: "Number of Passengers",
-                                    value: "",
+                                    value: data?.passengersCabins
+                                        .numberOfPassengers,
                                 },
                             ],
                         },
@@ -78,19 +86,19 @@ function ScheduleNewShipsViewPage() {
                             fields: [
                                 {
                                     label: "Cabin Name",
-                                    value: "",
+                                    value: data?.cargoCompartments.cabinName,
                                 },
                                 {
                                     label: "Weight",
-                                    value: "",
+                                    value: data?.cargoCompartments.weight,
                                 },
                                 {
                                     label: "Size",
-                                    value: "",
+                                    value: data?.cargoCompartments.size,
                                 },
                                 {
                                     label: "Quantity",
-                                    value: "",
+                                    value: data?.cargoCompartments.quantity,
                                 },
                             ],
                         },
@@ -98,23 +106,28 @@ function ScheduleNewShipsViewPage() {
                             fields: [
                                 {
                                     label: "Cabin Name",
-                                    value: "",
+                                    value: data?.vehiclesParking.cabinName,
                                 },
                                 {
                                     label: "Weight",
-                                    value: "",
+                                    value: data?.vehiclesParking.weight,
                                 },
                                 {
                                     label: "Size",
-                                    value: "",
+                                    value: data?.vehiclesParking.size,
                                 },
                                 {
                                     label: "Quantity",
-                                    value: "",
+                                    value: data?.vehiclesParking.quantity,
                                 },
                             ],
                         },
                     } as ViewCardData
+                }
+                onEdit={() =>
+                    navigate(
+                        `/ship-trip-management/schedule-new-ships/edit/${id}`
+                    )
                 }
                 buttons
             />

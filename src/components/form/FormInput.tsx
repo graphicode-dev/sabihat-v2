@@ -17,6 +17,7 @@ interface FormInputProps<T extends FieldValues> {
     type?: React.HTMLInputTypeAttribute;
     placeholder?: string;
     required?: boolean;
+    requiredLabel?: string;
     error?: string;
     className?: string;
     disabled?: boolean;
@@ -40,6 +41,7 @@ const FormInput = <T extends FieldValues>({
     type = "text",
     placeholder = "",
     required = false,
+    requiredLabel,
     error,
     className = "",
     disabled = false,
@@ -255,6 +257,12 @@ const FormInput = <T extends FieldValues>({
 
                 {error && (
                     <span className="form-error text-left ml-5">*{error}</span>
+                )}
+
+                {requiredLabel && (
+                    <span className="form-error text-left ml-5 text-primary-500">
+                        *{requiredLabel}
+                    </span>
                 )}
             </FormFieldWrapper>
         </div>

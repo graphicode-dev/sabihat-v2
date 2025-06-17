@@ -9,16 +9,16 @@ export default function BgColorClass({ status }: { status: string }) {
     let bgColorClass = "";
     switch (status) {
         case "In Transit": // Orange/Peach
-            bgColorClass = "bg-orange-200 text-orange-800";
+            bgColorClass = "bg-[#FFE5C9]";
             break;
         case "Active": // Green
-            bgColorClass = "bg-green-200 text-green-800";
+            bgColorClass = "bg-[#C7FFC8]";
             break;
         case "Maintenance": // Red
-            bgColorClass = "bg-red-200 text-red-800";
+            bgColorClass = "bg-[#FFC8C8]";
             break;
         case "Docked": // Teal
-            bgColorClass = "bg-teal-200 text-teal-800";
+            bgColorClass = "bg-[#BEFFF8]";
             break;
         default:
             bgColorClass = "bg-gray-200 text-gray-800";

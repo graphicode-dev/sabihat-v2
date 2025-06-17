@@ -52,9 +52,15 @@ function ScheduleNewTripsViewPage() {
                             title: "Passengers Cabins",
                             fields: [
                                 { label: "Cabin Name", value: "*******" },
-                                { label: "Number of Passengers", value: "*******" },
+                                {
+                                    label: "Number of Passengers",
+                                    value: "*******",
+                                },
                                 { label: "Cabin Name", value: "*******" },
-                                { label: "Number of Passengers", value: "*******" },
+                                {
+                                    label: "Number of Passengers",
+                                    value: "*******",
+                                },
                             ],
                         },
                         "Cargo Compartments": {
@@ -72,15 +78,24 @@ function ScheduleNewTripsViewPage() {
                                 { label: "Cabin Name", value: "*******" },
                                 { label: "Agent1", value: "*******" },
                                 { label: "Available Size", value: "*******" },
-                                { label: "Available Quantity", value: "*******" },
+                                {
+                                    label: "Available Quantity",
+                                    value: "*******",
+                                },
                             ],
                         },
-                        "Available": {
+                        Available: {
                             fields: [
                                 { label: "Cabin Name", value: "*******" },
-                                { label: "Number of Passengers", value: "*******" },
+                                {
+                                    label: "Number of Passengers",
+                                    value: "*******",
+                                },
                                 { label: "Cabin Name", value: "*******" },
-                                { label: "Number of Passengers", value: "*******" },
+                                {
+                                    label: "Number of Passengers",
+                                    value: "*******",
+                                },
                             ],
                         },
                     } as ViewCardData

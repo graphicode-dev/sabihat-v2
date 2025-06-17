@@ -150,7 +150,7 @@ function Tabs<T extends string>({
                             <button
                                 key={child.props.value}
                                 type="button"
-                                className={`tab ${
+                                className={`tab capitalize ${
                                     activeTab === child.props.value
                                         ? "tab-active"
                                         : "tab-inactive"

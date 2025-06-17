@@ -1,35 +1,10 @@
 import BgColorClass, { statuses } from "../../../../components/statusColors";
 import { DynamicTable } from "../../../../components/table";
 import PageLayout from "../../../../layout/PageLayout";
+import { useNavigate } from "react-router-dom";
 
 function ScheduleNewShipsPage() {
-    const data = Array.from({ length: 100 }, (_, index) => {
-        const status =
-            Object.keys(statuses)[
-                Math.floor(Math.random() * Object.keys(statuses).length)
-            ];
-        return {
-            id: (index + 1).toString(),
-            statusType:
-                status === "In Transit"
-                    ? "orange"
-                    : status === "Active"
-                    ? "green"
-                    : status === "Maintenance"
-                    ? "red"
-                    : "teal",
-            columns: {
-                "vessel name": "*******",
-                "vessel type": "*******",
-                "registration number": "*******",
-                "IMO number": "*******",
-                "mmsi number": "*******",
-                flag: "*******",
-                "operating status": status,
-            },
-        };
-    });
-
+    const navigate = useNavigate();
     const columns = [
         {
             id: "vessel name",
@@ -89,6 +64,33 @@ function ScheduleNewShipsPage() {
         },
     ];
 
+    const data = Array.from({ length: 100 }, (_, index) => {
+        const status =
+            Object.keys(statuses)[
+                Math.floor(Math.random() * Object.keys(statuses).length)
+            ];
+        return {
+            id: (index + 1).toString(),
+            statusType:
+                status === "In Transit"
+                    ? "orange"
+                    : status === "Active"
+                    ? "green"
+                    : status === "Maintenance"
+                    ? "red"
+                    : "teal",
+            columns: {
+                "vessel name": "*******",
+                "vessel type": "*******",
+                "registration number": "*******",
+                "IMO number": "*******",
+                "mmsi number": "*******",
+                flag: "*******",
+                "operating status": status,
+            },
+        };
+    });
+
     return (
         <PageLayout>
             <DynamicTable
@@ -96,6 +98,9 @@ function ScheduleNewShipsPage() {
                 data={data}
                 columns={columns}
                 addLabel="Add Ship"
+                onAddClick={() => {
+                    navigate("/ship-trip-management/schedule-new-ships/add");
+                }}
             />
         </PageLayout>
     );

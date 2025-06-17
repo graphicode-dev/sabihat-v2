@@ -16,7 +16,7 @@ const ViewCardSection: React.FC<ViewCardSectionProps> = ({
     children,
 }) => (
     <div className="mb-8 text-left">
-        <h3 className="text-sm text-left font-bold text-primary-500 mb-2">
+        <h3 className="text-sm text-left font-bold text-primary-500 mb-2 capitalize">
             {label}
         </h3>
         {children}
@@ -29,7 +29,7 @@ const ViewCardField: React.FC<ViewCardFieldProps> = ({
     type,
 }) => (
     <div className="mb-4 flex flex-col">
-        <h4 className="text-sm text-dark-200 mb-1">{label}</h4>
+        <h4 className="text-sm text-dark-200 mb-1 capitalize">{label}</h4>
 
         {type === "file" ? (
             <a
@@ -165,9 +165,11 @@ const ViewCard: React.FC<ViewCardProps> = ({
     const sectionKeys = Object.entries(data)
         .filter(
             ([_, value]) =>
-                typeof value === "object" && 
-                value !== null && 
-                ("fields" in value || ("customRender" in value && typeof value.customRender === "function"))
+                typeof value === "object" &&
+                value !== null &&
+                ("fields" in value ||
+                    ("customRender" in value &&
+                        typeof value.customRender === "function"))
         )
         .map(([key]) => key);
 
@@ -569,7 +571,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
                                 if (!visibleSectionKeys.includes(key)) {
                                     return false;
                                 }
-                                
+
                                 // Only process objects with fields or customRender property
                                 if (
                                     typeof value !== "object" ||
@@ -578,10 +580,15 @@ const ViewCard: React.FC<ViewCardProps> = ({
                                     return false;
                                 }
 
-                                const sectionData = value as ViewCardSectionData;
+                                const sectionData =
+                                    value as ViewCardSectionData;
 
                                 // If customRender is provided, include this section
-                                if (sectionData.customRender && typeof sectionData.customRender === "function") {
+                                if (
+                                    sectionData.customRender &&
+                                    typeof sectionData.customRender ===
+                                        "function"
+                                ) {
                                     return true;
                                 }
 
