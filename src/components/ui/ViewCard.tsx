@@ -114,6 +114,7 @@ const ViewCardButtons: React.FC<ViewCardButtonsProps> = ({
 
 const ViewCardHeader: React.FC<ViewCardHeaderProps> = ({
     headerTitle = "View",
+    hideHeaderTitle,
     buttons,
     ticketButton,
     onEdit,
@@ -122,7 +123,9 @@ const ViewCardHeader: React.FC<ViewCardHeaderProps> = ({
 }) => {
     return (
         <div className="flex justify-between items-center gap-2">
-            <h1 className="text-xl font-bold">{headerTitle}</h1>
+            {!hideHeaderTitle && (
+                <h1 className="text-xl font-bold">{headerTitle}</h1>
+            )}
             {buttons && (
                 <ViewCardButtons
                     ticketButton={ticketButton}
@@ -137,6 +140,7 @@ const ViewCardHeader: React.FC<ViewCardHeaderProps> = ({
 
 const ViewCard: React.FC<ViewCardProps> = ({
     headerTitle = "View",
+    hideHeaderTitle = false,
     title = "View",
     subtitle,
     variant = "default",
@@ -157,11 +161,13 @@ const ViewCard: React.FC<ViewCardProps> = ({
     // Default number of sections to show initially
     const initialSectionsToShow = 2;
 
-    // Get all section keys (keys that have objects with fields property)
+    // Get all section keys (keys that have objects with fields or customRender property)
     const sectionKeys = Object.entries(data)
         .filter(
             ([_, value]) =>
-                typeof value === "object" && value !== null && "fields" in value
+                typeof value === "object" && 
+                value !== null && 
+                ("fields" in value || ("customRender" in value && typeof value.customRender === "function"))
         )
         .map(([key]) => key);
 
@@ -246,6 +252,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
                         {/* Header */}
                         <ViewCardHeader
                             headerTitle={headerTitle}
+                            hideHeaderTitle={hideHeaderTitle}
                             buttons={buttons}
                             ticketButton={ticketButton}
                             onEdit={onEdit}
@@ -299,6 +306,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
                         {/* Header */}
                         <ViewCardHeader
                             headerTitle={headerTitle}
+                            hideHeaderTitle={hideHeaderTitle}
                             buttons={buttons}
                             ticketButton={ticketButton}
                             onEdit={onEdit}
@@ -394,21 +402,30 @@ const ViewCard: React.FC<ViewCardProps> = ({
                                             <ViewCardSection
                                                 label={sectionData.title || key}
                                             >
-                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                                    {sectionData.fields.map(
-                                                        (field, fieldIndex) => (
-                                                            <ViewCardField
-                                                                key={fieldIndex}
-                                                                label={
-                                                                    field.label
-                                                                }
-                                                                value={
-                                                                    field.value
-                                                                }
-                                                            />
-                                                        )
-                                                    )}
-                                                </div>
+                                                {sectionData.customRender ? (
+                                                    sectionData.customRender()
+                                                ) : (
+                                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                        {sectionData.fields?.map(
+                                                            (
+                                                                field,
+                                                                fieldIndex
+                                                            ) => (
+                                                                <ViewCardField
+                                                                    key={
+                                                                        fieldIndex
+                                                                    }
+                                                                    label={
+                                                                        field.label
+                                                                    }
+                                                                    value={
+                                                                        field.value
+                                                                    }
+                                                                />
+                                                            )
+                                                        )}
+                                                    </div>
+                                                )}
                                             </ViewCardSection>
                                         </React.Fragment>
                                     );
@@ -424,6 +441,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
                         {activeTabItem ? (
                             <ViewCardHeader
                                 headerTitle={headerTitle}
+                                hideHeaderTitle={hideHeaderTitle}
                                 buttons={activeTabItem.buttons || buttons}
                                 ticketButton={
                                     activeTabItem.onTicket ? true : ticketButton
@@ -435,6 +453,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
                         ) : (
                             <ViewCardHeader
                                 headerTitle={headerTitle}
+                                hideHeaderTitle={hideHeaderTitle}
                                 buttons={buttons}
                                 ticketButton={ticketButton}
                                 onEdit={onEdit}
@@ -478,20 +497,15 @@ const ViewCard: React.FC<ViewCardProps> = ({
             default:
                 return (
                     <div className="flex flex-col overflow-hidden">
-                        <div className="flex justify-between items-start">
-                            <h1 className="text-xl font-bold text-gray-900">
-                                {title}
-                            </h1>
-
-                            {buttons && (
-                                <ViewCardButtons
-                                    ticketButton={ticketButton}
-                                    onEdit={onEdit}
-                                    onDelete={onDelete}
-                                    onTicket={onTicket}
-                                />
-                            )}
-                        </div>
+                        <ViewCardHeader
+                            headerTitle={headerTitle}
+                            hideHeaderTitle={hideHeaderTitle}
+                            buttons={buttons}
+                            ticketButton={ticketButton}
+                            onEdit={onEdit}
+                            onDelete={onDelete}
+                            onTicket={onTicket}
+                        />
 
                         {/* Row-based layout if rows are provided */}
                         {data.rows ? (
@@ -551,28 +565,37 @@ const ViewCard: React.FC<ViewCardProps> = ({
                         {/* Section data with fields */}
                         {Object.entries(data)
                             .filter(([key, value]) => {
-                                // Only process objects with fields property
+                                // First check if this section should be visible based on the visibleSectionKeys
+                                if (!visibleSectionKeys.includes(key)) {
+                                    return false;
+                                }
+                                
+                                // Only process objects with fields or customRender property
                                 if (
                                     typeof value !== "object" ||
-                                    value === null ||
-                                    !("fields" in value)
+                                    value === null
                                 ) {
                                     return false;
                                 }
 
-                                const sectionData =
-                                    value as ViewCardSectionData;
+                                const sectionData = value as ViewCardSectionData;
 
-                                // Skip if fields is not an array or is empty
+                                // If customRender is provided, include this section
+                                if (sectionData.customRender && typeof sectionData.customRender === "function") {
+                                    return true;
+                                }
+
+                                // Check if it has valid fields
                                 if (
+                                    !("fields" in sectionData) ||
+                                    !sectionData.fields ||
                                     !Array.isArray(sectionData.fields) ||
                                     sectionData.fields.length === 0
                                 ) {
                                     return false;
                                 }
 
-                                // Only show sections that are in the visible keys list
-                                return visibleSectionKeys.includes(key);
+                                return true;
                             })
                             .map(([key, value], index) => {
                                 // Safe to cast now
@@ -589,19 +612,27 @@ const ViewCard: React.FC<ViewCardProps> = ({
                                         <ViewCardSection
                                             label={sectionData.title || key}
                                         >
-                                            <div
-                                                className={`grid grid-cols-1 md:grid-cols-${gridCols} gap-4`}
-                                            >
-                                                {sectionData.fields.map(
-                                                    (field, fieldIndex) => (
-                                                        <ViewCardField
-                                                            key={fieldIndex}
-                                                            label={field.label}
-                                                            value={field.value}
-                                                        />
-                                                    )
-                                                )}
-                                            </div>
+                                            {sectionData.customRender ? (
+                                                sectionData.customRender()
+                                            ) : (
+                                                <div
+                                                    className={`grid grid-cols-1 md:grid-cols-${gridCols} gap-4`}
+                                                >
+                                                    {sectionData.fields?.map(
+                                                        (field, fieldIndex) => (
+                                                            <ViewCardField
+                                                                key={fieldIndex}
+                                                                label={
+                                                                    field.label
+                                                                }
+                                                                value={
+                                                                    field.value
+                                                                }
+                                                            />
+                                                        )
+                                                    )}
+                                                </div>
+                                            )}
                                         </ViewCardSection>
                                     </React.Fragment>
                                 );

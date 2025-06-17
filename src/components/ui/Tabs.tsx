@@ -17,10 +17,14 @@ type TabItemProps<T extends string> = {
 // Define Tabs Props
 type TabsProps<T extends string> = {
     children: ReactElement<TabItemProps<T>>[];
+    hideBorder?: boolean;
 };
 
 // Tabs Component
-function Tabs<T extends string>({ children }: TabsProps<T>) {
+function Tabs<T extends string>({
+    children,
+    hideBorder = false,
+}: TabsProps<T>) {
     const navigate = useNavigate();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -126,7 +130,11 @@ function Tabs<T extends string>({ children }: TabsProps<T>) {
     }
 
     return (
-        <section className="relative p-3 sm:p-5 antialiased flex-1 w-full border-wrapper">
+        <section
+            className={`relative p-3 sm:p-5 antialiased flex-1 w-full ${
+                hideBorder ? "" : "border-wrapper"
+            }`}
+        >
             {/* Tabs Navigation */}
             <nav
                 className={`p-3 flex flex-col items-center md:items-start space-x-4 space-y-4 ${

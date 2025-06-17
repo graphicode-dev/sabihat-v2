@@ -12,7 +12,8 @@ export interface ViewCardFieldItem {
 export type ViewCardSectionData = {
     title?: string;
     mainTitle?: string; // Optional main title that appears above the section
-    fields: ViewCardFieldItem[];
+    fields?: ViewCardFieldItem[];
+    customRender?: () => React.ReactNode; // Optional custom render function
 };
 
 // Row structure for ViewCard
@@ -37,6 +38,7 @@ export type ViewCardVariant = "user" | "vessel" | "tabs" | "default";
 // Props for the ViewCard component
 export interface ViewCardProps {
     headerTitle?: string;
+    hideHeaderTitle?: boolean;
     title?: string;
     subtitle?: string;
     variant?: ViewCardVariant;
@@ -75,6 +77,7 @@ export interface ViewCardButtonsProps {
 
 export interface ViewCardHeaderProps {
     headerTitle?: string;
+    hideHeaderTitle?: boolean;
     buttons?: boolean;
     ticketButton?: boolean;
     onEdit?: () => void;

@@ -377,6 +377,71 @@ const ScheduleNewShipsViewPage = lazy(
 
 // #endregion Ship & Trip Management
 
+// #region Business Partners Management
+const BusinessPartnersPage = lazy(
+    () => import("../pages/dashboard/business-partners-management/partners")
+);
+const BusinessPartnersViewPage = lazy(
+    () =>
+        import("../pages/dashboard/business-partners-management/partners/view")
+);
+const BusinessPartnersEditPage = lazy(
+    () =>
+        import("../pages/dashboard/business-partners-management/partners/edit")
+);
+const BusinessPartnersAddPage = lazy(
+    () => import("../pages/dashboard/business-partners-management/partners/add")
+);
+const BusinessPartnersCommissionsPage = lazy(
+    () => import("../pages/dashboard/business-partners-management/commissions")
+);
+const BusinessPartnersCommissionsViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/business-partners-management/commissions/view"
+        )
+);
+const BusinessPartnersCommissionsAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/business-partners-management/commissions/add"
+        )
+);
+const BusinessPartnersMarkupDiscountsPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/business-partners-management/markup-discounts"
+        )
+);
+const BusinessPartnersMarkupDiscountsViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/business-partners-management/markup-discounts/view"
+        )
+);
+const BusinessPartnersMarkupDiscountsAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/business-partners-management/markup-discounts/add"
+        )
+);
+const BusinessPartnersAuthoritiesPage = lazy(
+    () => import("../pages/dashboard/business-partners-management/authorities")
+);
+const BusinessPartnersAuthoritiesViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/business-partners-management/authorities/view"
+        )
+);
+const BusinessPartnersAuthoritiesAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/business-partners-management/authorities/add"
+        )
+);
+// #endregion Business Partners Management
+
 export const navigationConfig: TabLink[] = [
     // System Management & Administration
     {
@@ -804,9 +869,77 @@ export const navigationConfig: TabLink[] = [
             },
             links: [
                 {
-                    title: "All",
-                    path: "/business-partners-management/all",
-                    component: PlaceholderPage,
+                    title: "Partners",
+                    path: "/business-partners-management/partners",
+                    component: BusinessPartnersPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: BusinessPartnersViewPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "edit/:id",
+                            component: BusinessPartnersEditPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: BusinessPartnersAddPage,
+                        },
+                    ],
+                },
+                {
+                    title: "Commissions",
+                    path: "/business-partners-management/commissions",
+                    component: BusinessPartnersCommissionsPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: BusinessPartnersCommissionsViewPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: BusinessPartnersCommissionsAddPage,
+                        },
+                    ],
+                },
+                {
+                    title: "Markup & Discounts",
+                    path: "/business-partners-management/markup-discounts",
+                    component: BusinessPartnersMarkupDiscountsPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: BusinessPartnersMarkupDiscountsViewPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: BusinessPartnersMarkupDiscountsAddPage,
+                        },
+                    ],
+                },
+                {
+                    title: "Authorities",
+                    path: "/business-partners-management/authorities",
+                    component: BusinessPartnersAuthoritiesPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: BusinessPartnersAuthoritiesViewPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: BusinessPartnersAuthoritiesAddPage,
+                        },
+                    ],
                 },
             ],
         },
