@@ -414,6 +414,8 @@ const ScheduleNewShipsEditPage = lazy(
 // #endregion Ship & Trip Management
 
 // #region Business Partners Management
+
+// #region Partners
 const BusinessPartnersPage = lazy(
     () => import("../pages/dashboard/business-partners-management/partners")
 );
@@ -428,6 +430,9 @@ const BusinessPartnersEditPage = lazy(
 const BusinessPartnersAddPage = lazy(
     () => import("../pages/dashboard/business-partners-management/partners/add")
 );
+// #endregion Partners
+
+// #region Commissions
 const BusinessPartnersCommissionsPage = lazy(
     () => import("../pages/dashboard/business-partners-management/commissions")
 );
@@ -443,6 +448,9 @@ const BusinessPartnersCommissionsAddPage = lazy(
             "../pages/dashboard/business-partners-management/commissions/add"
         )
 );
+// #endregion Commissions
+
+// #region Markup & Discounts
 const BusinessPartnersMarkupDiscountsPage = lazy(
     () =>
         import(
@@ -461,6 +469,9 @@ const BusinessPartnersMarkupDiscountsAddPage = lazy(
             "../pages/dashboard/business-partners-management/markup-discounts/add"
         )
 );
+// #endregion Markup & Discounts
+
+// #region Authorities
 const BusinessPartnersAuthoritiesPage = lazy(
     () => import("../pages/dashboard/business-partners-management/authorities")
 );
@@ -476,7 +487,82 @@ const BusinessPartnersAuthoritiesEditPage = lazy(
             "../pages/dashboard/business-partners-management/authorities/edit"
         )
 );
+// #endregion Authorities
+
 // #endregion Business Partners Management
+
+// #region Sales & Bookings
+
+// #region Price Lists B2B
+const PriceListsB2BPage = lazy(
+    () => import("../pages/dashboard/sales-bookings/price-lists-B2B")
+);
+const PriceListsB2BViewPage = lazy(
+    () => import("../pages/dashboard/sales-bookings/price-lists-B2B/view")
+);
+// #endregion Price Lists B2B
+
+// #region Price Lists B2C
+const PriceListsB2CPage = lazy(
+    () => import("../pages/dashboard/sales-bookings/price-lists-B2C")
+);
+const PriceListsB2CViewPage = lazy(
+    () => import("../pages/dashboard/sales-bookings/price-lists-B2C/view")
+);
+// #endregion Price Lists B2C
+
+// #region Excess baggage price B2B
+const ExcessBaggagePriceB2BPage = lazy(
+    () => import("../pages/dashboard/sales-bookings/excess-baggage-price-B2B")
+);
+const ExcessBaggagePriceB2BViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2B/view"
+        )
+);
+// #endregion Excess baggage price B2B
+
+// #region Excess baggage price B2C
+const ExcessBaggagePriceB2CPage = lazy(
+    () => import("../pages/dashboard/sales-bookings/excess-baggage-price-B2C")
+);
+const ExcessBaggagePriceB2CViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2C/view"
+        )
+);
+// #endregion Excess baggage price B2C
+
+// #region Allowed Weight
+const AllowedWeightPage = lazy(
+    () => import("../pages/dashboard/sales-bookings/allowed-weight")
+);
+const AllowedWeightViewPage = lazy(
+    () => import("../pages/dashboard/sales-bookings/allowed-weight/view")
+);
+// #endregion Allowed Weight
+
+// #region Tickets
+const TicketsPage = lazy(
+    () => import("../pages/dashboard/sales-bookings/tickets")
+);
+const TicketsViewPage = lazy(
+    () => import("../pages/dashboard/sales-bookings/tickets/view")
+);
+// #endregion Tickets
+
+// #region Ticket Excess Baggage
+const TicketExcessBaggagePage = lazy(
+    () => import("../pages/dashboard/sales-bookings/ticket-excess-baggage")
+);
+const TicketExcessBaggageViewPage = lazy(
+    () => import("../pages/dashboard/sales-bookings/ticket-excess-baggage/view")
+);
+// #endregion Ticket Excess Baggage
+
+// #endregion Sales & Bookings
 
 export const navigationConfig: TabLink[] = [
     // System Management & Administration
@@ -900,9 +986,88 @@ export const navigationConfig: TabLink[] = [
             },
             links: [
                 {
-                    title: "All",
-                    path: "/sales-bookings/all",
-                    component: PlaceholderPage,
+                    title: "Price Lists B2B",
+                    path: "/sales-bookings/price-lists-B2B",
+                    component: PriceListsB2BPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: PriceListsB2BViewPage,
+                        },
+                    ],
+                },
+                {
+                    title: "Price Lists B2C",
+                    path: "/sales-bookings/price-lists-B2C",
+                    component: PriceListsB2CPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: PriceListsB2CViewPage,
+                        },
+                    ],
+                },
+                {
+                    title: "Excess baggage price B2B",
+                    path: "/sales-bookings/excess-baggage-price-B2B",
+                    component: ExcessBaggagePriceB2BPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: ExcessBaggagePriceB2BViewPage,
+                        },
+                    ],
+                },
+                {
+                    title: "Excess baggage price B2C",
+                    path: "/sales-bookings/excess-baggage-price-B2C",
+                    component: ExcessBaggagePriceB2CPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: ExcessBaggagePriceB2CViewPage,
+                        },
+                    ],
+                },
+                {
+                    title: "Allowed Weight",
+                    path: "/sales-bookings/allowed-weight",
+                    component: AllowedWeightPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: AllowedWeightViewPage,
+                        },
+                    ],
+                },
+                {
+                    title: "Tickets",
+                    path: "/sales-bookings/tickets",
+                    component: TicketsPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: TicketsViewPage,
+                        },
+                    ],
+                },
+                {
+                    title: "Ticket Excess Baggage",
+                    path: "/sales-bookings/ticket-excess-baggage",
+                    component: TicketExcessBaggagePage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: TicketExcessBaggageViewPage,
+                        },
+                    ],
                 },
             ],
         },

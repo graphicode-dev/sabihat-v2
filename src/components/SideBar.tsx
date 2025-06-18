@@ -123,11 +123,12 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
                                     } rounded-full mr-2`}
                                 ></span>
                                 <span
-                                    className={
-                                        isActive(route.path, index)
-                                            ? "font-bold"
-                                            : ""
-                                    }
+                                    className={`text-left
+                                        ${
+                                            isActive(route.path, index)
+                                                ? "font-bold"
+                                                : ""
+                                        }`}
                                 >
                                     {route.title}
                                 </span>
