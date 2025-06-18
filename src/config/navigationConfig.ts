@@ -500,55 +500,55 @@ const PriceListsB2BPage = lazy(
 const PriceListsB2BViewPagePassengerPriceList = lazy(
     () =>
         import(
-            "../pages/dashboard/sales-bookings/price-lists-B2B/view/PassengerPriceListView"
+            "../pages/dashboard/sales-bookings/price-lists-B2B/view/PriceListsB2BPassengerView"
         )
 );
 const PriceListsB2BViewPageCargoPriceList = lazy(
     () =>
         import(
-            "../pages/dashboard/sales-bookings/price-lists-B2B/view/CargoPriceListView"
+            "../pages/dashboard/sales-bookings/price-lists-B2B/view/PriceListsB2BCargoView"
         )
 );
 const PriceListsB2BViewPageVehiclePriceList = lazy(
     () =>
         import(
-            "../pages/dashboard/sales-bookings/price-lists-B2B/view/VehiclePriceListView"
+            "../pages/dashboard/sales-bookings/price-lists-B2B/view/PriceListsB2BVehicleView"
         )
 );
 const PriceListsB2BEditPagePassengerPriceList = lazy(
     () =>
         import(
-            "../pages/dashboard/sales-bookings/price-lists-B2B/edit/PassengerPriceListEdit"
+            "../pages/dashboard/sales-bookings/price-lists-B2B/edit/PriceListsB2BPassengerEdit"
         )
 );
 const PriceListsB2BEditPageCargoPriceList = lazy(
     () =>
         import(
-            "../pages/dashboard/sales-bookings/price-lists-B2B/edit/CargoPriceListEdit"
+            "../pages/dashboard/sales-bookings/price-lists-B2B/edit/PriceListsB2BCargoEdit"
         )
 );
 const PriceListsB2BEditPageVehiclePriceList = lazy(
     () =>
         import(
-            "../pages/dashboard/sales-bookings/price-lists-B2B/edit/VehiclePriceListEdit"
+            "../pages/dashboard/sales-bookings/price-lists-B2B/edit/PriceListsB2BVehicleEdit"
         )
 );
 const PriceListsB2BAddPagePassengerPriceList = lazy(
     () =>
         import(
-            "../pages/dashboard/sales-bookings/price-lists-B2B/add/PassengerPriceListAdd"
+            "../pages/dashboard/sales-bookings/price-lists-B2B/add/PriceListsB2BPassengerAdd"
         )
 );
 const PriceListsB2BAddPageCargoPriceList = lazy(
     () =>
         import(
-            "../pages/dashboard/sales-bookings/price-lists-B2B/add/CargoPriceListAdd"
+            "../pages/dashboard/sales-bookings/price-lists-B2B/add/PriceListsB2BCargoAdd"
         )
 );
 const PriceListsB2BAddPageVehiclePriceList = lazy(
     () =>
         import(
-            "../pages/dashboard/sales-bookings/price-lists-B2B/add/VehiclePriceListAdd"
+            "../pages/dashboard/sales-bookings/price-lists-B2B/add/PriceListsB2BVehicleAdd"
         )
 );
 // #endregion Price Lists B2B
@@ -557,8 +557,59 @@ const PriceListsB2BAddPageVehiclePriceList = lazy(
 const PriceListsB2CPage = lazy(
     () => import("../pages/dashboard/sales-bookings/price-lists-B2C")
 );
-const PriceListsB2CViewPage = lazy(
-    () => import("../pages/dashboard/sales-bookings/price-lists-B2C/view")
+const PriceListsB2CViewPagePassengerPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2C/view/PriceListsB2CPassengerView"
+        )
+);
+const PriceListsB2CViewPageCargoPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2C/view/PriceListsB2CCargoView"
+        )
+);
+const PriceListsB2CViewPageVehiclePriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2C/view/PriceListsB2CVehicleView"
+        )
+);
+const PriceListsB2CEditPagePassengerPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2C/edit/PriceListsB2CPassengerEdit"
+        )
+);
+const PriceListsB2CEditPageCargoPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2C/edit/PriceListsB2CCargoEdit"
+        )
+);
+const PriceListsB2CEditPageVehiclePriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2C/edit/PriceListsB2CVehicleEdit"
+        )
+);
+const PriceListsB2CAddPagePassengerPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2C/add/PriceListsB2CPassengerAdd"
+        )
+);
+const PriceListsB2CAddPageCargoPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2C/add/PriceListsB2CCargoAdd"
+        )
+);
+const PriceListsB2CAddPageVehiclePriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2C/add/PriceListsB2CVehicleAdd"
+        )
 );
 // #endregion Price Lists B2C
 
@@ -566,10 +617,58 @@ const PriceListsB2CViewPage = lazy(
 const ExcessBaggagePriceB2BPage = lazy(
     () => import("../pages/dashboard/sales-bookings/excess-baggage-price-B2B")
 );
-const ExcessBaggagePriceB2BViewPage = lazy(
+const ExcessBaggagePriceB2BViewPassengerPriceListPage = lazy(
     () =>
         import(
-            "../pages/dashboard/sales-bookings/excess-baggage-price-B2B/view"
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2B/view/ExcessBaggagePriceB2BPassengerView"
+        )
+);
+const ExcessBaggagePriceB2BViewCargoPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2B/view/ExcessBaggagePriceB2BCargoView"
+        )
+);
+const ExcessBaggagePriceB2BViewVehiclePriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2B/view/ExcessBaggagePriceB2BVehicleView"
+        )
+);
+const ExcessBaggagePriceB2BEditPassengerPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2B/edit/ExcessBaggagePriceB2BPassengerEdit"
+        )
+);
+const ExcessBaggagePriceB2BEditCargoPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2B/edit/ExcessBaggagePriceB2BCargoEdit"
+        )
+);
+const ExcessBaggagePriceB2BEditVehiclePriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2B/edit/ExcessBaggagePriceB2BVehicleEdit"
+        )
+);
+const ExcessBaggagePriceB2BAddPassengerPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2B/add/ExcessBaggagePriceB2BPassengerAdd"
+        )
+);
+const ExcessBaggagePriceB2BAddCargoPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2B/add/ExcessBaggagePriceB2BCargoAdd"
+        )
+);
+const ExcessBaggagePriceB2BAddVehiclePriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2B/add/ExcessBaggagePriceB2BVehicleAdd"
         )
 );
 // #endregion Excess baggage price B2B
@@ -578,10 +677,58 @@ const ExcessBaggagePriceB2BViewPage = lazy(
 const ExcessBaggagePriceB2CPage = lazy(
     () => import("../pages/dashboard/sales-bookings/excess-baggage-price-B2C")
 );
-const ExcessBaggagePriceB2CViewPage = lazy(
+const ExcessBaggagePriceB2CViewPassengerPriceListPage = lazy(
     () =>
         import(
-            "../pages/dashboard/sales-bookings/excess-baggage-price-B2C/view"
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2C/view/ExcessBaggagePriceB2CPassengerView"
+        )
+);
+const ExcessBaggagePriceB2CViewCargoPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2C/view/ExcessBaggagePriceB2CCargoView"
+        )
+);
+const ExcessBaggagePriceB2CViewVehiclePriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2C/view/ExcessBaggagePriceB2CVehicleView"
+        )
+);
+const ExcessBaggagePriceB2CEditPassengerPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2C/edit/ExcessBaggagePriceB2CPassengerEdit"
+        )
+);
+const ExcessBaggagePriceB2CEditCargoPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2C/edit/ExcessBaggagePriceB2CCargoEdit"
+        )
+);
+const ExcessBaggagePriceB2CEditVehiclePriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2C/edit/ExcessBaggagePriceB2CVehicleEdit"
+        )
+);
+const ExcessBaggagePriceB2CAddPassengerPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2C/add/ExcessBaggagePriceB2CPassengerAdd"
+        )
+);
+const ExcessBaggagePriceB2CAddCargoPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2C/add/ExcessBaggagePriceB2CCargoAdd"
+        )
+);
+const ExcessBaggagePriceB2CAddVehiclePriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2C/add/ExcessBaggagePriceB2CVehicleAdd"
         )
 );
 // #endregion Excess baggage price B2C
@@ -590,8 +737,59 @@ const ExcessBaggagePriceB2CViewPage = lazy(
 const AllowedWeightPage = lazy(
     () => import("../pages/dashboard/sales-bookings/allowed-weight")
 );
-const AllowedWeightViewPage = lazy(
-    () => import("../pages/dashboard/sales-bookings/allowed-weight/view")
+const AllowedWeightViewPassengerPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/allowed-weight/view/AllowedWeightPassengerView"
+        )
+);
+const AllowedWeightViewCargoPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/allowed-weight/view/AllowedWeightCargoView"
+        )
+);
+const AllowedWeightViewVehiclePriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/allowed-weight/view/AllowedWeightVehicleView"
+        )
+);
+const AllowedWeightEditPassengerPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/allowed-weight/edit/AllowedWeightPassengerEdit"
+        )
+);
+const AllowedWeightEditCargoPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/allowed-weight/edit/AllowedWeightCargoEdit"
+        )
+);
+const AllowedWeightEditVehiclePriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/allowed-weight/edit/AllowedWeightVehicleEdit"
+        )
+);
+const AllowedWeightAddPassengerPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/allowed-weight/add/AllowedWeightPassengerAdd"
+        )
+);
+const AllowedWeightAddCargoPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/allowed-weight/add/AllowedWeightCargoAdd"
+        )
+);
+const AllowedWeightAddVehiclePriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/allowed-weight/add/AllowedWeightVehicleAdd"
+        )
 );
 // #endregion Allowed Weight
 
@@ -599,8 +797,41 @@ const AllowedWeightViewPage = lazy(
 const TicketsPage = lazy(
     () => import("../pages/dashboard/sales-bookings/tickets")
 );
-const TicketsViewPage = lazy(
-    () => import("../pages/dashboard/sales-bookings/tickets/view")
+const TicketsCargoViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/tickets/view/TicketsCargoView"
+        )
+);
+const TicketsPassengerViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/tickets/view/TicketsPassengerView"
+        )
+);
+const TicketsVehicleViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/tickets/view/TicketsVehicleView"
+        )
+);
+const TicketsCargoEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/tickets/edit/TicketsCargoEdit"
+        )
+);
+const TicketsPassengerEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/tickets/edit/TicketsPassengerEdit"
+        )
+);
+const TicketsVehicleEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/tickets/edit/TicketsVehicleEdit"
+        )
 );
 // #endregion Tickets
 
@@ -1094,9 +1325,49 @@ export const navigationConfig: TabLink[] = [
                     component: PriceListsB2CPage,
                     subLinks: [
                         {
-                            title: "View",
-                            path: "view/:id",
-                            component: PriceListsB2CViewPage,
+                            title: "Passenger Price List",
+                            path: "/passenger/:id/view",
+                            component: PriceListsB2CViewPagePassengerPriceList,
+                        },
+                        {
+                            title: "Passenger Price List",
+                            path: "/passenger/:id/edit",
+                            component: PriceListsB2CEditPagePassengerPriceList,
+                        },
+                        {
+                            title: "Passenger Price List",
+                            path: "/passenger/:id/add",
+                            component: PriceListsB2CAddPagePassengerPriceList,
+                        },
+                        {
+                            title: "Cargo Price List",
+                            path: "/cargo/:id/view",
+                            component: PriceListsB2CViewPageCargoPriceList,
+                        },
+                        {
+                            title: "Cargo Price List",
+                            path: "/cargo/:id/edit",
+                            component: PriceListsB2CEditPageCargoPriceList,
+                        },
+                        {
+                            title: "Cargo Price List",
+                            path: "/cargo/:id/add",
+                            component: PriceListsB2CAddPageCargoPriceList,
+                        },
+                        {
+                            title: "Vehicle Price List",
+                            path: "/vehicle/:id/view",
+                            component: PriceListsB2CViewPageVehiclePriceList,
+                        },
+                        {
+                            title: "Vehicle Price List",
+                            path: "/vehicle/:id/edit",
+                            component: PriceListsB2CEditPageVehiclePriceList,
+                        },
+                        {
+                            title: "Vehicle Price List",
+                            path: "/vehicle/:id/add",
+                            component: PriceListsB2CAddPageVehiclePriceList,
                         },
                     ],
                 },
@@ -1106,9 +1377,58 @@ export const navigationConfig: TabLink[] = [
                     component: ExcessBaggagePriceB2BPage,
                     subLinks: [
                         {
-                            title: "View",
-                            path: "view/:id",
-                            component: ExcessBaggagePriceB2BViewPage,
+                            title: "Passenger Price List",
+                            path: "/passenger/:id/view",
+                            component:
+                                ExcessBaggagePriceB2BViewPassengerPriceListPage,
+                        },
+                        {
+                            title: "Passenger Price List",
+                            path: "/passenger/:id/edit",
+                            component:
+                                ExcessBaggagePriceB2BEditPassengerPriceListPage,
+                        },
+                        {
+                            title: "Passenger Price List",
+                            path: "/passenger/:id/add",
+                            component:
+                                ExcessBaggagePriceB2BAddPassengerPriceListPage,
+                        },
+                        {
+                            title: "Cargo Price List",
+                            path: "/cargo/:id/view",
+                            component:
+                                ExcessBaggagePriceB2BViewCargoPriceListPage,
+                        },
+                        {
+                            title: "Cargo Price List",
+                            path: "/cargo/:id/edit",
+                            component:
+                                ExcessBaggagePriceB2BEditCargoPriceListPage,
+                        },
+                        {
+                            title: "Cargo Price List",
+                            path: "/cargo/:id/add",
+                            component:
+                                ExcessBaggagePriceB2BAddCargoPriceListPage,
+                        },
+                        {
+                            title: "Vehicle Price List",
+                            path: "/vehicle/:id/view",
+                            component:
+                                ExcessBaggagePriceB2BViewVehiclePriceListPage,
+                        },
+                        {
+                            title: "Vehicle Price List",
+                            path: "/vehicle/:id/edit",
+                            component:
+                                ExcessBaggagePriceB2BEditVehiclePriceListPage,
+                        },
+                        {
+                            title: "Vehicle Price List",
+                            path: "/vehicle/:id/add",
+                            component:
+                                ExcessBaggagePriceB2BAddVehiclePriceListPage,
                         },
                     ],
                 },
@@ -1118,9 +1438,58 @@ export const navigationConfig: TabLink[] = [
                     component: ExcessBaggagePriceB2CPage,
                     subLinks: [
                         {
-                            title: "View",
-                            path: "view/:id",
-                            component: ExcessBaggagePriceB2CViewPage,
+                            title: "Passenger Price List",
+                            path: "/passenger/:id/view",
+                            component:
+                                ExcessBaggagePriceB2CViewPassengerPriceListPage,
+                        },
+                        {
+                            title: "Passenger Price List",
+                            path: "/passenger/:id/edit",
+                            component:
+                                ExcessBaggagePriceB2CEditPassengerPriceListPage,
+                        },
+                        {
+                            title: "Passenger Price List",
+                            path: "/passenger/:id/add",
+                            component:
+                                ExcessBaggagePriceB2CAddPassengerPriceListPage,
+                        },
+                        {
+                            title: "Cargo Price List",
+                            path: "/cargo/:id/view",
+                            component:
+                                ExcessBaggagePriceB2CViewCargoPriceListPage,
+                        },
+                        {
+                            title: "Cargo Price List",
+                            path: "/cargo/:id/edit",
+                            component:
+                                ExcessBaggagePriceB2CEditCargoPriceListPage,
+                        },
+                        {
+                            title: "Cargo Price List",
+                            path: "/cargo/:id/add",
+                            component:
+                                ExcessBaggagePriceB2CAddCargoPriceListPage,
+                        },
+                        {
+                            title: "Vehicle Price List",
+                            path: "/vehicle/:id/view",
+                            component:
+                                ExcessBaggagePriceB2CViewVehiclePriceListPage,
+                        },
+                        {
+                            title: "Vehicle Price List",
+                            path: "/vehicle/:id/edit",
+                            component:
+                                ExcessBaggagePriceB2CEditVehiclePriceListPage,
+                        },
+                        {
+                            title: "Vehicle Price List",
+                            path: "/vehicle/:id/add",
+                            component:
+                                ExcessBaggagePriceB2CAddVehiclePriceListPage,
                         },
                     ],
                 },
@@ -1130,9 +1499,49 @@ export const navigationConfig: TabLink[] = [
                     component: AllowedWeightPage,
                     subLinks: [
                         {
-                            title: "View",
-                            path: "view/:id",
-                            component: AllowedWeightViewPage,
+                            title: "Passenger Price List",
+                            path: "/passenger/:id/view",
+                            component: AllowedWeightViewPassengerPriceListPage,
+                        },
+                        {
+                            title: "Passenger Price List",
+                            path: "/passenger/:id/edit",
+                            component: AllowedWeightEditPassengerPriceListPage,
+                        },
+                        {
+                            title: "Passenger Price List",
+                            path: "/passenger/:id/add",
+                            component: AllowedWeightAddPassengerPriceListPage,
+                        },
+                        {
+                            title: "Cargo Price List",
+                            path: "/cargo/:id/view",
+                            component: AllowedWeightViewCargoPriceListPage,
+                        },
+                        {
+                            title: "Cargo Price List",
+                            path: "/cargo/:id/edit",
+                            component: AllowedWeightEditCargoPriceListPage,
+                        },
+                        {
+                            title: "Cargo Price List",
+                            path: "/cargo/:id/add",
+                            component: AllowedWeightAddCargoPriceListPage,
+                        },
+                        {
+                            title: "Vehicle Price List",
+                            path: "/vehicle/:id/view",
+                            component: AllowedWeightViewVehiclePriceListPage,
+                        },
+                        {
+                            title: "Vehicle Price List",
+                            path: "/vehicle/:id/edit",
+                            component: AllowedWeightEditVehiclePriceListPage,
+                        },
+                        {
+                            title: "Vehicle Price List",
+                            path: "/vehicle/:id/add",
+                            component: AllowedWeightAddVehiclePriceListPage,
                         },
                     ],
                 },
@@ -1142,9 +1551,34 @@ export const navigationConfig: TabLink[] = [
                     component: TicketsPage,
                     subLinks: [
                         {
-                            title: "View",
-                            path: "view/:id",
-                            component: TicketsViewPage,
+                            title: "Passenger",
+                            path: "/passenger/:id/view",
+                            component: TicketsPassengerViewPage,
+                        },
+                        {
+                            title: "Cargo",
+                            path: "/cargo/:id/view",
+                            component: TicketsCargoViewPage,
+                        },
+                        {
+                            title: "Vehicle",
+                            path: "/vehicle/:id/view",
+                            component: TicketsVehicleViewPage,
+                        },
+                        {
+                            title: "Passenger",
+                            path: "/passenger/:id/edit",
+                            component: TicketsPassengerEditPage,
+                        },
+                        {
+                            title: "Cargo",
+                            path: "/cargo/:id/edit",
+                            component: TicketsCargoEditPage,
+                        },
+                        {
+                            title: "Vehicle",
+                            path: "/vehicle/:id/edit",
+                            component: TicketsVehicleEditPage,
                         },
                     ],
                 },
