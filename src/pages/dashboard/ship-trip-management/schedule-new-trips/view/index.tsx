@@ -1,107 +1,190 @@
-import { useParams } from "react-router-dom";
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
-import { ViewCardData } from "../../../../../types";
-import { useEffect, useState } from "react";
-import { TableData } from "../../../../../types/table";
+import { useNavigate, useParams } from "react-router-dom";
 
 function ScheduleNewTripsViewPage() {
+    const navigate = useNavigate();
     const { id } = useParams();
 
-    const [userData, setUserData] = useState<TableData | null>(null);
-
-    useEffect(() => {
-        // Fetch user data from API
-        const fetchUserData = async () => {
-            const user = data.find((item: TableData) => item.id === id);
-            setUserData(user || null);
-        };
-        fetchUserData();
-    }, []);
-
-    const data = Array.from({ length: 100 }, (_, index) => {
-        return {
-            id: (index + 1).toString(),
-            columns: {
-                "vessel name": "*******",
-                "Voyage Number": "*******",
-                "Port From": "*******",
-                "Port To": "*******",
-                ETD: "*******",
-                ETA: "*******",
+    const data = {
+        id: "1",
+        portFrom: "*******",
+        portTo: "*******",
+        ETD: "*********************************************************",
+        ETA: "*******",
+        description:
+            "********************************************************************************************************************",
+        ticketRules: "*******",
+        promotion: "*******",
+        beforeDeparture:
+            "*********************************************************",
+        agentAllocation: {
+            passengersCabins: {
+                cabinName: "*******",
+                agent1: "*******",
+                numberOfPassengers: "*******",
             },
-        };
-    });
+            cargoCompartments: {
+                cabinName: "*******",
+                agent1: "*******",
+                availableWeight: "*******",
+                availableSize: "*******",
+                availableQuantity: "*******",
+            },
+            vehiclePackages: {
+                cabinName: "*******",
+                agent1: "*******",
+                availableWeight: "*******",
+                availableSize: "*******",
+                availableQuantity: "*******",
+            },
+        },
+        available: {
+            passengersCabins: {
+                cabinName: "*******",
+                numberOfPassengers: "*******",
+            },
+        },
+    };
 
     return (
-        <PageLayout>
+        <PageLayout showBorder>
             <ViewCard
                 title="Vessel Name"
                 variant="vessel"
                 subtitle="Voyage Number"
-                data={
-                    {
-                        "Port From": userData?.columns["Port From"],
-                        "Port To": userData?.columns["Port To"],
-                        ETD: userData?.columns["ETD"],
-                        ETA: userData?.columns["ETA"],
-                        Description: userData?.columns["Description"],
-
-                        "Passengers Cabins": {
+                data={{
+                    rows: [
+                        {
+                            fields: [
+                                {
+                                    label: "Port From",
+                                    value: data?.portFrom?.toString(),
+                                },
+                                {
+                                    label: "Port To",
+                                    value: data?.portTo?.toString(),
+                                },
+                                {
+                                    label: "ETD",
+                                    value: data?.ETD?.toString(),
+                                },
+                                {
+                                    label: "ETA",
+                                    value: data?.ETA?.toString(),
+                                },
+                                {
+                                    label: "Description",
+                                    value: data?.description?.toString(),
+                                    colSpan: 2,
+                                },
+                                {
+                                    label: "Ticket Rules",
+                                    value: data?.ticketRules?.toString(),
+                                },
+                                {
+                                    label: "Promotion",
+                                    value: data?.promotion?.toString(),
+                                },
+                                {
+                                    label: "Before Departure",
+                                    value: data?.beforeDeparture?.toString(),
+                                },
+                            ],
+                        },
+                        {
                             mainTitle: "Agent Allocation",
                             title: "Passengers Cabins",
                             fields: [
-                                { label: "Cabin Name", value: "*******" },
                                 {
-                                    label: "Number of Passengers",
-                                    value: "*******",
+                                    label: "Cabin Name",
+                                    value: data?.agentAllocation?.passengersCabins?.cabinName?.toString(),
                                 },
-                                { label: "Cabin Name", value: "*******" },
                                 {
                                     label: "Number of Passengers",
-                                    value: "*******",
+                                    value: data?.agentAllocation?.passengersCabins?.numberOfPassengers?.toString(),
+                                },
+                                {
+                                    label: "Agent1",
+                                    value: data?.agentAllocation?.passengersCabins?.agent1?.toString(),
                                 },
                             ],
                         },
-                        "Cargo Compartments": {
+                        {
+                            title: "Cargo Compartments",
                             fields: [
-                                { label: "Cabin Name", value: "*******" },
-                                { label: "Agent1", value: "*******" },
-                                { label: "Available weight", value: "*******" },
-                                { label: "Cabin Name", value: "*******" },
-                                { label: "Agent1", value: "*******" },
-                                { label: "Available weight", value: "*******" },
-                            ],
-                        },
-                        "Vehicle Packages": {
-                            fields: [
-                                { label: "Cabin Name", value: "*******" },
-                                { label: "Agent1", value: "*******" },
-                                { label: "Available Size", value: "*******" },
+                                {
+                                    label: "Cabin Name",
+                                    value: data?.agentAllocation?.cargoCompartments?.cabinName?.toString(),
+                                },
+                                {
+                                    label: "Agent1",
+                                    value: data?.agentAllocation?.cargoCompartments?.agent1?.toString(),
+                                },
+                                {
+                                    label: "Available weight",
+                                    value: data?.agentAllocation?.cargoCompartments?.availableWeight?.toString(),
+                                },
+                                {
+                                    label: "Available Size",
+                                    value: data?.agentAllocation?.cargoCompartments?.availableSize?.toString(),
+                                },
                                 {
                                     label: "Available Quantity",
-                                    value: "*******",
+                                    value: data?.agentAllocation?.cargoCompartments?.availableQuantity?.toString(),
                                 },
                             ],
                         },
-                        Available: {
+                        {
+                            title: "Vehicle Packages",
                             fields: [
-                                { label: "Cabin Name", value: "*******" },
                                 {
-                                    label: "Number of Passengers",
-                                    value: "*******",
+                                    label: "Cabin Name",
+                                    value: data?.agentAllocation?.vehiclePackages?.cabinName?.toString(),
                                 },
-                                { label: "Cabin Name", value: "*******" },
                                 {
-                                    label: "Number of Passengers",
-                                    value: "*******",
+                                    label: "Agent1",
+                                    value: data?.agentAllocation?.vehiclePackages?.agent1?.toString(),
+                                },
+                                {
+                                    label: "Available Size",
+                                    value: data?.agentAllocation?.vehiclePackages?.availableSize?.toString(),
+                                },
+                                {
+                                    label: "Available Quantity",
+                                    value: data?.agentAllocation?.vehiclePackages?.availableQuantity?.toString(),
                                 },
                             ],
                         },
-                    } as ViewCardData
+                        {
+                            mainTitle: "Available",
+                            title: "Passengers Cabins",
+                            fields: [
+                                {
+                                    label: "Cabin Name",
+                                    value: data?.available?.passengersCabins?.cabinName?.toString(),
+                                },
+                                {
+                                    label: "Number of Passengers",
+                                    value: data?.available?.passengersCabins?.numberOfPassengers?.toString(),
+                                },
+                            ],
+                        },
+                    ],
+                }}
+                onEdit={() =>
+                    navigate(
+                        `/ship-trip-management/schedule-new-trips/edit/${id}`
+                    )
                 }
                 buttons
+                onTicket={() =>
+                    navigate(
+                        `/ship-trip-management/schedule-new-trips/tickets/${id}`
+                    )
+                }
                 ticketButton
+                hideBorder
             />
         </PageLayout>
     );

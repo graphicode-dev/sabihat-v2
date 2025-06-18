@@ -2,7 +2,6 @@ import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
 // import { useParams } from "react-router-dom";
 import { TableData } from "../../../../../types/table";
-import { ViewCardData } from "../../../../../types";
 
 function PromotionViewPage() {
     // const { id } = useParams();

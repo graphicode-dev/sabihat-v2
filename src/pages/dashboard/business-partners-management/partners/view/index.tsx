@@ -1,7 +1,6 @@
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
 import defaultAvatar from "../../../../../assets/images/default-user.png";
-import { ViewCardData } from "../../../../../types";
 import { useNavigate, useParams } from "react-router-dom";
 
 function PartnersViewPage() {
@@ -86,9 +85,9 @@ function PartnersViewPage() {
             <ViewCard
                 hideHeaderTitle
                 variant="default"
-                data={
-                    {
-                        partnersMaster: {
+                data={{
+                    rows: [
+                        {
                             title: "Partners Master",
                             fields: [
                                 {
@@ -109,7 +108,7 @@ function PartnersViewPage() {
                                 },
                             ],
                         },
-                        creditLimit: {
+                        {
                             title: "Credit Limit",
                             fields: [
                                 {
@@ -122,7 +121,7 @@ function PartnersViewPage() {
                                 },
                             ],
                         },
-                        contactInformation: {
+                        {
                             title: "Contact Information",
                             fields: [
                                 {
@@ -147,9 +146,8 @@ function PartnersViewPage() {
                                 },
                             ],
                         },
-                        users: {
+                        {
                             title: "Users",
-                            fields: [],
                             customRender: () => {
                                 return (
                                     <div className="w-full overflow-x-auto">
@@ -209,8 +207,8 @@ function PartnersViewPage() {
                                 );
                             },
                         },
-                    } as ViewCardData
-                }
+                    ],
+                }}
                 hideBorder
             />
         </PageLayout>

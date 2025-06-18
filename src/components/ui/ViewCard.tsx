@@ -5,7 +5,6 @@ import {
     ViewCardSectionProps,
     ViewCardFieldProps,
     ViewCardButtonsProps,
-    ViewCardSectionData,
     ViewCardHeaderProps,
 } from "../../types/viewCard.types";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -145,7 +144,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
     subtitle,
     variant = "default",
     image,
-    data = {},
+    data,
     buttons,
     ticketButton,
     hideBorder = false,
@@ -161,25 +160,15 @@ const ViewCard: React.FC<ViewCardProps> = ({
     // Default number of sections to show initially
     const initialSectionsToShow = 2;
 
-    // Get all section keys (keys that have objects with fields or customRender property)
-    const sectionKeys = Object.entries(data)
-        .filter(
-            ([_, value]) =>
-                typeof value === "object" &&
-                value !== null &&
-                ("fields" in value ||
-                    ("customRender" in value &&
-                        typeof value.customRender === "function"))
-        )
-        .map(([key]) => key);
+    // Get rows for the Show More/Less feature
+    const allRows = data?.rows || [];
 
     // Determine if we need a show more button
-    const needsShowMore = sectionKeys.length > initialSectionsToShow;
+    const needsShowMore = allRows.length > initialSectionsToShow;
+    
+    // Get the rows to display based on current state
+    const visibleRows = showAllContent ? allRows : allRows.slice(0, initialSectionsToShow);
 
-    // Get the sections to display based on current state
-    const visibleSectionKeys = showAllContent
-        ? sectionKeys
-        : sectionKeys.slice(0, initialSectionsToShow);
     // For tabs variant - handle tab navigation
     const navigate = useNavigate();
     const location = useLocation();
@@ -201,8 +190,8 @@ const ViewCard: React.FC<ViewCardProps> = ({
     // Find the active tab content
     const activeTabItem = tabs.find((tab) => tab.value === activeTab);
 
-    const getGridCols = (key: number) => {
-        switch (key) {
+    const getGridCols = () => {
+        switch (gridCols) {
             case 1:
                 return "grid-cols-1";
 
@@ -289,15 +278,17 @@ const ViewCard: React.FC<ViewCardProps> = ({
 
                         {/* User Details */}
                         <div
-                            className={`flex-1 grid grid-cols-1 md:grid-cols-${gridCols} gap-6 mt-6 md:mt-0`}
+                            className={`flex-1 grid grid-cols-1 md:${getGridCols()} gap-6 mt-6 md:mt-0`}
                         >
-                            {Object.entries(data).map(([key, value], index) => (
-                                <ViewCardField
-                                    key={index}
-                                    label={key}
-                                    value={value as string | number}
-                                />
-                            ))}
+                            {data?.rows.map((row, index) =>
+                                row.fields?.map((field) => (
+                                    <ViewCardField
+                                        key={index}
+                                        label={field.label}
+                                        value={field.value}
+                                    />
+                                ))
+                            )}
                         </div>
                     </div>
                 );
@@ -342,97 +333,44 @@ const ViewCard: React.FC<ViewCardProps> = ({
                         <div className="border-b border-dark-50 my-4" />
 
                         {/* Sections */}
-                        <div className="mt-6">
-                            {/* Regular fields */}
-                            <ViewCardSection>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    {Object.entries(data)
-                                        .filter(
-                                            ([_, value]) =>
-                                                typeof value !== "object" ||
-                                                value === null ||
-                                                !("fields" in value)
-                                        )
-                                        .map(([key, value], index) => (
-                                            <ViewCardField
-                                                key={index}
-                                                label={key}
-                                                value={value as string | number}
-                                            />
-                                        ))}
-                                </div>
-                            </ViewCardSection>
+                        {visibleRows.length > 0 && (
+                            <div className="mt-6">
+                                {visibleRows.map((row, index) => (
+                                    <React.Fragment key={index}>
+                                        {row.mainTitle && (
+                                            <h2 className="text-left text-2xl font-bold text-gray-900 mb-4">
+                                                {row.mainTitle}
+                                            </h2>
+                                        )}
 
-                            {/* Section data with fields */}
-                            {Object.entries(data)
-                                .filter(([key, value]) => {
-                                    // Only process objects with fields property
-                                    if (
-                                        typeof value !== "object" ||
-                                        value === null ||
-                                        !("fields" in value)
-                                    ) {
-                                        return false;
-                                    }
-
-                                    const sectionData =
-                                        value as ViewCardSectionData;
-
-                                    // Skip if fields is not an array or is empty
-                                    if (
-                                        !Array.isArray(sectionData.fields) ||
-                                        sectionData.fields.length === 0
-                                    ) {
-                                        return false;
-                                    }
-
-                                    // Only show sections that are in the visible keys list
-                                    return visibleSectionKeys.includes(key);
-                                })
-                                .map(([key, value], index) => {
-                                    // Safe to cast now
-                                    const sectionData =
-                                        value as ViewCardSectionData;
-
-                                    return (
-                                        <React.Fragment key={index}>
-                                            {sectionData.mainTitle && (
-                                                <h2 className="text-left text-2xl font-bold text-gray-900 mb-4">
-                                                    {sectionData.mainTitle}
-                                                </h2>
-                                            )}
-                                            <ViewCardSection
-                                                label={sectionData.title || key}
-                                            >
-                                                {sectionData.customRender ? (
-                                                    sectionData.customRender()
-                                                ) : (
-                                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                                        {sectionData.fields?.map(
-                                                            (
-                                                                field,
-                                                                fieldIndex
-                                                            ) => (
+                                        <ViewCardSection label={row.title}>
+                                            {row.customRender ? (
+                                                row.customRender()
+                                            ) : (
+                                                <div
+                                                    className={`grid grid-cols-1 md:${getGridCols()} gap-4`}
+                                                >
+                                                    {row.fields?.map(
+                                                        (field, fieldIndex) => (
+                                                            <div
+                                                                key={fieldIndex}
+                                                                className={`${field.colSpan ? getColSpan(field.colSpan) : ''}`}
+                                                            >
                                                                 <ViewCardField
-                                                                    key={
-                                                                        fieldIndex
-                                                                    }
-                                                                    label={
-                                                                        field.label
-                                                                    }
-                                                                    value={
-                                                                        field.value
-                                                                    }
+                                                                    label={field.label}
+                                                                    value={field.value}
+                                                                    type={field.type}
                                                                 />
-                                                            )
-                                                        )}
-                                                    </div>
-                                                )}
-                                            </ViewCardSection>
-                                        </React.Fragment>
-                                    );
-                                })}
-                        </div>
+                                                            </div>
+                                                        )
+                                                    )}
+                                                </div>
+                                            )}
+                                        </ViewCardSection>
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 );
 
@@ -509,141 +447,45 @@ const ViewCard: React.FC<ViewCardProps> = ({
                             onTicket={onTicket}
                         />
 
-                        {/* Row-based layout if rows are provided */}
-                        {data.rows ? (
-                            data.rows.map((row, rowIndex) => (
-                                <ViewCardSection key={rowIndex}>
-                                    <div
-                                        className={`grid ${getGridCols(
-                                            gridCols
-                                        )} gap-4`}
-                                    >
-                                        {row.fields.map((field, fieldIndex) => (
-                                            <div
-                                                key={fieldIndex}
-                                                className={`col-span-1 ${
-                                                    field.colSpan
-                                                        ? `${getColSpan(
-                                                              field.colSpan
-                                                          )}`
-                                                        : ""
-                                                }`}
-                                            >
-                                                <ViewCardField
-                                                    label={field.label}
-                                                    value={field.value}
-                                                    type={field.type}
-                                                />
-                                            </div>
-                                        ))}
-                                    </div>
-                                </ViewCardSection>
-                            ))
-                        ) : (
-                            /* Regular fields */
-                            <ViewCardSection>
-                                <div
-                                    className={`grid grid-cols-1 md:grid-cols-${gridCols} gap-4`}
-                                >
-                                    {Object.entries(data)
-                                        .filter(
-                                            ([key, value]) =>
-                                                key !== "rows" &&
-                                                (typeof value !== "object" ||
-                                                    value === null ||
-                                                    !("fields" in value))
-                                        )
-                                        .map(([key, value], index) => (
-                                            <ViewCardField
-                                                key={index}
-                                                label={key}
-                                                value={value as string | number}
-                                            />
-                                        ))}
-                                </div>
-                            </ViewCardSection>
-                        )}
-
-                        {/* Section data with fields */}
-                        {Object.entries(data)
-                            .filter(([key, value]) => {
-                                // First check if this section should be visible based on the visibleSectionKeys
-                                if (!visibleSectionKeys.includes(key)) {
-                                    return false;
-                                }
-
-                                // Only process objects with fields or customRender property
-                                if (
-                                    typeof value !== "object" ||
-                                    value === null
-                                ) {
-                                    return false;
-                                }
-
-                                const sectionData =
-                                    value as ViewCardSectionData;
-
-                                // If customRender is provided, include this section
-                                if (
-                                    sectionData.customRender &&
-                                    typeof sectionData.customRender ===
-                                        "function"
-                                ) {
-                                    return true;
-                                }
-
-                                // Check if it has valid fields
-                                if (
-                                    !("fields" in sectionData) ||
-                                    !sectionData.fields ||
-                                    !Array.isArray(sectionData.fields) ||
-                                    sectionData.fields.length === 0
-                                ) {
-                                    return false;
-                                }
-
-                                return true;
-                            })
-                            .map(([key, value], index) => {
-                                // Safe to cast now
-                                const sectionData =
-                                    value as ViewCardSectionData;
-
-                                return (
+                        {/* Sections */}
+                        {visibleRows.length > 0 && (
+                            <div className="mt-6">
+                                {visibleRows.map((row, index) => (
                                     <React.Fragment key={index}>
-                                        {sectionData.mainTitle && (
-                                            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                                                {sectionData.mainTitle}
+                                        {row.mainTitle && (
+                                            <h2 className="text-left text-2xl font-bold text-gray-900 mb-4">
+                                                {row.mainTitle}
                                             </h2>
                                         )}
-                                        <ViewCardSection
-                                            label={sectionData.title || key}
-                                        >
-                                            {sectionData.customRender ? (
-                                                sectionData.customRender()
+
+                                        <ViewCardSection label={row.title}>
+                                            {row.customRender ? (
+                                                row.customRender()
                                             ) : (
                                                 <div
-                                                    className={`grid grid-cols-1 md:grid-cols-${gridCols} gap-4`}
+                                                    className={`grid grid-cols-1 md:${getGridCols()} gap-4`}
                                                 >
-                                                    {sectionData.fields?.map(
+                                                    {row.fields?.map(
                                                         (field, fieldIndex) => (
-                                                            <ViewCardField
+                                                            <div
                                                                 key={fieldIndex}
-                                                                label={
-                                                                    field.label
-                                                                }
-                                                                value={
-                                                                    field.value
-                                                                }
-                                                            />
+                                                                className={`${field.colSpan ? getColSpan(field.colSpan) : ''}`}
+                                                            >
+                                                                <ViewCardField
+                                                                    label={field.label}
+                                                                    value={field.value}
+                                                                    type={field.type}
+                                                                />
+                                                            </div>
                                                         )
                                                     )}
                                                 </div>
                                             )}
                                         </ViewCardSection>
                                     </React.Fragment>
-                                );
-                            })}
+                                ))}
+                            </div>
+                        )}
                     </div>
                 );
         }

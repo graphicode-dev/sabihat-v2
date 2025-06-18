@@ -2,7 +2,6 @@ import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
 // import { useParams } from "react-router-dom";
 import { TableData } from "../../../../../types/table";
-import { ViewCardData } from "../../../../../types";
 
 function TaxViewPage() {
     // const { id } = useParams();
@@ -21,14 +20,30 @@ function TaxViewPage() {
         <PageLayout>
             <ViewCard
                 variant="default"
-                data={
-                    {
-                        "Tax Name": data?.columns.taxName,
-                        "Tax Type": data?.columns.taxType,
-                        "Amount Value": data?.columns.amountValue,
-                        Description: data?.columns.description,
-                    } as ViewCardData
-                }
+                data={{
+                    rows: [
+                        {
+                            fields: [
+                                {
+                                    label: "Tax Name",
+                                    value: data?.columns.taxName.toString(),
+                                },
+                                {
+                                    label: "Tax Type",
+                                    value: data?.columns.taxType.toString(),
+                                },
+                                {
+                                    label: "Amount Value",
+                                    value: data?.columns.amountValue.toString(),
+                                },
+                                {
+                                    label: "Description",
+                                    value: data?.columns.description.toString(),
+                                },
+                            ],
+                        },
+                    ],
+                }}
                 buttons
             />
         </PageLayout>

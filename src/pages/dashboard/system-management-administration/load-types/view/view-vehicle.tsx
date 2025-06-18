@@ -1,6 +1,5 @@
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
-import { ViewCardData } from "../../../../../types"; // import { useParams } from "react-router-dom";
 import { TableData } from "../../../../../types/table";
 
 function VehicleViewPage() {
@@ -17,11 +16,18 @@ function VehicleViewPage() {
         <PageLayout>
             <ViewCard
                 variant="default"
-                data={
-                    {
-                        "Type Name": data?.columns.typeName,
-                    } as ViewCardData
-                }
+                data={{
+                    rows: [
+                        {
+                            fields: [
+                                {
+                                    label: "Type Name",
+                                    value: data?.columns.typeName.toString(),
+                                },
+                            ],
+                        },
+                    ],
+                }}
                 buttons
             />
         </PageLayout>

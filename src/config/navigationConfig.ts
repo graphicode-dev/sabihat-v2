@@ -367,6 +367,18 @@ const ScheduleNewTripsViewPage = lazy(
             "../pages/dashboard/ship-trip-management/schedule-new-trips/view"
         )
 );
+const ScheduleNewTripsEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/ship-trip-management/schedule-new-trips/edit"
+        )
+);
+const ScheduleNewTripsTicketsPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/ship-trip-management/schedule-new-trips/tickets"
+        )
+);
 // #endregion Schedule New Trips
 
 // #region Schedule New Ships
@@ -837,6 +849,16 @@ export const navigationConfig: TabLink[] = [
                             title: "View",
                             path: "view/:id",
                             component: ScheduleNewTripsViewPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "edit/:id",
+                            component: ScheduleNewTripsEditPage,
+                        },
+                        {
+                            title: "Tickets",
+                            path: "tickets/:id",
+                            component: ScheduleNewTripsTicketsPage,
                         },
                     ],
                 },

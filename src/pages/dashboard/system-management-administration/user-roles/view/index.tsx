@@ -2,7 +2,6 @@ import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
 // import { useParams } from "react-router-dom";
 import { TableData } from "../../../../../types/table";
-import { ViewCardData } from "../../../../../types";
 function UserRolesViewPage() {
     // const { id } = useParams();
 
@@ -20,14 +19,30 @@ function UserRolesViewPage() {
         <PageLayout>
             <ViewCard
                 variant="default"
-                data={
-                    {
-                        ID: data?.columns.id,
-                        Role: data?.columns.role,
-                        Layer: data?.columns.layer,
-                        "Name Module": data?.columns.nameModule,
-                    } as ViewCardData
-                }
+                data={{
+                    rows: [
+                        {
+                            fields: [
+                                {
+                                    label: "ID",
+                                    value: data?.columns.id.toString(),
+                                },
+                                {
+                                    label: "Role",
+                                    value: data?.columns.role.toString(),
+                                },
+                                {
+                                    label: "Layer",
+                                    value: data?.columns.layer.toString(),
+                                },
+                                {
+                                    label: "Name Module",
+                                    value: data?.columns.nameModule.toString(),
+                                },
+                            ],
+                        },
+                    ],
+                }}
                 buttons
             />
         </PageLayout>

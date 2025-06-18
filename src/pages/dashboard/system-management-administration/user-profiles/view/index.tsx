@@ -2,7 +2,6 @@ import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
 // import { useParams } from "react-router-dom";
 import { TableData } from "../../../../../types/table";
-import { ViewCardData } from "../../../../../types";
 import defaultUser from "../../../../../assets/images/default-user.png";
 
 function UserProfilesViewPage() {
@@ -26,13 +25,26 @@ function UserProfilesViewPage() {
                 subtitle={data?.columns.role.toString()}
                 variant="user"
                 image={data?.avatar}
-                data={
-                    {
-                        email: data?.columns.email,
-                        phone: data?.columns.phone,
-                        address: data?.columns.address,
-                    } as ViewCardData
-                }
+                data={{
+                    rows: [
+                        {
+                            fields: [
+                                {
+                                    label: "Email",
+                                    value: data?.columns.email.toString(),
+                                },
+                                {
+                                    label: "Phone",
+                                    value: data?.columns.phone.toString(),
+                                },
+                                {
+                                    label: "Address",
+                                    value: data?.columns.address.toString(),
+                                },
+                            ],
+                        },
+                    ],
+                }}
                 buttons
             />
         </PageLayout>

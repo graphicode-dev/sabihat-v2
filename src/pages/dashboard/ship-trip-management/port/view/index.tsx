@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { TableData } from "../../../../../types/table";
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
-import { ViewCardData } from "../../../../../types";
 import { useNavigate } from "react-router-dom";
 
 function PortViewPage() {
@@ -35,14 +34,30 @@ function PortViewPage() {
         <PageLayout>
             <ViewCard
                 variant="default"
-                data={
-                    {
-                        "Port Name": userData?.columns["Port Name"],
-                        "Abbreviation Code":
-                            userData?.columns["Abbreviation Code"],
-                        Country: userData?.columns.Country,
-                    } as ViewCardData
-                }
+                data={{
+                    rows: [
+                        {
+                            fields: [
+                                {
+                                    label: "Port Name",
+                                    value: userData?.columns[
+                                        "Port Name"
+                                    ]?.toString(),
+                                },
+                                {
+                                    label: "Abbreviation Code",
+                                    value: userData?.columns[
+                                        "Abbreviation Code"
+                                    ]?.toString(),
+                                },
+                                {
+                                    label: "Country",
+                                    value: userData?.columns.Country?.toString(),
+                                },
+                            ],
+                        },
+                    ],
+                }}
                 onEdit={() => {
                     navigate(`/ship-trip-management/port/edit/${id}`);
                 }}

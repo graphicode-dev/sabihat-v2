@@ -8,28 +8,17 @@ export interface ViewCardFieldItem {
     type?: string;
 }
 
-// Type for section data (array of field items)
-export type ViewCardSectionData = {
-    title?: string;
-    mainTitle?: string; // Optional main title that appears above the section
-    fields?: ViewCardFieldItem[];
-    customRender?: () => React.ReactNode; // Optional custom render function
-};
-
 // Row structure for ViewCard
 export interface ViewCardRow {
-    fields: ViewCardFieldItem[];
+    mainTitle?: string;
+    title?: string;
+    fields?: ViewCardFieldItem[];
+    customRender?: () => React.ReactNode; // Optional custom render function
 }
 
 // Generic data structure for ViewCard
 export interface ViewCardData {
-    [key: string]:
-        | string
-        | number
-        | ViewCardSectionData
-        | ViewCardRow[]
-        | undefined;
-    rows?: ViewCardRow[]; // Optional rows-based layout
+    rows: ViewCardRow[];
 }
 
 // Variant type

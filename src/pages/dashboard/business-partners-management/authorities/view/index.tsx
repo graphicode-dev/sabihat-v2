@@ -1,7 +1,6 @@
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
 import defaultAvatar from "../../../../../assets/images/default-user.png";
-import { ViewCardData } from "../../../../../types";
 import { useNavigate, useParams } from "react-router-dom";
 
 function AuthoritiesViewPage() {
@@ -33,16 +32,21 @@ function AuthoritiesViewPage() {
                 variant="user"
                 image={data.user.avatar}
                 title={data.user.name}
-                onEdit={() => navigate(`/business-partners-management/authorities/edit/${id}`)}
+                onEdit={() =>
+                    navigate(
+                        `/business-partners-management/authorities/edit/${id}`
+                    )
+                }
                 buttons
                 hideBorder
             />
             <ViewCard
                 hideHeaderTitle
                 variant="default"
-                data={
-                    {
-                        "Authortiy master": {
+                data={{
+                    rows: [
+                        {
+                            title: "Authortiy master",
                             fields: [
                                 {
                                     label: "Name",
@@ -58,7 +62,8 @@ function AuthoritiesViewPage() {
                                 },
                             ],
                         },
-                        "Contact Information": {
+                        {
+                            title: "Contact Information",
                             fields: [
                                 {
                                     label: "Name",
@@ -82,8 +87,8 @@ function AuthoritiesViewPage() {
                                 },
                             ],
                         },
-                    } as ViewCardData
-                }
+                    ],
+                }}
                 hideBorder
             />
         </PageLayout>

@@ -1,6 +1,5 @@
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
-import { ViewCardData } from "../../../../../types";
 import { TableData } from "../../../../../types/table";
 
 function CommissionsViewPage() {
@@ -30,24 +29,70 @@ function CommissionsViewPage() {
         <PageLayout showBorder>
             <ViewCard
                 variant="default"
-                data={
-                    {
-                        "Partner Layer": data.columns.partnerLayer,
-                        Partner: data.columns.partner,
-                        Class: data.columns.class,
-                        "Services Type": data.columns.servicesType,
-                        "Passenger Type": data.columns.passengerType,
-                        "Ticket Type": data.columns.ticketType,
-                        Cabin: data.columns.cabin,
-                        "Port From": data.columns.portFrom,
-                        "Port To": data.columns.portTo,
-                        "Visit Type": data.columns.visitType,
-                        "Commission Type": data.columns.commissionType,
-                        "Commission Value": data.columns.commissionValue,
-                        "Effective Date": data.columns.effectiveDate,
-                        "End Date": data.columns.endDate,
-                    } as ViewCardData
-                }
+                data={{
+                    rows: [
+                        {
+                            fields: [
+                                {
+                                    label: "Partner Layer",
+                                    value: data.columns.partnerLayer.toString(),
+                                },
+                                {
+                                    label: "Partner",
+                                    value: data.columns.partner.toString(),
+                                },
+                                {
+                                    label: "Class",
+                                    value: data.columns.class.toString(),
+                                },
+                                {
+                                    label: "Services Type",
+                                    value: data.columns.servicesType.toString(),
+                                },
+                                {
+                                    label: "Passenger Type",
+                                    value: data.columns.passengerType.toString(),
+                                },
+                                {
+                                    label: "Ticket Type",
+                                    value: data.columns.ticketType.toString(),
+                                },
+                                {
+                                    label: "Cabin",
+                                    value: data.columns.cabin.toString(),
+                                },
+                                {
+                                    label: "Port From",
+                                    value: data.columns.portFrom.toString(),
+                                },
+                                {
+                                    label: "Port To",
+                                    value: data.columns.portTo.toString(),
+                                },
+                                {
+                                    label: "Visit Type",
+                                    value: data.columns.visitType.toString(),
+                                },
+                                {
+                                    label: "Commission Type",
+                                    value: data.columns.commissionType.toString(),
+                                },
+                                {
+                                    label: "Commission Value",
+                                    value: data.columns.commissionValue.toString(),
+                                },
+                                {
+                                    label: "Effective Date",
+                                    value: data.columns.effectiveDate.toString(),
+                                },
+                                {
+                                    label: "End Date",
+                                    value: data.columns.endDate.toString(),
+                                },
+                            ],
+                        },
+                    ],
+                }}
                 buttons
                 hideBorder
             />

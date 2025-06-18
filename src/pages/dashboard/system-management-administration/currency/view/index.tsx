@@ -2,7 +2,6 @@ import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
 // import { useParams } from "react-router-dom";
 import { TableColumn, TableData } from "../../../../../types/table";
-import { ViewCardData } from "../../../../../types";
 import { DynamicTable } from "../../../../../components/table";
 
 function CurrencyViewPage() {
@@ -94,14 +93,30 @@ function CurrencyViewPage() {
             <div className="p-5">
                 <ViewCard
                     variant="default"
-                    data={
-                        {
-                            "Currency Name": data?.columns.currencyName,
-                            "Currency Code": data?.columns.currencyCode,
-                            "Currency Rate": data?.columns.currencyRate,
-                            "Last Date": data?.columns.lastDate,
-                        } as ViewCardData
-                    }
+                    data={{
+                        rows: [
+                            {
+                                fields: [
+                                    {
+                                        label: "Currency Name",
+                                        value: data?.columns.currencyName.toString(),
+                                    },
+                                    {
+                                        label: "Currency Code",
+                                        value: data?.columns.currencyCode.toString(),
+                                    },
+                                    {
+                                        label: "Currency Rate",
+                                        value: data?.columns.currencyRate.toString(),
+                                    },
+                                    {
+                                        label: "Last Date",
+                                        value: data?.columns.lastDate.toString(),
+                                    },
+                                ],
+                            },
+                        ],
+                    }}
                     buttons
                     hideBorder
                 />
