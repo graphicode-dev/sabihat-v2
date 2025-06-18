@@ -41,6 +41,9 @@ export interface ViewCardProps {
     onEdit?: () => void;
     onDelete?: () => void;
     onTicket?: () => void;
+
+    customButtonLabel?: string;
+    onCustomButton?: () => void;
 }
 
 // Props for the ViewCardSection component
@@ -58,10 +61,12 @@ export interface ViewCardFieldProps {
 
 // Props for the ViewCardButtons component
 export interface ViewCardButtonsProps {
+    customButtonLabel?: string;
     ticketButton?: boolean;
     onEdit?: () => void;
     onDelete?: () => void;
     onTicket?: () => void;
+    onCustomButton?: () => void;
 }
 
 export interface ViewCardHeaderProps {
@@ -72,6 +77,9 @@ export interface ViewCardHeaderProps {
     onEdit?: () => void;
     onDelete?: () => void;
     onTicket?: () => void;
+
+    customButtonLabel?: string;
+    onCustomButton?: () => void;
 }
 
 export interface ViewCardTabItem {
@@ -86,4 +94,7 @@ export interface ViewCardTabItem {
     onEdit?: () => void;
     onDelete?: () => void;
     onTicket?: () => void;
+
+    customButtonLabel?: string;
+    onCustomButton?: () => void;
 }

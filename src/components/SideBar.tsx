@@ -32,9 +32,9 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
     const isActive = (path: string, index?: number) => {
         // For main routes (index 0), only consider them active if there's an exact match
         // This prevents the main route from being active when a sub-route is active
-        if (index === 0) {
-            return location.pathname === path;
-        }
+        // if (index === 0) {
+        //     return location.pathname === path;
+        // }
 
         // For other routes, check if current path matches or starts with the route path
         return (

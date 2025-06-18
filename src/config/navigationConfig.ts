@@ -497,8 +497,59 @@ const BusinessPartnersAuthoritiesEditPage = lazy(
 const PriceListsB2BPage = lazy(
     () => import("../pages/dashboard/sales-bookings/price-lists-B2B")
 );
-const PriceListsB2BViewPage = lazy(
-    () => import("../pages/dashboard/sales-bookings/price-lists-B2B/view")
+const PriceListsB2BViewPagePassengerPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2B/view/PassengerPriceListView"
+        )
+);
+const PriceListsB2BViewPageCargoPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2B/view/CargoPriceListView"
+        )
+);
+const PriceListsB2BViewPageVehiclePriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2B/view/VehiclePriceListView"
+        )
+);
+const PriceListsB2BEditPagePassengerPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2B/edit/PassengerPriceListEdit"
+        )
+);
+const PriceListsB2BEditPageCargoPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2B/edit/CargoPriceListEdit"
+        )
+);
+const PriceListsB2BEditPageVehiclePriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2B/edit/VehiclePriceListEdit"
+        )
+);
+const PriceListsB2BAddPagePassengerPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2B/add/PassengerPriceListAdd"
+        )
+);
+const PriceListsB2BAddPageCargoPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2B/add/CargoPriceListAdd"
+        )
+);
+const PriceListsB2BAddPageVehiclePriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2B/add/VehiclePriceListAdd"
+        )
 );
 // #endregion Price Lists B2B
 
@@ -991,9 +1042,49 @@ export const navigationConfig: TabLink[] = [
                     component: PriceListsB2BPage,
                     subLinks: [
                         {
-                            title: "View",
-                            path: "view/:id",
-                            component: PriceListsB2BViewPage,
+                            title: "Passenger Price List",
+                            path: "/passenger/:id/view",
+                            component: PriceListsB2BViewPagePassengerPriceList,
+                        },
+                        {
+                            title: "Passenger Price List",
+                            path: "/passenger/:id/edit",
+                            component: PriceListsB2BEditPagePassengerPriceList,
+                        },
+                        {
+                            title: "Passenger Price List",
+                            path: "/passenger/:id/add",
+                            component: PriceListsB2BAddPagePassengerPriceList,
+                        },
+                        {
+                            title: "Cargo Price List",
+                            path: "/cargo/:id/view",
+                            component: PriceListsB2BViewPageCargoPriceList,
+                        },
+                        {
+                            title: "Cargo Price List",
+                            path: "/cargo/:id/edit",
+                            component: PriceListsB2BEditPageCargoPriceList,
+                        },
+                        {
+                            title: "Cargo Price List",
+                            path: "/cargo/:id/add",
+                            component: PriceListsB2BAddPageCargoPriceList,
+                        },
+                        {
+                            title: "Vehicle Price List",
+                            path: "/vehicle/:id/view",
+                            component: PriceListsB2BViewPageVehiclePriceList,
+                        },
+                        {
+                            title: "Vehicle Price List",
+                            path: "/vehicle/:id/edit",
+                            component: PriceListsB2BEditPageVehiclePriceList,
+                        },
+                        {
+                            title: "Vehicle Price List",
+                            path: "/vehicle/:id/add",
+                            component: PriceListsB2BAddPageVehiclePriceList,
                         },
                     ],
                 },

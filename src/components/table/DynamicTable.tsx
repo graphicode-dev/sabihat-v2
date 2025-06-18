@@ -34,6 +34,7 @@ interface DynamicTableProps {
     hideHeader?: boolean;
     hideToolbar?: boolean;
     customToolbar?: React.ReactNode;
+    noPadding?: boolean;
 }
 
 export const DynamicTable = ({
@@ -52,6 +53,7 @@ export const DynamicTable = ({
     hideHeader = false,
     hideToolbar = false,
     customToolbar,
+    noPadding = false,
 }: DynamicTableProps) => {
     const [viewMode, setViewMode] = useState<ViewMode>(initialView);
     const [currentPage, setCurrentPage] = useState(1);
@@ -295,7 +297,7 @@ export const DynamicTable = ({
         <div
             className={`w-full bg-white ${hideBorder ? "" : "border-wrapper"}`}
         >
-            <div className="p-10">
+            <div className={noPadding ? "p-2" : "p-10"}>
                 {/* Header */}
                 {!hideHeader && (
                     <div className="flex justify-between items-center">

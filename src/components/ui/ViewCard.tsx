@@ -50,12 +50,23 @@ const ViewCardField: React.FC<ViewCardFieldProps> = ({
 
 const ViewCardButtons: React.FC<ViewCardButtonsProps> = ({
     ticketButton,
+    customButtonLabel,
     onEdit,
     onDelete,
     onTicket,
+    onCustomButton,
 }) => {
     return (
         <div className="flex gap-2">
+            {customButtonLabel && onCustomButton && (
+                <button
+                    type="button"
+                    className="bg-primary-500 text-white px-4 py-3 rounded-full"
+                    onClick={onCustomButton}
+                >
+                    {customButtonLabel}
+                </button>
+            )}
             {ticketButton && (
                 <button
                     type="button"
@@ -119,6 +130,8 @@ const ViewCardHeader: React.FC<ViewCardHeaderProps> = ({
     onEdit,
     onDelete,
     onTicket,
+    customButtonLabel,
+    onCustomButton,
 }) => {
     return (
         <div className="flex justify-between items-center gap-2">
@@ -131,6 +144,8 @@ const ViewCardHeader: React.FC<ViewCardHeaderProps> = ({
                     onEdit={onEdit}
                     onDelete={onDelete}
                     onTicket={onTicket}
+                    customButtonLabel={customButtonLabel}
+                    onCustomButton={onCustomButton}
                 />
             )}
         </div>
@@ -153,6 +168,8 @@ const ViewCard: React.FC<ViewCardProps> = ({
     onEdit,
     onDelete,
     onTicket,
+    customButtonLabel,
+    onCustomButton,
 }) => {
     // State to track if all content is shown or limited
     const [showAllContent, setShowAllContent] = useState(false);
@@ -165,9 +182,11 @@ const ViewCard: React.FC<ViewCardProps> = ({
 
     // Determine if we need a show more button
     const needsShowMore = allRows.length > initialSectionsToShow;
-    
+
     // Get the rows to display based on current state
-    const visibleRows = showAllContent ? allRows : allRows.slice(0, initialSectionsToShow);
+    const visibleRows = showAllContent
+        ? allRows
+        : allRows.slice(0, initialSectionsToShow);
 
     // For tabs variant - handle tab navigation
     const navigate = useNavigate();
@@ -249,6 +268,8 @@ const ViewCard: React.FC<ViewCardProps> = ({
                             onEdit={onEdit}
                             onDelete={onDelete}
                             onTicket={onTicket}
+                            customButtonLabel={customButtonLabel}
+                            onCustomButton={onCustomButton}
                         />
 
                         {/* User Avatar and Basic Info */}
@@ -305,6 +326,8 @@ const ViewCard: React.FC<ViewCardProps> = ({
                             onEdit={onEdit}
                             onDelete={onDelete}
                             onTicket={onTicket}
+                            customButtonLabel={customButtonLabel}
+                            onCustomButton={onCustomButton}
                         />
 
                         {/* User Avatar and Basic Info */}
@@ -354,12 +377,24 @@ const ViewCard: React.FC<ViewCardProps> = ({
                                                         (field, fieldIndex) => (
                                                             <div
                                                                 key={fieldIndex}
-                                                                className={`${field.colSpan ? getColSpan(field.colSpan) : ''}`}
+                                                                className={`${
+                                                                    field.colSpan
+                                                                        ? getColSpan(
+                                                                              field.colSpan
+                                                                          )
+                                                                        : ""
+                                                                }`}
                                                             >
                                                                 <ViewCardField
-                                                                    label={field.label}
-                                                                    value={field.value}
-                                                                    type={field.type}
+                                                                    label={
+                                                                        field.label
+                                                                    }
+                                                                    value={
+                                                                        field.value
+                                                                    }
+                                                                    type={
+                                                                        field.type
+                                                                    }
                                                                 />
                                                             </div>
                                                         )
@@ -389,6 +424,10 @@ const ViewCard: React.FC<ViewCardProps> = ({
                                 onEdit={activeTabItem.onEdit || onEdit}
                                 onDelete={activeTabItem.onDelete || onDelete}
                                 onTicket={activeTabItem.onTicket || onTicket}
+                                customButtonLabel={
+                                    activeTabItem.customButtonLabel
+                                }
+                                onCustomButton={activeTabItem.onCustomButton}
                             />
                         ) : (
                             <ViewCardHeader
@@ -399,6 +438,8 @@ const ViewCard: React.FC<ViewCardProps> = ({
                                 onEdit={onEdit}
                                 onDelete={onDelete}
                                 onTicket={onTicket}
+                                customButtonLabel={customButtonLabel}
+                                onCustomButton={onCustomButton}
                             />
                         )}
 
@@ -445,6 +486,8 @@ const ViewCard: React.FC<ViewCardProps> = ({
                             onEdit={onEdit}
                             onDelete={onDelete}
                             onTicket={onTicket}
+                            customButtonLabel={customButtonLabel}
+                            onCustomButton={onCustomButton}
                         />
 
                         {/* Sections */}
@@ -469,12 +512,24 @@ const ViewCard: React.FC<ViewCardProps> = ({
                                                         (field, fieldIndex) => (
                                                             <div
                                                                 key={fieldIndex}
-                                                                className={`${field.colSpan ? getColSpan(field.colSpan) : ''}`}
+                                                                className={`${
+                                                                    field.colSpan
+                                                                        ? getColSpan(
+                                                                              field.colSpan
+                                                                          )
+                                                                        : ""
+                                                                }`}
                                                             >
                                                                 <ViewCardField
-                                                                    label={field.label}
-                                                                    value={field.value}
-                                                                    type={field.type}
+                                                                    label={
+                                                                        field.label
+                                                                    }
+                                                                    value={
+                                                                        field.value
+                                                                    }
+                                                                    type={
+                                                                        field.type
+                                                                    }
                                                                 />
                                                             </div>
                                                         )

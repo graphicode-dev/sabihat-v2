@@ -184,7 +184,7 @@ function Tabs<T extends string>({
 
 // Define the Tabs.Item Component
 Tabs.Item = function TabItem<T extends string>({ children }: TabItemProps<T>) {
-    return <div>{children}</div>;
+    return children;
 };
 
 export default Tabs;
