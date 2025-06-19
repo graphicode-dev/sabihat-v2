@@ -217,16 +217,6 @@ export const PaymentProcessing = ({
         viewBox="15 15 80 80"
         fill="none"
     >
-        <rect x="1" y="1" width="104" height="104" rx="52" fill="#00A878" />
-        <rect
-            x="1"
-            y="1"
-            width="104"
-            height="104"
-            rx="52"
-            stroke="#00A878"
-            strokeWidth="2"
-        />
         <path
             d="M31.7965 63.8741L63.8747 31.7959"
             stroke={color}

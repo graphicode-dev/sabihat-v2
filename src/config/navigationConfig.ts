@@ -846,8 +846,62 @@ const TicketExcessBaggageViewPage = lazy(
 
 // #endregion Sales & Bookings
 
+// #region Financial Transactions
+
+// #region Chart Of Account
+const ChartOfAccountPage = lazy(
+    () => import("../pages/dashboard/financial-transactions/chart-of-account")
+);
+const ChartOfAccountViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/financial-transactions/chart-of-account/view"
+        )
+);
+const ChartOfAccountEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/financial-transactions/chart-of-account/edit"
+        )
+);
+// #endregion Chart Of Account
+
+// #region Journal Entries
+const JournalEntriesPage = lazy(
+    () => import("../pages/dashboard/financial-transactions/journal-entries")
+);
+const JournalEntriesViewPage = lazy(
+    () =>
+        import("../pages/dashboard/financial-transactions/journal-entries/view")
+);
+const JournalEntriesEditPage = lazy(
+    () =>
+        import("../pages/dashboard/financial-transactions/journal-entries/edit")
+);
+// #endregion Journal Entries
+
+// #region Payment & Receipts
+const PaymentReceiptsPage = lazy(
+    () => import("../pages/dashboard/financial-transactions/payment-receipts")
+);
+const PaymentReceiptsViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/financial-transactions/payment-receipts/view"
+        )
+);
+const PaymentReceiptsEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/financial-transactions/payment-receipts/edit"
+        )
+);
+// #endregion Payment & Receipts
+
+// #endregion Financial Transactions
+
 export const navigationConfig: TabLink[] = [
-    // System Management & Administration
+    // #region System Management & Administration
     {
         icon: Administration,
         title: "System Management & Administration",
@@ -1157,8 +1211,9 @@ export const navigationConfig: TabLink[] = [
             ],
         },
     },
+    // #endregion System Management & Administration
 
-    // Ship & Trip Management
+    // #region Ship & Trip Management
     {
         icon: Ship,
         title: "Ship & Trip Management",
@@ -1255,8 +1310,9 @@ export const navigationConfig: TabLink[] = [
             ],
         },
     },
+    // #endregion Ship & Trip Management
 
-    // Sales & Bookings
+    // #region Sales & Bookings
     {
         icon: Sales,
         title: "Sales & Bookings",
@@ -1597,8 +1653,9 @@ export const navigationConfig: TabLink[] = [
             ],
         },
     },
+    // #endregion Sales & Bookings
 
-    // Security & Compliance
+    // #region Security & Compliance
     {
         icon: Security,
         title: "Security & Compliance",
@@ -1617,8 +1674,9 @@ export const navigationConfig: TabLink[] = [
             ],
         },
     },
+    // #endregion Security & Compliance
 
-    // Business Partners Management
+    // #region Business Partners Management
     {
         icon: PartnersManagement,
         title: "Business Partners Management",
@@ -1705,8 +1763,9 @@ export const navigationConfig: TabLink[] = [
             ],
         },
     },
+    // #endregion Business Partners Management
 
-    // Check-in & Boarding
+    // #region Check-in & Boarding
     {
         icon: Boarding,
         title: "Check-in & Boarding",
@@ -1725,8 +1784,9 @@ export const navigationConfig: TabLink[] = [
             ],
         },
     },
+    // #endregion Check-in & Boarding
 
-    // Financial Transactions
+    // #region Financial Transactions
     {
         icon: PaymentProcessing,
         title: "Financial Transactions",
@@ -1738,15 +1798,62 @@ export const navigationConfig: TabLink[] = [
             },
             links: [
                 {
-                    title: "All",
-                    path: "/financial-transactions/all",
-                    component: PlaceholderPage,
+                    title: "Chart Of Account",
+                    path: "/financial-transactions/chart-of-account",
+                    component: ChartOfAccountPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: ChartOfAccountViewPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "/edit/:id",
+                            component: ChartOfAccountEditPage,
+                        },
+                    ],
+                },
+                {
+                    title: "Journal Entries",
+                    path: "/financial-transactions/journal-entries",
+                    component: JournalEntriesPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: JournalEntriesViewPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "/edit/:id",
+                            component: JournalEntriesEditPage,
+                        },
+                    ],
+                },
+                {
+                    title: "Payment & Receipts",
+                    path: "/financial-transactions/payments",
+                    component: PaymentReceiptsPage,
+                    subLinks: [
+                        {
+                            title: "View",
+                            path: "view/:id",
+                            component: PaymentReceiptsViewPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "edit/:id",
+                            component: PaymentReceiptsEditPage,
+                        },
+                    ],
                 },
             ],
         },
     },
+    // #endregion Financial Transactions
 
-    // Reporting
+    // #region Reporting
     {
         icon: Reporting,
         title: "Reporting",
@@ -1765,4 +1872,5 @@ export const navigationConfig: TabLink[] = [
             ],
         },
     },
+    // #endregion Reporting
 ];

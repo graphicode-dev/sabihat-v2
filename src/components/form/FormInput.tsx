@@ -70,6 +70,7 @@ const FormInput = <T extends FieldValues>({
                 required={required}
                 error={error}
                 activeLabel={showCalendar}
+                disabled={disabled}
             >
                 <Controller
                     name={name}
@@ -81,14 +82,16 @@ const FormInput = <T extends FieldValues>({
                                     {...field}
                                     className={`peer form-input h-auto ${
                                         error ? "form-error" : ""
-                                    }`}
+                                    } ${disabled ? "form-input-disabled" : ""}`}
                                     placeholder={placeholder}
                                     required={required}
                                     disabled={disabled}
                                     cols={cols}
                                     rows={rows}
                                     style={{
-                                        resize: textareaResize,
+                                        resize: disabled
+                                            ? "none"
+                                            : textareaResize,
                                     }}
                                 />
                             );
@@ -138,13 +141,18 @@ const FormInput = <T extends FieldValues>({
                             return (
                                 <div className="relative w-full">
                                     <div
-                                        className={`peer flex items-center justify-between rounded-full px-4 py-2 cursor-pointer ${
+                                        className={`peer flex items-center justify-between rounded-full px-4 py-2  ${
                                             error ? "border-red-500" : ""
+                                        } ${
+                                            disabled
+                                                ? "border-gray-300 bg-dark-50 cursor-not-allowed opacity-50"
+                                                : "cursor-pointer"
                                         }`}
                                         style={{
-                                            border: showCalendar
-                                                ? "2px solid var(--color-primary-500)"
-                                                : "2px solid var(--color-dark-50)",
+                                            border:
+                                                showCalendar && !disabled
+                                                    ? "2px solid var(--color-primary-500)"
+                                                    : "2px solid var(--color-dark-50)",
                                         }}
                                         onClick={toggleCalendar}
                                     >
@@ -162,10 +170,16 @@ const FormInput = <T extends FieldValues>({
                                                   )
                                                 : placeholder || "Select date"}
                                         </span>
-                                        <CalendarIcon className="h-5 w-5 text-green-500" />
+                                        <CalendarIcon
+                                            className={`h-5 w-5 ${
+                                                disabled
+                                                    ? "text-gray-400"
+                                                    : "text-primary-500"
+                                            }`}
+                                        />
                                     </div>
 
-                                    {showCalendar && (
+                                    {showCalendar && !disabled && (
                                         <div
                                             ref={calendarRef}
                                             className="absolute z-50 mt-1"
@@ -184,6 +198,13 @@ const FormInput = <T extends FieldValues>({
                                     <input
                                         type="hidden"
                                         {...field}
+                                        className={`peer form-input ${
+                                            error ? "form-error" : ""
+                                        } ${
+                                            disabled
+                                                ? "border-gray-300 bg-dark-50 cursor-not-allowed opacity-50"
+                                                : ""
+                                        }`}
                                         disabled={disabled}
                                     />
                                 </div>
@@ -230,7 +251,7 @@ const FormInput = <T extends FieldValues>({
                                     type={inputType}
                                     className={`peer form-input ${
                                         error ? "form-error" : ""
-                                    }`}
+                                    } ${disabled ? "form-input-disabled" : ""}`}
                                     placeholder={placeholder}
                                     required={required}
                                     disabled={disabled}
