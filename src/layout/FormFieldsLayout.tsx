@@ -4,6 +4,7 @@ interface FormLayoutProps {
     children: ReactNode;
     title?: string;
     subtitle?: string;
+    greenTitle?: string;
     className?: string;
     separator?: boolean;
     cols?: string;
@@ -13,6 +14,7 @@ function FormFieldsLayout({
     children,
     title,
     subtitle,
+    greenTitle,
     className,
     separator,
     cols,
@@ -45,10 +47,16 @@ function FormFieldsLayout({
             {subtitle && (
                 <h2 className="text-left font-bold px-5">{subtitle}</h2>
             )}
-            <div
-                className={`grid md:grid-cols-2 ${getGridColsClass()} gap-4 my-5 px-1  ${className}`}
-            >
-                {children}
+
+            <div className=" flex flex-col gap-2 my-5">
+                <h3 className="text-left font-bold px-7 text-primary-500 capitalize">
+                    {greenTitle}
+                </h3>
+                <div
+                    className={`grid md:grid-cols-2 ${getGridColsClass()} gap-4 px-3 ${className}`}
+                >
+                    {children}
+                </div>
             </div>
 
             {separator && <div className="my-20 h-px bg-gray-200" />}

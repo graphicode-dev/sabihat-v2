@@ -1,7 +1,8 @@
 import { TableColumn, TableData } from "../../../../types/table";
-import { CheckBox, DynamicTable } from "../../../../components/table";
+import {  DynamicTable } from "../../../../components/table";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { CheckBox } from "../../../../components/ui/CheckBox";
 
 function PriceListsB2BPassengerPage() {
     const navigate = useNavigate();

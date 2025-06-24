@@ -137,7 +137,7 @@ const ChartOfAccountEditPage = () => {
 
                 <FormButtons
                     isLoading={isLoading}
-                    disabled={formState.isSubmitting}
+                    disabled={!formState.isDirty}
                 />
             </FormLayout>
         </PageLayout>

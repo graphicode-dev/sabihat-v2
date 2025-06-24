@@ -15,6 +15,7 @@ interface FormInputProps<T extends FieldValues> {
     control: Control<T>;
     label?: string;
     type?: React.HTMLInputTypeAttribute;
+    fileIcon?: React.ReactNode;
     placeholder?: string;
     required?: boolean;
     requiredLabel?: string;
@@ -32,6 +33,7 @@ interface FormInputProps<T extends FieldValues> {
         | "block"
         | "inline";
     fileLabel?: string;
+    readOnly?: boolean;
 }
 
 const FormInput = <T extends FieldValues>({
@@ -50,6 +52,8 @@ const FormInput = <T extends FieldValues>({
     colSpan = 1,
     textareaResize = "vertical",
     fileLabel = "Upload File",
+    fileIcon,
+    readOnly = false,
 }: FormInputProps<T>) => {
     const [showPassword, setShowPassword] = useState(false);
     const isPasswordField = type === "password";
@@ -86,6 +90,7 @@ const FormInput = <T extends FieldValues>({
                                     placeholder={placeholder}
                                     required={required}
                                     disabled={disabled}
+                                    readOnly={readOnly}
                                     cols={cols}
                                     rows={rows}
                                     style={{
@@ -214,7 +219,11 @@ const FormInput = <T extends FieldValues>({
                                 <>
                                     <label className="w-fit flex items-center gap-2 cursor-pointer text-green-500 hover:text-green-600 transition-colors">
                                         <div className="flex items-center gap-2 border-b-2 border-primary-500">
-                                            <PaperclipIcon className="h-5 w-5" />
+                                            {fileIcon ? (
+                                                fileIcon
+                                            ) : (
+                                                <PaperclipIcon className="h-5 w-5" />
+                                            )}
                                             <span>{fileLabel}</span>
                                             <input
                                                 type={inputType}
@@ -255,6 +264,7 @@ const FormInput = <T extends FieldValues>({
                                     placeholder={placeholder}
                                     required={required}
                                     disabled={disabled}
+                                    readOnly={readOnly}
                                 />
                             );
                         }

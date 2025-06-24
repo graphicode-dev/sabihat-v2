@@ -754,6 +754,74 @@ export const TrashIcon = ({
     </svg>
 );
 
+//  QrCode Icon
+export const QrCodeIcon = ({ width = 173, height = 173 }: Icon) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={width}
+        height={height}
+        viewBox="0 0 173 173"
+        fill="none"
+    >
+        <path
+            d="M14.6787 65.1276V47.2109C14.6787 29.3659 29.0837 14.9609 46.9287 14.9609H64.8454"
+            stroke="#00A878"
+            strokeWidth="6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M107.846 14.9609H125.762C143.607 14.9609 158.012 29.3659 158.012 47.2109V65.1276"
+            stroke="#00A878"
+            strokeWidth="6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M158.013 115.289V126.039C158.013 143.884 143.608 158.289 125.763 158.289H115.013"
+            stroke="#00A878"
+            strokeWidth="6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M64.8454 158.292H46.9287C29.0837 158.292 14.6787 143.887 14.6787 126.042V108.125"
+            stroke="#00A878"
+            strokeWidth="6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M75.596 50.7891V65.1224C75.596 72.2891 72.0127 75.8724 64.846 75.8724H50.5127C43.346 75.8724 39.7627 72.2891 39.7627 65.1224V50.7891C39.7627 43.6224 43.346 40.0391 50.5127 40.0391H64.846C72.0127 40.0391 75.596 43.6224 75.596 50.7891Z"
+            stroke="#00A878"
+            strokeWidth="6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M132.929 50.7891V65.1224C132.929 72.2891 129.346 75.8724 122.179 75.8724H107.846C100.679 75.8724 97.0957 72.2891 97.0957 65.1224V50.7891C97.0957 43.6224 100.679 40.0391 107.846 40.0391H122.179C129.346 40.0391 132.929 43.6224 132.929 50.7891Z"
+            stroke="#00A878"
+            strokeWidth="6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M75.596 108.125V122.458C75.596 129.625 72.0127 133.208 64.846 133.208H50.5127C43.346 133.208 39.7627 129.625 39.7627 122.458V108.125C39.7627 100.958 43.346 97.375 50.5127 97.375H64.846C72.0127 97.375 75.596 100.958 75.596 108.125Z"
+            stroke="#00A878"
+            strokeWidth="6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M132.929 108.125V122.458C132.929 129.625 129.346 133.208 122.179 133.208H107.846C100.679 133.208 97.0957 129.625 97.0957 122.458V108.125C97.0957 100.958 100.679 97.375 107.846 97.375H122.179C129.346 97.375 132.929 100.958 132.929 108.125Z"
+            stroke="#00A878"
+            strokeWidth="6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+);
+
 export const PenIcon = ({ width = 24, height = 24, color = "white" }: Icon) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"

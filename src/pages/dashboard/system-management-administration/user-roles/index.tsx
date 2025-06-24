@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CheckBox, DynamicTable } from "../../../../components/table";
+import {  DynamicTable } from "../../../../components/table";
 import PageLayout from "../../../../layout/PageLayout";
 import { FormButtons, FormFieldWrapper } from "../../../../components/form";
 import { SearchedDropDown } from "../../../../components/SearchedDropDown";
@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import FormLayout from "../../../../layout/FormLayout";
 import { useToast } from "../../../../hooks/useToast";
+import { CheckBox } from "../../../../components/ui/CheckBox";
 
 // Define the permission types
 type Permission = "read" | "write" | "create" | "delete";

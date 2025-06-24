@@ -10,6 +10,7 @@
         "empty-table-header": "off"
       }
     ],
-    "no-inline-styles": "off"
+    "no-inline-styles": "off",
+    "axe/forms": "off"
   }
 }

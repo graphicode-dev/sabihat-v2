@@ -27,7 +27,7 @@ function FormFieldWrapper({
                         htmlFor={label}
                         className={`form-label ${error ? "form-error" : ""} ${
                             disabled
-                                ? "cursor-not-allowed opacity-50 bg-transparent text-dark-200"
+                                ? "cursor-not-allowed opacity-50  text-dark-200"
                                 : ""
                         } z-0`}
                         style={{

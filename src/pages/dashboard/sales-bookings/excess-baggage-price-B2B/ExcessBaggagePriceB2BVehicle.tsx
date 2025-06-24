@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { TableColumn, TableData } from "../../../../types/table";
-import { CheckBox, DynamicTable } from "../../../../components/table";
+import {  DynamicTable } from "../../../../components/table";
 import { useNavigate } from "react-router-dom";
+import { CheckBox } from "../../../../components/ui/CheckBox";
 
 function ExcessBaggagePriceB2BVehiclePage() {
     const navigate = useNavigate();
