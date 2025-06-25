@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { QrCodeIcon } from "../../../../../../components/ui/icons";
 import { printDocument } from "../../../../../../lib/utils";
 
-function PassengerCheckInPaymentSuccessBaggagePage() {
+function VehicleCheckInPaymentSuccessBaggagePage() {
     const navigate = useNavigate();
 
     const onPrintButton = () => {
@@ -16,7 +16,7 @@ function PassengerCheckInPaymentSuccessBaggagePage() {
 
     const onBoardingPassButton = () => {
         navigate(
-            "/check-in-boarding/passenger-check-in/payment/success/boarding-pass"
+            "/check-in-boarding/vehicle-check-in/payment/success/boarding-pass"
         );
     };
 
@@ -24,7 +24,7 @@ function PassengerCheckInPaymentSuccessBaggagePage() {
         <PageLayout showBorder>
             {/* Header */}
             <div className="flex justify-between items-center gap-2 mb-10">
-                <h1 className="text-xl font-bold">Print Baggage Labels</h1>
+                <h1 className="text-xl font-bold ">Print Baggage Labels</h1>
 
                 <div className="flex gap-2">
                     <div
@@ -49,8 +49,12 @@ function PassengerCheckInPaymentSuccessBaggagePage() {
                     <h1 className="text-xl font-bold my-10 print:block hidden">
                         Baggage Labels
                     </h1>
+
                     {/* Qr Code */}
-                    <QrCodeIcon />
+                    <div className="w-full flex justify-start print:justify-center items-center">
+                        <QrCodeIcon />
+                    </div>
+
                     {/* Data */}
                     <div className="w-full relative max-w-[600px] py-5 px-6 z-40">
                         <div className="flex flex-col">
@@ -133,4 +137,4 @@ function PassengerCheckInPaymentSuccessBaggagePage() {
     );
 }
 
-export default PassengerCheckInPaymentSuccessBaggagePage;
+export default VehicleCheckInPaymentSuccessBaggagePage;

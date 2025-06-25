@@ -947,27 +947,87 @@ const PassengerCheckInPaymentSuccessBaggagePage = lazy(
 const VehicleCheckInPage = lazy(
     () => import("../pages/dashboard/check-in-boarding/vehicle-check-in")
 );
-const VehicleCheckInViewPage = lazy(
-    () => import("../pages/dashboard/check-in-boarding/vehicle-check-in/view")
-);
-const VehicleCheckInEditPage = lazy(
-    () => import("../pages/dashboard/check-in-boarding/vehicle-check-in/edit")
-);
 const VehicleCheckInAddPage = lazy(
     () => import("../pages/dashboard/check-in-boarding/vehicle-check-in/add")
+);
+const VehicleCheckInVerificationPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/check-in-boarding/vehicle-check-in/verification"
+        )
+);
+const VehicleCheckInVerificationViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/check-in-boarding/vehicle-check-in/verification/view"
+        )
+);
+const VehicleCheckInVerificationEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/check-in-boarding/vehicle-check-in/verification/edit"
+        )
+);
+const VehicleCheckInPaymentInvoicePage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/check-in-boarding/vehicle-check-in/payment/invoice"
+        )
+);
+const VehicleCheckInPaymentSuccessBoardingPassPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/check-in-boarding/vehicle-check-in/payment/success/BoardingPass"
+        )
+);
+const VehicleCheckInPaymentSuccessBaggagePage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/check-in-boarding/vehicle-check-in/payment/success/Baggage"
+        )
 );
 
 const CargoCheckInPage = lazy(
     () => import("../pages/dashboard/check-in-boarding/cargo-check-in")
 );
-const CargoCheckInViewPage = lazy(
-    () => import("../pages/dashboard/check-in-boarding/cargo-check-in/view")
-);
-const CargoCheckInEditPage = lazy(
-    () => import("../pages/dashboard/check-in-boarding/cargo-check-in/edit")
-);
 const CargoCheckInAddPage = lazy(
     () => import("../pages/dashboard/check-in-boarding/cargo-check-in/add")
+);
+const CargoCheckInVerificationPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/check-in-boarding/cargo-check-in/verification"
+        )
+);
+const CargoCheckInVerificationViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/check-in-boarding/cargo-check-in/verification/view"
+        )
+);
+const CargoCheckInVerificationEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/check-in-boarding/cargo-check-in/verification/edit"
+        )
+);
+const CargoCheckInPaymentInvoicePage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/check-in-boarding/cargo-check-in/payment/invoice"
+        )
+);
+const CargoCheckInPaymentSuccessBoardingPassPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/check-in-boarding/cargo-check-in/payment/success/BoardingPass"
+        )
+);
+const CargoCheckInPaymentSuccessBaggagePage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/check-in-boarding/cargo-check-in/payment/success/Baggage"
+        )
 );
 
 const BoardingPage = lazy(
@@ -1914,19 +1974,40 @@ export const navigationConfig: TabLink[] = [
                     component: CargoCheckInPage,
                     subLinks: [
                         {
-                            title: "View",
-                            path: "view/:id",
-                            component: CargoCheckInViewPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/edit/:id",
-                            component: CargoCheckInEditPage,
-                        },
-                        {
                             title: "Add",
                             path: "/add",
                             component: CargoCheckInAddPage,
+                        },
+                        {
+                            title: "Verification",
+                            path: "/verification",
+                            component: CargoCheckInVerificationPage,
+                        },
+                        {
+                            title: "View",
+                            path: "/verification/view/:id",
+                            component: CargoCheckInVerificationViewPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "/verification/edit/:id",
+                            component: CargoCheckInVerificationEditPage,
+                        },
+                        {
+                            title: "Invoice",
+                            path: "/payment/invoice",
+                            component: CargoCheckInPaymentInvoicePage,
+                        },
+                        {
+                            title: "Baggage",
+                            path: "/payment/success/baggage",
+                            component: CargoCheckInPaymentSuccessBaggagePage,
+                        },
+                        {
+                            title: "Boarding Pass",
+                            path: "/payment/success/boarding-pass",
+                            component:
+                                CargoCheckInPaymentSuccessBoardingPassPage,
                         },
                     ],
                 },
@@ -1936,19 +2017,40 @@ export const navigationConfig: TabLink[] = [
                     component: VehicleCheckInPage,
                     subLinks: [
                         {
-                            title: "View",
-                            path: "view/:id",
-                            component: VehicleCheckInViewPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/edit/:id",
-                            component: VehicleCheckInEditPage,
-                        },
-                        {
                             title: "Add",
                             path: "/add",
                             component: VehicleCheckInAddPage,
+                        },
+                        {
+                            title: "Verification",
+                            path: "/verification",
+                            component: VehicleCheckInVerificationPage,
+                        },
+                        {
+                            title: "View",
+                            path: "/verification/view/:id",
+                            component: VehicleCheckInVerificationViewPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "/verification/edit/:id",
+                            component: VehicleCheckInVerificationEditPage,
+                        },
+                        {
+                            title: "Invoice",
+                            path: "/payment/invoice",
+                            component: VehicleCheckInPaymentInvoicePage,
+                        },
+                        {
+                            title: "Baggage",
+                            path: "/payment/success/baggage",
+                            component: VehicleCheckInPaymentSuccessBaggagePage,
+                        },
+                        {
+                            title: "Boarding Pass",
+                            path: "/payment/success/boarding-pass",
+                            component:
+                                VehicleCheckInPaymentSuccessBoardingPassPage,
                         },
                     ],
                 },

@@ -17,18 +17,16 @@ import { CheckBox } from "../../../../../../components/ui/CheckBox";
 import FormCheckBoxWrapper from "../../../../../../components/form/FormCheckBoxWrapper";
 
 type Verification = {
-    ticket: File | null;
-    passport: File | null;
-    visa: File | null;
-    healthyCertificate: File | null;
+    cargoType: File | null;
+    cargoDescription: string;
+    cargoCertificate: File | null;
     invalidReason?: string;
 };
 
 const verificationSchema = z.object({
-    ticket: z.instanceof(File).nullable(),
-    passport: z.instanceof(File).nullable(),
-    visa: z.instanceof(File).nullable(),
-    healthyCertificate: z.instanceof(File).nullable(),
+    cargoType: z.instanceof(File).nullable(),
+    cargoDescription: z.string(),
+    cargoCertificate: z.instanceof(File).nullable(),
     invalidReason: z.string().optional(),
 });
 
@@ -41,13 +39,23 @@ const data = {
         ETD: "ETD",
         ETA: "ETA",
     },
-    passengerData: {
+    cargoDetails: {
+        cargoType: "cargoType",
+        QTY: "QTY",
+        goodsType: "goodsType",
+        totalWeight: "totalWeight",
+        totalDimension: "totalDimension",
+        goodsDescription: "goodsDescription",
+    },
+    consigneeDetails: {
         name: "name",
-        age: "age",
-        passportNumber: "passportNumber",
-        expiryDate: "expiryDate",
-        gender: "gender",
-        type: "type",
+        phone: "phone",
+        passport: "passport",
+    },
+    consignorDetails: {
+        name: "name",
+        phone: "phone",
+        passport: "passport",
     },
     ticket: {
         cabin: "cabin",
@@ -57,26 +65,23 @@ const data = {
     },
 };
 
-function PassengerCheckInVerificationViewPage() {
+function CargoCheckInVerificationViewPage() {
     const { id } = useParams();
     const { addToast } = useToast();
     const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState(false);
     const [invalid, setInvalid] = useState(true);
-    const [isTicketChecked, setIsTicketChecked] = useState(false);
-    const [isPassportChecked, setIsPassportChecked] = useState(false);
-    const [isVisaChecked, setIsVisaChecked] = useState(false);
-    const [isHealthyCertificateChecked, setIsHealthyCertificateChecked] =
+    const [isCargoTypeChecked, setIsCargoTypeChecked] = useState(false);
+    const [isCargoCertificateChecked, setIsCargoCertificateChecked] =
         useState(false);
 
     const { control, handleSubmit, reset, formState } = useForm<Verification>({
         resolver: zodResolver(verificationSchema),
         defaultValues: {
-            ticket: null,
-            passport: null,
-            visa: null,
-            healthyCertificate: null,
+            cargoType: null,
+            cargoDescription: "",
+            cargoCertificate: null,
             invalidReason: "",
         },
         mode: "onChange",
@@ -90,22 +95,21 @@ function PassengerCheckInVerificationViewPage() {
 
             // Always append all fields, even if they're empty strings
             // This ensures the API receives all fields
-            if (formData.ticket) {
-                apiFormData.append("ticket", formData.ticket);
+            if (formData.cargoType) {
+                apiFormData.append("cargoType", formData.cargoType);
             }
 
-            if (formData.passport) {
-                apiFormData.append("passport", formData.passport);
-            }
-
-            if (formData.visa) {
-                apiFormData.append("visa", formData.visa);
-            }
-
-            if (formData.healthyCertificate) {
+            if (formData.cargoDescription) {
                 apiFormData.append(
-                    "healthyCertificate",
-                    formData.healthyCertificate
+                    "cargoDescription",
+                    formData.cargoDescription
+                );
+            }
+
+            if (formData.cargoCertificate) {
+                apiFormData.append(
+                    "cargoCertificate",
+                    formData.cargoCertificate
                 );
             }
 
@@ -125,7 +129,7 @@ function PassengerCheckInVerificationViewPage() {
 
             reset();
             navigate(
-                `/check-in-boarding/passenger-check-in/verification/edit/${id}?invalid=${invalid}`
+                `/check-in-boarding/cargo-check-in/verification/edit/${id}?invalid=${invalid}`
             );
         } catch (error: any) {
             console.error("Error updating Verification:", error);
@@ -133,21 +137,18 @@ function PassengerCheckInVerificationViewPage() {
                 // Map API error fields to our frontend field names
                 const mappedErrors: any = {};
 
-                if (error.errors.ticket) {
-                    mappedErrors.ticket = error.errors.ticket[0];
+                if (error.errors.cargoType) {
+                    mappedErrors.cargoType = error.errors.cargoType[0];
                 }
 
-                if (error.errors.passport) {
-                    mappedErrors.passport = error.errors.passport[0];
+                if (error.errors.cargoDescription) {
+                    mappedErrors.cargoDescription =
+                        error.errors.cargoDescription[0];
                 }
 
-                if (error.errors.visa) {
-                    mappedErrors.visa = error.errors.visa[0];
-                }
-
-                if (error.errors.healthyCertificate) {
-                    mappedErrors.healthyCertificate =
-                        error.errors.healthyCertificate[0];
+                if (error.errors.cargoCertificate) {
+                    mappedErrors.cargoCertificate =
+                        error.errors.cargoCertificate[0];
                 }
 
                 if (error.errors.invalidReason) {
@@ -173,17 +174,11 @@ function PassengerCheckInVerificationViewPage() {
 
     const handleCheck = (type: string) => {
         switch (type) {
-            case "ticket":
-                setIsTicketChecked(!isTicketChecked);
+            case "cargoType":
+                setIsCargoTypeChecked(!isCargoTypeChecked);
                 break;
-            case "passport":
-                setIsPassportChecked(!isPassportChecked);
-                break;
-            case "visa":
-                setIsVisaChecked(!isVisaChecked);
-                break;
-            case "healthyCertificate":
-                setIsHealthyCertificateChecked(!isHealthyCertificateChecked);
+            case "cargoCertificate":
+                setIsCargoCertificateChecked(!isCargoCertificateChecked);
                 break;
             default:
                 break;
@@ -254,57 +249,127 @@ function PassengerCheckInVerificationViewPage() {
                     </FormFieldWrapper>
                 </FormFieldsLayout>
 
-                {/* Passenger Data */}
-                <FormFieldsLayout greenTitle="Passenger Data">
+                {/* Cargo Data */}
+                <FormFieldsLayout greenTitle="Cargo Data">
+                    <FormFieldWrapper label={"Cargo Type"}>
+                        <input
+                            type="text"
+                            value={data.cargoDetails.cargoType}
+                            readOnly
+                            tabIndex={-1}
+                            className=" cursor-default h-10 w-full rounded-3xl ring-2 px-6 py-3 ring-dark-50  focus:outline-none"
+                        />
+                    </FormFieldWrapper>
+                    <FormFieldWrapper label={"QTY"}>
+                        <input
+                            type="text"
+                            value={data.cargoDetails.QTY}
+                            readOnly
+                            tabIndex={-1}
+                            className=" cursor-default h-10 w-full rounded-3xl ring-2 px-6 py-3 ring-dark-50  focus:outline-none"
+                        />
+                    </FormFieldWrapper>
+                    <FormFieldWrapper label={"Goods Type"}>
+                        <input
+                            type="text"
+                            value={data.cargoDetails.goodsType}
+                            readOnly
+                            tabIndex={-1}
+                            className=" cursor-default h-10 w-full rounded-3xl ring-2 px-6 py-3 ring-dark-50  focus:outline-none"
+                        />
+                    </FormFieldWrapper>
+                    <FormFieldWrapper label={"Total Weight"}>
+                        <input
+                            type="text"
+                            value={data.cargoDetails.totalWeight}
+                            readOnly
+                            tabIndex={-1}
+                            className=" cursor-default h-10 w-full rounded-3xl ring-2 px-6 py-3 ring-dark-50  focus:outline-none"
+                        />
+                    </FormFieldWrapper>
+                    <FormFieldWrapper label={"Total Dimension"}>
+                        <input
+                            type="text"
+                            value={data.cargoDetails.totalDimension}
+                            readOnly
+                            tabIndex={-1}
+                            className=" cursor-default h-10 w-full rounded-3xl ring-2 px-6 py-3 ring-dark-50  focus:outline-none"
+                        />
+                    </FormFieldWrapper>
+                </FormFieldsLayout>
+
+                {/* Goods description */}
+                <FormFieldsLayout cols="1">
+                    <FormFieldWrapper label={"Goods Description"}>
+                        <textarea
+                            value={data.cargoDetails.goodsDescription}
+                            readOnly
+                            tabIndex={-1}
+                            className=" cursor-default w-full rounded-3xl ring-2 px-6 py-3 ring-dark-50  focus:outline-none resize-none"
+                            rows={4}
+                            cols={1}
+                            style={{
+                                resize: "none",
+                            }}
+                        />
+                    </FormFieldWrapper>
+                </FormFieldsLayout>
+
+                {/*  consignee Details */}
+                <FormFieldsLayout greenTitle="Consignee Details">
                     <FormFieldWrapper label={"Name"}>
                         <input
                             type="text"
-                            value={data.passengerData.name}
+                            value={data.consigneeDetails.name}
                             readOnly
                             tabIndex={-1}
                             className=" cursor-default h-10 w-full rounded-3xl ring-2 px-6 py-3 ring-dark-50  focus:outline-none"
                         />
                     </FormFieldWrapper>
-                    <FormFieldWrapper label={"Age"}>
+                    <FormFieldWrapper label={"Phone"}>
                         <input
                             type="text"
-                            value={data.passengerData.age}
+                            value={data.consigneeDetails.phone}
                             readOnly
                             tabIndex={-1}
                             className=" cursor-default h-10 w-full rounded-3xl ring-2 px-6 py-3 ring-dark-50  focus:outline-none"
                         />
                     </FormFieldWrapper>
-                    <FormFieldWrapper label={"Passport Number"}>
+                    <FormFieldWrapper label={"Passport"}>
                         <input
                             type="text"
-                            value={data.passengerData.passportNumber}
+                            value={data.consigneeDetails.passport}
                             readOnly
                             tabIndex={-1}
                             className=" cursor-default h-10 w-full rounded-3xl ring-2 px-6 py-3 ring-dark-50  focus:outline-none"
                         />
                     </FormFieldWrapper>
-                    <FormFieldWrapper label={"Expiry Date"}>
+                </FormFieldsLayout>
+
+                {/* Consignor Details */}
+                <FormFieldsLayout greenTitle="Consignor Details">
+                    <FormFieldWrapper label={"Name"}>
                         <input
                             type="text"
-                            value={data.passengerData.expiryDate}
+                            value={data.consignorDetails.name}
                             readOnly
                             tabIndex={-1}
                             className=" cursor-default h-10 w-full rounded-3xl ring-2 px-6 py-3 ring-dark-50  focus:outline-none"
                         />
                     </FormFieldWrapper>
-                    <FormFieldWrapper label={"Gender"}>
+                    <FormFieldWrapper label={"Phone"}>
                         <input
                             type="text"
-                            value={data.passengerData.gender}
+                            value={data.consignorDetails.phone}
                             readOnly
                             tabIndex={-1}
                             className=" cursor-default h-10 w-full rounded-3xl ring-2 px-6 py-3 ring-dark-50  focus:outline-none"
                         />
                     </FormFieldWrapper>
-                    <FormFieldWrapper label={"Type"}>
+                    <FormFieldWrapper label={"Passport"}>
                         <input
                             type="text"
-                            value={data.passengerData.type}
+                            value={data.consignorDetails.passport}
                             readOnly
                             tabIndex={-1}
                             className=" cursor-default h-10 w-full rounded-3xl ring-2 px-6 py-3 ring-dark-50  focus:outline-none"
@@ -351,70 +416,47 @@ function PassengerCheckInVerificationViewPage() {
                     </FormFieldWrapper>
                 </FormFieldsLayout>
 
-                <FormFieldsLayout className="px-7">
-                    {/* Ticket */}
+                <FormFieldsLayout className="px-7" cols="1">
+                    {/* Cargo Type */}
                     <FormCheckBoxWrapper
-                        label="Ticket"
-                        labelWidth="50"
-                        isChecked={isTicketChecked}
-                        handleCheck={() => handleCheck("ticket")}
+                        label="Cargo Type"
+                        isChecked={isCargoTypeChecked}
+                        handleCheck={() => handleCheck("cargoType")}
                     >
                         <FormInput
-                            name="ticket"
+                            name="cargoType"
                             control={control}
-                            fileLabel="ticket"
+                            fileLabel="cargoType"
                             type="file"
                             fileIcon={<Image className="h-5 w-5" />}
-                            disabled={!isTicketChecked}
+                            disabled={isCargoTypeChecked}
                         />
                     </FormCheckBoxWrapper>
 
-                    {/* Passport */}
-                    <FormCheckBoxWrapper
-                        label="Passport"
-                        labelWidth="50"
-                        isChecked={isPassportChecked}
-                        handleCheck={() => handleCheck("passport")}
-                    >
-                        <FormInput
-                            name="passport"
-                            control={control}
-                            fileLabel="passport"
-                            type="file"
-                            disabled={!isPassportChecked}
-                        />
-                    </FormCheckBoxWrapper>
+                    {/* Description */}
+                    <FormInput
+                        name="cargoDescription"
+                        control={control}
+                        label="Description"
+                        type="textarea"
+                        rows={3}
+                        textareaResize="none"
+                        disabled={!isCargoTypeChecked}
+                    />
 
-                    {/* Visa */}
+                    {/* cargo Certificate */}
                     <FormCheckBoxWrapper
-                        label="Visa"
-                        labelWidth="30"
-                        isChecked={isVisaChecked}
-                        handleCheck={() => handleCheck("visa")}
+                        label="Cargo Certificate"
+                        isChecked={isCargoCertificateChecked}
+                        handleCheck={() => handleCheck("cargoCertificate")}
                     >
                         <FormInput
-                            name="visa"
+                            name="cargoCertificate"
                             control={control}
-                            fileLabel="visa"
-                            type="file"
-                            disabled={!isVisaChecked}
-                        />
-                    </FormCheckBoxWrapper>
-
-                    {/* Healthy Certificate */}
-                    <FormCheckBoxWrapper
-                        label="Healthy Certificate"
-                        labelWidth="150"
-                        isChecked={isHealthyCertificateChecked}
-                        handleCheck={() => handleCheck("healthyCertificate")}
-                    >
-                        <FormInput
-                            name="healthyCertificate"
-                            control={control}
-                            fileLabel="healthy certificate"
+                            fileLabel="cargoCertificate"
                             type="file"
                             fileIcon={<Image className="h-5 w-5" />}
-                            disabled={!isHealthyCertificateChecked}
+                            disabled={isCargoCertificateChecked}
                         />
                     </FormCheckBoxWrapper>
                 </FormFieldsLayout>
@@ -461,4 +503,4 @@ function PassengerCheckInVerificationViewPage() {
     );
 }
 
-export default PassengerCheckInVerificationViewPage;
+export default CargoCheckInVerificationViewPage;

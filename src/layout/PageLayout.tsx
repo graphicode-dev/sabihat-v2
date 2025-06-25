@@ -15,7 +15,7 @@ function PageLayout({
 }: PageLayoutProps) {
     return (
         <div
-            className={`page-wrapper ${
+            className={`page-wrapper print:shadow-none print:border-none ${
                 showBorder ? "border-wrapper" : ""
             }   ${className} ${noPadding ? "p-0" : "p-5"}`}
         >

@@ -21,6 +21,7 @@ interface FormInputProps<T extends FieldValues> {
     requiredLabel?: string;
     error?: string;
     className?: string;
+    inputClassName?: string;
     disabled?: boolean;
     rows?: number;
     cols?: number;
@@ -46,6 +47,7 @@ const FormInput = <T extends FieldValues>({
     requiredLabel,
     error,
     className = "",
+    inputClassName = "",
     disabled = false,
     rows = 3,
     cols = 30,
@@ -86,7 +88,7 @@ const FormInput = <T extends FieldValues>({
                                     {...field}
                                     className={`peer form-input h-auto ${
                                         error ? "form-error" : ""
-                                    } ${disabled ? "form-input-disabled" : ""}`}
+                                    } ${disabled ? "form-input-disabled" : ""} ${inputClassName}`}
                                     placeholder={placeholder}
                                     required={required}
                                     disabled={disabled}
@@ -209,7 +211,7 @@ const FormInput = <T extends FieldValues>({
                                             disabled
                                                 ? "border-gray-300 bg-dark-50 cursor-not-allowed opacity-50"
                                                 : ""
-                                        }`}
+                                        } ${inputClassName}`}
                                         disabled={disabled}
                                     />
                                 </div>
@@ -217,8 +219,8 @@ const FormInput = <T extends FieldValues>({
                         } else if (type === "file") {
                             return (
                                 <>
-                                    <label className="w-fit flex items-center gap-2 cursor-pointer text-green-500 hover:text-green-600 transition-colors">
-                                        <div className="flex items-center gap-2 border-b-2 border-primary-500">
+                                    <label className="w-fit flex items-center gap-2 cursor-pointer text-green-500 hover:text-green-600 transition-colors disabled:cursor-not-allowed">
+                                        <div className={`flex items-center gap-2 border-b-2 border-primary-500 ${disabled ? "cursor-not-allowed opacity-50" : ""}`}>
                                             {fileIcon ? (
                                                 fileIcon
                                             ) : (
@@ -260,7 +262,7 @@ const FormInput = <T extends FieldValues>({
                                     type={inputType}
                                     className={`peer form-input ${
                                         error ? "form-error" : ""
-                                    } ${disabled ? "form-input-disabled" : ""}`}
+                                    } ${disabled ? "form-input-disabled" : ""} ${inputClassName}`}
                                     placeholder={placeholder}
                                     required={required}
                                     disabled={disabled}

@@ -61,7 +61,7 @@ const Navbar = ({ onToggleSidebar }: Props) => {
     }, [showNotifications, isProfileOpen]);
 
     return (
-        <nav className=" md:px-20 lg:px-10 py-2.5 fixed w-[85vw] lg:w-[80vw] top-0  flex justify-between z-50">
+        <nav className="py-2.5 fixed w-[85vw] lg:w-[80vw] top-0  flex justify-between z-50">
             {/* Left side - Greeting */}
             <div className="flex justify-start items-center w-1/3">
                 {/* Sidebar toggle button */}

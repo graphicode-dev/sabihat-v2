@@ -47,7 +47,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                         onToggleSidebar={toggleSidebar}
                     />
                     {/* Main content area */}
-                    <main className="md:ml-64 pt-[2vh] px-10 h-screen flex justify-center items-center ">
+                    <main className="main-content pt-[2vh] px-10 h-screen flex justify-center items-center ">
                         <div className="w-[85vw] lg:w-[80vw] h-full antialiased flex flex-col justify-center items-center relative overflow-hidden">
                             {/* Navbar */}
                             <Navbar onToggleSidebar={toggleSidebar} />

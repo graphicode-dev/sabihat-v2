@@ -196,3 +196,95 @@ button:disabled {
     );
     border-image-slice: 1;
 }
+
+/* Small Screens */
+@media (width < 1800px) {
+    nav {
+        padding-left: 1rem;
+    }
+    .main-content {
+        margin-left: 12rem;
+    }
+}
+
+/* Large Screens */
+@media (width < 2400px) and (width > 1800px) {
+    nav {
+        padding-right: 6rem;
+        padding-left: 6rem;
+    }
+    .main-content {
+        margin-left: 2rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    /* Hide elements that shouldn't be printed */
+    nav,
+    .sidebar,
+    .no-print,
+    button {
+        display: none !important;
+    }
+
+    /* Hide URL and other browser elements */
+    @page {
+        margin: 0;
+        size: auto;
+    }
+
+    /* Remove any content added by the browser */
+    body::after,
+    body::before {
+        content: none !important;
+    }
+
+    /* Hide any headers or footers added by the browser */
+    html {
+        background-color: #ffffff;
+    }
+
+    /* Hide URL display in footer */
+    .print-section {
+        position: relative;
+    }
+
+    .print-section::after {
+        display: none !important;
+    }
+
+    /* Show only print section */
+    .print-section {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: white;
+    }
+
+    /* Reset layout for printing */
+    body,
+    html {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: white;
+        overflow: visible !important;
+    }
+
+    /* Remove any fixed positioning */
+    .main-content {
+        margin-left: 0 !important;
+        padding: 0 !important;
+        position: static !important;
+    }
+
+    /* Ensure page breaks don't happen in the middle of important content */
+    .border-custom-pattern {
+        page-break-inside: avoid;
+    }
+}

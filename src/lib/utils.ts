@@ -48,3 +48,50 @@ export const logFormData = (apiFormData: FormData, message?: string) => {
         );
     }
 };
+
+export const printDocument = (options?: {
+    title?: string;
+    beforePrint?: () => void;
+    afterPrint?: () => void;
+    printOnly?: string;
+}) => {
+    // Set document title if provided
+    const originalTitle = document.title;
+    if (options?.title) {
+        document.title = options.title;
+    }
+
+    // Add print-only class to target specific elements if needed
+    if (options?.printOnly) {
+        const elements = document.querySelectorAll(options.printOnly);
+        elements.forEach((el) => {
+            el.classList.add(options?.printOnly || "");
+        });
+    }
+
+    // Execute beforePrint callback if provided
+    if (options?.beforePrint) {
+        options.beforePrint();
+    }
+
+    // Open print dialog
+    window.print();
+
+    // Execute afterPrint callback if provided
+    if (options?.afterPrint) {
+        options.afterPrint();
+    }
+
+    // Reset document title
+    if (options?.title) {
+        document.title = originalTitle;
+    }
+
+    // Remove print-only class if it was added
+    if (options?.printOnly) {
+        const elements = document.querySelectorAll(options.printOnly);
+        elements.forEach((el) => {
+            el.classList.remove(options?.printOnly || "");
+        });
+    }
+};

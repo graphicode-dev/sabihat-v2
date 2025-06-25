@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { QrCodeIcon } from "../../../../../../components/ui/icons";
 import { printDocument } from "../../../../../../lib/utils";
 
-function PassengerCheckInPaymentSuccessBaggagePage() {
+function CargoCheckInPaymentSuccessBaggagePage() {
     const navigate = useNavigate();
 
     const onPrintButton = () => {
@@ -16,7 +16,7 @@ function PassengerCheckInPaymentSuccessBaggagePage() {
 
     const onBoardingPassButton = () => {
         navigate(
-            "/check-in-boarding/passenger-check-in/payment/success/boarding-pass"
+            "/check-in-boarding/cargo-check-in/payment/success/boarding-pass"
         );
     };
 
@@ -43,7 +43,6 @@ function PassengerCheckInPaymentSuccessBaggagePage() {
                 </div>
             </div>
 
-            {/* Data */}
             <div className="print-section">
                 <div className="flex flex-col justify-center items-start print:items-center">
                     <h1 className="text-xl font-bold my-10 print:block hidden">
@@ -133,4 +132,4 @@ function PassengerCheckInPaymentSuccessBaggagePage() {
     );
 }
 
-export default PassengerCheckInPaymentSuccessBaggagePage;
+export default CargoCheckInPaymentSuccessBaggagePage;
