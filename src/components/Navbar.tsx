@@ -45,6 +45,7 @@ const Navbar = ({ onToggleSidebar }: Props) => {
             ) {
                 setShowNotifications(false);
             }
+
             if (
                 !target.closest("#profile-dropdown") &&
                 !target.closest("#user-menu-button") &&
@@ -69,7 +70,7 @@ const Navbar = ({ onToggleSidebar }: Props) => {
                     <button
                         type="button"
                         onClick={onToggleSidebar}
-                        className="p-2 mr-2 text-gray-600 rounded-lg cursor-pointer md:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100"
+                        className="p-2 mr-2 text-gray-600 rounded-lg cursor-pointer lg:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100"
                     >
                         <Menu className="w-6 h-6" />
                         <span className="sr-only">Toggle sidebar</span>
@@ -85,6 +86,7 @@ const Navbar = ({ onToggleSidebar }: Props) => {
                 {/* Notifications */}
                 <div className="relative w-8 h-8 rounded-full bg-transparent border border-dark-50">
                     <button
+                        id="notification-button"
                         type="button"
                         onClick={handleNotifications}
                         className="p-1 relative"
@@ -113,10 +115,7 @@ const Navbar = ({ onToggleSidebar }: Props) => {
             </div>
 
             {showNotifications && (
-                <NotificationBox
-                    onClose={handleNotifications}
-                    notifications={notifications}
-                />
+                <NotificationBox notifications={notifications} />
             )}
 
             {/* Dropdown profile */}

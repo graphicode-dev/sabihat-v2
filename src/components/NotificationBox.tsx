@@ -1,33 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { NotificationItem } from "../types";
 
 interface NotificationBoxProps {
-    onClose?: () => void;
     notifications: NotificationItem[];
 }
 
-function NotificationBox({ onClose, notifications }: NotificationBoxProps) {
+function NotificationBox({ notifications }: NotificationBoxProps) {
     const notificationRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (
-                notificationRef.current &&
-                !notificationRef.current.contains(event.target as Node) &&
-                onClose
-            ) {
-                onClose();
-            }
-        }
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [onClose]);
 
     return (
         <div
+            id="notification-dropdown"
             ref={notificationRef}
             className="w-full max-w-[400px] bg-white rounded-3xl shadow-md py-5 px-6 fixed top-15 right-10 z-50"
         >

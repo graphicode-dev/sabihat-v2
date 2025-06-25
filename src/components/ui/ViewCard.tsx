@@ -446,7 +446,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
                         {/* Tabs Navigation */}
                         {tabs.length > 0 && (
                             <>
-                                <nav className="flex border-b border-gray-200 mb-6">
+                                <div className="flex border-b border-gray-200 mb-6">
                                     {tabs.map((tab) => (
                                         <button
                                             key={tab.value}
@@ -464,7 +464,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
                                             {tab.label}
                                         </button>
                                     ))}
-                                </nav>
+                                </div>
 
                                 {/* Render active tab content */}
                                 <div className="pt-2">

@@ -136,7 +136,7 @@ function Tabs<T extends string>({
             }`}
         >
             {/* Tabs Navigation */}
-            <nav
+            <div
                 className={`p-3 flex flex-col items-center md:items-start space-x-4 space-y-4 ${
                     !activeTabItem?.props?.buttonLabel &&
                     !activeTabItem?.props.buttonHref
@@ -174,7 +174,7 @@ function Tabs<T extends string>({
                         </div>
                     )}
                 </div>
-            </nav>
+            </div>
 
             {/* Render Active Tab Content */}
             <div>{activeTabItem}</div>

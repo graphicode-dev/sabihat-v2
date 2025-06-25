@@ -64,9 +64,9 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
 
     return (
         <div
-            className={`fixed top-0 ${
-                isSidebarOpen ? "left-[35%]" : "left-0"
-            } z-40 w-64 h-[calc(100vh-10px)] pt-14 transition-all duration-300 ease-in-out -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 `}
+            className={`side-bar ${
+                isSidebarOpen ? "open" : ""
+            } flex flex-col h-screen pt-14 transition-all duration-300 ease-in-out bg-white border-r border-gray-200 overflow-y-auto`}
         >
             {/* Close Sidebar button */}
             <button
@@ -89,7 +89,7 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
             </div>
 
             {/* Links Section */}
-            <div className="py-5 px-3 h-full bg-white ">
+            <div className="py-5 px-3 h-full bg-white">
                 <div className="flex items-center text-primary-500 font-medium mb-4">
                     {currentSideBar?.titleSection?.icon && (
                         <currentSideBar.titleSection.icon
@@ -104,7 +104,7 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
                 </div>
 
                 {/* Navigation Menu */}
-                <ul className="space-y-2 overflow-y-auto h-[calc(100%-80px)]">
+                <ul className="space-y-2">
                     {currentSideBar?.links.map((route, index) => (
                         <li key={route.path}>
                             <Link

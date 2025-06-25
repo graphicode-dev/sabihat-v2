@@ -18,23 +18,24 @@ export const TableFilter = ({
     onGroupSelect,
 }: TableFilterProps) => {
     const [showFilterMenu, setShowFilterMenu] = useState(false);
-    
+
     // Group columns by their category for better organization
-    const groupableColumns = columns.filter(col => 
-        // You can customize this logic based on which columns should be groupable
-        col.id !== 'actions' && col.id !== 'avatar'
+    const groupableColumns = columns.filter(
+        (col) =>
+            // You can customize this logic based on which columns should be groupable
+            col.id !== "actions" && col.id !== "avatar"
     );
-    
+
     // Handle clearing all group selections at once
     const handleClearAllGroups = () => {
         if (onGroupSelect) {
             // Call onGroupSelect for each selected group to clear them all
-            selectedGroups.forEach(groupId => {
+            selectedGroups.forEach((groupId) => {
                 onGroupSelect(groupId);
             });
         }
     };
-    
+
     return (
         <div className="relative">
             <button
@@ -70,7 +71,7 @@ export const TableFilter = ({
             </button>
 
             {showFilterMenu && (
-                <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-dark-50 z-50">
+                <div className="absolute left-0 mt-2 w-64 px-2 bg-white rounded-lg shadow-lg border border-dark-50 z-50">
                     <div className="flex justify-between items-center">
                         {/* Filters */}
                         <div className="w-1/2 flex flex-col justify-center items-center">

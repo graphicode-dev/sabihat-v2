@@ -149,6 +149,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     font-family: "Sk-Modernist", sans-serif;
+    overflow: hidden;
 
     ::-webkit-scrollbar {
         width: 5px;
@@ -197,8 +198,36 @@ button:disabled {
     border-image-slice: 1;
 }
 
+.side-bar {
+    position: relative;
+}
+
+/* Mobile Screens */
+@media (max-width: 767px) {
+    .side-bar {
+        opacity: 0;
+        width: 0;
+        position: fixed;
+        z-index: 9999;
+    }
+    .side-bar.open {
+        opacity: 1;
+        width: 70%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+}
+
 /* Small Screens */
-@media (width < 1800px) {
+@media (min-width: 768px) and (max-width: 1799px) {
+    .side-bar {
+        opacity: 0;
+        width: 0;
+    }
+    .side-bar.open {
+        opacity: 1;
+        width: calc(1 / 6 * 100%);
+        min-width: 250px;
+    }
     nav {
         padding-left: 1rem;
     }
@@ -208,7 +237,16 @@ button:disabled {
 }
 
 /* Large Screens */
-@media (width < 2400px) and (width > 1800px) {
+@media (min-width: 1800px) and (max-width: 2399px) {
+    .side-bar {
+        opacity: 0;
+        width: 0;
+    }
+    .side-bar.open {
+        opacity: 1;
+        width: calc(1 / 8 * 100%);
+        min-width: 250px;
+    }
     nav {
         padding-right: 6rem;
         padding-left: 6rem;
