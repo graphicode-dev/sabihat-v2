@@ -24,6 +24,9 @@ const TaxViewPage = lazy(
 const TaxAddPage = lazy(
     () => import("../pages/dashboard/system-management-administration/tax/add")
 );
+const TaxEditPage = lazy(
+    () => import("../pages/dashboard/system-management-administration/tax/edit")
+);
 // #endregion Tax
 
 // #region Contact Messages
@@ -57,6 +60,12 @@ const CurrencyAddPage = lazy(
             "../pages/dashboard/system-management-administration/currency/add"
         )
 );
+const CurrencyEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/currency/edit"
+        )
+);
 // #endregion Currency
 
 // #region Payment Methods
@@ -76,6 +85,12 @@ const PaymentMethodsAddPage = lazy(
     () =>
         import(
             "../pages/dashboard/system-management-administration/payment-methods/add"
+        )
+);
+const PaymentMethodsEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/payment-methods/edit"
         )
 );
 // #endregion Payment Methods
@@ -154,6 +169,12 @@ const UserProfilesAddPage = lazy(
             "../pages/dashboard/system-management-administration/user-profiles/add"
         )
 );
+const UserProfilesEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/user-profiles/edit"
+        )
+);
 //  #endregion User Profiles
 
 //  #region User Roles
@@ -185,6 +206,12 @@ const PoliciesAddPage = lazy(
             "../pages/dashboard/system-management-administration/policies/add"
         )
 );
+const PoliciesEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/policies/edit"
+        )
+);
 // #endregion Policies
 
 // #region Terms & Conditions
@@ -204,6 +231,12 @@ const TermsConditionsAddPage = lazy(
     () =>
         import(
             "../pages/dashboard/system-management-administration/terms-conditions/add"
+        )
+);
+const TermsConditionsEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/terms-conditions/edit"
         )
 );
 // #endregion Terms & Conditions
@@ -249,6 +282,24 @@ const LoadTypesVehicleAddPage = lazy(
             "../pages/dashboard/system-management-administration/load-types/add/add-vehicle"
         )
 );
+const LoadTypesVehicleEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/load-types/edit/edit-vehicle"
+        )
+);
+const LoadTypesPassengerEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/load-types/edit/edit-passenger"
+        )
+);
+const LoadTypesCargoEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/load-types/edit/edit-cargo"
+        )
+);
 // #endregion Load Types
 
 // #region Ticket Rules
@@ -270,6 +321,12 @@ const TicketRulesVoidAddPage = lazy(
             "../pages/dashboard/system-management-administration/ticket-rules/add/add-void"
         )
 );
+const TicketRulesVoidEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/ticket-rules/edit/edit-void"
+        )
+);
 const TicketRulesRefundViewPage = lazy(
     () =>
         import(
@@ -280,6 +337,12 @@ const TicketRulesRefundAddPage = lazy(
     () =>
         import(
             "../pages/dashboard/system-management-administration/ticket-rules/add/add-refund"
+        )
+);
+const TicketRulesRefundEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/ticket-rules/edit/edit-refund"
         )
 );
 const TicketRulesNoShowViewPage = lazy(
@@ -294,7 +357,12 @@ const TicketRulesNoShowAddPage = lazy(
             "../pages/dashboard/system-management-administration/ticket-rules/add/add-noShow"
         )
 );
-
+const TicketRulesNoShowEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/ticket-rules/edit/edit-noShow"
+        )
+);
 const TicketRulesReissueViewPage = lazy(
     () =>
         import(
@@ -307,7 +375,12 @@ const TicketRulesReissueAddPage = lazy(
             "../pages/dashboard/system-management-administration/ticket-rules/add/add-reissue"
         )
 );
-
+const TicketRulesReissueEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/ticket-rules/edit/edit-reissue"
+        )
+);
 // #endregion Ticket Rules
 
 // #region Promotion
@@ -325,6 +398,12 @@ const PromotionAddPage = lazy(
     () =>
         import(
             "../pages/dashboard/system-management-administration/promotion/add"
+        )
+);
+const PromotionEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/promotion/edit"
         )
 );
 // #endregion Promotion
@@ -1076,6 +1155,11 @@ export const navigationConfig: TabLink[] = [
                             path: "/add",
                             component: UserProfilesAddPage,
                         },
+                        {
+                            title: "Edit",
+                            path: "/edit/:id",
+                            component: UserProfilesEditPage,
+                        },
                     ],
                 },
 
@@ -1171,6 +1255,11 @@ export const navigationConfig: TabLink[] = [
                             path: "/add",
                             component: CurrencyAddPage,
                         },
+                        {
+                            title: "Edit",
+                            path: "/edit/:id",
+                            component: CurrencyEditPage,
+                        },
                     ],
                 },
 
@@ -1189,6 +1278,11 @@ export const navigationConfig: TabLink[] = [
                             title: "Add",
                             path: "/add",
                             component: TaxAddPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "/edit/:id",
+                            component: TaxEditPage,
                         },
                     ],
                 },
@@ -1209,6 +1303,11 @@ export const navigationConfig: TabLink[] = [
                             path: "/add",
                             component: PaymentMethodsAddPage,
                         },
+                        {
+                            title: "Edit",
+                            path: "/edit/:id",
+                            component: PaymentMethodsEditPage,
+                        },
                     ],
                 },
 
@@ -1228,6 +1327,11 @@ export const navigationConfig: TabLink[] = [
                             path: "/add",
                             component: PoliciesAddPage,
                         },
+                        {
+                            title: "Edit",
+                            path: "/edit/:id",
+                            component: PoliciesEditPage,
+                        },
                     ],
                 },
 
@@ -1246,6 +1350,11 @@ export const navigationConfig: TabLink[] = [
                             title: "Add",
                             path: "/add",
                             component: TermsConditionsAddPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "/edit/:id",
+                            component: TermsConditionsEditPage,
                         },
                     ],
                 },
@@ -1286,6 +1395,21 @@ export const navigationConfig: TabLink[] = [
                             path: "/vehicle/add",
                             component: LoadTypesVehicleAddPage,
                         },
+                        {
+                            title: "Edit",
+                            path: "/passenger/edit/:id",
+                            component: LoadTypesPassengerEditPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "/cargo/edit/:id",
+                            component: LoadTypesCargoEditPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "/vehicle/edit/:id",
+                            component: LoadTypesVehicleEditPage,
+                        },
                     ],
                 },
 
@@ -1306,6 +1430,11 @@ export const navigationConfig: TabLink[] = [
                             component: TicketRulesVoidAddPage,
                         },
                         {
+                            title: "Edit",
+                            path: "void/edit/:id",
+                            component: TicketRulesVoidEditPage,
+                        },
+                        {
                             title: "View",
                             path: "refund/view/:id",
                             component: TicketRulesRefundViewPage,
@@ -1314,6 +1443,11 @@ export const navigationConfig: TabLink[] = [
                             title: "Add",
                             path: "refund/add",
                             component: TicketRulesRefundAddPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "refund/edit/:id",
+                            component: TicketRulesRefundEditPage,
                         },
                         {
                             title: "View",
@@ -1326,6 +1460,11 @@ export const navigationConfig: TabLink[] = [
                             component: TicketRulesNoShowAddPage,
                         },
                         {
+                            title: "Edit",
+                            path: "no-show/edit/:id",
+                            component: TicketRulesNoShowEditPage,
+                        },
+                        {
                             title: "View",
                             path: "reissue/view/:id",
                             component: TicketRulesReissueViewPage,
@@ -1334,6 +1473,11 @@ export const navigationConfig: TabLink[] = [
                             title: "Add",
                             path: "reissue/add",
                             component: TicketRulesReissueAddPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "reissue/edit/:id",
+                            component: TicketRulesReissueEditPage,
                         },
                     ],
                 },
@@ -1353,6 +1497,11 @@ export const navigationConfig: TabLink[] = [
                             title: "Add",
                             path: "/add",
                             component: PromotionAddPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "edit/:id",
+                            component: PromotionEditPage,
                         },
                     ],
                 },

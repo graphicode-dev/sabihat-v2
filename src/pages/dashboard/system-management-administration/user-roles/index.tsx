@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {  DynamicTable } from "../../../../components/table";
+import { DynamicTable } from "../../../../components/table";
 import PageLayout from "../../../../layout/PageLayout";
 import { FormButtons, FormFieldWrapper } from "../../../../components/form";
 import { SearchedDropDown } from "../../../../components/SearchedDropDown";

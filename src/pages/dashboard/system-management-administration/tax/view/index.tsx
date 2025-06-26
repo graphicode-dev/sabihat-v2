@@ -1,10 +1,13 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
-// import { useParams } from "react-router-dom";
 import { TableData } from "../../../../../types/table";
+import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "../../../../../hooks/useToast";
 
 function TaxViewPage() {
-    // const { id } = useParams();
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const { addAlertToast, addToast } = useToast();
 
     const data: TableData = {
         id: "1",
@@ -43,6 +46,35 @@ function TaxViewPage() {
                             ],
                         },
                     ],
+                }}
+                onEdit={() =>
+                    navigate(
+                        `/system-management-administration/tax/edit/${id}`
+                    )
+                }
+                onDelete={() => {
+                    addAlertToast(
+                        "Are you sure you want to delete this tax?",
+                        [
+                            {
+                                text: "OK",
+                                onClick: () => {
+                                    addToast({
+                                        type: "success",
+                                        message: "Tax deleted successfully",
+                                        title: "Success!",
+                                    });
+                                    navigate(-1);
+                                },
+                                variant: "primary",
+                            },
+                            {
+                                text: "Cancel",
+                                onClick: () => {},
+                                variant: "secondary",
+                            },
+                        ]
+                    );
                 }}
                 buttons
             />

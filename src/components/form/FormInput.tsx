@@ -88,7 +88,9 @@ const FormInput = <T extends FieldValues>({
                                     {...field}
                                     className={`peer form-input h-auto ${
                                         error ? "form-error" : ""
-                                    } ${disabled ? "form-input-disabled" : ""} ${inputClassName}`}
+                                    } ${
+                                        disabled ? "form-input-disabled" : ""
+                                    } ${inputClassName}`}
                                     placeholder={placeholder}
                                     required={required}
                                     disabled={disabled}
@@ -220,7 +222,13 @@ const FormInput = <T extends FieldValues>({
                             return (
                                 <>
                                     <label className="w-fit flex items-center gap-2 cursor-pointer text-green-500 hover:text-green-600 transition-colors disabled:cursor-not-allowed">
-                                        <div className={`flex items-center gap-2 border-b-2 border-primary-500 ${disabled ? "cursor-not-allowed opacity-50" : ""}`}>
+                                        <div
+                                            className={`flex items-center gap-2 border-b-2 border-primary-500 ${
+                                                disabled
+                                                    ? "cursor-not-allowed opacity-50"
+                                                    : ""
+                                            }`}
+                                        >
                                             {fileIcon ? (
                                                 fileIcon
                                             ) : (
@@ -262,7 +270,9 @@ const FormInput = <T extends FieldValues>({
                                     type={inputType}
                                     className={`peer form-input ${
                                         error ? "form-error" : ""
-                                    } ${disabled ? "form-input-disabled" : ""} ${inputClassName}`}
+                                    } ${
+                                        disabled ? "form-input-disabled" : ""
+                                    } ${inputClassName}`}
                                     placeholder={placeholder}
                                     required={required}
                                     disabled={disabled}

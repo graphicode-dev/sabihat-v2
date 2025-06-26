@@ -301,8 +301,8 @@ const ViewCard: React.FC<ViewCardProps> = ({
                         <div
                             className={`flex-1 grid grid-cols-1 md:${getGridCols()} gap-6 mt-6 md:mt-0`}
                         >
-                            {data?.rows.map((row, index) =>
-                                row.fields?.map((field) => (
+                            {data?.rows.map((row) =>
+                                row.fields?.map((field, index) => (
                                     <ViewCardField
                                         key={index}
                                         label={field.label}

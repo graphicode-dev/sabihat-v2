@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { FieldValues, FormState } from "react-hook-form";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -95,3 +96,6 @@ export const printDocument = (options?: {
         });
     }
 };
+
+export const dirtyFields = <T extends FieldValues>(formState: FormState<T>) =>
+    Object.keys(formState.dirtyFields || {});

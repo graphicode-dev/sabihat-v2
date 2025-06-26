@@ -1,13 +1,17 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { TableData } from "../../../../../types/table";
 import defaultUser from "../../../../../assets/images/default-user.png";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "../../../../../hooks/useToast";
 
 function UserProfilesViewPage() {
-    // const { id } = useParams();
+    const navigate = useNavigate();
+    const { addAlertToast, addToast } = useToast();
+    const { id } = useParams();
     const data: TableData = {
-        id: "1",
+        id: id?.toString() || "",
         avatar: defaultUser,
         columns: {
             name: "John Doe",
@@ -44,6 +48,35 @@ function UserProfilesViewPage() {
                             ],
                         },
                     ],
+                }}
+                onEdit={() =>
+                    navigate(
+                        `/system-management-administration/user-profiles/edit/${id}`
+                    )
+                }
+                onDelete={() => {
+                    addAlertToast(
+                        "Are you sure you want to delete this user?",
+                        [
+                            {
+                                text: "OK",
+                                onClick: () => {
+                                    addToast({
+                                        type: "success",
+                                        message: "User deleted successfully",
+                                        title: "Success!",
+                                    });
+                                    navigate(-1);
+                                },
+                                variant: "primary",
+                            },
+                            {
+                                text: "Cancel",
+                                onClick: () => {},
+                                variant: "secondary",
+                            },
+                        ]
+                    );
                 }}
                 buttons
             />
