@@ -1,9 +1,9 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import Tabs from "../../../../../components/ui/Tabs";
-import TripInformationEditPage from "../../../../../components/ship-trip-management/TripInformationEditPage";
-import PassengersAgentAllocationEditPage from "../../../../../components/ship-trip-management/PassengersAgentAllocationEditPage";
-import CargoAgentAllocationEditPage from "../../../../../components/ship-trip-management/CargoAgentAllocationEditPage";
-import VehiclesAgentAllocationEditPage from "../../../../../components/ship-trip-management/VehiclesAgentAllocationEditPage";
+import TripInformationEditPage from "../../../../../components/ship-trip-management/edit/TripInformationEditPage";
+import PassengersAgentAllocationEditPage from "../../../../../components/ship-trip-management/edit/PassengersAgentAllocationEditPage";
+import CargoAgentAllocationEditPage from "../../../../../components/ship-trip-management/edit/CargoAgentAllocationEditPage";
+import VehiclesAgentAllocationEditPage from "../../../../../components/ship-trip-management/edit/VehiclesAgentAllocationEditPage";
 
 function ScheduleNewTripsEditPage() {
     return (

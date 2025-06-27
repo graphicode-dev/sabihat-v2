@@ -1,55 +1,56 @@
 import { z } from "zod";
-import { useToast } from "../../hooks/useToast";
+import { useToast } from "../../../hooks/useToast";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormLayout from "../../layout/FormLayout";
-import FormFieldsLayout from "../../layout/FormFieldsLayout";
-import { FormButtons, FormInput } from "../form";
-import { SearchedDropDown } from "../SearchedDropDown";
-import { DynamicTable } from "../table";
-import { TableColumn, TableData } from "../../types/table";
-import defaultImage from "../../assets/images/default-user.png";
+import FormLayout from "../../../layout/FormLayout";
+import FormFieldsLayout from "../../../layout/FormFieldsLayout";
+import { FormButtons, FormInput } from "../../form";
+import { DynamicTable } from "../../table";
+import { TableColumn, TableData } from "../../../types/table";
 
-type PassengersCabins = {
+type VehiclesParking = {
     id?: string;
     cabin: string;
-    passengers: string;
-    image: File | null;
+    availableWeight: string;
+    availableSize: string;
+    availableQuantity: string;
 };
 
-const passengersCabinsSchema = z.object({
+const vehiclesParkingSchema = z.object({
     id: z.string().optional(),
     cabin: z.string(),
-    passengers: z.string(),
-    image: z.instanceof(File).nullable(),
+    availableWeight: z.string(),
+    availableSize: z.string(),
+    availableQuantity: z.string(),
 });
 
-function PassengersCabinsEditForm() {
+function VehiclesParkingEditForm() {
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState<PassengersCabins>({
+    const [errors, setErrors] = useState<VehiclesParking>({
         cabin: "",
-        passengers: "",
-        image: null,
+        availableWeight: "",
+        availableSize: "",
+        availableQuantity: "",
     });
-    const [selectedCabin, setSelectedCabin] = useState<string | null>(null);
 
     const { control, handleSubmit, reset, formState } =
-        useForm<PassengersCabins>({
-            resolver: zodResolver(passengersCabinsSchema),
+        useForm<VehiclesParking>({
+            resolver: zodResolver(vehiclesParkingSchema),
             defaultValues: {
                 id: "",
                 cabin: "",
-                passengers: "",
-                image: null,
+                availableWeight: "",
+                availableSize: "",
+                availableQuantity: "",
             },
             mode: "onChange",
         });
 
-    const onSubmit = async (formData: PassengersCabins) => {
+    const onSubmit = async (formData: VehiclesParking) => {
         setIsLoading(true);
         try {
             // Create FormData object for file upload
@@ -60,11 +61,17 @@ function PassengersCabinsEditForm() {
             if (formData.cabin) {
                 apiFormData.append("cabin", formData.cabin);
             }
-            if (formData.passengers) {
-                apiFormData.append("passengers", formData.passengers);
+            if (formData.availableWeight) {
+                apiFormData.append("availableWeight", formData.availableWeight);
             }
-            if (formData.image instanceof File) {
-                apiFormData.append("image", formData.image);
+            if (formData.availableSize) {
+                apiFormData.append("availableSize", formData.availableSize);
+            }
+            if (formData.availableQuantity) {
+                apiFormData.append(
+                    "availableQuantity",
+                    formData.availableQuantity
+                );
             }
 
             // Simulate API call success
@@ -72,7 +79,7 @@ function PassengersCabinsEditForm() {
             // const response = await api.post('/company', apiFormData);
 
             addToast({
-                message: "Passengers Cabins added successfully",
+                message: "Vehicles Parking added successfully",
                 type: "success",
                 title: "Success!",
             });
@@ -80,7 +87,7 @@ function PassengersCabinsEditForm() {
             reset();
             navigate(-1);
         } catch (error: any) {
-            console.error("Error adding passengers cabins:", error);
+            console.error("Error adding vehicles parking:", error);
             if (error?.errors) {
                 // Map API error fields to our frontend field names
                 const mappedErrors: any = {};
@@ -88,11 +95,16 @@ function PassengersCabinsEditForm() {
                 if (error.errors.cabin) {
                     mappedErrors.cabin = error.errors.cabin[0];
                 }
-                if (error.errors.passengers) {
-                    mappedErrors.passengers = error.errors.passengers[0];
+                if (error.errors.availableWeight) {
+                    mappedErrors.availableWeight =
+                        error.errors.availableWeight[0];
                 }
-                if (error.errors.image) {
-                    mappedErrors.image = error.errors.image[0];
+                if (error.errors.availableSize) {
+                    mappedErrors.availableSize = error.errors.availableSize[0];
+                }
+                if (error.errors.availableQuantity) {
+                    mappedErrors.availableQuantity =
+                        error.errors.availableQuantity[0];
                 }
 
                 console.log("Mapped errors:", mappedErrors);
@@ -111,62 +123,61 @@ function PassengersCabinsEditForm() {
 
     const columns: TableColumn[] = [
         {
-            id: "image",
-            header: "Image",
-            accessorKey: "image",
-            cell(props) {
-                const image = props.row.original.image;
-                return (
-                    <img
-                        src={image}
-                        alt="Passenger Image"
-                        className="w-16 h-16 rounded-xl object-cover"
-                    />
-                );
-            },
-        },
-        {
             id: "cabin",
             header: "Cabin",
             accessorKey: "cabin",
         },
         {
-            id: "numberOfPassengers",
-            header: "Number of Passengers",
-            accessorKey: "numberOfPassengers",
+            id: "availableWeight",
+            header: "Available Weight",
+            accessorKey: "availableWeight",
+        },
+        {
+            id: "availableSize",
+            header: "Available Size",
+            accessorKey: "availableSize",
+        },
+        {
+            id: "availableQuantity",
+            header: "Available Quantity",
+            accessorKey: "availableQuantity",
         },
     ];
     const data: TableData[] = [
         {
             id: "1",
             columns: {
-                image: defaultImage,
                 cabin: "*****",
-                numberOfPassengers: "*****",
+                availableWeight: "*****",
+                availableSize: "*****",
+                availableQuantity: "*****",
             },
         },
         {
             id: "2",
             columns: {
-                image: defaultImage,
                 cabin: "*****",
-                numberOfPassengers: "*****",
+                availableWeight: "*****",
+                availableSize: "*****",
+                availableQuantity: "*****",
             },
         },
         {
             id: "3",
             columns: {
-                image: defaultImage,
                 cabin: "*****",
-                numberOfPassengers: "*****",
+                availableWeight: "*****",
+                availableSize: "*****",
+                availableQuantity: "*****",
             },
         },
         {
             id: "4",
             columns: {
-                image: defaultImage,
                 cabin: "*****",
-                numberOfPassengers: "*****",
+                availableWeight: "*****",
+                availableSize: "*****",
+                availableQuantity: "*****",
             },
         },
     ];
@@ -182,43 +193,46 @@ function PassengersCabinsEditForm() {
                 handleFormSubmit={onSubmit}
                 removeBorder
             >
-                <FormFieldsLayout cols="4">
+                <FormFieldsLayout cols="5">
                     {/* cabin */}
-                    <SearchedDropDown
+                    <FormInput
                         name="cabin"
                         control={control}
                         label="Cabin"
-                        options={[
-                            { key: "Cabin 1", value: "cabin1" },
-                            { key: "Cabin 2", value: "cabin2" },
-                            { key: "Cabin 3", value: "cabin3" },
-                        ]}
-                        value={selectedCabin}
-                        onChange={(value) => {
-                            setSelectedCabin(value);
-                        }}
-                        placeholder="Select Cabin"
+                        type="text"
+                        error={errors.cabin}
                     />
 
-                    {/* passengers */}
+                    {/* availableWeight */}
                     <FormInput
-                        name="passengers"
+                        name="availableWeight"
                         control={control}
-                        label="Passengers"
+                        label="Available Weight"
                         type="text"
-                        placeholder="Enter Passengers"
-                        error={errors.passengers}
+                        error={errors.availableWeight}
                         requiredLabel="Available 40"
                     />
 
-                    {/* image */}
+                    {/* availableSize */}
                     <FormInput
-                        name="image"
+                        name="availableSize"
                         control={control}
-                        label="Image"
-                        type="file"
-                        placeholder="Passenger Image"
+                        label="Available Size"
+                        type="text"
+                        error={errors.availableSize}
+                        requiredLabel="Available 40"
                     />
+
+                    {/* availableQuantity */}
+                    <FormInput
+                        name="availableQuantity"
+                        control={control}
+                        label="Available Quantity"
+                        type="text"
+                        error={errors.availableQuantity}
+                        requiredLabel="Available 40"
+                    />
+
                     <FormButtons
                         className="justify-end!"
                         isLoading={isLoading}
@@ -230,9 +244,10 @@ function PassengersCabinsEditForm() {
             </FormLayout>
 
             <DynamicTable
-                title="Passengers Cabins"
+                title="Vehicles Parking's"
                 data={data}
                 columns={columns}
+                onRowClick={() => {}}
                 hideBorder
             />
 
@@ -241,4 +256,4 @@ function PassengersCabinsEditForm() {
     );
 }
 
-export default PassengersCabinsEditForm;
+export default VehiclesParkingEditForm;

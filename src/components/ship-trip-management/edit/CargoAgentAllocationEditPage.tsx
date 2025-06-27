@@ -1,17 +1,17 @@
 import { z } from "zod";
-import { useToast } from "../../hooks/useToast";
+import { useToast } from "../../../hooks/useToast";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormLayout from "../../layout/FormLayout";
-import FormFieldsLayout from "../../layout/FormFieldsLayout";
-import { SearchedDropDown } from "../SearchedDropDown";
-import { FormButtons, FormInput } from "../form";
-import { DynamicTable } from "../table";
-import { TableColumn, TableData } from "../../types/table";
+import FormLayout from "../../../layout/FormLayout";
+import FormFieldsLayout from "../../../layout/FormFieldsLayout";
+import { SearchedDropDown } from "../../SearchedDropDown";
+import { FormButtons, FormInput } from "../../form";
+import { DynamicTable } from "../../table";
+import { TableColumn, TableData } from "../../../types/table";
 
-type VehiclesAgent = {
+type CargoAgent = {
     id?: string;
     cabin: string;
     agent: string;
@@ -20,7 +20,7 @@ type VehiclesAgent = {
     availableQuantity: string;
 };
 
-const vehiclesAgentSchema = z.object({
+const cargoAgentSchema = z.object({
     id: z.string().optional(),
     cabin: z.string(),
     agent: z.string(),
@@ -29,11 +29,11 @@ const vehiclesAgentSchema = z.object({
     availableQuantity: z.string(),
 });
 
-function VehiclesAgentAllocationEditPage() {
+function CargoAgentAllocationEditPage() {
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState<VehiclesAgent>({
+    const [errors, setErrors] = useState<CargoAgent>({
         cabin: "",
         agent: "",
         availableWeight: "",
@@ -43,8 +43,8 @@ function VehiclesAgentAllocationEditPage() {
 
     const [selectedCabin, setSelectedCabin] = useState<string | null>(null);
 
-    const { control, handleSubmit, reset, formState } = useForm<VehiclesAgent>({
-        resolver: zodResolver(vehiclesAgentSchema),
+    const { control, handleSubmit, reset, formState } = useForm<CargoAgent>({
+        resolver: zodResolver(cargoAgentSchema),
         defaultValues: {
             id: "",
             cabin: "",
@@ -56,7 +56,7 @@ function VehiclesAgentAllocationEditPage() {
         mode: "onChange",
     });
 
-    const onSubmit = async (formData: VehiclesAgent) => {
+    const onSubmit = async (formData: CargoAgent) => {
         setIsLoading(true);
         try {
             // Create FormData object for file upload
@@ -88,7 +88,7 @@ function VehiclesAgentAllocationEditPage() {
             // const response = await api.post('/company', apiFormData);
 
             addToast({
-                message: "Vehicles Agent Allocation added successfully",
+                message: "Cargo Agent Allocation added successfully",
                 type: "success",
                 title: "Success!",
             });
@@ -96,7 +96,7 @@ function VehiclesAgentAllocationEditPage() {
             reset();
             navigate(-1);
         } catch (error: any) {
-            console.error("Error adding vehicles agent allocation:", error);
+            console.error("Error adding cargo agent allocation:", error);
             if (error?.errors) {
                 // Map API error fields to our frontend field names
                 const mappedErrors: any = {};
@@ -289,9 +289,10 @@ function VehiclesAgentAllocationEditPage() {
 
             <FormFieldsLayout cols="1">
                 <DynamicTable
-                    title="Vehicles Parking's"
+                    title="Cargo Compartments"
                     columns={columns}
                     data={data}
+                    onRowClick={() => {}}
                     hideBorder
                 />
             </FormFieldsLayout>
@@ -301,4 +302,4 @@ function VehiclesAgentAllocationEditPage() {
     );
 }
 
-export default VehiclesAgentAllocationEditPage;
+export default CargoAgentAllocationEditPage;

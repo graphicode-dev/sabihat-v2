@@ -1,10 +1,12 @@
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
+import { useToast } from "../../../../../hooks/useToast";
 import { useNavigate, useParams } from "react-router-dom";
 
 function ScheduleNewTripsViewPage() {
     const navigate = useNavigate();
     const { id } = useParams();
+    const { addToast, addAlertToast } = useToast();
 
     const data = {
         id: "1",
@@ -183,6 +185,32 @@ function ScheduleNewTripsViewPage() {
                         `/ship-trip-management/schedule-new-trips/tickets/${id}`
                     )
                 }
+
+                onDelete={() => {
+                    addAlertToast(
+                        "Are you sure you want to delete this trip?",
+                        [
+                            {
+                                text: "OK",
+                                onClick: () => {
+                                    addToast({
+                                        type: "success",
+                                        message:
+                                            "Trip deleted successfully",
+                                        title: "Success!",
+                                    });
+                                    navigate(-1);
+                                },
+                                variant: "primary",
+                            },
+                            {
+                                text: "Cancel",
+                                onClick: () => {},
+                                variant: "secondary",
+                            },
+                        ]
+                    );
+                }}
                 ticketButton
                 hideBorder
             />

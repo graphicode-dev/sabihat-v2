@@ -1,10 +1,12 @@
 // import { useParams } from "react-router-dom";
 import ViewCard from "../../../../../components/ui/ViewCard";
+import { useToast } from "../../../../../hooks/useToast";
 import PageLayout from "../../../../../layout/PageLayout";
 import { useNavigate, useParams } from "react-router-dom";
 
 function ScheduleNewShipsViewPage() {
     const navigate = useNavigate();
+    const { addToast, addAlertToast } = useToast();
     const { id } = useParams();
 
     const data = {
@@ -184,6 +186,31 @@ function ScheduleNewShipsViewPage() {
                         `/ship-trip-management/schedule-new-ships/edit/${id}`
                     )
                 }
+                onDelete={() => {
+                    addAlertToast(
+                        "Are you sure you want to delete this ship?",
+                        [
+                            {
+                                text: "OK",
+                                onClick: () => {
+                                    addToast({
+                                        type: "success",
+                                        message:
+                                            "Ship deleted successfully",
+                                        title: "Success!",
+                                    });
+                                    navigate(-1);
+                                },
+                                variant: "primary",
+                            },
+                            {
+                                text: "Cancel",
+                                onClick: () => {},
+                                variant: "secondary",
+                            },
+                        ]
+                    );
+                }}
                 buttons
             />
         </PageLayout>

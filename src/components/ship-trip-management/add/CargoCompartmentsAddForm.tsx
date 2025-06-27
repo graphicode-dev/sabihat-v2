@@ -1,14 +1,14 @@
 import { z } from "zod";
-import { useToast } from "../../hooks/useToast";
+import { useToast } from "../../../hooks/useToast";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormLayout from "../../layout/FormLayout";
-import FormFieldsLayout from "../../layout/FormFieldsLayout";
-import { FormButtons, FormInput } from "../form";
-import { DynamicTable } from "../table";
-import { TableColumn, TableData } from "../../types/table";
+import FormLayout from "../../../layout/FormLayout";
+import FormFieldsLayout from "../../../layout/FormFieldsLayout";
+import { FormButtons, FormInput } from "../../form";
+import { DynamicTable } from "../../table";
+import { TableColumn, TableData } from "../../../types/table";
 
 type CargoCompartments = {
     id?: string;
@@ -251,6 +251,7 @@ function CargoCompartmentsEditForm() {
                 title="Cargo Compartments"
                 data={data}
                 columns={columns}
+                onRowClick={() => {}}
                 hideBorder
             />
 

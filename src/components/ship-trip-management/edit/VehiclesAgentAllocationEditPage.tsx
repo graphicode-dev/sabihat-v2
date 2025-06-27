@@ -1,56 +1,62 @@
 import { z } from "zod";
-import { useToast } from "../../hooks/useToast";
+import { useToast } from "../../../hooks/useToast";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormLayout from "../../layout/FormLayout";
-import FormFieldsLayout from "../../layout/FormFieldsLayout";
-import { SearchedDropDown } from "../SearchedDropDown";
-import { FormButtons, FormInput } from "../form";
-import { DynamicTable } from "../table";
-import { TableColumn, TableData } from "../../types/table";
+import FormLayout from "../../../layout/FormLayout";
+import FormFieldsLayout from "../../../layout/FormFieldsLayout";
+import { SearchedDropDown } from "../../SearchedDropDown";
+import { FormButtons, FormInput } from "../../form";
+import { DynamicTable } from "../../table";
+import { TableColumn, TableData } from "../../../types/table";
 
-type PassengersAgent = {
+type VehiclesAgent = {
     id?: string;
     cabin: string;
     agent: string;
-    passengers: string;
+    availableWeight: string;
+    availableSize: string;
+    availableQuantity: string;
 };
 
-const passengersAgentSchema = z.object({
+const vehiclesAgentSchema = z.object({
     id: z.string().optional(),
     cabin: z.string(),
     agent: z.string(),
-    passengers: z.string(),
+    availableWeight: z.string(),
+    availableSize: z.string(),
+    availableQuantity: z.string(),
 });
 
-function PassengersAgentAllocationEditPage() {
+function VehiclesAgentAllocationEditPage() {
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState<PassengersAgent>({
+    const [errors, setErrors] = useState<VehiclesAgent>({
         cabin: "",
         agent: "",
-        passengers: "",
+        availableWeight: "",
+        availableSize: "",
+        availableQuantity: "",
     });
 
     const [selectedCabin, setSelectedCabin] = useState<string | null>(null);
-    const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
 
-    const { control, handleSubmit, reset, formState } =
-        useForm<PassengersAgent>({
-            resolver: zodResolver(passengersAgentSchema),
-            defaultValues: {
-                id: "",
-                cabin: "",
-                agent: "",
-                passengers: "",
-            },
-            mode: "onChange",
-        });
+    const { control, handleSubmit, reset, formState } = useForm<VehiclesAgent>({
+        resolver: zodResolver(vehiclesAgentSchema),
+        defaultValues: {
+            id: "",
+            cabin: "",
+            agent: "",
+            availableWeight: "",
+            availableSize: "",
+            availableQuantity: "",
+        },
+        mode: "onChange",
+    });
 
-    const onSubmit = async (formData: PassengersAgent) => {
+    const onSubmit = async (formData: VehiclesAgent) => {
         setIsLoading(true);
         try {
             // Create FormData object for file upload
@@ -64,8 +70,17 @@ function PassengersAgentAllocationEditPage() {
             if (formData.agent) {
                 apiFormData.append("agent", formData.agent);
             }
-            if (formData.passengers) {
-                apiFormData.append("passengers", formData.passengers);
+            if (formData.availableWeight) {
+                apiFormData.append("availableWeight", formData.availableWeight);
+            }
+            if (formData.availableSize) {
+                apiFormData.append("availableSize", formData.availableSize);
+            }
+            if (formData.availableQuantity) {
+                apiFormData.append(
+                    "availableQuantity",
+                    formData.availableQuantity
+                );
             }
 
             // Simulate API call success
@@ -73,7 +88,7 @@ function PassengersAgentAllocationEditPage() {
             // const response = await api.post('/company', apiFormData);
 
             addToast({
-                message: "Passengers Agent Allocation added successfully",
+                message: "Vehicles Agent Allocation added successfully",
                 type: "success",
                 title: "Success!",
             });
@@ -81,7 +96,7 @@ function PassengersAgentAllocationEditPage() {
             reset();
             navigate(-1);
         } catch (error: any) {
-            console.error("Error adding passengers agent allocation:", error);
+            console.error("Error adding vehicles agent allocation:", error);
             if (error?.errors) {
                 // Map API error fields to our frontend field names
                 const mappedErrors: any = {};
@@ -92,8 +107,16 @@ function PassengersAgentAllocationEditPage() {
                 if (error.errors.agent) {
                     mappedErrors.agent = error.errors.agent[0];
                 }
-                if (error.errors.passengers) {
-                    mappedErrors.passengers = error.errors.passengers[0];
+                if (error.errors.availableWeight) {
+                    mappedErrors.availableWeight =
+                        error.errors.availableWeight[0];
+                }
+                if (error.errors.availableSize) {
+                    mappedErrors.availableSize = error.errors.availableSize[0];
+                }
+                if (error.errors.availableQuantity) {
+                    mappedErrors.availableQuantity =
+                        error.errors.availableQuantity[0];
                 }
 
                 console.log("Mapped errors:", mappedErrors);
@@ -122,9 +145,19 @@ function PassengersAgentAllocationEditPage() {
             accessorKey: "agent",
         },
         {
-            id: "passengers",
-            header: "Number of Passengers",
-            accessorKey: "passengers",
+            id: "availableWeight",
+            header: "Available Weight",
+            accessorKey: "availableWeight",
+        },
+        {
+            id: "availableSize",
+            header: "Available Size",
+            accessorKey: "availableSize",
+        },
+        {
+            id: "availableQuantity",
+            header: "Available Quantity",
+            accessorKey: "availableQuantity",
         },
     ];
 
@@ -134,7 +167,9 @@ function PassengersAgentAllocationEditPage() {
             columns: {
                 cabin: "Cabin 1",
                 agent: "Agent 1",
-                passengers: "10",
+                availableWeight: "10",
+                availableSize: "10",
+                availableQuantity: "10",
             },
         },
         {
@@ -142,7 +177,9 @@ function PassengersAgentAllocationEditPage() {
             columns: {
                 cabin: "Cabin 2",
                 agent: "Agent 2",
-                passengers: "20",
+                availableWeight: "20",
+                availableSize: "20",
+                availableQuantity: "20",
             },
         },
         {
@@ -150,7 +187,9 @@ function PassengersAgentAllocationEditPage() {
             columns: {
                 cabin: "Cabin 3",
                 agent: "Agent 3",
-                passengers: "30",
+                availableWeight: "30",
+                availableSize: "30",
+                availableQuantity: "30",
             },
         },
         {
@@ -158,7 +197,9 @@ function PassengersAgentAllocationEditPage() {
             columns: {
                 cabin: "Cabin 4",
                 agent: "Agent 4",
-                passengers: "40",
+                availableWeight: "40",
+                availableSize: "40",
+                availableQuantity: "40",
             },
         },
         {
@@ -166,7 +207,9 @@ function PassengersAgentAllocationEditPage() {
             columns: {
                 cabin: "Cabin 5",
                 agent: "Agent 5",
-                passengers: "50",
+                availableWeight: "50",
+                availableSize: "50",
+                availableQuantity: "50",
             },
         },
     ];
@@ -177,7 +220,7 @@ function PassengersAgentAllocationEditPage() {
             handleFormSubmit={onSubmit}
             removeBorder
         >
-            <FormFieldsLayout cols="4">
+            <FormFieldsLayout cols="6">
                 {/* Cabin */}
                 <SearchedDropDown
                     name="cabin"
@@ -198,32 +241,44 @@ function PassengersAgentAllocationEditPage() {
                 />
 
                 {/* Agent */}
-                <SearchedDropDown
-                    name="agent"
-                    control={control}
-                    label="Agent"
-                    options={[
-                        { key: "1", value: "Agent 1" },
-                        { key: "2", value: "Agent 2" },
-                        { key: "3", value: "Agent 3" },
-                        { key: "4", value: "Agent 4" },
-                        { key: "5", value: "Agent 5" },
-                    ]}
-                    value={selectedAgent}
-                    onChange={(value) => {
-                        setSelectedAgent(value);
-                    }}
-                    placeholder="Select Agent"
-                />
-
-                {/* Passengers */}
                 <FormInput
-                    name="passengers"
-                    label="Passengers"
+                    name="agent"
+                    label="Agent"
                     control={control}
                     type="text"
-                    error={errors.passengers}
+                    error={errors.agent}
                 />
+
+                {/* Available Weight */}
+                <FormInput
+                    name="availableWeight"
+                    label="Available Weight"
+                    control={control}
+                    type="text"
+                    error={errors.availableWeight}
+                    requiredLabel="Available 40"
+                />
+
+                {/* Available Size */}
+                <FormInput
+                    name="availableSize"
+                    label="Available Size"
+                    control={control}
+                    type="text"
+                    error={errors.availableSize}
+                    requiredLabel="Available 40"
+                />
+
+                {/* Available Quantity */}
+                <FormInput
+                    name="availableQuantity"
+                    label="Available Quantity"
+                    control={control}
+                    type="text"
+                    error={errors.availableQuantity}
+                    requiredLabel="Available 40"
+                />
+
                 <FormButtons
                     className="justify-end!"
                     isLoading={isLoading}
@@ -234,9 +289,10 @@ function PassengersAgentAllocationEditPage() {
 
             <FormFieldsLayout cols="1">
                 <DynamicTable
-                    title="Passengers Cabins"
+                    title="Vehicles Parking's"
                     columns={columns}
                     data={data}
+                    onRowClick={() => {}}
                     hideBorder
                 />
             </FormFieldsLayout>
@@ -246,4 +302,4 @@ function PassengersAgentAllocationEditPage() {
     );
 }
 
-export default PassengersAgentAllocationEditPage;
+export default VehiclesAgentAllocationEditPage;

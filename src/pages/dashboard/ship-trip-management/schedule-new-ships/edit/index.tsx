@@ -1,9 +1,9 @@
 import Tabs from "../../../../../components/ui/Tabs";
 import PageLayout from "../../../../../layout/PageLayout";
-import ShipInformationEditForm from "../../../../../components/ship-trip-management/ShipInformationEditForm";
-import PassengersCabinsEditForm from "../../../../../components/ship-trip-management/PassengersCabinsEditForm";
-import CargoCompartmentsEditForm from "../../../../../components/ship-trip-management/CargoCompartmentsEditForm";
-import VehiclesParkingEditForm from "../../../../../components/ship-trip-management/VehiclesParkingEditForm";
+import ShipInformationEditForm from "../../../../../components/ship-trip-management/edit/ShipInformationEditForm";
+import PassengersCabinsEditForm from "../../../../../components/ship-trip-management/edit/PassengersCabinsEditForm";
+import CargoCompartmentsEditForm from "../../../../../components/ship-trip-management/edit/CargoCompartmentsEditForm";
+import VehiclesParkingEditForm from "../../../../../components/ship-trip-management/edit/VehiclesParkingEditForm";
 
 function ScheduleNewShipsEditPage() {
     return (

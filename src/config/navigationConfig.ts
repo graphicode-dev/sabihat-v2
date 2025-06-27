@@ -488,6 +488,13 @@ const ScheduleNewShipsEditPage = lazy(
             "../pages/dashboard/ship-trip-management/schedule-new-ships/edit"
         )
 );
+const ScheduleNewShipsAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/ship-trip-management/schedule-new-ships/add"
+        )
+);
+
 // #endregion Schedule New Ships
 
 // #endregion Ship & Trip Management
@@ -1598,6 +1605,11 @@ export const navigationConfig: TabLink[] = [
                             title: "Edit",
                             path: "edit/:id",
                             component: ScheduleNewShipsEditPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "add",
+                            component: ScheduleNewShipsAddPage,
                         },
                     ],
                 },
