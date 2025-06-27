@@ -1,10 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
+import { useToast } from "../../../../../hooks/useToast";
 
 const PaymentReceiptsViewPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { addToast, addAlertToast } = useToast();
 
     const data = {
         id,
@@ -89,10 +91,33 @@ const PaymentReceiptsViewPage = () => {
                 }}
                 buttons
                 onEdit={() =>
-                    navigate(
-                        `/financial-transactions/payments/edit/${id}`
-                    )
+                    navigate(`/financial-transactions/payments/edit/${id}`)
                 }
+                onDelete={() => {
+                    addAlertToast(
+                        "Are you sure you want to delete this payment receipt?",
+                        [
+                            {
+                                text: "OK",
+                                onClick: () => {
+                                    addToast({
+                                        type: "success",
+                                        message:
+                                            "Payment receipt deleted successfully",
+                                        title: "Success!",
+                                    });
+                                    navigate(-1);
+                                },
+                                variant: "primary",
+                            },
+                            {
+                                text: "Cancel",
+                                onClick: () => {},
+                                variant: "secondary",
+                            },
+                        ]
+                    );
+                }}
             />
         </PageLayout>
     );

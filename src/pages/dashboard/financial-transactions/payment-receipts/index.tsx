@@ -1,8 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import { DynamicTable } from "../../../../components/table";
 import PageLayout from "../../../../layout/PageLayout";
 import { TableColumn, TableData } from "../../../../types/table";
 
 const PaymentReceiptsPage = () => {
+    const navigate = useNavigate();
     const columns: TableColumn[] = [
         {
             id: "date",
@@ -90,7 +92,9 @@ const PaymentReceiptsPage = () => {
                 columns={columns}
                 data={data}
                 addLabel="Add Payment"
-                onAddClick={() => {}}
+                onAddClick={() =>
+                    navigate("/financial-transactions/payments/add")
+                }
             />
         </PageLayout>
     );

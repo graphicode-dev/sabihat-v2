@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import { DynamicTable } from "../../../../components/table";
 import PageLayout from "../../../../layout/PageLayout";
 import { TableColumn, TableData } from "../../../../types/table";
 
 const ChartOfAccountPage = () => {
+    const navigate = useNavigate();
+
     const columns: TableColumn[] = [
         {
             id: "recordNo",
@@ -80,7 +83,9 @@ const ChartOfAccountPage = () => {
                 columns={columns}
                 data={data}
                 addLabel="Add Chart of Account"
-                onAddClick={() => {}}
+                onAddClick={() =>
+                    navigate("/financial-transactions/chart-of-account/add")
+                }
             />
         </PageLayout>
     );

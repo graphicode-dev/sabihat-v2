@@ -956,6 +956,12 @@ const ChartOfAccountEditPage = lazy(
             "../pages/dashboard/financial-transactions/chart-of-account/edit"
         )
 );
+const ChartOfAccountAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/financial-transactions/chart-of-account/add"
+        )
+);
 // #endregion Chart Of Account
 
 // #region Journal Entries
@@ -969,6 +975,10 @@ const JournalEntriesViewPage = lazy(
 const JournalEntriesEditPage = lazy(
     () =>
         import("../pages/dashboard/financial-transactions/journal-entries/edit")
+);
+const JournalEntriesAddPage = lazy(
+    () =>
+        import("../pages/dashboard/financial-transactions/journal-entries/add")
 );
 // #endregion Journal Entries
 
@@ -986,6 +996,12 @@ const PaymentReceiptsEditPage = lazy(
     () =>
         import(
             "../pages/dashboard/financial-transactions/payment-receipts/edit"
+        )
+);
+const PaymentReceiptsAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/financial-transactions/payment-receipts/add"
         )
 );
 // #endregion Payment & Receipts
@@ -2284,6 +2300,11 @@ export const navigationConfig: TabLink[] = [
                             path: "/edit/:id",
                             component: ChartOfAccountEditPage,
                         },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: ChartOfAccountAddPage,
+                        },
                     ],
                 },
                 {
@@ -2301,6 +2322,11 @@ export const navigationConfig: TabLink[] = [
                             path: "/edit/:id",
                             component: JournalEntriesEditPage,
                         },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: JournalEntriesAddPage,
+                        },
                     ],
                 },
                 {
@@ -2317,6 +2343,11 @@ export const navigationConfig: TabLink[] = [
                             title: "Edit",
                             path: "edit/:id",
                             component: PaymentReceiptsEditPage,
+                        },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: PaymentReceiptsAddPage,
                         },
                     ],
                 },

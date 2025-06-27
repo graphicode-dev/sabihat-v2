@@ -1,10 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
+import { useToast } from "../../../../../hooks/useToast";
 
 const JournalEntriesViewPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { addToast, addAlertToast } = useToast();
 
     const data = {
         id,
@@ -95,6 +97,31 @@ const JournalEntriesViewPage = () => {
                         `/financial-transactions/journal-entries/edit/${id}`
                     )
                 }
+                onDelete={() => {
+                    addAlertToast(
+                        "Are you sure you want to delete this journal entry?",
+                        [
+                            {
+                                text: "OK",
+                                onClick: () => {
+                                    addToast({
+                                        type: "success",
+                                        message:
+                                            "Journal entry deleted successfully",
+                                        title: "Success!",
+                                    });
+                                    navigate(-1);
+                                },
+                                variant: "primary",
+                            },
+                            {
+                                text: "Cancel",
+                                onClick: () => {},
+                                variant: "secondary",
+                            },
+                        ]
+                    );
+                }}
             />
         </PageLayout>
     );
