@@ -2,10 +2,12 @@ import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
 import defaultAvatar from "../../../../../assets/images/default-user.png";
 import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "../../../../../hooks/useToast";
 
 function AuthoritiesViewPage() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { addToast, addAlertToast } = useToast();
 
     const data = {
         user: {
@@ -37,6 +39,31 @@ function AuthoritiesViewPage() {
                         `/business-partners-management/authorities/edit/${id}`
                     )
                 }
+                onDelete={() => {
+                    addAlertToast(
+                        "Are you sure you want to delete this authority?",
+                        [
+                            {
+                                text: "OK",
+                                onClick: () => {
+                                    addToast({
+                                        type: "success",
+                                        message:
+                                            "Authority deleted successfully",
+                                        title: "Success!",
+                                    });
+                                    navigate(-1);
+                                },
+                                variant: "primary",
+                            },
+                            {
+                                text: "Cancel",
+                                onClick: () => {},
+                                variant: "secondary",
+                            },
+                        ]
+                    );
+                }}
                 buttons
                 hideBorder
             />

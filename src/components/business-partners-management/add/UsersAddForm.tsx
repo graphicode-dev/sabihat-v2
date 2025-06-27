@@ -1,15 +1,15 @@
-import { FormButtons } from "../form";
-import FormFieldsLayout from "../../layout/FormFieldsLayout";
-import FormLayout from "../../layout/FormLayout";
+import { FormButtons } from "../../form";
+import FormFieldsLayout from "../../../layout/FormFieldsLayout";
+import FormLayout from "../../../layout/FormLayout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../../hooks/useToast";
+import { useToast } from "../../../hooks/useToast";
 import { z } from "zod";
-import { DynamicTable } from "../table";
-import { TableColumn, TableData } from "../../types/table";
-import ToggleButton from "../ui/ToggleButton";
+import { DynamicTable } from "../../table";
+import { TableColumn, TableData } from "../../../types/table";
+import ToggleButton from "../../ui/ToggleButton";
 
 type User = {
     id: string;
@@ -28,7 +28,7 @@ const usersSchema = z.object({
     users: z.record(z.string(), z.boolean()),
 });
 
-function UsersEditForm() {
+function UsersAddForm() {
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
@@ -241,4 +241,4 @@ function UsersEditForm() {
     );
 }
 
-export default UsersEditForm;
+export default UsersAddForm;

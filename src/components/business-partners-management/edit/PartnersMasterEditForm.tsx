@@ -1,66 +1,70 @@
-import { FormInput } from "../form";
-import { FormButtons } from "../form";
-import FormFieldsLayout from "../../layout/FormFieldsLayout";
-import FormLayout from "../../layout/FormLayout";
+import { FormInput } from "../../form";
+import { FormButtons } from "../../form";
+import FormFieldsLayout from "../../../layout/FormFieldsLayout";
+import { SearchedDropDown } from "../../SearchedDropDown";
+import FormLayout from "../../../layout/FormLayout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../../hooks/useToast";
+import { useToast } from "../../../hooks/useToast";
 import { z } from "zod";
 
 type Error = {
     name: string;
-    title: string;
     phone: string;
-    email: string;
-    hotline: string;
+    address: string;
+    layer: string;
+    image: string;
 };
 
-type ContactInformation = {
+type PartnersMaster = {
     id?: string;
     name: string;
-    title: string;
     phone: string;
-    email: string;
-    hotline: string;
+    address: string;
+    layer: string;
+    image: File | null;
 };
 
-const contactInformationSchema = z.object({
+const partnersMasterSchema = z.object({
     id: z.string().optional(),
     name: z.string(),
-    title: z.string(),
     phone: z.string(),
-    email: z.string(),
-    hotline: z.string(),
+    address: z.string(),
+    layer: z.string(),
+    image: z.instanceof(File).nullable(),
 });
-function ContactInformationEditForm() {
+
+function PartnersMasterEditForm() {
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<Error>({
         name: "",
-        title: "",
         phone: "",
-        email: "",
-        hotline: "",
+        address: "",
+        layer: "",
+        image: "",
     });
+    const [selectedLayer, setSelectedLayer] = useState<string | null>(null);
 
-    const { control, handleSubmit, reset, formState } =
-        useForm<ContactInformation>({
-            resolver: zodResolver(contactInformationSchema),
+    const { control, handleSubmit, reset, formState } = useForm<PartnersMaster>(
+        {
+            resolver: zodResolver(partnersMasterSchema),
             defaultValues: {
                 id: "",
                 name: "",
-                title: "",
                 phone: "",
-                email: "",
-                hotline: "",
+                address: "",
+                layer: "",
+                image: null,
             },
             mode: "onChange",
-        });
+        }
+    );
 
-    const onSubmit = async (formData: ContactInformation) => {
+    const onSubmit = async (formData: PartnersMaster) => {
         setIsLoading(true);
         try {
             // Create FormData object for file upload
@@ -71,17 +75,17 @@ function ContactInformationEditForm() {
             if (formData.name) {
                 apiFormData.append("name", formData.name);
             }
-            if (formData.title) {
-                apiFormData.append("title", formData.title);
-            }
             if (formData.phone) {
                 apiFormData.append("phone", formData.phone);
             }
-            if (formData.email) {
-                apiFormData.append("email", formData.email);
+            if (formData.address) {
+                apiFormData.append("address", formData.address);
             }
-            if (formData.hotline) {
-                apiFormData.append("hotline", formData.hotline);
+            if (formData.layer) {
+                apiFormData.append("layer", formData.layer);
+            }
+            if (formData.image instanceof File) {
+                apiFormData.append("image", formData.image);
             }
 
             // Simulate API call success
@@ -89,7 +93,7 @@ function ContactInformationEditForm() {
             // const response = await api.post('/company', apiFormData);
 
             addToast({
-                message: "Contact Information updated successfully",
+                message: "About us updated successfully",
                 type: "success",
                 title: "Success!",
             });
@@ -97,7 +101,7 @@ function ContactInformationEditForm() {
             reset();
             navigate(-1);
         } catch (error: any) {
-            console.error("Error updating Contact Information:", error);
+            console.error("Error updating about us:", error);
             if (error?.errors) {
                 // Map API error fields to our frontend field names
                 const mappedErrors: any = {};
@@ -105,17 +109,17 @@ function ContactInformationEditForm() {
                 if (error.errors.name) {
                     mappedErrors.name = error.errors.name[0];
                 }
-                if (error.errors.title) {
-                    mappedErrors.title = error.errors.title[0];
-                }
                 if (error.errors.phone) {
                     mappedErrors.phone = error.errors.phone[0];
                 }
-                if (error.errors.email) {
-                    mappedErrors.email = error.errors.email[0];
+                if (error.errors.address) {
+                    mappedErrors.address = error.errors.address[0];
                 }
-                if (error.errors.hotline) {
-                    mappedErrors.hotline = error.errors.hotline[0];
+                if (error.errors.layer) {
+                    mappedErrors.layer = error.errors.layer[0];
+                }
+                if (error.errors.image) {
+                    mappedErrors.image = error.errors.image[0];
                 }
 
                 console.log("Mapped errors:", mappedErrors);
@@ -147,14 +151,6 @@ function ContactInformationEditForm() {
                     error={errors.name}
                 />
 
-                {/* Title */}
-                <FormInput
-                    name="title"
-                    control={control}
-                    label="Title"
-                    error={errors.title}
-                />
-
                 {/* Phone */}
                 <FormInput
                     name="phone"
@@ -163,26 +159,53 @@ function ContactInformationEditForm() {
                     error={errors.phone}
                 />
 
-                {/* Email */}
+                {/* Address */}
                 <FormInput
-                    name="email"
+                    name="address"
                     control={control}
-                    label="Email"
-                    error={errors.email}
+                    label="Address"
+                    error={errors.address}
                 />
 
-                {/* Hotline */}
-                <FormInput
-                    name="hotline"
+                {/* Layer */}
+                <SearchedDropDown
+                    name="layer"
                     control={control}
-                    label="Hotline"
-                    error={errors.hotline}
+                    label="Layer"
+                    options={[
+                        { key: "1", value: "Layer 1" },
+                        { key: "2", value: "Layer 2" },
+                        { key: "3", value: "Layer 3" },
+                        { key: "4", value: "Layer 4" },
+                        { key: "5", value: "Layer 5" },
+                    ]}
+                    value={selectedLayer}
+                    onChange={(value) => {
+                        setSelectedLayer(value);
+                    }}
+                    placeholder="Select Layer"
+                />
+            </FormFieldsLayout>
+            <FormFieldsLayout>
+                {/* image */}
+                <FormInput
+                    name="image"
+                    control={control}
+                    type="file"
+                    fileLabel="Image"
+                    error={errors.image}
                 />
             </FormFieldsLayout>
 
-            <FormButtons isLoading={isLoading} disabled={!formState.isDirty} />
+            <FormButtons
+                isLoading={isLoading}
+                disabled={!formState.isDirty}
+                cancelText="Cancel"
+                className="mt-4"
+                // Add explicit onCancel handler to ensure navigation works
+            />
         </FormLayout>
     );
 }
 
-export default ContactInformationEditForm;
+export default PartnersMasterEditForm;

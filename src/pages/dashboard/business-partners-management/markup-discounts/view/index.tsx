@@ -1,9 +1,13 @@
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
 import { TableData } from "../../../../../types/table";
+import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "../../../../../hooks/useToast";
 
 function MarkUpViewPage() {
-    // const { id } = useParams();
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const { addToast, addAlertToast } = useToast();
 
     const data: TableData = {
         id: "1",
@@ -97,6 +101,35 @@ function MarkUpViewPage() {
                             ],
                         },
                     ],
+                }}
+                onEdit={() =>
+                    navigate(
+                        `/business-partners-management/markup-discounts/edit/${id}`
+                    )
+                }
+                onDelete={() => {
+                    addAlertToast(
+                        "Are you sure you want to delete this markup discount?",
+                        [
+                            {
+                                text: "OK",
+                                onClick: () => {
+                                    addToast({
+                                        type: "success",
+                                        message: "Markup discount deleted successfully",
+                                        title: "Success!",
+                                    });
+                                    navigate(-1);
+                                },
+                                variant: "primary",
+                            },
+                            {
+                                text: "Cancel",
+                                onClick: () => {},
+                                variant: "secondary",
+                            },
+                        ]
+                    );
                 }}
                 buttons
                 hideBorder

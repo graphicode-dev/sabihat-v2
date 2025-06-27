@@ -1,12 +1,21 @@
+import { FormInput } from "../../form";
+import { FormButtons } from "../../form";
+import FormFieldsLayout from "../../../layout/FormFieldsLayout";
+import FormLayout from "../../../layout/FormLayout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../../../hooks/useToast";
 import { z } from "zod";
-import { useToast } from "../../hooks/useToast";
-import FormLayout from "../../layout/FormLayout";
-import FormFieldsLayout from "../../layout/FormFieldsLayout";
-import { FormButtons, FormInput } from "../form";
+
+type Error = {
+    name: string;
+    title: string;
+    phone: string;
+    email: string;
+    hotline: string;
+};
 
 type ContactInformation = {
     id?: string;
@@ -25,12 +34,11 @@ const contactInformationSchema = z.object({
     email: z.string(),
     hotline: z.string(),
 });
-
-function AuthoritiesContactInformationEditForm() {
+function ContactInformationEditForm() {
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState<ContactInformation>({
+    const [errors, setErrors] = useState<Error>({
         name: "",
         title: "",
         phone: "",
@@ -63,6 +71,9 @@ function AuthoritiesContactInformationEditForm() {
             if (formData.name) {
                 apiFormData.append("name", formData.name);
             }
+            if (formData.title) {
+                apiFormData.append("title", formData.title);
+            }
             if (formData.phone) {
                 apiFormData.append("phone", formData.phone);
             }
@@ -72,16 +83,13 @@ function AuthoritiesContactInformationEditForm() {
             if (formData.hotline) {
                 apiFormData.append("hotline", formData.hotline);
             }
-            if (formData.title) {
-                apiFormData.append("title", formData.title);
-            }
 
             // Simulate API call success
             // In a real app, you would send apiFormData to your backend
             // const response = await api.post('/company', apiFormData);
 
             addToast({
-                message: "Contact Information added successfully",
+                message: "Contact Information updated successfully",
                 type: "success",
                 title: "Success!",
             });
@@ -89,13 +97,16 @@ function AuthoritiesContactInformationEditForm() {
             reset();
             navigate(-1);
         } catch (error: any) {
-            console.error("Error adding contact information:", error);
+            console.error("Error updating Contact Information:", error);
             if (error?.errors) {
                 // Map API error fields to our frontend field names
                 const mappedErrors: any = {};
 
                 if (error.errors.name) {
                     mappedErrors.name = error.errors.name[0];
+                }
+                if (error.errors.title) {
+                    mappedErrors.title = error.errors.title[0];
                 }
                 if (error.errors.phone) {
                     mappedErrors.phone = error.errors.phone[0];
@@ -105,9 +116,6 @@ function AuthoritiesContactInformationEditForm() {
                 }
                 if (error.errors.hotline) {
                     mappedErrors.hotline = error.errors.hotline[0];
-                }
-                if (error.errors.title) {
-                    mappedErrors.title = error.errors.title[0];
                 }
 
                 console.log("Mapped errors:", mappedErrors);
@@ -136,7 +144,6 @@ function AuthoritiesContactInformationEditForm() {
                     name="name"
                     control={control}
                     label="Name"
-                    placeholder="Enter Name"
                     error={errors.name}
                 />
 
@@ -145,7 +152,6 @@ function AuthoritiesContactInformationEditForm() {
                     name="title"
                     control={control}
                     label="Title"
-                    placeholder="Enter Title"
                     error={errors.title}
                 />
 
@@ -154,7 +160,6 @@ function AuthoritiesContactInformationEditForm() {
                     name="phone"
                     control={control}
                     label="Phone"
-                    placeholder="Enter Phone"
                     error={errors.phone}
                 />
 
@@ -164,8 +169,6 @@ function AuthoritiesContactInformationEditForm() {
                     control={control}
                     label="Email"
                     error={errors.email}
-                    type="email"
-                    placeholder="Enter Email"
                 />
 
                 {/* Hotline */}
@@ -174,19 +177,12 @@ function AuthoritiesContactInformationEditForm() {
                     control={control}
                     label="Hotline"
                     error={errors.hotline}
-                    type="number"
-                    placeholder="Enter Hotline"
                 />
             </FormFieldsLayout>
 
-            <FormButtons
-                isLoading={isLoading}
-                submitText="Add"
-                disabled={!formState.isDirty}
-                cancelText="Cancel"
-            />
+            <FormButtons isLoading={isLoading} disabled={!formState.isDirty} />
         </FormLayout>
     );
 }
 
-export default AuthoritiesContactInformationEditForm;
+export default ContactInformationEditForm;

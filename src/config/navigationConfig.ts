@@ -527,6 +527,13 @@ const BusinessPartnersCommissionsAddPage = lazy(
             "../pages/dashboard/business-partners-management/commissions/add"
         )
 );
+
+const BusinessPartnersCommissionsEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/business-partners-management/commissions/edit"
+        )
+);
 // #endregion Commissions
 
 // #region Markup & Discounts
@@ -546,6 +553,12 @@ const BusinessPartnersMarkupDiscountsAddPage = lazy(
     () =>
         import(
             "../pages/dashboard/business-partners-management/markup-discounts/add"
+        )
+);
+const BusinessPartnersMarkupDiscountsEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/business-partners-management/markup-discounts/edit"
         )
 );
 // #endregion Markup & Discounts
@@ -2021,6 +2034,11 @@ export const navigationConfig: TabLink[] = [
                             path: "/add",
                             component: BusinessPartnersCommissionsAddPage,
                         },
+                        {
+                            title: "Edit",
+                            path: "edit/:id",
+                            component: BusinessPartnersCommissionsEditPage,
+                        },
                     ],
                 },
                 {
@@ -2037,6 +2055,11 @@ export const navigationConfig: TabLink[] = [
                             title: "Add",
                             path: "/add",
                             component: BusinessPartnersMarkupDiscountsAddPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "/edit/:id",
+                            component: BusinessPartnersMarkupDiscountsEditPage,
                         },
                     ],
                 },

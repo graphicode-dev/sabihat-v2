@@ -1,9 +1,9 @@
 import Tabs from "../../../../../components/ui/Tabs";
 import PageLayout from "../../../../../layout/PageLayout";
-import PartnersMasterEditForm from "../../../../../components/business-partners-management/PartnersMasterEditForm";
-import QuotaManagementEditForm from "../../../../../components/business-partners-management/QuotaManagementEditForm";
-import ContactInformationEditForm from "../../../../../components/business-partners-management/ContactInformationEditForm";
-import UsersEditForm from "../../../../../components/business-partners-management/UsersEditForm";
+import PartnersMasterEditForm from "../../../../../components/business-partners-management/edit/PartnersMasterEditForm";
+import QuotaManagementEditForm from "../../../../../components/business-partners-management/edit/QuotaManagementEditForm";
+import ContactInformationEditForm from "../../../../../components/business-partners-management/edit/ContactInformationEditForm";
+import UsersEditForm from "../../../../../components/business-partners-management/edit/UsersEditForm";
 
 function PartnersEditPage() {
     return (

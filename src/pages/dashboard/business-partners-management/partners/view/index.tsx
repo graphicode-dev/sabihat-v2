@@ -2,9 +2,11 @@ import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
 import defaultAvatar from "../../../../../assets/images/default-user.png";
 import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "../../../../../hooks/useToast";
 
 function PartnersViewPage() {
     const { id } = useParams();
+    const { addAlertToast, addToast } = useToast();
     const navigate = useNavigate();
 
     const data = {
@@ -79,6 +81,31 @@ function PartnersViewPage() {
                         `/business-partners-management/partners/edit/${id}`
                     )
                 }
+                onDelete={() => {
+                    addAlertToast(
+                        "Are you sure you want to delete this partner?",
+                        [
+                            {
+                                text: "OK",
+                                onClick: () => {
+                                    addToast({
+                                        type: "success",
+                                        message:
+                                            "Partner deleted successfully",
+                                        title: "Success!",
+                                    });
+                                    navigate(-1);
+                                },
+                                variant: "primary",
+                            },
+                            {
+                                text: "Cancel",
+                                onClick: () => {},
+                                variant: "secondary",
+                            },
+                        ]
+                    );
+                }}
                 buttons
                 hideBorder
             />

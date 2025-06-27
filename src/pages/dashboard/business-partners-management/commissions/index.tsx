@@ -100,6 +100,7 @@ function CommissionsPage() {
                         `/business-partners-management/commissions/view/${rowId}`
                     )
                 }
+                
                 hideBorder
             />
         </PageLayout>

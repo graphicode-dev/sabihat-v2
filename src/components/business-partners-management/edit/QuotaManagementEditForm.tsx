@@ -1,12 +1,12 @@
-import { FormInput } from "../form";
-import { FormButtons } from "../form";
-import FormFieldsLayout from "../../layout/FormFieldsLayout";
-import FormLayout from "../../layout/FormLayout";
+import { FormInput } from "../../form";
+import { FormButtons } from "../../form";
+import FormFieldsLayout from "../../../layout/FormFieldsLayout";
+import FormLayout from "../../../layout/FormLayout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../../hooks/useToast";
+import { useToast } from "../../../hooks/useToast";
 import { z } from "zod";
 
 type Error = {

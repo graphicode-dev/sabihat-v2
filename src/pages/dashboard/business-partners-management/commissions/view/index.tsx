@@ -1,9 +1,13 @@
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
 import { TableData } from "../../../../../types/table";
+import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "../../../../../hooks/useToast";
 
 function CommissionsViewPage() {
-    // const { id } = useParams();
+    const { id } = useParams();
+    const { addAlertToast, addToast } = useToast();
+    const navigate = useNavigate();
 
     const data: TableData = {
         id: "1",
@@ -92,6 +96,36 @@ function CommissionsViewPage() {
                             ],
                         },
                     ],
+                }}
+                onEdit={() => {
+                    navigate(
+                        `/business-partners-management/commissions/edit/${id}`
+                    );
+                }}
+                onDelete={() => {
+                    addAlertToast(
+                        "Are you sure you want to delete this commission?",
+                        [
+                            {
+                                text: "OK",
+                                onClick: () => {
+                                    addToast({
+                                        type: "success",
+                                        message:
+                                            "Commission deleted successfully",
+                                        title: "Success!",
+                                    });
+                                    navigate(-1);
+                                },
+                                variant: "primary",
+                            },
+                            {
+                                text: "Cancel",
+                                onClick: () => {},
+                                variant: "secondary",
+                            },
+                        ]
+                    );
                 }}
                 buttons
                 hideBorder

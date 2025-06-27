@@ -3,10 +3,10 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { useToast } from "../../hooks/useToast";
-import FormLayout from "../../layout/FormLayout";
-import FormFieldsLayout from "../../layout/FormFieldsLayout";
-import { FormButtons, FormInput } from "../form";
+import { useToast } from "../../../hooks/useToast";
+import FormLayout from "../../../layout/FormLayout";
+import FormFieldsLayout from "../../../layout/FormFieldsLayout";
+import { FormButtons, FormInput } from "../../form";
 
 type Error = {
     name: string;
