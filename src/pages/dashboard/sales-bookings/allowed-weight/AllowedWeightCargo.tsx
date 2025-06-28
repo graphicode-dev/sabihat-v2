@@ -100,7 +100,9 @@ function AllowedWeightCargo() {
             columns={columns}
             data={tableData}
             addLabel="Add Allowed Weight"
-            onAddClick={() => {}}
+            onAddClick={() =>
+                navigate(`/sales-bookings/allowed-weight/cargo/add`)
+            }
             onRowClick={(id) =>
                 navigate(`/sales-bookings/allowed-weight/cargo/${id}/view`)
             }

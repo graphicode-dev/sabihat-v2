@@ -1,8 +1,10 @@
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
 import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "../../../../../hooks/useToast";
 
 function ExcessBaggagePriceB2CVehicleViewPage() {
+    const { addToast, addAlertToast } = useToast();
     const { id } = useParams();
     const navigate = useNavigate();
     const data = {
@@ -83,7 +85,7 @@ function ExcessBaggagePriceB2CVehicleViewPage() {
                 customButtonLabel="Create New Price"
                 onCustomButton={() =>
                     navigate(
-                        `/sales-bookings/excess-baggage-price-B2C/vehicle/${id}/add`
+                        `/sales-bookings/excess-baggage-price-B2C/vehicle/${id}/create`
                     )
                 }
                 onEdit={() =>
@@ -91,6 +93,30 @@ function ExcessBaggagePriceB2CVehicleViewPage() {
                         `/sales-bookings/excess-baggage-price-B2C/vehicle/${id}/edit`
                     )
                 }
+                onDelete={() => {
+                    addAlertToast(
+                        "Are you sure you want to delete this vehicle?",
+                        [
+                            {
+                                text: "OK",
+                                onClick: () => {
+                                    addToast({
+                                        type: "success",
+                                        message: "Vehicle deleted successfully",
+                                        title: "Success!",
+                                    });
+                                    navigate(-1);
+                                },
+                                variant: "primary",
+                            },
+                            {
+                                text: "Cancel",
+                                onClick: () => {},
+                                variant: "secondary",
+                            },
+                        ]
+                    );
+                }}
                 buttons
             />
         </PageLayout>

@@ -1,8 +1,10 @@
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
 import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "../../../../../hooks/useToast";
 
 function TicketsCargoViewPage() {
+    const { addToast, addAlertToast } = useToast();
     const { id } = useParams();
     const navigate = useNavigate();
     const data = {
@@ -274,6 +276,30 @@ function TicketsCargoViewPage() {
                 onEdit={() =>
                     navigate(`/sales-bookings/tickets/cargo/${id}/edit`)
                 }
+                onDelete={() => {
+                    addAlertToast(
+                        "Are you sure you want to delete this cargo?",
+                        [
+                            {
+                                text: "OK",
+                                onClick: () => {
+                                    addToast({
+                                        type: "success",
+                                        message: "Cargo deleted successfully",
+                                        title: "Success!",
+                                    });
+                                    navigate(-1);
+                                },
+                                variant: "primary",
+                            },
+                            {
+                                text: "Cancel",
+                                onClick: () => {},
+                                variant: "secondary",
+                            },
+                        ]
+                    );
+                }}
                 buttons
             />
         </PageLayout>

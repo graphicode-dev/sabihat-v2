@@ -99,7 +99,9 @@ function AllowedWeightPassengerPage() {
             columns={columns}
             data={tableData}
             addLabel="Add Allowed Wight"
-            onAddClick={() => {}}
+            onAddClick={() =>
+                navigate(`/sales-bookings/allowed-weight/passenger/add`)
+            }
             onRowClick={(id) =>
                 navigate(`/sales-bookings/allowed-weight/passenger/${id}/view`)
             }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TableColumn, TableData } from "../../../../types/table";
-import {  DynamicTable } from "../../../../components/table";
+import { DynamicTable } from "../../../../components/table";
 import { useNavigate } from "react-router-dom";
 import { CheckBox } from "../../../../components/ui/CheckBox";
 
@@ -99,7 +99,9 @@ function PriceListsB2CVehiclePage() {
             columns={columns}
             data={tableData}
             addLabel="Add Price List"
-            onAddClick={() => {}}
+            onAddClick={() =>
+                navigate(`/sales-bookings/price-lists-B2C/vehicle/add`)
+            }
             onRowClick={(id) =>
                 navigate(`/sales-bookings/price-lists-B2C/vehicle/${id}/view`)
             }

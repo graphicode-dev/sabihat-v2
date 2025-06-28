@@ -1,8 +1,10 @@
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
 import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "../../../../../hooks/useToast";
 
 function AllowedWeightPassengerViewPage() {
+    const { addToast, addAlertToast } = useToast();
     const { id } = useParams();
     const navigate = useNavigate();
     const data = {
@@ -83,7 +85,7 @@ function AllowedWeightPassengerViewPage() {
                 customButtonLabel="Create New Price"
                 onCustomButton={() =>
                     navigate(
-                        `/sales-bookings/allowed-weight/passenger/${id}/add`
+                        `/sales-bookings/allowed-weight/passenger/${id}/create`
                     )
                 }
                 onEdit={() =>
@@ -91,6 +93,31 @@ function AllowedWeightPassengerViewPage() {
                         `/sales-bookings/allowed-weight/passenger/${id}/edit`
                     )
                 }
+                onDelete={() => {
+                    addAlertToast(
+                        "Are you sure you want to delete this passenger?",
+                        [
+                            {
+                                text: "OK",
+                                onClick: () => {
+                                    addToast({
+                                        type: "success",
+                                        message:
+                                            "Passenger deleted successfully",
+                                        title: "Success!",
+                                    });
+                                    navigate(-1);
+                                },
+                                variant: "primary",
+                            },
+                            {
+                                text: "Cancel",
+                                onClick: () => {},
+                                variant: "secondary",
+                            },
+                        ]
+                    );
+                }}
                 buttons
             />
         </PageLayout>

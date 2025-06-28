@@ -100,7 +100,9 @@ function ExcessBaggagePriceB2BCargoPage() {
             columns={columns}
             data={tableData}
             addLabel="Add Excess Baggage Price B2B"
-            onAddClick={() => {}}
+            onAddClick={() =>
+                navigate(`/sales-bookings/excess-baggage-price-B2B/cargo/add`)
+            }
             onRowClick={(id) =>
                 navigate(
                     `/sales-bookings/excess-baggage-price-B2B/cargo/${id}/view`

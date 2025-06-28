@@ -99,7 +99,9 @@ function PriceListsB2BVehiclePage() {
             columns={columns}
             data={tableData}
             addLabel="Add Price List"
-            onAddClick={() => {}}
+            onAddClick={() =>
+                navigate(`/sales-bookings/price-lists-B2B/vehicle/add`)
+            }
             onRowClick={(id) =>
                 navigate(`/sales-bookings/price-lists-B2B/vehicle/${id}/view`)
             }

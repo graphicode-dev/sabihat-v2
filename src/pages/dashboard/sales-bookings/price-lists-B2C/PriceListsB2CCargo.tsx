@@ -100,7 +100,9 @@ function PriceListsB2CCargo() {
             columns={columns}
             data={tableData}
             addLabel="Add Price List"
-            onAddClick={() => {}}
+            onAddClick={() =>
+                navigate(`/sales-bookings/price-lists-B2C/cargo/add`)
+            }
             onRowClick={(id) =>
                 navigate(`/sales-bookings/price-lists-B2C/cargo/${id}/view`)
             }

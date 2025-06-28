@@ -1,8 +1,10 @@
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
 import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "../../../../../hooks/useToast";
 
 function ExcessBaggagePriceB2CCargoViewPage() {
+    const { addToast, addAlertToast } = useToast();
     const { id } = useParams();
     const navigate = useNavigate();
     const data = {
@@ -82,11 +84,39 @@ function ExcessBaggagePriceB2CCargoViewPage() {
                 }}
                 customButtonLabel="Create New Price"
                 onCustomButton={() =>
-                    navigate(`/sales-bookings/excess-baggage-price-B2C/cargo/${id}/add`)
+                    navigate(
+                        `/sales-bookings/excess-baggage-price-B2C/cargo/${id}/create`
+                    )
                 }
                 onEdit={() =>
-                    navigate(`/sales-bookings/excess-baggage-price-B2C/cargo/${id}/edit`)
+                    navigate(
+                        `/sales-bookings/excess-baggage-price-B2C/cargo/${id}/edit`
+                    )
                 }
+                onDelete={() => {
+                    addAlertToast(
+                        "Are you sure you want to delete this cargo?",
+                        [
+                            {
+                                text: "OK",
+                                onClick: () => {
+                                    addToast({
+                                        type: "success",
+                                        message: "Cargo deleted successfully",
+                                        title: "Success!",
+                                    });
+                                    navigate(-1);
+                                },
+                                variant: "primary",
+                            },
+                            {
+                                text: "Cancel",
+                                onClick: () => {},
+                                variant: "secondary",
+                            },
+                        ]
+                    );
+                }}
                 buttons
             />
         </PageLayout>

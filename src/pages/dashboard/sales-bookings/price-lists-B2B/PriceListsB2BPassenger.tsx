@@ -99,7 +99,9 @@ function PriceListsB2BPassengerPage() {
             columns={columns}
             data={tableData}
             addLabel="Add Price List"
-            onAddClick={() => {}}
+            onAddClick={() =>
+                navigate(`/sales-bookings/price-lists-B2B/passenger/add`)
+            }
             onRowClick={(id) =>
                 navigate(`/sales-bookings/price-lists-B2B/passenger/${id}/view`)
             }

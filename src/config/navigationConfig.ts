@@ -490,9 +490,7 @@ const ScheduleNewShipsEditPage = lazy(
 );
 const ScheduleNewShipsAddPage = lazy(
     () =>
-        import(
-            "../pages/dashboard/ship-trip-management/schedule-new-ships/add"
-        )
+        import("../pages/dashboard/ship-trip-management/schedule-new-ships/add")
 );
 
 // #endregion Schedule New Ships
@@ -650,6 +648,24 @@ const PriceListsB2BAddPageVehiclePriceList = lazy(
             "../pages/dashboard/sales-bookings/price-lists-B2B/add/PriceListsB2BVehicleAdd"
         )
 );
+const PriceListsB2BViewCreatePagePassengerPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2B/view/create/PriceListsB2BPassengerCreate"
+        )
+);
+const PriceListsB2BViewCreatePageCargoPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2B/view/create/PriceListsB2BCargoCreate"
+        )
+);
+const PriceListsB2BViewCreatePageVehiclePriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2B/view/create/PriceListsB2BVehicleCreate"
+        )
+);
 // #endregion Price Lists B2B
 
 // #region Price Lists B2C
@@ -708,6 +724,24 @@ const PriceListsB2CAddPageVehiclePriceList = lazy(
     () =>
         import(
             "../pages/dashboard/sales-bookings/price-lists-B2C/add/PriceListsB2CVehicleAdd"
+        )
+);
+const PriceListsB2CViewCreatePagePassengerPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2C/view/create/PriceListsB2CPassengerCreate"
+        )
+);
+const PriceListsB2CViewCreatePageCargoPriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2C/view/create/PriceListsB2CCargoCreate"
+        )
+);
+const PriceListsB2CViewCreatePageVehiclePriceList = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/price-lists-B2C/view/create/PriceListsB2CVehicleCreate"
         )
 );
 // #endregion Price Lists B2C
@@ -770,6 +804,24 @@ const ExcessBaggagePriceB2BAddVehiclePriceListPage = lazy(
             "../pages/dashboard/sales-bookings/excess-baggage-price-B2B/add/ExcessBaggagePriceB2BVehicleAdd"
         )
 );
+const ExcessBaggagePriceB2BViewCreatePassengerPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2B/view/create/ExcessBaggagePriceB2BPassengerCreate"
+        )
+);
+const ExcessBaggagePriceB2BViewCreateCargoPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2B/view/create/ExcessBaggagePriceB2BCargoCreate"
+        )
+);
+const ExcessBaggagePriceB2BViewCreateVehiclePriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2B/view/create/ExcessBaggagePriceB2BVehicleCreate"
+        )
+);
 // #endregion Excess baggage price B2B
 
 // #region Excess baggage price B2C
@@ -830,6 +882,24 @@ const ExcessBaggagePriceB2CAddVehiclePriceListPage = lazy(
             "../pages/dashboard/sales-bookings/excess-baggage-price-B2C/add/ExcessBaggagePriceB2CVehicleAdd"
         )
 );
+const ExcessBaggagePriceB2CViewCreatePassengerPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2C/view/create/ExcessBaggagePriceB2CPassengerCreate"
+        )
+);
+const ExcessBaggagePriceB2CViewCreateCargoPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2C/view/create/ExcessBaggagePriceB2CCargoCreate"
+        )
+);
+const ExcessBaggagePriceB2CViewCreateVehiclePriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/excess-baggage-price-B2C/view/create/ExcessBaggagePriceB2CVehicleCreate"
+        )
+);
 // #endregion Excess baggage price B2C
 
 // #region Allowed Weight
@@ -888,6 +958,24 @@ const AllowedWeightAddVehiclePriceListPage = lazy(
     () =>
         import(
             "../pages/dashboard/sales-bookings/allowed-weight/add/AllowedWeightVehicleAdd"
+        )
+);
+const AllowedWeightViewCreatePassengerPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/allowed-weight/view/create/AllowedWeightPassengerCreate"
+        )
+);
+const AllowedWeightViewCreateCargoPriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/allowed-weight/view/create/AllowedWeightCargoCreate"
+        )
+);
+const AllowedWeightViewCreateVehiclePriceListPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/sales-bookings/allowed-weight/view/create/AllowedWeightVehicleCreate"
         )
 );
 // #endregion Allowed Weight
@@ -965,9 +1053,7 @@ const ChartOfAccountEditPage = lazy(
 );
 const ChartOfAccountAddPage = lazy(
     () =>
-        import(
-            "../pages/dashboard/financial-transactions/chart-of-account/add"
-        )
+        import("../pages/dashboard/financial-transactions/chart-of-account/add")
 );
 // #endregion Chart Of Account
 
@@ -1007,9 +1093,7 @@ const PaymentReceiptsEditPage = lazy(
 );
 const PaymentReceiptsAddPage = lazy(
     () =>
-        import(
-            "../pages/dashboard/financial-transactions/payment-receipts/add"
-        )
+        import("../pages/dashboard/financial-transactions/payment-receipts/add")
 );
 // #endregion Payment & Receipts
 
@@ -1673,13 +1757,19 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Passenger Price List",
+                            path: "/passenger/add",
+                            component: PriceListsB2BAddPagePassengerPriceList,
+                        },
+                        {
+                            title: "Passenger Price List",
                             path: "/passenger/:id/edit",
                             component: PriceListsB2BEditPagePassengerPriceList,
                         },
                         {
                             title: "Passenger Price List",
-                            path: "/passenger/:id/add",
-                            component: PriceListsB2BAddPagePassengerPriceList,
+                            path: "/passenger/:id/create",
+                            component:
+                                PriceListsB2BViewCreatePagePassengerPriceList,
                         },
                         {
                             title: "Cargo Price List",
@@ -1688,13 +1778,19 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Cargo Price List",
+                            path: "/cargo/add",
+                            component: PriceListsB2BAddPageCargoPriceList,
+                        },
+                        {
+                            title: "Cargo Price List",
                             path: "/cargo/:id/edit",
                             component: PriceListsB2BEditPageCargoPriceList,
                         },
                         {
                             title: "Cargo Price List",
-                            path: "/cargo/:id/add",
-                            component: PriceListsB2BAddPageCargoPriceList,
+                            path: "/cargo/:id/create",
+                            component:
+                                PriceListsB2BViewCreatePageCargoPriceList,
                         },
                         {
                             title: "Vehicle Price List",
@@ -1703,13 +1799,19 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Vehicle Price List",
+                            path: "/vehicle/add",
+                            component: PriceListsB2BAddPageVehiclePriceList,
+                        },
+                        {
+                            title: "Vehicle Price List",
                             path: "/vehicle/:id/edit",
                             component: PriceListsB2BEditPageVehiclePriceList,
                         },
                         {
                             title: "Vehicle Price List",
-                            path: "/vehicle/:id/add",
-                            component: PriceListsB2BAddPageVehiclePriceList,
+                            path: "/vehicle/:id/create",
+                            component:
+                                PriceListsB2BViewCreatePageVehiclePriceList,
                         },
                     ],
                 },
@@ -1725,13 +1827,19 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Passenger Price List",
+                            path: "/passenger/add",
+                            component: PriceListsB2CAddPagePassengerPriceList,
+                        },
+                        {
+                            title: "Passenger Price List",
                             path: "/passenger/:id/edit",
                             component: PriceListsB2CEditPagePassengerPriceList,
                         },
                         {
                             title: "Passenger Price List",
-                            path: "/passenger/:id/add",
-                            component: PriceListsB2CAddPagePassengerPriceList,
+                            path: "/passenger/:id/create",
+                            component:
+                                PriceListsB2CViewCreatePagePassengerPriceList,
                         },
                         {
                             title: "Cargo Price List",
@@ -1740,13 +1848,19 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Cargo Price List",
+                            path: "/cargo/add",
+                            component: PriceListsB2CAddPageCargoPriceList,
+                        },
+                        {
+                            title: "Cargo Price List",
                             path: "/cargo/:id/edit",
                             component: PriceListsB2CEditPageCargoPriceList,
                         },
                         {
                             title: "Cargo Price List",
-                            path: "/cargo/:id/add",
-                            component: PriceListsB2CAddPageCargoPriceList,
+                            path: "/cargo/:id/create",
+                            component:
+                                PriceListsB2CViewCreatePageCargoPriceList,
                         },
                         {
                             title: "Vehicle Price List",
@@ -1755,13 +1869,19 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Vehicle Price List",
+                            path: "/vehicle/add",
+                            component: PriceListsB2CAddPageVehiclePriceList,
+                        },
+                        {
+                            title: "Vehicle Price List",
                             path: "/vehicle/:id/edit",
                             component: PriceListsB2CEditPageVehiclePriceList,
                         },
                         {
                             title: "Vehicle Price List",
-                            path: "/vehicle/:id/add",
-                            component: PriceListsB2CAddPageVehiclePriceList,
+                            path: "/vehicle/:id/create",
+                            component:
+                                PriceListsB2CViewCreatePageVehiclePriceList,
                         },
                     ],
                 },
@@ -1778,15 +1898,21 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Passenger Price List",
+                            path: "/passenger/add",
+                            component:
+                                ExcessBaggagePriceB2BAddPassengerPriceListPage,
+                        },
+                        {
+                            title: "Passenger Price List",
                             path: "/passenger/:id/edit",
                             component:
                                 ExcessBaggagePriceB2BEditPassengerPriceListPage,
                         },
                         {
                             title: "Passenger Price List",
-                            path: "/passenger/:id/add",
+                            path: "/passenger/:id/create",
                             component:
-                                ExcessBaggagePriceB2BAddPassengerPriceListPage,
+                                ExcessBaggagePriceB2BViewCreatePassengerPriceListPage,
                         },
                         {
                             title: "Cargo Price List",
@@ -1796,15 +1922,21 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Cargo Price List",
+                            path: "/cargo/add",
+                            component:
+                                ExcessBaggagePriceB2BAddCargoPriceListPage,
+                        },
+                        {
+                            title: "Cargo Price List",
                             path: "/cargo/:id/edit",
                             component:
                                 ExcessBaggagePriceB2BEditCargoPriceListPage,
                         },
                         {
                             title: "Cargo Price List",
-                            path: "/cargo/:id/add",
+                            path: "/cargo/:id/create",
                             component:
-                                ExcessBaggagePriceB2BAddCargoPriceListPage,
+                                ExcessBaggagePriceB2BViewCreateCargoPriceListPage,
                         },
                         {
                             title: "Vehicle Price List",
@@ -1814,15 +1946,21 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Vehicle Price List",
+                            path: "/vehicle/add",
+                            component:
+                                ExcessBaggagePriceB2BAddVehiclePriceListPage,
+                        },
+                        {
+                            title: "Vehicle Price List",
                             path: "/vehicle/:id/edit",
                             component:
                                 ExcessBaggagePriceB2BEditVehiclePriceListPage,
                         },
                         {
                             title: "Vehicle Price List",
-                            path: "/vehicle/:id/add",
+                            path: "/vehicle/:id/create",
                             component:
-                                ExcessBaggagePriceB2BAddVehiclePriceListPage,
+                                ExcessBaggagePriceB2BViewCreateVehiclePriceListPage,
                         },
                     ],
                 },
@@ -1839,15 +1977,21 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Passenger Price List",
+                            path: "/passenger/add",
+                            component:
+                                ExcessBaggagePriceB2CAddPassengerPriceListPage,
+                        },
+                        {
+                            title: "Passenger Price List",
                             path: "/passenger/:id/edit",
                             component:
                                 ExcessBaggagePriceB2CEditPassengerPriceListPage,
                         },
                         {
                             title: "Passenger Price List",
-                            path: "/passenger/:id/add",
+                            path: "/passenger/:id/create",
                             component:
-                                ExcessBaggagePriceB2CAddPassengerPriceListPage,
+                                ExcessBaggagePriceB2CViewCreatePassengerPriceListPage,
                         },
                         {
                             title: "Cargo Price List",
@@ -1857,15 +2001,21 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Cargo Price List",
+                            path: "/cargo/add",
+                            component:
+                                ExcessBaggagePriceB2CAddCargoPriceListPage,
+                        },
+                        {
+                            title: "Cargo Price List",
                             path: "/cargo/:id/edit",
                             component:
                                 ExcessBaggagePriceB2CEditCargoPriceListPage,
                         },
                         {
                             title: "Cargo Price List",
-                            path: "/cargo/:id/add",
+                            path: "/cargo/:id/create",
                             component:
-                                ExcessBaggagePriceB2CAddCargoPriceListPage,
+                                ExcessBaggagePriceB2CViewCreateCargoPriceListPage,
                         },
                         {
                             title: "Vehicle Price List",
@@ -1875,15 +2025,21 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Vehicle Price List",
+                            path: "/vehicle/add",
+                            component:
+                                ExcessBaggagePriceB2CAddVehiclePriceListPage,
+                        },
+                        {
+                            title: "Vehicle Price List",
                             path: "/vehicle/:id/edit",
                             component:
                                 ExcessBaggagePriceB2CEditVehiclePriceListPage,
                         },
                         {
                             title: "Vehicle Price List",
-                            path: "/vehicle/:id/add",
+                            path: "/vehicle/:id/create",
                             component:
-                                ExcessBaggagePriceB2CAddVehiclePriceListPage,
+                                ExcessBaggagePriceB2CViewCreateVehiclePriceListPage,
                         },
                     ],
                 },
@@ -1899,13 +2055,18 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Passenger Price List",
+                            path: "/passenger/add",
+                            component: AllowedWeightAddPassengerPriceListPage,
+                        },
+                        {
+                            title: "Passenger Price List",
                             path: "/passenger/:id/edit",
                             component: AllowedWeightEditPassengerPriceListPage,
                         },
                         {
                             title: "Passenger Price List",
-                            path: "/passenger/:id/add",
-                            component: AllowedWeightAddPassengerPriceListPage,
+                            path: "/passenger/:id/create",
+                            component: AllowedWeightViewCreatePassengerPriceListPage,
                         },
                         {
                             title: "Cargo Price List",
@@ -1914,13 +2075,19 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Cargo Price List",
+                            path: "/cargo/add",
+                            component: AllowedWeightAddCargoPriceListPage,
+                        },
+                        {
+                            title: "Cargo Price List",
                             path: "/cargo/:id/edit",
                             component: AllowedWeightEditCargoPriceListPage,
                         },
                         {
                             title: "Cargo Price List",
-                            path: "/cargo/:id/add",
-                            component: AllowedWeightAddCargoPriceListPage,
+                            path: "/cargo/:id/create",
+                            component:
+                                AllowedWeightViewCreateCargoPriceListPage,
                         },
                         {
                             title: "Vehicle Price List",
@@ -1929,13 +2096,19 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "Vehicle Price List",
+                            path: "/vehicle/add",
+                            component: AllowedWeightAddVehiclePriceListPage,
+                        },
+                        {
+                            title: "Vehicle Price List",
                             path: "/vehicle/:id/edit",
                             component: AllowedWeightEditVehiclePriceListPage,
                         },
                         {
                             title: "Vehicle Price List",
-                            path: "/vehicle/:id/add",
-                            component: AllowedWeightAddVehiclePriceListPage,
+                            path: "/vehicle/:id/create",
+                            component:
+                                AllowedWeightViewCreateVehiclePriceListPage,
                         },
                     ],
                 },
