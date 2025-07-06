@@ -3,6 +3,7 @@ import Cargo from "../../../../components/reporting/trips/Cargo";
 import Vehicle from "../../../../components/reporting/trips/Vehicle";
 import Tabs from "../../../../components/ui/Tabs";
 import PageLayout from "../../../../layout/PageLayout";
+import Payload from "../../../../components/reporting/trips/Payload";
 
 function TripsPage() {
     return (
@@ -16,6 +17,9 @@ function TripsPage() {
                 </Tabs.Item>
                 <Tabs.Item label="Vehicle" value="vehicle">
                     <Vehicle />
+                </Tabs.Item>
+                <Tabs.Item label="Payload" value="payload">
+                    <Payload />
                 </Tabs.Item>
             </Tabs>
         </PageLayout>

@@ -41,7 +41,7 @@ function IncomeStatement() {
                 if (!item["created at"]) {
                     return true; // Include items without dates
                 }
-                
+
                 const itemDate = new Date(item["created at"] as string);
 
                 // Set time to beginning of day for start date comparison
@@ -62,6 +62,7 @@ function IncomeStatement() {
 
         setFilteredData(filtered);
     }, [startDate, endDate]);
+
     return (
         <div className="p-4">
             <div className="flex flex-col space-y-4">
