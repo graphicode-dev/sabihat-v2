@@ -1247,6 +1247,11 @@ const BoardingEditPage = lazy(
 
 // #endregion Check-in & Boarding
 
+// #region Reporting
+const FinancePage = lazy(() => import("../pages/dashboard/reporting/finance"));
+const TripsPage = lazy(() => import("../pages/dashboard/reporting/trips"));
+// #endregion Reporting
+
 export const navigationConfig: TabLink[] = [
     // #region System Management & Administration
     {
@@ -2066,7 +2071,8 @@ export const navigationConfig: TabLink[] = [
                         {
                             title: "Passenger Price List",
                             path: "/passenger/:id/create",
-                            component: AllowedWeightViewCreatePassengerPriceListPage,
+                            component:
+                                AllowedWeightViewCreatePassengerPriceListPage,
                         },
                         {
                             title: "Cargo Price List",
@@ -2553,9 +2559,14 @@ export const navigationConfig: TabLink[] = [
             },
             links: [
                 {
-                    title: "All",
-                    path: "/reporting/all",
-                    component: PlaceholderPage,
+                    title: "Finance",
+                    path: "/reporting/finance",
+                    component: FinancePage,
+                },
+                {
+                    title: "Trips",
+                    path: "/reporting/trips",
+                    component: TripsPage,
                 },
             ],
         },
