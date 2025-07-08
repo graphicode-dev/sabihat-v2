@@ -8,7 +8,7 @@ import { z } from "zod";
 import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { useNavigate } from "react-router-dom";
-import { logFormData } from "../../../../../lib/utils";
+import { logFormData } from "../../../../../utils";
 
 type ContactUS = {
     id?: string;

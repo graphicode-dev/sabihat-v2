@@ -8,7 +8,7 @@ import { z } from "zod";
 import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { useNavigate } from "react-router-dom";
-import { dirtyFields, logFormData } from "../../../../../lib/utils";
+import { dirtyFields, logFormData } from "../../../../../utils";
 
 type Currency = {
     id: string;
@@ -52,7 +52,9 @@ function CurrencyEditPage() {
             currencyName: fetchedData.currencyName,
             currencyCode: fetchedData.currencyCode,
             currencyRate: fetchedData.currencyRate,
-            lastDate: fetchedData.lastDate ? new Date(fetchedData.lastDate) : null,
+            lastDate: fetchedData.lastDate
+                ? new Date(fetchedData.lastDate)
+                : null,
         },
         mode: "onChange",
     });

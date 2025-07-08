@@ -1,7 +1,7 @@
 import PageLayout from "../../../../../../layout/PageLayout";
 import { PrinterIcon } from "lucide-react";
 import { QrCodeIcon } from "../../../../../../components/ui/icons";
-import { printDocument } from "../../../../../../lib/utils";
+import { printDocument } from "../../../../../../utils";
 
 function CargoCheckInPaymentSuccessBoardingPassPage() {
     const onPrintButton = () => {

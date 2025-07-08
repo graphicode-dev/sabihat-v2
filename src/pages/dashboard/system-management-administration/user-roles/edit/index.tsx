@@ -9,7 +9,7 @@ import { z } from "zod";
 import FormLayout from "../../../../../layout/FormLayout";
 import { useToast } from "../../../../../hooks/useToast";
 import { CheckBox } from "../../../../../components/ui/CheckBox";
-import { dirtyFields, logFormData } from "../../../../../lib/utils";
+import { dirtyFields, logFormData } from "../../../../../utils";
 
 // Define the permission types
 type PermissionType = "read" | "write" | "create" | "delete";

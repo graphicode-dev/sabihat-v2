@@ -10,12 +10,13 @@ import Calendar from "../ui/Calendar";
 import { format } from "date-fns";
 import FormFieldWrapper from "./FormFieldWrapper";
 import PhoneInput from "react-phone-input-2";
+import OTP from "../auth/OTP";
 
 interface FormInputProps<T extends FieldValues> {
     name: Path<T>;
     control: Control<T>;
     label?: string;
-    type?: React.HTMLInputTypeAttribute;
+    type?: React.HTMLInputTypeAttribute | "otp";
     fileIcon?: React.ReactNode;
     placeholder?: string;
     required?: boolean;
@@ -23,6 +24,7 @@ interface FormInputProps<T extends FieldValues> {
     error?: string;
     className?: string;
     inputClassName?: string;
+    formFieldWrapperParentClassName?: string;
     disabled?: boolean;
     rows?: number;
     cols?: number;
@@ -49,6 +51,7 @@ const FormInput = <T extends FieldValues>({
     error,
     className = "",
     inputClassName = "",
+    formFieldWrapperParentClassName = "",
     disabled = false,
     rows = 3,
     cols = 30,
@@ -79,6 +82,7 @@ const FormInput = <T extends FieldValues>({
                 error={error}
                 activeLabel={showCalendar}
                 disabled={disabled}
+                parentClassName={formFieldWrapperParentClassName}
             >
                 <Controller
                     name={name}
@@ -219,6 +223,17 @@ const FormInput = <T extends FieldValues>({
                                         disabled={disabled}
                                     />
                                 </div>
+                            );
+                        } else if (type === "otp") {
+                            return (
+                                <OTP
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    name={field.name}
+                                    onComplete={(code) => {
+                                        field.onChange(code);
+                                    }}
+                                />
                             );
                         } else if (type === "tel") {
                             return (

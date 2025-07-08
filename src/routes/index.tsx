@@ -14,6 +14,7 @@ const DashboardWrapper = lazy(
     () => import("../pages/dashboard/DashboardWrapper")
 );
 const Login = lazy(() => import("../pages/auth/Login"));
+const ForgetPasswordPage = lazy(() => import("../pages/auth/forget-password"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 
 // Component to handle root path redirection
@@ -105,6 +106,10 @@ function AppRoutes() {
             <Routes>
                 {/* Public routes */}
                 <Route path="/login" element={<Login />} />
+                <Route
+                    path="/forget-password"
+                    element={<ForgetPasswordPage />}
+                />
 
                 {/* Protected routes */}
                 <Route element={<ProtectedRoute />}>

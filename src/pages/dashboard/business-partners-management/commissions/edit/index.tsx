@@ -9,7 +9,7 @@ import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { FormButtons, FormInput } from "../../../../../components/form";
 import { SearchedDropDown } from "../../../../../components/SearchedDropDown";
 import PageLayout from "../../../../../layout/PageLayout";
-import { dirtyFields, logFormData } from "../../../../../lib/utils";
+import { dirtyFields, logFormData } from "../../../../../utils";
 
 type Commissions = {
     id?: string;

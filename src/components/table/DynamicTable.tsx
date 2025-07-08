@@ -15,7 +15,7 @@ import {
     getSelectedCount,
     sortData,
     toggleSort,
-} from "../../lib/tableUtils";
+} from "../../utils/tableUtils";
 import { TableGroupView } from "./TableGroupView";
 
 interface DynamicTableProps {

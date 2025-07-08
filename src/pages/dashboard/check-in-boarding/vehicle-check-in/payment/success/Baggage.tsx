@@ -2,7 +2,7 @@ import PageLayout from "../../../../../../layout/PageLayout";
 import { PrinterIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { QrCodeIcon } from "../../../../../../components/ui/icons";
-import { printDocument } from "../../../../../../lib/utils";
+import { printDocument } from "../../../../../../utils";
 
 function VehicleCheckInPaymentSuccessBaggagePage() {
     const navigate = useNavigate();

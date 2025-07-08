@@ -1,6 +1,6 @@
 import { TableData, TableColumn } from "../../types/table";
 import { TableAvatar } from "./TableAvatar";
-import { getInitials } from "../../lib/tableUtils";
+import { getInitials } from "../../utils/tableUtils";
 
 interface TableCardViewProps {
     data: TableData[];

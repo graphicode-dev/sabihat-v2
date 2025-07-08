@@ -1,23 +1,26 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
 import {
-    formatPhone,
     removeToken,
     setToken,
-    getToken,
     isAuthenticated,
     USER_KEY,
-} from "../../../lib/utils";
+} from "../../../utils";
 import { RootState } from "../..";
 import { User } from "../../../types";
+import { ENDPOINTS } from "../../../config/endpoints";
 
 // Define the auth state interface
-interface AuthState {
+export interface AuthState {
     user: User | null;
     isAuthenticated: boolean;
     loading: boolean;
     error: string | null;
     profileRefreshed: boolean;
+    verificationCodeSent: boolean;
+    verificationCodeVerified: boolean;
+    forgetPasswordStep: "send-code" | "verify-code" | "reset-password" | "done";
+    resetPasswordToken: string | null;
+    resetPasswordPhoneNumber: string | null;
 }
 
 // Initial state
@@ -27,30 +30,38 @@ const initialState: AuthState = {
     loading: false,
     error: null,
     profileRefreshed: false,
+    verificationCodeSent: false,
+    verificationCodeVerified: false,
+    forgetPasswordStep: "send-code",
+    resetPasswordToken: null,
+    resetPasswordPhoneNumber: null,
 };
 
-// Configure axios defaults
-axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
+// No longer needed as we're fetching fresh data on each refresh
 
 // Initialize auth from localStorage
-const initializeAuth = (): AuthState => {
+export const initializeAuth = (): AuthState => {
     try {
         const isAuth = isAuthenticated();
-        const storedUser = localStorage.getItem(USER_KEY);
 
-        if (isAuth && storedUser) {
-            const parsedUser = JSON.parse(storedUser);
+        if (isAuth) {
+            // If we have a token, set initial state to authenticated
+            // but we'll need to fetch the profile data after component mount
             return {
-                user: parsedUser,
+                user: null, // Will be populated by refreshUserProfile action
                 isAuthenticated: true,
-                profileRefreshed: true,
+                profileRefreshed: false, // Set to false to trigger profile refresh
                 loading: false,
                 error: null,
+                verificationCodeSent: false,
+                verificationCodeVerified: false,
+                forgetPasswordStep: "send-code",
+                resetPasswordToken: null,
+                resetPasswordPhoneNumber: null,
             };
         }
     } catch (error) {
-        console.error("Error parsing stored user:", error);
-        localStorage.removeItem(USER_KEY);
+        console.error("Error initializing auth state:", error);
     }
     return initialState;
 };
@@ -63,10 +74,7 @@ export const login = createAsyncThunk(
         { rejectWithValue }
     ) => {
         try {
-            const response = await axios.post("/auth/login", {
-                phone: formatPhone(phone),
-                password,
-            });
+            const response = await ENDPOINTS.auth.login({ phone, password });
 
             if (!response.data.success) {
                 return rejectWithValue(response.data.message || "Login failed");
@@ -77,13 +85,14 @@ export const login = createAsyncThunk(
 
                 // Store user data
                 const userData = response.data.data.result;
-                localStorage.setItem(USER_KEY, JSON.stringify(userData));
 
+                // Return just the user data without storing in localStorage
                 return userData;
             }
 
             return rejectWithValue("Invalid response format");
         } catch (error: any) {
+            console.error("Login error:", error);
             return rejectWithValue(
                 error.response?.data?.message || "An unknown error occurred"
             );
@@ -96,15 +105,7 @@ export const logout = createAsyncThunk(
     "auth/logout",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.post(
-                "/auth/logout",
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${getToken()}`,
-                    },
-                }
-            );
+            const response = await ENDPOINTS.auth.logout();
 
             if (response.data.success) {
                 // Clear local storage and token
@@ -141,26 +142,127 @@ export const refreshUserProfile = createAsyncThunk(
         }
 
         try {
-            const response = await axios.get("/auth/profile", {
-                headers: {
-                    Authorization: `Bearer ${getToken()}`,
-                },
-            });
+            const response = await ENDPOINTS.auth.profile();
 
             if (response.data.success) {
-                localStorage.setItem(USER_KEY, JSON.stringify(response.data));
-                return response.data;
+                // Log the response structure to help debug
+                console.log("Profile API response:", response.data);
+
+                // Extract user data from the response
+                // The API might return the data in different structures
+                let userData;
+
+                if (response.data.data) {
+                    userData = response.data.data;
+                } else if (response.data.result) {
+                    userData = response.data.result;
+                } else {
+                    userData = response.data;
+                }
+
+                console.log("Extracted user data:", userData);
+
+                if (userData && typeof userData === "object") {
+                    // Return user data without storing in localStorage
+                    return userData;
+                } else {
+                    console.error(
+                        "User data is undefined or invalid in API response"
+                    );
+                    return rejectWithValue("User data not found in response");
+                }
             }
 
             return rejectWithValue("Failed to fetch profile");
         } catch (error) {
             console.error("Profile refresh error:", error);
-            if (axios.isAxiosError(error) && error.response?.status === 401) {
+            if ((error as any).response?.status === 401) {
                 // Handle unauthorized error
                 removeToken();
                 localStorage.removeItem(USER_KEY);
             }
             return rejectWithValue("Failed to refresh profile");
+        }
+    }
+);
+
+// Reset password steps
+export const sendVerificationCode = createAsyncThunk(
+    "auth/sendVerificationCode",
+    async ({ phone }: { phone: string }, { rejectWithValue }) => {
+        try {
+            const response = await ENDPOINTS.auth.sendVerificationCode({
+                phone,
+            });
+
+            if (!response.data.success) {
+                return rejectWithValue(
+                    response.data.message || "Verification code send failed"
+                );
+            }
+
+            return true;
+        } catch (error: any) {
+            console.error("Login error:", error);
+            return rejectWithValue(
+                error.response?.data?.message || "An unknown error occurred"
+            );
+        }
+    }
+);
+
+export const verifyVerificationCode = createAsyncThunk(
+    "auth/verifyVerificationCode",
+    async ({ code }: { code: string }, { rejectWithValue }) => {
+        try {
+            const response = await ENDPOINTS.auth.verifyVerificationCode({
+                code,
+            });
+
+            if (!response.data.success) {
+                return rejectWithValue(
+                    response.data.message || "Verification code verify failed"
+                );
+            }
+            return true;
+        } catch (error: any) {
+            console.error("Login error:", error);
+            return rejectWithValue(
+                error.response?.data?.message || "An unknown error occurred"
+            );
+        }
+    }
+);
+
+export const resetPassword = createAsyncThunk(
+    "auth/resetPassword",
+    async (
+        { password }: { password: string },
+        { rejectWithValue, getState }
+    ) => {
+        try {
+            const state = getState() as RootState;
+            const response = await ENDPOINTS.auth.resetPassword({
+                password,
+                token: state.auth.resetPasswordToken!,
+            });
+
+            if (!response.data.success) {
+                return rejectWithValue(
+                    response.data.message || "Password reset failed"
+                );
+            }
+
+            // Store user data
+            const userData = response.data.data.result;
+
+            // Return just the user data without storing in localStorage
+            return userData;
+        } catch (error: any) {
+            console.error("Login error:", error);
+            return rejectWithValue(
+                error.response?.data?.message || "An unknown error occurred"
+            );
         }
     }
 );
@@ -181,11 +283,12 @@ const authSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(login.fulfilled, (state, action: PayloadAction<User>) => {
+            .addCase(login.fulfilled, (state, action) => {
                 state.user = action.payload;
                 state.isAuthenticated = true;
                 state.loading = false;
                 state.error = null;
+                state.profileRefreshed = true; // Set to true since we have user data
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;
@@ -219,16 +322,63 @@ const authSlice = createSlice({
                     state.error = null;
                 }
             })
-            .addCase(
-                refreshUserProfile.fulfilled,
-                (state, action: PayloadAction<User>) => {
-                    state.user = action.payload;
-                    state.loading = false;
-                    state.error = null;
-                    state.profileRefreshed = true;
-                }
-            )
+            .addCase(refreshUserProfile.fulfilled, (state, action) => {
+                state.user = action.payload;
+                state.loading = false;
+                state.error = null;
+                state.profileRefreshed = true;
+            })
             .addCase(refreshUserProfile.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+            // Send verification code cases
+            .addCase(sendVerificationCode.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(sendVerificationCode.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+                state.resetPasswordPhoneNumber = action.meta.arg.phone;
+                state.forgetPasswordStep = "verify-code";
+                state.verificationCodeSent = true;
+            })
+            .addCase(sendVerificationCode.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+            // Verify verification code cases
+            .addCase(verifyVerificationCode.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(verifyVerificationCode.fulfilled, (state, action: any) => {
+                state.loading = false;
+                state.error = null;
+                state.forgetPasswordStep = "reset-password";
+                state.resetPasswordToken = action.payload.data.token;
+                state.verificationCodeVerified = true;
+            })
+            .addCase(verifyVerificationCode.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+            // Reset password cases
+            .addCase(resetPassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(resetPassword.fulfilled, (state, action) => {
+                state.user = action.payload;
+                state.isAuthenticated = true;
+                state.loading = false;
+                state.error = null;
+                state.forgetPasswordStep = "done";
+                state.resetPasswordToken = null;
+                state.profileRefreshed = true;
+            })
+            .addCase(resetPassword.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             });
@@ -237,9 +387,15 @@ const authSlice = createSlice({
 
 export const { setError } = authSlice.actions;
 
+export const selectProfileRefreshed = (state: RootState) =>
+    state.auth.profileRefreshed;
 export const selectUser = (state: RootState) => state.auth.user;
 export const selectIsAuthenticated = (state: RootState) =>
     state.auth.isAuthenticated;
+export const selectForgetPasswordStep = (state: RootState) =>
+    state.auth.forgetPasswordStep;
+export const selectResetPhoneNumber = (state: RootState) =>
+    state.auth.resetPasswordPhoneNumber;
 export const selectLoading = (state: RootState) => state.auth.loading;
 export const selectError = (state: RootState) => state.auth.error;
 

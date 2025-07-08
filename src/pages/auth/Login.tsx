@@ -1,5 +1,5 @@
-import { useState, FormEvent, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loading from "../../components/ui/Loading";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -10,17 +10,29 @@ import {
     selectLoading,
     setError,
 } from "../../store/slices/auth/authSlice";
-import { formatPhone } from "../../lib/utils";
-import { Eye, EyeOff } from "lucide-react";
-import PhoneInput from "react-phone-input-2";
+import AuthLayout from "../../layout/AuthLayout";
+import AuthCard from "../../components/auth/AuthCard";
+import FormLayout from "../../layout/FormLayout";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "../../hooks/useToast";
+import FormFieldsLayout from "../../layout/FormFieldsLayout";
+import { FormInput } from "../../components/form";
+
+type LoginCredentials = {
+    phone: string;
+    password: string;
+};
+
+const loginSchema = z.object({
+    phone: z.string(),
+    password: z.string(),
+});
 
 const Login = () => {
-    const [phone, setPhone] = useState("20");
-    const [password, setPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
-
+    const { addToast } = useToast();
     const navigate = useNavigate();
-
     const dispatch = useAppDispatch();
     const isLoading = useAppSelector(selectLoading);
     const isAuthenticated = useAppSelector(selectIsAuthenticated);
@@ -33,15 +45,29 @@ const Login = () => {
         }
     }, [isAuthenticated, isLoading, navigate]);
 
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
+    const { control, handleSubmit, reset } = useForm<LoginCredentials>({
+        resolver: zodResolver(loginSchema),
+        defaultValues: {
+            phone: "",
+            password: "",
+        },
+        mode: "onChange",
+    });
+
+    const onSubmit = async (data: LoginCredentials) => {
         dispatch(setError(""));
 
         try {
             const response = await dispatch(
-                login({ phone: formatPhone(phone), password })
+                login({ phone: data.phone, password: data.password })
             );
             if (response.meta.requestStatus === "fulfilled") {
+                addToast({
+                    message: "Login successfully",
+                    type: "success",
+                    title: "Success!",
+                });
+                reset();
                 navigate("/");
             }
         } catch (err) {
@@ -53,101 +79,70 @@ const Login = () => {
         }
     };
 
-    const handleShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
-
     // Show loading spinner while checking authentication
-    if (isLoading) {
-        return <Loading />;
-    }
+    if (isLoading) return <Loading />;
 
     // Don't render login form if already authenticated (will redirect via useEffect)
-    if (isAuthenticated) {
-        return null;
-    }
+    if (isAuthenticated) return null;
 
     return (
-        <div className="min-h-screen flex items-center justify-center">
-            <div className="max-w-md w-full p-8 rounded-lg shadow-lg">
-                <h1 className="text-3xl font-bold text-center mb-6 text-primary-500">
-                    Login
-                </h1>
-
-                {error && (
-                    <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
-                        {error}
-                    </div>
-                )}
-
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label
-                            htmlFor="phone"
-                            className="block text-sm font-medium text-primary-500 mb-1"
-                        >
-                            Phone Number
-                        </label>
-                        <div className="relative">
-                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <span className="text-gray-500">+20</span>
-                            </div>
-                            <PhoneInput
-                                country={"eg"}
-                                enableSearch={true}
-                                value={phone}
-                                onChange={(phoneValue) => {
-                                    setPhone(phoneValue);
-                                }}
-                                inputClass="w-full! rounded-md! pl-12! px-3! py-2! focus:ring-primary-500! focus:border-2! focus:border-primary-500! shadow-none!"
-                                buttonClass="focus:ring-primary-500! focus:border-2! focus:border-primary-500! shadow-none!"
-                                dropdownClass="border border-primary-500!"
-                                placeholder="Enter your phone number"
-                            />
-                        </div>
-                        <p className="mt-1 text-xs text-gray-500">
-                            Enter your number without country code
-                        </p>
-                    </div>
-
-                    <div className="relative mb-6">
-                        <label
-                            htmlFor="password"
-                            className="block text-sm font-medium text-primary-500 mb-1"
-                        >
-                            Password
-                        </label>
-                        <input
-                            id="password"
-                            type={showPassword ? "text" : "password"}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-300"
-                            required
+        <AuthLayout>
+            <AuthCard
+                title="welcome back!"
+                subtitle={
+                    <>
+                        Great to see you again —{" "}
+                        <span className="text-black">log in</span> to continue.
+                    </>
+                }
+            >
+                <FormLayout
+                    handleSubmit={handleSubmit}
+                    handleFormSubmit={onSubmit}
+                    removeBorder
+                    noPadding
+                >
+                    <FormFieldsLayout cols="1" className="p-0! gap-0!">
+                        {/* Name */}
+                        <FormInput
+                            formFieldWrapperParentClassName="p-0! mb-7"
+                            name="phone"
+                            control={control}
+                            label="Phone"
+                            type="tel"
+                            placeholder="Enter Phone"
                         />
-                        <button
-                            type="button"
-                            onClick={handleShowPassword}
-                            className="absolute right-3 transform translate-y-1/2"
-                        >
-                            {showPassword ? (
-                                <EyeOff className="w-5 h-5 text-gray-500" />
-                            ) : (
-                                <Eye className="w-5 h-5 text-gray-500" />
-                            )}
-                        </button>
-                    </div>
+
+                        {/* Password */}
+                        <FormInput
+                            formFieldWrapperParentClassName="p-0! mb-3"
+                            name="password"
+                            control={control}
+                            label="Password"
+                            type="password"
+                        />
+
+                        <span className="text-right text-sm text-dark-100 hover:text-dark-300 transition-colors duration-300 ease-in-out">
+                            <Link to="/forget-password">Forgot Password?</Link>
+                        </span>
+
+                        {error && (
+                            <span className="form-error text-center mb-5">
+                                *{error}
+                            </span>
+                        )}
+                    </FormFieldsLayout>
 
                     <button
                         type="submit"
+                        className="w-full rounded-3xl bg-primary-500 py-2 text-white mt-7"
                         disabled={isLoading}
-                        className="w-full py-2 px-4 bg-primary-500 text-white rounded-md hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-300 disabled:opacity-50"
                     >
-                        {isLoading ? "Logging in..." : "Login"}
+                        Login
                     </button>
-                </form>
-            </div>
-        </div>
+                </FormLayout>
+            </AuthCard>
+        </AuthLayout>
     );
 };
 

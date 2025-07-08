@@ -9,7 +9,7 @@ import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { useNavigate } from "react-router-dom";
 import { SearchedDropDown } from "../../../../../components/SearchedDropDown";
-import { logFormData } from "../../../../../lib/utils";
+import { logFormData } from "../../../../../utils";
 
 type Promotion = {
     id?: string;
