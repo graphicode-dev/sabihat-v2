@@ -5,7 +5,7 @@ import FormFieldsLayout from "../../layout/FormFieldsLayout";
 import FormLayout from "../../layout/FormLayout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "../../hooks/useToast";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -345,13 +345,24 @@ function ForgetPasswordPage() {
     const step = useAppSelector(selectForgetPasswordStep);
     const isLoading = useAppSelector(selectLoading);
     const isAuthenticated = useAppSelector(selectIsAuthenticated);
+    const [isRedirecting, setIsRedirecting] = useState(false);
 
-    // Redirect to dashboard if already authenticated
+    // Redirect to dashboard if already authenticated with a smooth transition
     useEffect(() => {
-        if (isAuthenticated && !isLoading) {
-            navigate("/");
+        if (isAuthenticated && !isLoading && !isRedirecting) {
+            setIsRedirecting(true);
+            // Short delay to allow for a smoother transition
+            setTimeout(() => {
+                navigate("/");
+            }, 10);
         }
-    }, [isAuthenticated, isLoading, navigate]);
+    }, [isAuthenticated, isLoading, navigate, isRedirecting]);
+
+    // Apply fade-out effect when redirecting
+    const pageStyle = {
+        opacity: isRedirecting ? 0 : 1,
+        transition: 'opacity 0.1s ease-out'
+    };
 
     const forgotPasswordSteps = () => {
         switch (step) {
@@ -387,7 +398,11 @@ function ForgetPasswordPage() {
         }
     };
 
-    return <AuthLayout>{forgotPasswordSteps()}</AuthLayout>;
+    return (
+        <div style={pageStyle}>
+            <AuthLayout>{forgotPasswordSteps()}</AuthLayout>
+        </div>
+    );
 }
 
 export default ForgetPasswordPage;

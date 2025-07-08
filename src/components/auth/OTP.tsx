@@ -250,7 +250,7 @@ const OTP: React.FC<OTPProps> = ({
                                 ref={inputRefs[index]}
                                 type="text"
                                 maxLength={1}
-                                className="w-12 h-12 text-center text-xl border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+                                className="w-15 h-11 text-center text-xl border border-gray-300 rounded-3xl focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
                                 value={otp[index] || ""}
                                 onChange={(e) => handleInputChange(e, index)}
                                 onKeyDown={(e) => handleKeyDown(e, index)}
