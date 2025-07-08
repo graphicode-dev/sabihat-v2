@@ -175,7 +175,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
     const [showAllContent, setShowAllContent] = useState(false);
 
     // Default number of sections to show initially
-    const initialSectionsToShow = 6;
+    const initialSectionsToShow = 3;
 
     // Get rows for the Show More/Less feature
     const allRows = data?.rows || [];
