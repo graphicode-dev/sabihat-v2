@@ -2,9 +2,11 @@ import ViewCard from "../../../../components/ui/ViewCard";
 import PageLayout from "../../../../layout/PageLayout";
 import defaultUser from "../../../../assets/images/default-user.png";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../../../../hooks/useToast";
 
 function CompanyProfilePage() {
     const navigate = useNavigate();
+    const { addAlertToast, addToast } = useToast();
     const userData = {
         id: "1",
         avatar: defaultUser,
@@ -25,7 +27,30 @@ function CompanyProfilePage() {
                             navigate(
                                 "/system-management-administration/company-profile/edit/profile"
                             ),
-                        onDelete: () => console.log("Delete Company Info"),
+                        onDelete: () => {
+                            addAlertToast(
+                                "Are you sure you want to delete this company?",
+                                [
+                                    {
+                                        text: "OK",
+                                        onClick: () => {
+                                            addToast({
+                                                type: "success",
+                                                message:
+                                                    "Company deleted successfully",
+                                                title: "Success!",
+                                            });
+                                        },
+                                        variant: "primary",
+                                    },
+                                    {
+                                        text: "Cancel",
+                                        onClick: () => {},
+                                        variant: "secondary",
+                                    },
+                                ]
+                            );
+                        },
                         children: (
                             <div>
                                 {/* Company Info Tab - First Image */}
@@ -69,7 +94,30 @@ function CompanyProfilePage() {
                             navigate(
                                 "/system-management-administration/company-profile/edit/contact-us"
                             ),
-                        onDelete: () => console.log("Delete Contact Us"),
+                        onDelete: () => {
+                            addAlertToast(
+                                "Are you sure you want to delete this contact us?",
+                                [
+                                    {
+                                        text: "OK",
+                                        onClick: () => {
+                                            addToast({
+                                                type: "success",
+                                                message:
+                                                    "Contact us deleted successfully",
+                                                title: "Success!",
+                                            });
+                                        },
+                                        variant: "primary",
+                                    },
+                                    {
+                                        text: "Cancel",
+                                        onClick: () => {},
+                                        variant: "secondary",
+                                    },
+                                ]
+                            );
+                        },
                         children: (
                             <div>
                                 {/* Contact Us Tab - Second Image */}
@@ -158,12 +206,35 @@ function CompanyProfilePage() {
                             navigate(
                                 "/system-management-administration/company-profile/edit/about-us"
                             ),
-                        onDelete: () => console.log("Delete About Us"),
+                        onDelete: () => {
+                            addAlertToast(
+                                "Are you sure you want to delete this about us?",
+                                [
+                                    {
+                                        text: "OK",
+                                        onClick: () => {
+                                            addToast({
+                                                type: "success",
+                                                message:
+                                                    "About us deleted successfully",
+                                                title: "Success!",
+                                            });
+                                        },
+                                        variant: "primary",
+                                    },
+                                    {
+                                        text: "Cancel",
+                                        onClick: () => {},
+                                        variant: "secondary",
+                                    },
+                                ]
+                            );
+                        },
                         children: (
                             <div>
                                 {/* About Us Tab - Third Image */}
-                                <div className="flex flex-col gap-8">
-                                    <div>
+                                <div className="flex flex-col gap-8 w-full">
+                                    <div className="text-left">
                                         <h3 className="text-sm text-gray-500 mb-1">
                                             Who We Are Statement
                                         </h3>
@@ -171,7 +242,7 @@ function CompanyProfilePage() {
                                             ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
                                         </p>
                                     </div>
-                                    <div>
+                                    <div className="text-left">
                                         <h3 className="text-sm text-gray-500 mb-1">
                                             Vision
                                         </h3>
@@ -179,7 +250,7 @@ function CompanyProfilePage() {
                                             ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
                                         </p>
                                     </div>
-                                    <div>
+                                    <div className="text-left">
                                         <h3 className="text-sm text-gray-500 mb-1">
                                             Mission
                                         </h3>
@@ -187,7 +258,7 @@ function CompanyProfilePage() {
                                             ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
                                         </p>
                                     </div>
-                                    <div>
+                                    <div className="text-left">
                                         <h3 className="text-sm text-gray-500 mb-1">
                                             Purpose
                                         </h3>
@@ -207,7 +278,30 @@ function CompanyProfilePage() {
                             navigate(
                                 "/system-management-administration/company-profile/edit/setting"
                             ),
-                        onDelete: () => console.log("Delete Setting"),
+                        onDelete: () => {
+                            addAlertToast(
+                                "Are you sure you want to delete this setting?",
+                                [
+                                    {
+                                        text: "OK",
+                                        onClick: () => {
+                                            addToast({
+                                                type: "success",
+                                                message:
+                                                    "Setting deleted successfully",
+                                                title: "Success!",
+                                            });
+                                        },
+                                        variant: "primary",
+                                    },
+                                    {
+                                        text: "Cancel",
+                                        onClick: () => {},
+                                        variant: "secondary",
+                                    },
+                                ]
+                            );
+                        },
                         children: (
                             <div>
                                 {/* Setting Tab - Fourth Image */}

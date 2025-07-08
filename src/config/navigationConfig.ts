@@ -141,10 +141,10 @@ const PartnersClassificationViewPage = lazy(
             "../pages/dashboard/system-management-administration/partners-classification/view"
         )
 );
-const PartnersClassificationAddPage = lazy(
+const PartnersClassificationEditPage = lazy(
     () =>
         import(
-            "../pages/dashboard/system-management-administration/partners-classification/add"
+            "../pages/dashboard/system-management-administration/partners-classification/edit"
         )
 );
 
@@ -186,6 +186,18 @@ const UserRolesViewPage = lazy(
     () =>
         import(
             "../pages/dashboard/system-management-administration/user-roles/view"
+        )
+);
+const UserRolesAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/user-roles/add"
+        )
+);
+const UserRolesEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/user-roles/edit"
         )
 );
 //  #endregion User Roles
@@ -1299,6 +1311,16 @@ export const navigationConfig: TabLink[] = [
                             path: "view/:id",
                             component: UserRolesViewPage,
                         },
+                        {
+                            title: "Add",
+                            path: "/add",
+                            component: UserRolesAddPage,
+                        },
+                        {
+                            title: "Edit",
+                            path: "/edit/:id",
+                            component: UserRolesEditPage,
+                        },
                     ],
                 },
 
@@ -1358,8 +1380,8 @@ export const navigationConfig: TabLink[] = [
                         },
                         {
                             title: "View",
-                            path: "/:id/add",
-                            component: PartnersClassificationAddPage,
+                            path: "/:id/edit",
+                            component: PartnersClassificationEditPage,
                         },
                     ],
                 },

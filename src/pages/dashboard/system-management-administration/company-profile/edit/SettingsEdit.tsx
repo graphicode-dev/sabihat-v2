@@ -99,7 +99,7 @@ function SettingsEditPage() {
     return (
         <PageLayout>
             <FormLayout handleSubmit={handleSubmit} handleFormSubmit={onSubmit}>
-                <FormFieldsLayout title="Add" cols="3">
+                <FormFieldsLayout title="Edit" cols="3">
                     {/* tax */}
                     <SearchedDropDown
                         name="taxId"

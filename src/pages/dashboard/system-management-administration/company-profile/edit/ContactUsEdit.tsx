@@ -167,7 +167,7 @@ function ContactUsEditPage() {
     return (
         <PageLayout>
             <FormLayout handleSubmit={handleSubmit} handleFormSubmit={onSubmit}>
-                <FormFieldsLayout title="Add" cols="3">
+                <FormFieldsLayout title="Edit" cols="3">
                     {/* facebook */}
                     <FormInput
                         name="facebook"

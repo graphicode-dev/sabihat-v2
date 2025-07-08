@@ -2,6 +2,7 @@ import PageLayout from "../../../../layout/PageLayout";
 import { DynamicTable } from "../../../../components/table";
 import { useNavigate } from "react-router-dom";
 import { TableColumn, TableData } from "../../../../types/table";
+import defaultUser from "../../../../assets/images/default-user.png";
 
 function UserProfilesPage() {
     const navigate = useNavigate();
@@ -37,6 +38,7 @@ function UserProfilesPage() {
                 phone: "123-456-7890",
                 address: "123 Main St, Anytown, USA",
             },
+            avatar: defaultUser,
         },
         {
             id: "2",
@@ -46,6 +48,7 @@ function UserProfilesPage() {
                 phone: "123-456-7890",
                 address: "123 Main St, Anytown, USA",
             },
+            avatar: defaultUser,
         },
         {
             id: "3",
@@ -55,6 +58,7 @@ function UserProfilesPage() {
                 phone: "123-456-7890",
                 address: "123 Main St, Anytown, USA",
             },
+            avatar: defaultUser,
         },
     ];
 

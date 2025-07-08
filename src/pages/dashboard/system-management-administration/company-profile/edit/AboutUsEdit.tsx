@@ -117,7 +117,7 @@ function AboutUsEditPage() {
     return (
         <PageLayout>
             <FormLayout handleSubmit={handleSubmit} handleFormSubmit={onSubmit}>
-                <FormFieldsLayout title="Add" cols="1">
+                <FormFieldsLayout title="Edit" cols="1">
                     {/* whoWeAre */}
                     <FormInput
                         name="whoWeAre"

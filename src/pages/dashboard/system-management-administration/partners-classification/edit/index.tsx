@@ -19,7 +19,7 @@ const partnersSchema = z.object({
     nameClass: z.string().optional(),
 });
 
-function PartnersClassificationAddPage() {
+function PartnersClassificationEditPage() {
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
@@ -87,7 +87,7 @@ function PartnersClassificationAddPage() {
     return (
         <PageLayout>
             <FormLayout handleSubmit={handleSubmit} handleFormSubmit={onSubmit}>
-                <FormFieldsLayout title="Add" cols="5">
+                <FormFieldsLayout title="Edit" cols="5">
                     {/* nameClass */}
                     <FormInput
                         name="nameClass"
@@ -109,4 +109,4 @@ function PartnersClassificationAddPage() {
     );
 }
 
-export default PartnersClassificationAddPage;
+export default PartnersClassificationEditPage;
