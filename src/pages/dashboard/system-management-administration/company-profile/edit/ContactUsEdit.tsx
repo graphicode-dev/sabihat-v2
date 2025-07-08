@@ -8,6 +8,7 @@ import { z } from "zod";
 import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { useNavigate } from "react-router-dom";
+import { logFormData } from "../../../../../lib/utils";
 
 type ContactUS = {
     id?: string;
@@ -103,6 +104,8 @@ function ContactUsEditPage() {
             if (formData.phone) {
                 apiFormData.append("phone", formData.phone);
             }
+
+            logFormData(apiFormData);
 
             // Simulate API call success
             // In a real app, you would send apiFormData to your backend
@@ -245,7 +248,7 @@ function ContactUsEditPage() {
                         name="phone"
                         control={control}
                         label="Phone"
-                        type="text"
+                        type="tel"
                         error={errors.phone}
                     />
                 </FormFieldsLayout>

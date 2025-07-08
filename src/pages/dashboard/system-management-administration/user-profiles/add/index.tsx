@@ -259,7 +259,7 @@ function UserProfilesAddPage() {
                         name="phone"
                         control={control}
                         label="Phone"
-                        type="text"
+                        type="tel"
                         error={errors.phone}
                     />
                     {/* Address */}

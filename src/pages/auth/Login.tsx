@@ -12,9 +12,10 @@ import {
 } from "../../store/slices/auth/authSlice";
 import { formatPhone } from "../../lib/utils";
 import { Eye, EyeOff } from "lucide-react";
+import PhoneInput from "react-phone-input-2";
 
 const Login = () => {
-    const [phone, setPhone] = useState("");
+    const [phone, setPhone] = useState("20");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
@@ -91,21 +92,17 @@ const Login = () => {
                             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <span className="text-gray-500">+20</span>
                             </div>
-                            <input
-                                id="phone"
-                                type="tel"
+                            <PhoneInput
+                                country={"eg"}
+                                enableSearch={true}
                                 value={phone}
-                                onChange={(e) => {
-                                    // Remove any non-digit characters
-                                    const value = e.target.value.replace(
-                                        /\D/g,
-                                        ""
-                                    );
-                                    setPhone(value);
+                                onChange={(phoneValue) => {
+                                    setPhone(phoneValue);
                                 }}
-                                className="w-full pl-12 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-300)]"
-                                placeholder="1012345678"
-                                required
+                                inputClass="w-full! rounded-md! pl-12! px-3! py-2! focus:ring-primary-500! focus:border-2! focus:border-primary-500! shadow-none!"
+                                buttonClass="focus:ring-primary-500! focus:border-2! focus:border-primary-500! shadow-none!"
+                                dropdownClass="border border-primary-500!"
+                                placeholder="Enter your phone number"
                             />
                         </div>
                         <p className="mt-1 text-xs text-gray-500">
@@ -125,7 +122,7 @@ const Login = () => {
                             type={showPassword ? "text" : "password"}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-300)]"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-300"
                             required
                         />
                         <button

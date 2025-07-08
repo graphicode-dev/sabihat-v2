@@ -9,6 +9,7 @@ import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import Calendar from "../ui/Calendar";
 import { format } from "date-fns";
 import FormFieldWrapper from "./FormFieldWrapper";
+import PhoneInput from "react-phone-input-2";
 
 interface FormInputProps<T extends FieldValues> {
     name: Path<T>;
@@ -61,6 +62,7 @@ const FormInput = <T extends FieldValues>({
     const isPasswordField = type === "password";
     const [showCalendar, setShowCalendar] = useState(false);
     const calendarRef = useRef<HTMLDivElement>(null);
+    const [phone, setPhone] = useState("20");
 
     // Determine the actual input type
     const inputType = isPasswordField
@@ -217,6 +219,24 @@ const FormInput = <T extends FieldValues>({
                                         disabled={disabled}
                                     />
                                 </div>
+                            );
+                        } else if (type === "tel") {
+                            return (
+                                <PhoneInput
+                                    country={"eg"}
+                                    enableSearch={true}
+                                    value={field.value || phone}
+                                    onChange={(phoneValue) => {
+                                        // Update local state
+                                        setPhone(phoneValue);
+                                        // Update React Hook Form field value
+                                        field.onChange(phoneValue);
+                                    }}
+                                    inputClass="w-full! rounded-3xl! h-11! focus:ring-primary-500! focus:border-2! focus:border-primary-500! shadow-none!"
+                                    buttonClass="focus:ring-primary-500! focus:border-2! focus:border-primary-500! shadow-none!"
+                                    dropdownClass="border border-primary-500!"
+                                    disabled={disabled}
+                                />
                             );
                         } else if (type === "file") {
                             return (

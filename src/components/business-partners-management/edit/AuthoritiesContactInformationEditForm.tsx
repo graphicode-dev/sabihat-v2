@@ -154,6 +154,7 @@ function AuthoritiesContactInformationEditForm() {
                     name="phone"
                     control={control}
                     label="Phone"
+                    type="tel"
                     placeholder="Enter Phone"
                     error={errors.phone}
                 />

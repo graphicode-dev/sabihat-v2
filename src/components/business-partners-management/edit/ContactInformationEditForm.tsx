@@ -160,6 +160,7 @@ function ContactInformationEditForm() {
                     name="phone"
                     control={control}
                     label="Phone"
+                    type="tel"
                     error={errors.phone}
                 />
 
