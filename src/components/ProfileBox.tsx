@@ -33,7 +33,7 @@ function ProfileBox() {
                         </span>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 gap-1">
+                {/* <div className="grid grid-cols-1 gap-1">
                     <div className="flex items-center">
                         <div className="w-4 h-4 mr-2 flex-shrink-0 flex items-center justify-center">
                             <svg
@@ -63,7 +63,7 @@ function ProfileBox() {
                                 : "User"}
                         </span>
                     </div>
-                </div>
+                </div> */}
             </div>
             <ul className="py-1 text-gray-700" aria-labelledby="dropdown">
                 <li>

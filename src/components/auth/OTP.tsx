@@ -47,7 +47,7 @@ const OTP: React.FC<OTPProps> = ({
         }
     };
 
-    const otpNum = 5;
+    const otpNum = 6;
 
     // Create refs for each input field
     const inputRefs = [
@@ -97,7 +97,7 @@ const OTP: React.FC<OTPProps> = ({
 
         try {
             const result = await dispatch(
-                sendVerificationCode({ phone: resetPhoneNumber })
+                sendVerificationCode({ phoneCode: "", phoneNumber: resetPhoneNumber })
             );
             if (result.meta.requestStatus === "fulfilled") {
                 setTimer(60);

@@ -6,22 +6,38 @@ const token = getToken();
 
 export const ENDPOINTS = {
     auth: {
-        login: (data: { phone: string; password: string }) =>
-            api.post("/auth/login", data),
+        login: (data: {
+            phoneCode: string;
+            phoneNumber: string;
+            password: string;
+        }) => api.post("/login", data),
         logout: () =>
             api.post(
-                "/auth/logout",
+                "/logout",
                 {},
                 { headers: { Authorization: `Bearer ${token}` } }
             ),
-        sendVerificationCode: (data: { phone: string }) =>
-            api.post("/auth/verification/send", data),
-        verifyVerificationCode: (data: { code: string }) =>
-            api.post(`/auth/verification/verify/${data.code}`),
-        resetPassword: (data: { token: string; password: string }) =>
-            api.post(`/auth/reset-password`, data),
+        sendVerificationCode: (data: {
+            phoneCode: string;
+            phoneNumber: string;
+        }) => api.post("/forgot-password", data),
+        verifyVerificationCode: (data: {
+            phoneCode: string;
+            phoneNumber: string;
+            code: string;
+        }) => api.post("/forgot-verify-code", data),
+        resetPassword: (data: { verifyToken: string; password: string }) =>
+            api.post(`/reset-password`, data),
         profile: () =>
-            api.get("/auth/profile", {
+            api.get("/profile", {
+                headers: { Authorization: `Bearer ${token}` },
+            }),
+        changePassword: (data: {
+            currentPassword: string;
+            newPassword: string;
+            newPasswordConfirmation: string;
+        }) =>
+            api.post(`/change-password`, data, {
                 headers: { Authorization: `Bearer ${token}` },
             }),
     },

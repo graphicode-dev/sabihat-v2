@@ -41,17 +41,17 @@ function Tabs<T extends string>({
                 ? child.props.role
                 : [child.props.role];
 
-            if (!requiredRoles.includes(user?.role || "")) {
-                return false; // Role doesn't match
-            }
+            // if (!requiredRoles.includes(user?.role || "")) {
+            //     return false; // Role doesn't match
+            // }
         }
 
         // Check entity restrictions if present
         if (child.props.entity) {
             // Admin users can see all entities
-            if (user?.role === "admin") {
-                return true; // Admin can see all tabs
-            }
+            // if (user?.role === "admin") {
+            //     return true; // Admin can see all tabs
+            // }
 
             // const requiredEntities = Array.isArray(child.props.entity)
             //     ? child.props.entity

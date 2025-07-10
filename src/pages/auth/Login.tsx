@@ -21,12 +21,14 @@ import FormFieldsLayout from "../../layout/FormFieldsLayout";
 import { FormInput } from "../../components/form";
 
 type LoginCredentials = {
-    phone: string;
+    phoneNumber: string;
+    phoneCode?: string;
     password: string;
 };
 
 const loginSchema = z.object({
-    phone: z.string(),
+    phoneNumber: z.string(),
+    phoneCode: z.string().optional(),
     password: z.string(),
 });
 
@@ -45,21 +47,40 @@ const Login = () => {
         }
     }, [isAuthenticated, isLoading, navigate]);
 
-    const { control, handleSubmit, reset } = useForm<LoginCredentials>({
-        resolver: zodResolver(loginSchema),
-        defaultValues: {
-            phone: "",
-            password: "",
-        },
-        mode: "onChange",
-    });
+    const { control, handleSubmit, reset, setValue } =
+        useForm<LoginCredentials>({
+            resolver: zodResolver(loginSchema),
+            defaultValues: {
+                phoneNumber: "",
+                phoneCode: "",
+                password: "",
+            },
+            mode: "onChange",
+        });
+
+    // Handle phone extraction
+    const handlePhoneExtracted = (phoneData: {
+        fullNumber: string;
+        phoneCode: string;
+        phoneNumber: string;
+    }) => {
+        setValue("phoneCode", phoneData.phoneCode);
+        setValue("phoneNumber", phoneData.fullNumber);
+    };
 
     const onSubmit = async (data: LoginCredentials) => {
         dispatch(setError(""));
 
         try {
+            const phoneCodeLength = data.phoneCode?.length || 0;
+            const phoneNumberOnly = data.phoneNumber.substring(phoneCodeLength);
+
             const response = await dispatch(
-                login({ phone: data.phone, password: data.password })
+                login({
+                    phoneCode: data.phoneCode || "",
+                    phoneNumber: phoneNumberOnly,
+                    password: data.password,
+                })
             );
             if (response.meta.requestStatus === "fulfilled") {
                 addToast({
@@ -103,14 +124,15 @@ const Login = () => {
                     noPadding
                 >
                     <FormFieldsLayout cols="1" className="p-0! gap-0!">
-                        {/* Name */}
+                        {/* Phone */}
                         <FormInput
                             formFieldWrapperParentClassName="p-0! mb-7"
-                            name="phone"
+                            name="phoneNumber"
                             control={control}
                             label="Phone"
                             type="tel"
                             placeholder="Enter Phone"
+                            onPhoneExtracted={handlePhoneExtracted}
                         />
 
                         {/* Password */}

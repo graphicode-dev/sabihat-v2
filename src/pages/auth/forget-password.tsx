@@ -16,6 +16,7 @@ import {
     selectForgetPasswordStep,
     selectIsAuthenticated,
     selectLoading,
+    selectResetPhoneCode,
     selectResetPhoneNumber,
     sendVerificationCode,
     setError,
@@ -41,17 +42,21 @@ type CommonComponentsProps = {
 };
 
 type SendCodeFormFields = {
-    phone: string;
+    phoneNumber: string;
+    phoneCode?: string;
 };
 const sendCodeSchema = z.object({
-    phone: z.string(),
+    phoneNumber: z.string(),
+    phoneCode: z.string().optional(),
 });
 
 type VerifyCodeFormFields = {
     code: string;
+    phoneNumber: string;
 };
 const verifyCodeSchema = z.object({
     code: z.string(),
+    phoneNumber: z.string(),
 });
 
 type ResetPasswordFormFields = {
@@ -69,20 +74,37 @@ const SendCode = ({
     error,
     isLoading,
 }: CommonComponentsProps) => {
-    const { control, handleSubmit, reset } = useForm<SendCodeFormFields>({
-        resolver: zodResolver(sendCodeSchema),
-        defaultValues: {
-            phone: "",
-        },
-        mode: "onChange",
-    });
+    const { control, handleSubmit, reset, setValue } =
+        useForm<SendCodeFormFields>({
+            resolver: zodResolver(sendCodeSchema),
+            defaultValues: {
+                phoneNumber: "",
+                phoneCode: "",
+            },
+            mode: "onChange",
+        });
+
+    const handlePhoneExtracted = (phoneData: {
+        fullNumber: string;
+        phoneCode: string;
+        phoneNumber: string;
+    }) => {
+        setValue("phoneCode", phoneData.phoneCode);
+        setValue("phoneNumber", phoneData.fullNumber);
+    };
 
     const onSubmit = async (data: SendCodeFormFields) => {
         dispatch(setError(""));
 
         try {
+            const phoneCodeLength = data.phoneCode?.length || 0;
+            const phoneNumberOnly = data.phoneNumber.substring(phoneCodeLength);
+
             const response = await dispatch(
-                sendVerificationCode({ phone: data.phone })
+                sendVerificationCode({
+                    phoneCode: data.phoneCode || "",
+                    phoneNumber: phoneNumberOnly,
+                })
             );
             if (response.meta.requestStatus === "fulfilled") {
                 addToast({
@@ -121,11 +143,12 @@ const SendCode = ({
                     {/* Phone */}
                     <FormInput
                         formFieldWrapperParentClassName="p-0! mb-7"
-                        name="phone"
+                        name="phoneNumber"
                         control={control}
                         label="Phone"
                         type="tel"
                         placeholder="Enter Phone"
+                        onPhoneExtracted={handlePhoneExtracted}
                     />
 
                     {error && (
@@ -154,11 +177,13 @@ const VerifyCode = ({
     isLoading,
 }: CommonComponentsProps) => {
     const resetPhoneNumber = useAppSelector(selectResetPhoneNumber);
+    const resetPhoneCode = useAppSelector(selectResetPhoneCode);
     const { control, handleSubmit, reset, formState } =
         useForm<VerifyCodeFormFields>({
             resolver: zodResolver(verifyCodeSchema),
             defaultValues: {
                 code: "",
+                phoneNumber: "",
             },
             mode: "onChange",
         });
@@ -168,7 +193,11 @@ const VerifyCode = ({
 
         try {
             const response = await dispatch(
-                verifyVerificationCode({ code: data.code })
+                verifyVerificationCode({
+                    phoneCode: resetPhoneCode || "",
+                    phoneNumber: data.phoneNumber,
+                    code: data.code,
+                })
             );
             if (response.meta.requestStatus === "fulfilled") {
                 addToast({
@@ -361,7 +390,7 @@ function ForgetPasswordPage() {
     // Apply fade-out effect when redirecting
     const pageStyle = {
         opacity: isRedirecting ? 0 : 1,
-        transition: 'opacity 0.1s ease-out'
+        transition: "opacity 0.1s ease-out",
     };
 
     const forgotPasswordSteps = () => {

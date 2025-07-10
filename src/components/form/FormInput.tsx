@@ -12,6 +12,12 @@ import FormFieldWrapper from "./FormFieldWrapper";
 import PhoneInput from "react-phone-input-2";
 import OTP from "../auth/OTP";
 
+interface PhoneData {
+    fullNumber: string;
+    phoneCode: string;
+    phoneNumber: string;
+}
+
 interface FormInputProps<T extends FieldValues> {
     name: Path<T>;
     control: Control<T>;
@@ -38,6 +44,7 @@ interface FormInputProps<T extends FieldValues> {
         | "inline";
     fileLabel?: string;
     readOnly?: boolean;
+    onPhoneExtracted?: (phoneData: PhoneData) => void;
 }
 
 const FormInput = <T extends FieldValues>({
@@ -60,6 +67,7 @@ const FormInput = <T extends FieldValues>({
     fileLabel = "Upload File",
     fileIcon,
     readOnly = false,
+    onPhoneExtracted,
 }: FormInputProps<T>) => {
     const [showPassword, setShowPassword] = useState(false);
     const isPasswordField = type === "password";
@@ -239,13 +247,40 @@ const FormInput = <T extends FieldValues>({
                             return (
                                 <PhoneInput
                                     country={"eg"}
+                                    countryCodeEditable={false}
                                     enableSearch={true}
                                     value={field.value || phone}
-                                    onChange={(phoneValue) => {
-                                        // Update local state
+                                    onChange={(phoneValue, country) => {
+                                        // Update local state with the full phone number
                                         setPhone(phoneValue);
-                                        // Update React Hook Form field value
+
+                                        // Extract phone code and phone number
+                                        const selectedCountry = country as any;
+                                        const phoneCode =
+                                            selectedCountry.dialCode;
+                                        const phoneNumberOnly =
+                                            phoneValue.substring(
+                                                selectedCountry.dialCode.length
+                                            );
+
+                                        console.log("Phone Extraction:", {
+                                            fullNumber: phoneValue,
+                                            phoneCode,
+                                            phoneNumber: phoneNumberOnly,
+                                        });
+
+                                        // Update React Hook Form field value with full number
+                                        // This is important - we need to keep the full number in the field
                                         field.onChange(phoneValue);
+
+                                        // If onPhoneExtracted callback exists, provide separated values
+                                        if (onPhoneExtracted) {
+                                            onPhoneExtracted({
+                                                fullNumber: phoneValue,
+                                                phoneCode,
+                                                phoneNumber: phoneNumberOnly,
+                                            });
+                                        }
                                     }}
                                     inputClass="w-full! rounded-3xl! h-11! focus:ring-primary-500! focus:border-2! focus:border-primary-500! shadow-none!"
                                     buttonClass="focus:ring-primary-500! focus:border-2! focus:border-primary-500! shadow-none!"

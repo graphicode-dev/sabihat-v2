@@ -1,26 +1,12 @@
 export interface User {
-  id: number;
-  name: string;
-  phone: string;
-  email: string;
-  role: string;
-  status: string | null;
-  phoneVerifiedAt: string;
-  currentBalance: string;
-  avatar?: string; // Optional avatar URL
-}
-
-export interface LoginResponse {
-  success: boolean;
-  message: string;
-  data: {
-    token: string;
-    result: User;
-  };
-}
-
-export interface ProfileResponse {
-  success: boolean;
-  message: string;
-  data: User;
+    id: number;
+    name: string;
+    phoneCode: string;
+    phoneNumber: string;
+    email: string;
+    address: string;
+    phoneVerifiedAt: string;
+    businessPartnerId: string;
+    isSalesman: boolean;
+    avatar?: string; // Optional avatar URL
 }

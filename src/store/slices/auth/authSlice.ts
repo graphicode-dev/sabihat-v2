@@ -21,6 +21,7 @@ export interface AuthState {
     forgetPasswordStep: "send-code" | "verify-code" | "reset-password" | "done";
     resetPasswordToken: string | null;
     resetPasswordPhoneNumber: string | null;
+    resetPasswordPhoneCode: string | null;
 }
 
 // Initial state
@@ -35,6 +36,7 @@ const initialState: AuthState = {
     forgetPasswordStep: "send-code",
     resetPasswordToken: null,
     resetPasswordPhoneNumber: null,
+    resetPasswordPhoneCode: null,
 };
 
 // No longer needed as we're fetching fresh data on each refresh
@@ -58,6 +60,7 @@ export const initializeAuth = (): AuthState => {
                 forgetPasswordStep: "send-code",
                 resetPasswordToken: null,
                 resetPasswordPhoneNumber: null,
+                resetPasswordPhoneCode: null,
             };
         }
     } catch (error) {
@@ -70,11 +73,19 @@ export const initializeAuth = (): AuthState => {
 export const login = createAsyncThunk(
     "auth/login",
     async (
-        { phone, password }: { phone: string; password: string },
+        {
+            phoneCode,
+            phoneNumber,
+            password,
+        }: { phoneCode: string; phoneNumber: string; password: string },
         { rejectWithValue }
     ) => {
         try {
-            const response = await ENDPOINTS.auth.login({ phone, password });
+            const response = await ENDPOINTS.auth.login({
+                phoneCode,
+                phoneNumber,
+                password,
+            });
 
             if (!response.data.success) {
                 return rejectWithValue(response.data.message || "Login failed");
@@ -189,10 +200,14 @@ export const refreshUserProfile = createAsyncThunk(
 // Reset password steps
 export const sendVerificationCode = createAsyncThunk(
     "auth/sendVerificationCode",
-    async ({ phone }: { phone: string }, { rejectWithValue }) => {
+    async (
+        { phoneCode, phoneNumber }: { phoneCode: string; phoneNumber: string },
+        { rejectWithValue }
+    ) => {
         try {
             const response = await ENDPOINTS.auth.sendVerificationCode({
-                phone,
+                phoneCode,
+                phoneNumber,
             });
 
             if (!response.data.success) {
@@ -213,9 +228,18 @@ export const sendVerificationCode = createAsyncThunk(
 
 export const verifyVerificationCode = createAsyncThunk(
     "auth/verifyVerificationCode",
-    async ({ code }: { code: string }, { rejectWithValue }) => {
+    async (
+        {
+            phoneCode,
+            phoneNumber,
+            code,
+        }: { phoneCode: string; phoneNumber: string; code: string },
+        { rejectWithValue }
+    ) => {
         try {
             const response = await ENDPOINTS.auth.verifyVerificationCode({
+                phoneCode,
+                phoneNumber,
                 code,
             });
 
@@ -243,8 +267,8 @@ export const resetPassword = createAsyncThunk(
         try {
             const state = getState() as RootState;
             const response = await ENDPOINTS.auth.resetPassword({
+                verifyToken: state.auth.resetPasswordToken!,
                 password,
-                token: state.auth.resetPasswordToken!,
             });
 
             if (!response.data.success) {
@@ -340,7 +364,8 @@ const authSlice = createSlice({
             .addCase(sendVerificationCode.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = null;
-                state.resetPasswordPhoneNumber = action.meta.arg.phone;
+                state.resetPasswordPhoneNumber = action.meta.arg.phoneNumber;
+                state.resetPasswordPhoneCode = action.meta.arg.phoneCode;
                 state.forgetPasswordStep = "verify-code";
                 state.verificationCodeSent = true;
             })
@@ -377,6 +402,8 @@ const authSlice = createSlice({
                 state.forgetPasswordStep = "done";
                 state.resetPasswordToken = null;
                 state.profileRefreshed = true;
+                state.resetPasswordPhoneNumber = null;
+                state.resetPasswordPhoneCode = null;
             })
             .addCase(resetPassword.rejected, (state, action) => {
                 state.loading = false;
@@ -396,6 +423,8 @@ export const selectForgetPasswordStep = (state: RootState) =>
     state.auth.forgetPasswordStep;
 export const selectResetPhoneNumber = (state: RootState) =>
     state.auth.resetPasswordPhoneNumber;
+export const selectResetPhoneCode = (state: RootState) =>
+    state.auth.resetPasswordPhoneCode;
 export const selectLoading = (state: RootState) => state.auth.loading;
 export const selectError = (state: RootState) => state.auth.error;
 
