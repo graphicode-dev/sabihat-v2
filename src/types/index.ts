@@ -12,7 +12,7 @@ export type Icon = {
 
 export type SideBar = {
     titleSection: {
-        icon: ({ width, height, color }: Icon) => React.JSX.Element;
+        icon: string;
         title: string;
     };
     links: {
@@ -28,7 +28,7 @@ export type SideBar = {
 };
 
 export type TabLink = {
-    icon: ({ width, height }: Icon) => React.JSX.Element;
+    icon: string;
     title: string;
     path: string;
     sideBar: SideBar;

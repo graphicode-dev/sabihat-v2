@@ -1,19 +1,33 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState, useCallback } from "react";
 import SideBar from "../components/SideBar";
 import Navbar from "../components/Navbar";
 import Loading from "../components/ui/Loading";
 import DashboardHome from "../pages/dashboard/DashboardHome";
-import { selectLoading } from "../store/slices/auth/authSlice";
-import { useAppSelector } from "../store/hooks";
+import { selectLoading, setLoading } from "../store/slices/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { TabLink } from "../types";
+import { buildDynamicNavigation } from "../config/navigationConfig";
 
 interface DashboardLayoutProps {
     children: ReactNode;
 }
 
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+    const dispatch = useAppDispatch();
     const isLoading = useAppSelector(selectLoading);
 
+    // Use useCallback to memoize the setIsLoading function
+    const setIsLoading = useCallback(
+        (isLoading: boolean) => {
+            // Dispatch the action immediately without waiting for the promise
+            dispatch(setLoading(isLoading));
+            console.log("Loading state set to:", isLoading);
+        },
+        [dispatch]
+    ); // Include dispatch as a dependency
+
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [navigationLinks, setNavigationLinks] = useState<TabLink[]>([]);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -41,9 +55,40 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    if (isLoading) {
-        return <Loading />;
-    }
+    // Fetch navigation data when component mounts
+    useEffect(() => {
+        let isMounted = true; // Flag to prevent state updates after unmount
+
+        const fetchNavigation = async () => {
+            setIsLoading(true);
+            try {
+                const navConfig = await buildDynamicNavigation();
+                // Only update state if component is still mounted
+                if (isMounted) {
+                    setNavigationLinks(navConfig);
+                    console.log("Navigation links loaded:", navConfig.length);
+                }
+            } catch (error) {
+                console.error("Failed to load navigation:", error);
+                if (isMounted) {
+                    setNavigationLinks([]);
+                }
+            } finally {
+                if (isMounted) {
+                    setIsLoading(false);
+                }
+            }
+        };
+
+        fetchNavigation();
+
+        // Cleanup function to prevent state updates after unmount
+        return () => {
+            isMounted = false;
+        };
+    }, [setIsLoading]); // setIsLoading is memoized with useCallback
+
+    if (isLoading) return <Loading />;
 
     return (
         <div className="antialiased">
@@ -61,6 +106,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             ) : (
                 <div className="flex justify-between items-start">
                     <SideBar
+                        navigationLinks={navigationLinks}
                         isSidebarOpen={sidebarOpen}
                         onToggleSidebar={toggleSidebar}
                     />

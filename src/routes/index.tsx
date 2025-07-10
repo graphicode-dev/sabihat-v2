@@ -1,8 +1,9 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
 import Loading from "../components/ui/Loading";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { navigationConfig } from "../config/navigationConfig";
+import { buildDynamicNavigation } from "../config/navigationConfig";
+import { TabLink } from "../types";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 import { useAppSelector } from "../store/hooks";
 import {
@@ -46,41 +47,71 @@ const cleanPath = (path: string) => path.replace(/^\/|\/$/g, "");
 // };
 
 function AppRoutes() {
+    const [navigationConfig, setNavigationConfig] = useState<TabLink[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchNavigation = async () => {
+            try {
+                const navConfig = await buildDynamicNavigation();
+                setNavigationConfig(navConfig);
+            } catch (error) {
+                console.error("Failed to load navigation:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchNavigation();
+    }, []);
+
+    if (loading) {
+        return <Loading />;
+    }
+
     // Extract all view routes with ID parameters
-    const viewRoutes = navigationConfig.flatMap((link) =>
-        (link.sideBar?.links || []).flatMap((route) =>
-            (route.subLinks || [])
-                .filter((subLink) => subLink.path.includes(":id"))
-                .map((subLink) => {
-                    // Get the base path without parent prefix
-                    const basePath = cleanPath(
-                        route.path.startsWith("/") ? route.path : route.path
-                    );
-                    return {
-                        path: `${basePath}/${cleanPath(subLink.path)}`,
-                        component: subLink.component,
-                    };
-                })
-        )
-    );
+    const viewRoutes = Array.isArray(navigationConfig)
+        ? navigationConfig.flatMap((link) =>
+              (link.sideBar?.links || []).flatMap((route) =>
+                  (route.subLinks || [])
+                      .filter((subLink) => subLink.path.includes(":id"))
+                      .map((subLink) => {
+                          // Get the base path without parent prefix
+                          const basePath = cleanPath(
+                              route.path.startsWith("/")
+                                  ? route.path
+                                  : route.path
+                          );
+                          return {
+                              path: `${basePath}/${cleanPath(subLink.path)}`,
+                              component: subLink.component,
+                          };
+                      })
+              )
+          )
+        : [];
 
     // Extract all other sublinks (non-ID routes like edit pages)
-    const otherSubRoutes = navigationConfig.flatMap((link) =>
-        (link.sideBar?.links || []).flatMap((route) =>
-            (route.subLinks || [])
-                .filter((subLink) => !subLink.path.includes(":id"))
-                .map((subLink) => {
-                    // Get the base path without parent prefix
-                    const basePath = cleanPath(
-                        route.path.startsWith("/") ? route.path : route.path
-                    );
-                    return {
-                        path: `${basePath}/${cleanPath(subLink.path)}`,
-                        component: subLink.component,
-                    };
-                })
-        )
-    );
+    const otherSubRoutes = Array.isArray(navigationConfig)
+        ? navigationConfig.flatMap((link) =>
+              (link.sideBar?.links || []).flatMap((route) =>
+                  (route.subLinks || [])
+                      .filter((subLink) => !subLink.path.includes(":id"))
+                      .map((subLink) => {
+                          // Get the base path without parent prefix
+                          const basePath = cleanPath(
+                              route.path.startsWith("/")
+                                  ? route.path
+                                  : route.path
+                          );
+                          return {
+                              path: `${basePath}/${cleanPath(subLink.path)}`,
+                              component: subLink.component,
+                          };
+                      })
+              )
+          )
+        : [];
 
     // Create redirects from main paths to first sidebar item
     const mainPathRedirects = navigationConfig

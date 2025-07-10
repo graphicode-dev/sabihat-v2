@@ -107,7 +107,7 @@ const Navbar = ({ onToggleSidebar }: Props) => {
                 >
                     <span className="sr-only">Open user menu</span>
                     <ImgWithSpinner
-                        src={(user?.avatar as string) || DefaultUser}
+                        src={(user?.image as string) || DefaultUser}
                         alt="user photo"
                         rounded
                     />

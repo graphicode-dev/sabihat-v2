@@ -95,7 +95,7 @@ export const login = createAsyncThunk(
                 setToken(response.data.data.token);
 
                 // Store user data
-                const userData = response.data.data.result;
+                const userData = response.data.data;
 
                 // Return just the user data without storing in localStorage
                 return userData;
@@ -156,11 +156,6 @@ export const refreshUserProfile = createAsyncThunk(
             const response = await ENDPOINTS.auth.profile();
 
             if (response.data.success) {
-                // Log the response structure to help debug
-                console.log("Profile API response:", response.data);
-
-                // Extract user data from the response
-                // The API might return the data in different structures
                 let userData;
 
                 if (response.data.data) {
@@ -170,8 +165,6 @@ export const refreshUserProfile = createAsyncThunk(
                 } else {
                     userData = response.data;
                 }
-
-                console.log("Extracted user data:", userData);
 
                 if (userData && typeof userData === "object") {
                     // Return user data without storing in localStorage
@@ -291,6 +284,13 @@ export const resetPassword = createAsyncThunk(
     }
 );
 
+export const setLoading = createAsyncThunk(
+    "auth/setLoading",
+    async (isLoading: boolean) => {
+        return isLoading;
+    }
+);
+
 // Create the auth slice
 const authSlice = createSlice({
     name: "auth",
@@ -327,6 +327,14 @@ const authSlice = createSlice({
                 state.isAuthenticated = false;
                 state.loading = false;
                 state.error = null;
+                state.profileRefreshed = false;
+                state.verificationCodeSent = false;
+                state.verificationCodeVerified = false;
+                state.forgetPasswordStep = "send-code";
+                state.resetPasswordToken = null;
+                state.resetPasswordPhoneNumber = null;
+                state.resetPasswordPhoneCode = null;
+
                 // Redirect to login page
                 window.location.href = "/login";
             })
@@ -408,6 +416,10 @@ const authSlice = createSlice({
             .addCase(resetPassword.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
+            })
+            // Handle setLoading action
+            .addCase(setLoading.fulfilled, (state, action) => {
+                state.loading = action.payload;
             });
     },
 });

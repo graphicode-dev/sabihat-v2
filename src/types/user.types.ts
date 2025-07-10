@@ -8,5 +8,5 @@ export interface User {
     phoneVerifiedAt: string;
     businessPartnerId: string;
     isSalesman: boolean;
-    avatar?: string; // Optional avatar URL
+    image: string;
 }

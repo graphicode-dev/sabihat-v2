@@ -1,16 +1,26 @@
-import {
-    Administration,
-    Ship,
-    Sales,
-    Reporting,
-    PartnersManagement,
-    Boarding,
-    PaymentProcessing,
-    Security,
-} from "../components/ui/icons";
 import { TabLink } from "../types";
-import PlaceholderPage from "../pages/PlaceholderPage";
-import { lazy } from "react";
+import FeaturePlaceholder from "../pages/FeaturePlaceholder";
+import React, { lazy } from "react";
+import api from "./api";
+
+// Types for API responses
+export interface Feature {
+    id: number;
+    name: string;
+    displayName: string;
+    img: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface Activity {
+    id: number;
+    name: string;
+    displayName: string;
+    feature: Feature;
+    createdAt: string;
+    updatedAt: string;
+}
 
 // #region System Management & Administration
 
@@ -1264,1334 +1274,380 @@ const FinancePage = lazy(() => import("../pages/dashboard/reporting/finance"));
 const TripsPage = lazy(() => import("../pages/dashboard/reporting/trips"));
 // #endregion Reporting
 
-export const navigationConfig: TabLink[] = [
-    // #region System Management & Administration
-    {
-        icon: Administration,
-        title: "System Management & Administration",
-        path: "/system-management-administration",
-        sideBar: {
-            titleSection: {
-                icon: Administration,
-                title: "System Management & Administration",
-            },
-            links: [
-                // User Profiles
-                {
-                    title: "User Profiles",
-                    path: "/system-management-administration/user-profiles",
-                    component: UserProfilesPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: UserProfilesViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: UserProfilesAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/edit/:id",
-                            component: UserProfilesEditPage,
-                        },
-                    ],
-                },
-
-                // Create Roles & Permissions
-                {
-                    title: "Create Roles & Permissions",
-                    path: "/system-management-administration/user-roles",
-                    component: UserRolesPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: UserRolesViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: UserRolesAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/edit/:id",
-                            component: UserRolesEditPage,
-                        },
-                    ],
-                },
-
-                // Company Profile
-                {
-                    title: "Company Profile",
-                    path: "/system-management-administration/company-profile",
-                    component: CompanyProfilePage,
-                    subLinks: [
-                        {
-                            title: "Edit",
-                            path: "edit/profile",
-                            component: CompanyEditPage,
-                        },
-                        {
-                            title: "About Us",
-                            path: "edit/about-us",
-                            component: AboutUsEditPage,
-                        },
-                        {
-                            title: "Contact Us",
-                            path: "edit/contact-us",
-                            component: ContactUsEditPage,
-                        },
-                        {
-                            title: "Settings",
-                            path: "edit/setting",
-                            component: SettingsEditPage,
-                        },
-                    ],
-                },
-
-                // Contact Messages
-                {
-                    title: "Contact Messages",
-                    path: "/system-management-administration/contact-messages",
-                    component: ContactMessagesPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: ContactMessagesViewPage,
-                        },
-                    ],
-                },
-
-                // Partners Classification
-                {
-                    title: "Partners Classification",
-                    path: "/system-management-administration/partners-classification",
-                    component: PartnersClassificationPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: PartnersClassificationViewPage,
-                        },
-                        {
-                            title: "View",
-                            path: "/:id/edit",
-                            component: PartnersClassificationEditPage,
-                        },
-                    ],
-                },
-
-                // Currency
-                {
-                    title: "Currency",
-                    path: "/system-management-administration/currency",
-                    component: CurrencyPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: CurrencyViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: CurrencyAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/edit/:id",
-                            component: CurrencyEditPage,
-                        },
-                    ],
-                },
-
-                // Tax
-                {
-                    title: "Tax",
-                    path: "/system-management-administration/tax",
-                    component: TaxPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: TaxViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: TaxAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/edit/:id",
-                            component: TaxEditPage,
-                        },
-                    ],
-                },
-
-                // Payment Methods
-                {
-                    title: "Payment Methods",
-                    path: "/system-management-administration/payment-methods",
-                    component: PaymentMethodsPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: PaymentMethodsViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: PaymentMethodsAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/edit/:id",
-                            component: PaymentMethodsEditPage,
-                        },
-                    ],
-                },
-
-                // Policies
-                {
-                    title: "Policies",
-                    path: "/system-management-administration/policies",
-                    component: PoliciesPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: PoliciesViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: PoliciesAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/edit/:id",
-                            component: PoliciesEditPage,
-                        },
-                    ],
-                },
-
-                // Terms & Conditions
-                {
-                    title: "Terms & Conditions",
-                    path: "/system-management-administration/terms-conditions",
-                    component: TermsConditionsPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: TermsConditionsViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: TermsConditionsAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/edit/:id",
-                            component: TermsConditionsEditPage,
-                        },
-                    ],
-                },
-
-                // Load Types
-                {
-                    title: "Load Types",
-                    path: "/system-management-administration/load-types",
-                    component: LoadTypesPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "/passenger/view/:id",
-                            component: LoadTypesPassengerViewPage,
-                        },
-                        {
-                            title: "View",
-                            path: "/cargo/view/:id",
-                            component: LoadTypesCargoViewPage,
-                        },
-                        {
-                            title: "View",
-                            path: "/vehicle/view/:id",
-                            component: LoadTypesVehicleViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/passenger/add",
-                            component: LoadTypesPassengerAddPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/cargo/add",
-                            component: LoadTypesCargoAddPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/vehicle/add",
-                            component: LoadTypesVehicleAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/passenger/edit/:id",
-                            component: LoadTypesPassengerEditPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/cargo/edit/:id",
-                            component: LoadTypesCargoEditPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/vehicle/edit/:id",
-                            component: LoadTypesVehicleEditPage,
-                        },
-                    ],
-                },
-
-                // Ticket Rules
-                {
-                    title: "Ticket Rules",
-                    path: "/system-management-administration/ticket-rules",
-                    component: TicketRulesPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "void/view/:id",
-                            component: TicketRulesVoidViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "void/add",
-                            component: TicketRulesVoidAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "void/edit/:id",
-                            component: TicketRulesVoidEditPage,
-                        },
-                        {
-                            title: "View",
-                            path: "refund/view/:id",
-                            component: TicketRulesRefundViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "refund/add",
-                            component: TicketRulesRefundAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "refund/edit/:id",
-                            component: TicketRulesRefundEditPage,
-                        },
-                        {
-                            title: "View",
-                            path: "no-show/view/:id",
-                            component: TicketRulesNoShowViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "no-show/add",
-                            component: TicketRulesNoShowAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "no-show/edit/:id",
-                            component: TicketRulesNoShowEditPage,
-                        },
-                        {
-                            title: "View",
-                            path: "reissue/view/:id",
-                            component: TicketRulesReissueViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "reissue/add",
-                            component: TicketRulesReissueAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "reissue/edit/:id",
-                            component: TicketRulesReissueEditPage,
-                        },
-                    ],
-                },
-
-                // Promotion
-                {
-                    title: "Promotion",
-                    path: "/system-management-administration/promotion",
-                    component: PromotionPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: PromotionViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: PromotionAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "edit/:id",
-                            component: PromotionEditPage,
-                        },
-                    ],
-                },
-            ],
-        },
+// Component mapping registry - maps activity names to their respective components
+const componentRegistry: Record<string, any> = {
+    // System Management & Administration
+    user_profiles: {
+        main: UserProfilesPage,
+        view: UserProfilesViewPage,
+        add: UserProfilesAddPage,
+        edit: UserProfilesEditPage,
     },
-    // #endregion System Management & Administration
-
-    // #region Ship & Trip Management
-    {
-        icon: Ship,
-        title: "Ship & Trip Management",
-        path: "/ship-trip-management",
-        sideBar: {
-            titleSection: {
-                icon: Ship,
-                title: "Ship & Trip Management",
-            },
-            links: [
-                {
-                    title: "Cabins",
-                    path: "/ship-trip-management/cabins",
-                    component: CabinsPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: CabinsViewPage,
-                        },
-                    ],
-                },
-                {
-                    title: "Port",
-                    path: "/ship-trip-management/port",
-                    component: PortPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: PortViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "add",
-                            component: PortAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "edit/:id",
-                            component: PortEditPage,
-                        },
-                    ],
-                },
-                {
-                    title: "Schedule New Ships",
-                    path: "/ship-trip-management/schedule-new-ships",
-                    component: ScheduleNewShipsPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: ScheduleNewShipsViewPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "edit/:id",
-                            component: ScheduleNewShipsEditPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "add",
-                            component: ScheduleNewShipsAddPage,
-                        },
-                    ],
-                },
-                {
-                    title: "Schedule New Trips",
-                    path: "/ship-trip-management/schedule-new-trips",
-                    component: ScheduleNewTripsPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: ScheduleNewTripsViewPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "edit/:id",
-                            component: ScheduleNewTripsEditPage,
-                        },
-                        {
-                            title: "Tickets",
-                            path: "tickets/:id",
-                            component: ScheduleNewTripsTicketsPage,
-                        },
-                        {
-                            title: "Tickets",
-                            path: "tickets/:id/view/:ticketId",
-                            component: ScheduleNewTripsTicketsViewPage,
-                        },
-                        {
-                            title: "Tickets",
-                            path: "tickets/:id/edit/:ticketId",
-                            component: ScheduleNewTripsTicketsEditPage,
-                        },
-                    ],
-                },
-            ],
-        },
+    create_roles_permissions: {
+        main: UserRolesPage,
+        view: UserRolesViewPage,
+        add: UserRolesAddPage,
+        edit: UserRolesEditPage,
     },
-    // #endregion Ship & Trip Management
-
-    // #region Sales & Bookings
-    {
-        icon: Sales,
-        title: "Sales & Bookings",
-        path: "/sales-bookings",
-        sideBar: {
-            titleSection: {
-                icon: Sales,
-                title: "Sales & Bookings",
-            },
-            links: [
-                {
-                    title: "Price Lists B2B",
-                    path: "/sales-bookings/price-lists-B2B",
-                    component: PriceListsB2BPage,
-                    subLinks: [
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/:id/view",
-                            component: PriceListsB2BViewPagePassengerPriceList,
-                        },
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/add",
-                            component: PriceListsB2BAddPagePassengerPriceList,
-                        },
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/:id/edit",
-                            component: PriceListsB2BEditPagePassengerPriceList,
-                        },
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/:id/create",
-                            component:
-                                PriceListsB2BViewCreatePagePassengerPriceList,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/:id/view",
-                            component: PriceListsB2BViewPageCargoPriceList,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/add",
-                            component: PriceListsB2BAddPageCargoPriceList,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/:id/edit",
-                            component: PriceListsB2BEditPageCargoPriceList,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/:id/create",
-                            component:
-                                PriceListsB2BViewCreatePageCargoPriceList,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/:id/view",
-                            component: PriceListsB2BViewPageVehiclePriceList,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/add",
-                            component: PriceListsB2BAddPageVehiclePriceList,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/:id/edit",
-                            component: PriceListsB2BEditPageVehiclePriceList,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/:id/create",
-                            component:
-                                PriceListsB2BViewCreatePageVehiclePriceList,
-                        },
-                    ],
-                },
-                {
-                    title: "Price Lists B2C",
-                    path: "/sales-bookings/price-lists-B2C",
-                    component: PriceListsB2CPage,
-                    subLinks: [
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/:id/view",
-                            component: PriceListsB2CViewPagePassengerPriceList,
-                        },
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/add",
-                            component: PriceListsB2CAddPagePassengerPriceList,
-                        },
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/:id/edit",
-                            component: PriceListsB2CEditPagePassengerPriceList,
-                        },
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/:id/create",
-                            component:
-                                PriceListsB2CViewCreatePagePassengerPriceList,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/:id/view",
-                            component: PriceListsB2CViewPageCargoPriceList,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/add",
-                            component: PriceListsB2CAddPageCargoPriceList,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/:id/edit",
-                            component: PriceListsB2CEditPageCargoPriceList,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/:id/create",
-                            component:
-                                PriceListsB2CViewCreatePageCargoPriceList,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/:id/view",
-                            component: PriceListsB2CViewPageVehiclePriceList,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/add",
-                            component: PriceListsB2CAddPageVehiclePriceList,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/:id/edit",
-                            component: PriceListsB2CEditPageVehiclePriceList,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/:id/create",
-                            component:
-                                PriceListsB2CViewCreatePageVehiclePriceList,
-                        },
-                    ],
-                },
-                {
-                    title: "Excess baggage price B2B",
-                    path: "/sales-bookings/excess-baggage-price-B2B",
-                    component: ExcessBaggagePriceB2BPage,
-                    subLinks: [
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/:id/view",
-                            component:
-                                ExcessBaggagePriceB2BViewPassengerPriceListPage,
-                        },
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/add",
-                            component:
-                                ExcessBaggagePriceB2BAddPassengerPriceListPage,
-                        },
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/:id/edit",
-                            component:
-                                ExcessBaggagePriceB2BEditPassengerPriceListPage,
-                        },
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/:id/create",
-                            component:
-                                ExcessBaggagePriceB2BViewCreatePassengerPriceListPage,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/:id/view",
-                            component:
-                                ExcessBaggagePriceB2BViewCargoPriceListPage,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/add",
-                            component:
-                                ExcessBaggagePriceB2BAddCargoPriceListPage,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/:id/edit",
-                            component:
-                                ExcessBaggagePriceB2BEditCargoPriceListPage,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/:id/create",
-                            component:
-                                ExcessBaggagePriceB2BViewCreateCargoPriceListPage,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/:id/view",
-                            component:
-                                ExcessBaggagePriceB2BViewVehiclePriceListPage,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/add",
-                            component:
-                                ExcessBaggagePriceB2BAddVehiclePriceListPage,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/:id/edit",
-                            component:
-                                ExcessBaggagePriceB2BEditVehiclePriceListPage,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/:id/create",
-                            component:
-                                ExcessBaggagePriceB2BViewCreateVehiclePriceListPage,
-                        },
-                    ],
-                },
-                {
-                    title: "Excess baggage price B2C",
-                    path: "/sales-bookings/excess-baggage-price-B2C",
-                    component: ExcessBaggagePriceB2CPage,
-                    subLinks: [
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/:id/view",
-                            component:
-                                ExcessBaggagePriceB2CViewPassengerPriceListPage,
-                        },
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/add",
-                            component:
-                                ExcessBaggagePriceB2CAddPassengerPriceListPage,
-                        },
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/:id/edit",
-                            component:
-                                ExcessBaggagePriceB2CEditPassengerPriceListPage,
-                        },
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/:id/create",
-                            component:
-                                ExcessBaggagePriceB2CViewCreatePassengerPriceListPage,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/:id/view",
-                            component:
-                                ExcessBaggagePriceB2CViewCargoPriceListPage,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/add",
-                            component:
-                                ExcessBaggagePriceB2CAddCargoPriceListPage,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/:id/edit",
-                            component:
-                                ExcessBaggagePriceB2CEditCargoPriceListPage,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/:id/create",
-                            component:
-                                ExcessBaggagePriceB2CViewCreateCargoPriceListPage,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/:id/view",
-                            component:
-                                ExcessBaggagePriceB2CViewVehiclePriceListPage,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/add",
-                            component:
-                                ExcessBaggagePriceB2CAddVehiclePriceListPage,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/:id/edit",
-                            component:
-                                ExcessBaggagePriceB2CEditVehiclePriceListPage,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/:id/create",
-                            component:
-                                ExcessBaggagePriceB2CViewCreateVehiclePriceListPage,
-                        },
-                    ],
-                },
-                {
-                    title: "Allowed Weight",
-                    path: "/sales-bookings/allowed-weight",
-                    component: AllowedWeightPage,
-                    subLinks: [
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/:id/view",
-                            component: AllowedWeightViewPassengerPriceListPage,
-                        },
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/add",
-                            component: AllowedWeightAddPassengerPriceListPage,
-                        },
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/:id/edit",
-                            component: AllowedWeightEditPassengerPriceListPage,
-                        },
-                        {
-                            title: "Passenger Price List",
-                            path: "/passenger/:id/create",
-                            component:
-                                AllowedWeightViewCreatePassengerPriceListPage,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/:id/view",
-                            component: AllowedWeightViewCargoPriceListPage,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/add",
-                            component: AllowedWeightAddCargoPriceListPage,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/:id/edit",
-                            component: AllowedWeightEditCargoPriceListPage,
-                        },
-                        {
-                            title: "Cargo Price List",
-                            path: "/cargo/:id/create",
-                            component:
-                                AllowedWeightViewCreateCargoPriceListPage,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/:id/view",
-                            component: AllowedWeightViewVehiclePriceListPage,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/add",
-                            component: AllowedWeightAddVehiclePriceListPage,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/:id/edit",
-                            component: AllowedWeightEditVehiclePriceListPage,
-                        },
-                        {
-                            title: "Vehicle Price List",
-                            path: "/vehicle/:id/create",
-                            component:
-                                AllowedWeightViewCreateVehiclePriceListPage,
-                        },
-                    ],
-                },
-                {
-                    title: "Tickets",
-                    path: "/sales-bookings/tickets",
-                    component: TicketsPage,
-                    subLinks: [
-                        {
-                            title: "Passenger",
-                            path: "/passenger/:id/view",
-                            component: TicketsPassengerViewPage,
-                        },
-                        {
-                            title: "Cargo",
-                            path: "/cargo/:id/view",
-                            component: TicketsCargoViewPage,
-                        },
-                        {
-                            title: "Vehicle",
-                            path: "/vehicle/:id/view",
-                            component: TicketsVehicleViewPage,
-                        },
-                        {
-                            title: "Passenger",
-                            path: "/passenger/:id/edit",
-                            component: TicketsPassengerEditPage,
-                        },
-                        {
-                            title: "Cargo",
-                            path: "/cargo/:id/edit",
-                            component: TicketsCargoEditPage,
-                        },
-                        {
-                            title: "Vehicle",
-                            path: "/vehicle/:id/edit",
-                            component: TicketsVehicleEditPage,
-                        },
-                    ],
-                },
-                {
-                    title: "Ticket Excess Baggage",
-                    path: "/sales-bookings/ticket-excess-baggage",
-                    component: TicketExcessBaggagePage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: TicketExcessBaggageViewPage,
-                        },
-                    ],
-                },
-            ],
-        },
+    company_profile: {
+        main: CompanyProfilePage,
+        edit: CompanyEditPage,
+        // Additional edit components with custom keys
+        edit_settings: SettingsEditPage,
+        edit_contact: ContactUsEditPage,
+        edit_about: AboutUsEditPage,
     },
-    // #endregion Sales & Bookings
-
-    // #region Security & Compliance
-    {
-        icon: Security,
-        title: "Security & Compliance",
-        path: "/security-compliance",
-        sideBar: {
-            titleSection: {
-                icon: Security,
-                title: "Security & Compliance",
-            },
-            links: [
-                {
-                    title: "All",
-                    path: "/security-compliance/all",
-                    component: PlaceholderPage,
-                },
-            ],
-        },
+    contact_messages: {
+        main: ContactMessagesPage,
+        view: ContactMessagesViewPage,
     },
-    // #endregion Security & Compliance
-
-    // #region Business Partners Management
-    {
-        icon: PartnersManagement,
-        title: "Business Partners Management",
-        path: "/business-partners-management",
-        sideBar: {
-            titleSection: {
-                icon: PartnersManagement,
-                title: "Business Partners Management",
-            },
-            links: [
-                {
-                    title: "Partners",
-                    path: "/business-partners-management/partners",
-                    component: BusinessPartnersPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: BusinessPartnersViewPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "edit/:id",
-                            component: BusinessPartnersEditPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: BusinessPartnersAddPage,
-                        },
-                    ],
-                },
-                {
-                    title: "Commissions",
-                    path: "/business-partners-management/commissions",
-                    component: BusinessPartnersCommissionsPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: BusinessPartnersCommissionsViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: BusinessPartnersCommissionsAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "edit/:id",
-                            component: BusinessPartnersCommissionsEditPage,
-                        },
-                    ],
-                },
-                {
-                    title: "Markup & Discounts",
-                    path: "/business-partners-management/markup-discounts",
-                    component: BusinessPartnersMarkupDiscountsPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: BusinessPartnersMarkupDiscountsViewPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: BusinessPartnersMarkupDiscountsAddPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/edit/:id",
-                            component: BusinessPartnersMarkupDiscountsEditPage,
-                        },
-                    ],
-                },
-                {
-                    title: "Authorities",
-                    path: "/business-partners-management/authorities",
-                    component: BusinessPartnersAuthoritiesPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: BusinessPartnersAuthoritiesViewPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/edit/:id",
-                            component: BusinessPartnersAuthoritiesEditPage,
-                        },
-                    ],
-                },
-            ],
-        },
+    partners_classification: {
+        main: PartnersClassificationPage,
+        view: PartnersClassificationViewPage,
+        edit: PartnersClassificationEditPage,
     },
-    // #endregion Business Partners Management
-
-    // #region Check-in & Boarding
-    {
-        icon: Boarding,
-        title: "Check-in & Boarding",
-        path: "/check-in-boarding",
-        sideBar: {
-            titleSection: {
-                icon: Boarding,
-                title: "Check-in & Boarding",
-            },
-            links: [
-                {
-                    title: "Passenger Check-In",
-                    path: "/check-in-boarding/passenger-check-in",
-                    component: PassengerCheckInPage,
-                    subLinks: [
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: PassengerCheckInAddPage,
-                        },
-                        {
-                            title: "Verification",
-                            path: "/verification",
-                            component: PassengerCheckInVerificationPage,
-                        },
-                        {
-                            title: "View",
-                            path: "/verification/view/:id",
-                            component: PassengerCheckInVerificationViewPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/verification/edit/:id",
-                            component: PassengerCheckInVerificationEditPage,
-                        },
-                        {
-                            title: "Invoice",
-                            path: "/payment/invoice",
-                            component: PassengerCheckInPaymentInvoicePage,
-                        },
-                        {
-                            title: "Baggage",
-                            path: "/payment/success/baggage",
-                            component:
-                                PassengerCheckInPaymentSuccessBaggagePage,
-                        },
-                        {
-                            title: "Boarding Pass",
-                            path: "/payment/success/boarding-pass",
-                            component:
-                                PassengerCheckInPaymentSuccessBoardingPassPage,
-                        },
-                    ],
-                },
-                {
-                    title: "Cargo Check-In",
-                    path: "/check-in-boarding/cargo-check-in",
-                    component: CargoCheckInPage,
-                    subLinks: [
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: CargoCheckInAddPage,
-                        },
-                        {
-                            title: "Verification",
-                            path: "/verification",
-                            component: CargoCheckInVerificationPage,
-                        },
-                        {
-                            title: "View",
-                            path: "/verification/view/:id",
-                            component: CargoCheckInVerificationViewPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/verification/edit/:id",
-                            component: CargoCheckInVerificationEditPage,
-                        },
-                        {
-                            title: "Invoice",
-                            path: "/payment/invoice",
-                            component: CargoCheckInPaymentInvoicePage,
-                        },
-                        {
-                            title: "Baggage",
-                            path: "/payment/success/baggage",
-                            component: CargoCheckInPaymentSuccessBaggagePage,
-                        },
-                        {
-                            title: "Boarding Pass",
-                            path: "/payment/success/boarding-pass",
-                            component:
-                                CargoCheckInPaymentSuccessBoardingPassPage,
-                        },
-                    ],
-                },
-                {
-                    title: "Vehicle Check-In",
-                    path: "/check-in-boarding/vehicle-check-in",
-                    component: VehicleCheckInPage,
-                    subLinks: [
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: VehicleCheckInAddPage,
-                        },
-                        {
-                            title: "Verification",
-                            path: "/verification",
-                            component: VehicleCheckInVerificationPage,
-                        },
-                        {
-                            title: "View",
-                            path: "/verification/view/:id",
-                            component: VehicleCheckInVerificationViewPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/verification/edit/:id",
-                            component: VehicleCheckInVerificationEditPage,
-                        },
-                        {
-                            title: "Invoice",
-                            path: "/payment/invoice",
-                            component: VehicleCheckInPaymentInvoicePage,
-                        },
-                        {
-                            title: "Baggage",
-                            path: "/payment/success/baggage",
-                            component: VehicleCheckInPaymentSuccessBaggagePage,
-                        },
-                        {
-                            title: "Boarding Pass",
-                            path: "/payment/success/boarding-pass",
-                            component:
-                                VehicleCheckInPaymentSuccessBoardingPassPage,
-                        },
-                    ],
-                },
-                {
-                    title: "Boarding",
-                    path: "/check-in-boarding/boarding",
-                    component: BoardingPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "passenger/view/:id",
-                            component: BoardingViewPassengerPage,
-                        },
-                        {
-                            title: "View",
-                            path: "cargo/view/:id",
-                            component: BoardingViewCargoPage,
-                        },
-                        {
-                            title: "View",
-                            path: "vehicle/view/:id",
-                            component: BoardingViewVehiclePage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/edit/:id",
-                            component: BoardingEditPage,
-                        },
-                    ],
-                },
-            ],
-        },
+    currency: {
+        main: CurrencyPage,
+        view: CurrencyViewPage,
+        add: CurrencyAddPage,
+        edit: CurrencyEditPage,
     },
-    // #endregion Check-in & Boarding
-
-    // #region Financial Transactions
-    {
-        icon: PaymentProcessing,
-        title: "Financial Transactions",
-        path: "/financial-transactions",
-        sideBar: {
-            titleSection: {
-                icon: PaymentProcessing,
-                title: "Financial Transactions",
-            },
-            links: [
-                {
-                    title: "Chart Of Account",
-                    path: "/financial-transactions/chart-of-account",
-                    component: ChartOfAccountPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: ChartOfAccountViewPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/edit/:id",
-                            component: ChartOfAccountEditPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: ChartOfAccountAddPage,
-                        },
-                    ],
-                },
-                {
-                    title: "Journal Entries",
-                    path: "/financial-transactions/journal-entries",
-                    component: JournalEntriesPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: JournalEntriesViewPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "/edit/:id",
-                            component: JournalEntriesEditPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: JournalEntriesAddPage,
-                        },
-                    ],
-                },
-                {
-                    title: "Payment & Receipts",
-                    path: "/financial-transactions/payments",
-                    component: PaymentReceiptsPage,
-                    subLinks: [
-                        {
-                            title: "View",
-                            path: "view/:id",
-                            component: PaymentReceiptsViewPage,
-                        },
-                        {
-                            title: "Edit",
-                            path: "edit/:id",
-                            component: PaymentReceiptsEditPage,
-                        },
-                        {
-                            title: "Add",
-                            path: "/add",
-                            component: PaymentReceiptsAddPage,
-                        },
-                    ],
-                },
-            ],
-        },
+    tax: {
+        main: TaxPage,
+        view: TaxViewPage,
+        add: TaxAddPage,
+        edit: TaxEditPage,
     },
-    // #endregion Financial Transactions
-
-    // #region Reporting
-    {
-        icon: Reporting,
-        title: "Reporting",
-        path: "/reporting",
-        sideBar: {
-            titleSection: {
-                icon: Reporting,
-                title: "Reporting",
-            },
-            links: [
-                {
-                    title: "Finance",
-                    path: "/reporting/finance",
-                    component: FinancePage,
-                },
-                {
-                    title: "Trips",
-                    path: "/reporting/trips",
-                    component: TripsPage,
-                },
-            ],
-        },
+    payment_methods: {
+        main: PaymentMethodsPage,
+        view: PaymentMethodsViewPage,
+        add: PaymentMethodsAddPage,
+        edit: PaymentMethodsEditPage,
     },
-    // #endregion Reporting
-];
+    policies: {
+        main: PoliciesPage,
+        view: PoliciesViewPage,
+        add: PoliciesAddPage,
+        edit: PoliciesEditPage,
+    },
+    terms_conditions: {
+        main: TermsConditionsPage,
+        view: TermsConditionsViewPage,
+        add: TermsConditionsAddPage,
+        edit: TermsConditionsEditPage,
+    },
+    load_types: {
+        main: LoadTypesPage,
+        view_passenger: LoadTypesPassengerViewPage,
+        view_cargo: LoadTypesCargoViewPage,
+        view_vehicle: LoadTypesVehicleViewPage,
+        add_passenger: LoadTypesPassengerAddPage,
+        add_cargo: LoadTypesCargoAddPage,
+        add_vehicle: LoadTypesVehicleAddPage,
+        edit_passenger: LoadTypesPassengerEditPage,
+        edit_cargo: LoadTypesCargoEditPage,
+        edit_vehicle: LoadTypesVehicleEditPage,
+    },
+    ticket_rules: {
+        main: TicketRulesPage,
+        view_void: TicketRulesVoidViewPage,
+        view_refund: TicketRulesRefundViewPage,
+        view_noShow: TicketRulesNoShowViewPage,
+        view_reissue: TicketRulesReissueViewPage,
+        add_void: TicketRulesVoidAddPage,
+        add_refund: TicketRulesRefundAddPage,
+        add_noShow: TicketRulesNoShowAddPage,
+        add_reissue: TicketRulesReissueAddPage,
+        edit_void: TicketRulesVoidEditPage,
+        edit_refund: TicketRulesRefundEditPage,
+        edit_noShow: TicketRulesNoShowEditPage,
+        edit_reissue: TicketRulesReissueEditPage,
+    },
+    promotion: {
+        main: PromotionPage,
+        view: PromotionViewPage,
+        add: PromotionAddPage,
+        edit: PromotionEditPage,
+    },
+
+    // Ship Trip Management
+    cabins: {
+        main: CabinsPage,
+        view: CabinsViewPage,
+        // No add/edit pages for cabins based on directory structure
+    },
+    port: {
+        main: PortPage,
+        view: PortViewPage,
+        add: PortAddPage,
+        edit: PortEditPage,
+    },
+    schedule_new_ships: {
+        main: ScheduleNewShipsPage,
+        view: ScheduleNewShipsViewPage,
+        add: ScheduleNewShipsAddPage,
+        edit: ScheduleNewShipsEditPage,
+    },
+    schedule_new_trips: {
+        main: ScheduleNewTripsPage,
+        view: ScheduleNewTripsViewPage,
+        edit: ScheduleNewTripsEditPage,
+        // No add page for trips based on directory structure
+    },
+    schedule_new_trips_tickets: {
+        main: ScheduleNewTripsTicketsPage,
+        view: ScheduleNewTripsTicketsViewPage,
+        edit: ScheduleNewTripsTicketsEditPage,
+        // No add page for tickets based on directory structure
+    },
+};
+
+export const toKebabCase = (str: string): string => {
+    return str
+        .replace(/([a-z])([A-Z])/g, "$1-$2")
+        .replace(/[\s_]+/g, "-")
+        .toLowerCase();
+};
+
+// Function to properly format icon URLs
+const formatIconUrl = (iconPath: string, baseURL: string): string => {
+    // If iconPath is empty or undefined, return empty string
+    if (!iconPath) {
+        console.log("Empty icon path received");
+        return "";
+    }
+
+    // If the icon path is already a full URL (starts with http:// or https://), return it as is
+    if (iconPath.startsWith("http://") || iconPath.startsWith("https://")) {
+        console.log("Icon is already a full URL:", iconPath);
+        return iconPath;
+    }
+
+    // If the icon path starts with a slash, append it directly to the baseURL
+    if (iconPath.startsWith("/")) {
+        const fullUrl = `${baseURL}${iconPath}`;
+        console.log("Formatted icon URL (with leading slash):", fullUrl);
+        return fullUrl;
+    }
+
+    // Otherwise, ensure there's a slash between baseURL and iconPath
+    const fullUrl = `${baseURL}/${iconPath}`;
+    console.log("Formatted icon URL:", fullUrl);
+    return fullUrl;
+};
+
+export const getComponentForActivity = (
+    activityName: string,
+    type: string = "main"
+) => {
+    if (
+        componentRegistry[activityName] &&
+        componentRegistry[activityName][type]
+    ) {
+        return componentRegistry[activityName][type];
+    }
+
+    // Use a wrapper around FeaturePlaceholder for better UX
+    // This creates a component that will show the activity name
+    const DynamicFeaturePlaceholder = lazy(() =>
+        Promise.resolve({
+            default: (props: any) => {
+                // When the component is rendered, it will receive props from React Router
+                // We'll pass the activityName as a prop to FeaturePlaceholder
+                return React.createElement(FeaturePlaceholder, {
+                    ...props,
+                    activityName: activityName,
+                });
+            },
+        })
+    );
+
+    return DynamicFeaturePlaceholder;
+};
+
+// Define the sublink interface
+interface Sublink {
+    title: string;
+    path: string;
+    component: any;
+}
+
+export const generateStandardSublinks = (
+    featureName: string,
+    activityName: string
+): Sublink[] => {
+    // Using parameters in the function to avoid unused variable warnings
+    console.debug(`Generating sublinks for ${featureName}/${activityName}`);
+
+    const sublinks: Sublink[] = [];
+
+    // Check if component registry has this activity
+    if (componentRegistry[activityName]) {
+        // Get all keys from the component registry for this activity
+        const componentKeys = Object.keys(componentRegistry[activityName]);
+
+        // Process each component key to generate appropriate sublinks
+        componentKeys.forEach((key) => {
+            // Skip the main component as it's not a sublink
+            if (key === "main") return;
+
+            // Handle standard keys (view, add, edit)
+            if (key === "view") {
+                sublinks.push({
+                    title: "View",
+                    path: `view/:id`,
+                    component: getComponentForActivity(activityName, "view"),
+                });
+            } else if (key === "add") {
+                sublinks.push({
+                    title: "Add",
+                    path: `add`,
+                    component: getComponentForActivity(activityName, "add"),
+                });
+            } else if (key === "edit") {
+                sublinks.push({
+                    title: "Edit",
+                    path: `edit/:id`,
+                    component: getComponentForActivity(activityName, "edit"),
+                });
+            }
+            // Handle custom keys with underscore pattern (e.g., view_passenger)
+            else if (key.includes("_")) {
+                const [action, subType] = key.split("_");
+                const title = `${
+                    action.charAt(0).toUpperCase() + action.slice(1)
+                } ${subType.charAt(0).toUpperCase() + subType.slice(1)}`;
+
+                // Create appropriate path based on action type
+                let path;
+                if (action === "view") {
+                    path = `${subType}/view/:id`;
+                } else if (action === "add") {
+                    path = `${subType}/add`;
+                } else if (action === "edit") {
+                    path = `${subType}/edit/:id`;
+                } else {
+                    path = `${action}/${subType}`;
+                }
+
+                sublinks.push({
+                    title,
+                    path,
+                    component: getComponentForActivity(activityName, key),
+                });
+            }
+        });
+    } else {
+        // Fallback to standard sublinks if no registry entry exists
+        return [
+            {
+                title: "View",
+                path: `view/:id`,
+                component: getComponentForActivity(activityName, "view"),
+            },
+            {
+                title: "Add",
+                path: `add`,
+                component: getComponentForActivity(activityName, "add"),
+            },
+            {
+                title: "Edit",
+                path: `edit/:id`,
+                component: getComponentForActivity(activityName, "edit"),
+            },
+        ];
+    }
+
+    return sublinks;
+};
+
+const fetchFeatures = async (): Promise<Feature[]> => {
+    try {
+        const response = await api.get("/public-operations/features");
+        return response.data.success ? response.data.data : [];
+    } catch (error) {
+        console.error("Error fetching features:", error);
+        return [];
+    }
+};
+
+const fetchActivities = async (featureId: number): Promise<Activity[]> => {
+    // Otherwise fetch from API
+    try {
+        const response = await api.get(
+            `/public-operations/activities/${featureId}`
+        );
+        return response.data.success ? response.data.data : [];
+    } catch (error) {
+        console.error(
+            `Error fetching activities for feature ${featureId}:`,
+            error
+        );
+        return [];
+    }
+};
+
+const buildDynamicNavigation = async (): Promise<TabLink[]> => {
+    try {
+        // Fetch features from API
+        let features = await fetchFeatures();
+        console.log("Features fetched from API:", features);
+
+        // Check if ship_trip_management feature exists, if not add it from static data
+        const shipTripFeatureExists = features.some(
+            (f) => f.name === "ship_trip_management"
+        );
+        if (!shipTripFeatureExists) {
+            console.log("Adding static ship_trip_management feature");
+            features = [...features];
+        }
+
+        const navigationConfig: TabLink[] = [];
+        // Get the base URL for icons
+        const baseURL = import.meta.env.VITE_API_BASE_URL || "";
+        console.log("Using base URL for icons:", baseURL);
+
+        for (const feature of features) {
+            const activities = await fetchActivities(feature.id);
+            const featureKebab = toKebabCase(feature.name);
+
+            // Format the icon URL properly
+            const iconUrl = feature.img
+                ? formatIconUrl(feature.img, baseURL)
+                : "";
+
+            const featureLinks = activities.map((activity) => {
+                const activityKebab = toKebabCase(activity.name);
+                return {
+                    title: activity.displayName,
+                    path: `/${featureKebab}/${activityKebab}`,
+                    component: getComponentForActivity(activity.name),
+                    subLinks: generateStandardSublinks(
+                        feature.name,
+                        activity.name
+                    ),
+                };
+            });
+
+            navigationConfig.push({
+                icon: iconUrl,
+                title: feature.displayName,
+                path: `/${featureKebab}`,
+                sideBar: {
+                    titleSection: {
+                        icon: iconUrl,
+                        title: feature.displayName,
+                    },
+                    links: featureLinks,
+                },
+            });
+        }
+
+        return navigationConfig;
+    } catch (error) {
+        console.error("Error building dynamic navigation:", error);
+        return [];
+    }
+};
+
+export { buildDynamicNavigation };

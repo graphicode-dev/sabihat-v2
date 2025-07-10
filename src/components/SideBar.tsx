@@ -1,51 +1,37 @@
 import { Link, useLocation } from "react-router-dom";
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
-import { navigationConfig } from "../config/navigationConfig";
-import { SideBar as SideBarType } from "../types";
+import { SideBar as SideBarType, TabLink } from "../types";
 import { refreshUserProfile } from "../store/slices/auth/authSlice";
 import { useAppDispatch } from "../store/hooks";
 
 type Props = {
     isSidebarOpen: boolean;
     onToggleSidebar: () => void;
+    navigationLinks: TabLink[];
 };
 
-const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
+const SideBar = ({
+    isSidebarOpen,
+    onToggleSidebar,
+    navigationLinks,
+}: Props) => {
     const dispatch = useAppDispatch();
-
     const location = useLocation();
-    const profileRefreshedRef = useRef(false);
     const [currentSideBar, setCurrentSideBar] = useState<SideBarType | null>(
         null
     );
 
-    // Refresh user profile when sidebar mounts, but only once
+    // Refresh user profile when sidebar is mounted
     useEffect(() => {
-        if (!profileRefreshedRef.current) {
-            dispatch(refreshUserProfile());
-            profileRefreshedRef.current = true;
-        }
-    }, [dispatch]); // Only depend on dispatch, not refreshUserProfile
+        dispatch(refreshUserProfile());
+    }, [dispatch]);
 
-    // Check if a menu item is active
-    const isActive = (path: string, index?: number) => {
-        // For main routes (index 0), only consider them active if there's an exact match
-        // This prevents the main route from being active when a sub-route is active
-        // if (index === 0) {
-        //     return location.pathname === path;
-        // }
-
-        // For other routes, check if current path matches or starts with the route path
-        return (
-            location.pathname === path ||
-            location.pathname.startsWith(`${path}/`)
-        );
-    };
+    // No need for click outside handler as we're using the provided toggle
 
     useEffect(() => {
         // Find the link that matches the current path or is a parent path
-        const foundLink = navigationConfig.find(
+        const foundLink = navigationLinks.find(
             (link) =>
                 window.location.pathname === link.path ||
                 (window.location.pathname !== "/" &&
@@ -53,13 +39,22 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
         );
 
         setCurrentSideBar(foundLink?.sideBar || null);
-    }, [location.pathname]);
+    }, [location.pathname, navigationLinks]);
 
     // Handle logo click to navigate to dashboard home
     const handleLogoClick = (e: React.MouseEvent) => {
         e.preventDefault();
         // Force a reload to ensure the dashboard home page is displayed correctly
         window.location.href = "/";
+    };
+
+    // Check if a menu item is active
+    const isActive = (path: string) => {
+        // Check if current path matches or starts with the route path
+        return (
+            location.pathname === path ||
+            location.pathname.startsWith(`${path}/`)
+        );
     };
 
     return (
@@ -91,12 +86,25 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
             {/* Links Section */}
             <div className="py-5 px-3 h-full bg-white">
                 <div className="flex items-center text-primary-500 font-medium mb-4">
-                    {currentSideBar?.titleSection?.icon && (
-                        <currentSideBar.titleSection.icon
-                            color="#00a878 "
+                    {currentSideBar?.titleSection?.icon ? (
+                        <img
+                            src={currentSideBar.titleSection.icon}
+                            alt={currentSideBar.titleSection.title || ""}
                             width={25}
                             height={25}
+                            onError={(e) => {
+                                console.log(
+                                    `Failed to load icon for ${currentSideBar.titleSection.title}`
+                                );
+                                e.currentTarget.style.display = "none";
+                            }}
                         />
+                    ) : (
+                        <div className="w-6 h-6 bg-primary-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                            {(
+                                currentSideBar?.titleSection?.title || "N"
+                            ).charAt(0)}
+                        </div>
                     )}
                     <span className="ml-2">
                         {currentSideBar?.titleSection?.title || "Navigation"}
@@ -105,19 +113,19 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
 
                 {/* Navigation Menu */}
                 <ul className="space-y-2">
-                    {currentSideBar?.links.map((route, index) => (
+                    {currentSideBar?.links.map((route) => (
                         <li key={route.path}>
                             <Link
                                 to={route.path}
                                 className={`flex items-center py-2 px-4 rounded-md hover:bg-primary-50  ${
-                                    isActive(route.path, index)
+                                    isActive(route.path)
                                         ? "bg-primary-50"
                                         : "text-gray-500 hover:text-gray-700"
                                 }`}
                             >
                                 <span
                                     className={`${
-                                        isActive(route.path, index)
+                                        isActive(route.path)
                                             ? "w-2 h-2 bg-primary-500"
                                             : "w-1 h-1 bg-gray-400"
                                     } rounded-full mr-2`}
@@ -125,7 +133,7 @@ const SideBar = ({ isSidebarOpen, onToggleSidebar }: Props) => {
                                 <span
                                     className={`text-left
                                         ${
-                                            isActive(route.path, index)
+                                            isActive(route.path)
                                                 ? "font-bold"
                                                 : ""
                                         }`}

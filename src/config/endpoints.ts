@@ -29,7 +29,7 @@ export const ENDPOINTS = {
         resetPassword: (data: { verifyToken: string; password: string }) =>
             api.post(`/reset-password`, data),
         profile: () =>
-            api.get("/profile", {
+            api.get("/auth/profile", {
                 headers: { Authorization: `Bearer ${token}` },
             }),
         changePassword: (data: {
