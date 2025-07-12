@@ -78,6 +78,7 @@ function TaxAddPage() {
                 setIsLoading(false);
             })
             .catch((error) => {
+                setIsLoading(false);
                 return setErrors(error);
             });
     };
