@@ -1,96 +1,143 @@
 import { DynamicTable } from "../../../../components/table";
 import PageLayout from "../../../../layout/PageLayout";
-import { TableColumn, TableData } from "../../../../types/table";
+import { TableColumn } from "../../../../types/table";
+import { ContactMessage } from "./types";
+import {
+    useInfinitePaginatedQuery,
+    transformPaginatedDataToTableData,
+} from "../../../../utils";
+import { RowType } from "../../../../types";
+import Error from "../../../../components/ui/Error";
+import Loading from "../../../../components/ui/Loading";
+import { useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
+
+// Define the custom hook for contact messages outside the component
+const useInfiniteContactMessages = (
+    page: number = 1,
+    options?: { enabled?: boolean }
+) => {
+    return useInfinitePaginatedQuery<ContactMessage>({
+        queryKey: ["contactMessages", page.toString()],
+        endpointKey: "contactMessages",
+        enabled: options?.enabled ?? true,
+    });
+};
 
 function ContactMessagesPage() {
+    // Get page from URL or default to 1
+    const [searchParams, setSearchParams] = useSearchParams();
+    const currentPage = Number(searchParams.get("page")) || 1;
+
+    // Use our custom hook to fetch contact messages with pagination
+    const {
+        data: messagesData,
+        error,
+        isLoading,
+        fetchNextPage,
+    } = useInfiniteContactMessages(currentPage);
+
+    // Handle page change
+    const handlePageChange = (page: number) => {
+        setSearchParams({ page: page.toString() });
+    };
+
+    // Define table columns
     const columns: TableColumn[] = [
         {
-            id: "col1",
+            id: "fullName",
             header: "Full Name",
             accessorKey: "fullName",
             sortable: true,
         },
-        { id: "col2", header: "Email", accessorKey: "email", sortable: true },
         {
-            id: "col3",
+            id: "email",
+            header: "Email",
+            accessorKey: "emailAddress",
+            sortable: true,
+        },
+        {
+            id: "phoneNumber",
             header: "Phone Number",
             accessorKey: "phoneNumber",
+            cell: ({ row }: { row: RowType }) => {
+                const message = row.original as ContactMessage;
+                return message.phoneCode
+                    ? `${message.phoneCode} ${message.phoneNumber}`
+                    : message.phoneNumber;
+            },
             sortable: true,
         },
         {
-            id: "col4",
+            id: "message",
             header: "Message",
             accessorKey: "message",
+            cell: ({ row }: { row: RowType }) => {
+                const message = row.original as ContactMessage;
+                // Truncate long messages
+                return message.message?.length > 50
+                    ? `${message.message.substring(0, 50)}...`
+                    : message.message;
+            },
             sortable: true,
         },
         {
-            id: "col5",
-            header: "Attach File",
-            accessorKey: "attachFile",
+            id: "isRead",
+            header: "Status",
+            accessorKey: "isRead",
+            cell: ({ row }: { row: RowType }) => {
+                const message = row.original as ContactMessage;
+                return message.isRead ? "Read" : "Unread";
+            },
+            sortable: true,
+        },
+        {
+            id: "createdAt",
+            header: "Date",
+            accessorKey: "createdAt",
+            cell: ({ row }: { row: RowType }) => {
+                const message = row.original as ContactMessage;
+                return new Date(message.createdAt).toLocaleDateString();
+            },
             sortable: true,
         },
     ];
 
-    const data: TableData[] = [
-        {
-            id: "1",
-            columns: {
-                fullName: "John Doe",
-                email: "john.doe@example.com",
-                phoneNumber: "123-456-7890",
-                message: "Hello, how are you?",
-                attachFile: "file.pdf",
-            },
-        },
-        {
-            id: "2",
-            columns: {
-                fullName: "John Doe",
-                email: "john.doe@example.com",
-                phoneNumber: "123-456-7890",
-                message: "Hello, how are you?",
-                attachFile: "file.pdf",
-            },
-        },
-        {
-            id: "3",
-            columns: {
-                fullName: "John Doe",
-                email: "john.doe@example.com",
-                phoneNumber: "123-456-7890",
-                message: "Hello, how are you?",
-                attachFile: "file.pdf",
-            },
-        },
-        {
-            id: "4",
-            columns: {
-                fullName: "John Doe",
-                email: "john.doe@example.com",
-                phoneNumber: "123-456-7890",
-                message: "Hello, how are you?",
-                attachFile: "file.pdf",
-            },
-        },
-        {
-            id: "5",
-            columns: {
-                fullName: "John Doe",
-                email: "john.doe@example.com",
-                phoneNumber: "123-456-7890",
-                message: "Hello, how are you?",
-                attachFile: "file.pdf",
-            },
-        },
-    ];
+    // Transform the data for the table using our generic helper function
+    const flattenedData = transformPaginatedDataToTableData<ContactMessage>(
+        messagesData,
+        (item) => ({
+            fullName: item.fullName,
+            emailAddress: item.emailAddress,
+            phoneNumber: item.phoneNumber,
+            message: item.message,
+            isRead: item.isRead ? "Read" : "Unread",
+            createdAt: new Date(item.createdAt).toLocaleDateString(),
+        })
+    );
+
+    // Update URL when page changes
+    useEffect(() => {
+        if (currentPage > 1 && messagesData?.pages.length === 1) {
+            fetchNextPage();
+        }
+    }, [currentPage, messagesData?.pages.length, fetchNextPage]);
+
+    if (isLoading) return <Loading />;
+    if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
         <PageLayout>
             <DynamicTable
-                title="All Messages"
-                data={data}
+                title="Contact Messages"
+                data={flattenedData}
                 columns={columns}
-                addLabel="Add Commercial Agent"
+                addLabel="View Message"
+                itemsPerPage={messagesData?.pages[0]?.perPage}
+                currentPage={currentPage}
+                lastPage={messagesData?.pages[0]?.lastPage}
+                totalCount={messagesData?.pages[0]?.totalCount}
+                onPageChange={handlePageChange}
             />
         </PageLayout>
     );

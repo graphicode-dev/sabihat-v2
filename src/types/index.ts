@@ -4,6 +4,27 @@ export * from "./notifications.types";
 export * from "./toast.types";
 export * from "./viewCard.types";
 
+export interface PageData<T> {
+    items: T[];
+    hasMore: boolean;
+    lastPage: number;
+    currentPage: number;
+    totalCount?: number;
+    perPage?: number;
+}
+
+export interface ApiResponse<T> {
+    success: boolean;
+    message: string;
+    data: {
+        perPage: number;
+        currentPage: number;
+        lastPage: number;
+        nextPageUrl: string | null;
+        items: T[];
+    };
+}
+
 export type Icon = {
     width?: number;
     height?: number;
@@ -33,3 +54,7 @@ export type TabLink = {
     path: string;
     sideBar: SideBar;
 };
+
+export interface RowType {
+    original: any;
+}

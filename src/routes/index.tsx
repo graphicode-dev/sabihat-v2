@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState, useEffect } from "react";
 import Loading from "../components/ui/Loading";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { buildDynamicNavigation } from "../config/navigationConfig";
 import { TabLink } from "../types";
@@ -47,11 +47,20 @@ const cleanPath = (path: string) => path.replace(/^\/|\/$/g, "");
 // };
 
 function AppRoutes() {
+    const isAuthenticated = useAppSelector(selectIsAuthenticated);
     const [navigationConfig, setNavigationConfig] = useState<TabLink[]>([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchNavigation = async () => {
+        const handleNavigation = async () => {
+            if (!isAuthenticated) {
+                // Set loading to false and navigate to login
+                setLoading(false);
+                navigate("/login");
+                return;
+            }
+
             try {
                 const navConfig = await buildDynamicNavigation();
                 setNavigationConfig(navConfig);
@@ -62,8 +71,8 @@ function AppRoutes() {
             }
         };
 
-        fetchNavigation();
-    }, []);
+        handleNavigation();
+    }, [isAuthenticated, navigate]);
 
     if (loading) {
         return <Loading />;

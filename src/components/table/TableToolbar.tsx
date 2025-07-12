@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, SetStateAction, Dispatch } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ViewMode, TableColumn } from "../../types/table";
 import { TableFilter } from "./TableFilter";
 import { PDFIcon, VerticalFilter, XFile } from "../ui/icons";
@@ -14,7 +14,7 @@ interface TableToolbarProps {
     columns: TableColumn[];
     currentPage: number;
     totalPages: number;
-    onPageChange: Dispatch<SetStateAction<number>>;
+    onPageChange: (page: number) => void;
     itemsPerPage: number;
     onItemsPerPageChange: (count: number) => void;
     onColumnVisibilityChange?: (visibleColumns: string[]) => void;
@@ -104,12 +104,20 @@ export const TableToolbar = ({
         }
     };
 
+    // Use the usePagination hook to handle pagination logic
+    // This ensures proper synchronization with URL state
     const {
-        currentPage: paginationPage,
         goToNextPage,
         goToPreviousPage,
         setPage,
-    } = usePagination(currentPage, onPageChange, totalPages);
+    } = usePagination(
+        currentPage,
+        (page: number) => {
+            // Call the onPageChange prop to update the parent component's state
+            onPageChange(page);
+        },
+        totalPages
+    );
 
     // Get column header by id
     const getColumnHeader = (columnId: string) => {
@@ -205,7 +213,7 @@ export const TableToolbar = ({
                 <div className="flex items-center justify-center flex-wrap gap-5">
                     {/* Pagination */}
                     <Pagination
-                        currentPage={paginationPage}
+                        currentPage={currentPage}
                         totalPages={totalPages}
                         goToNextPage={goToNextPage}
                         goToPreviousPage={goToPreviousPage}

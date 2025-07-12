@@ -2,6 +2,10 @@ import Cookies from "js-cookie";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { FieldValues, FormState } from "react-hook-form";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { PageData } from "../types";
+import { ENDPOINTS } from "../config/endpoints";
+import { TableData } from "../types/table";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -34,6 +38,7 @@ export const setToken = (token: string) =>
         secure: import.meta.env.PROD,
         sameSite: "strict",
     });
+export const token = getToken();
 
 export const logFormData = (apiFormData: FormData, message?: string) => {
     console.log(message + ":" || "FormData contents:");
@@ -99,3 +104,105 @@ export const printDocument = (options?: {
 
 export const dirtyFields = <T extends FieldValues>(formState: FormState<T>) =>
     Object.keys(formState.dirtyFields || {});
+
+// Define a type for the endpoint methods to help with type safety
+type EndpointMethods = {
+    [key: string]: (...args: any[]) => Promise<any>;
+};
+
+export const fetchPaginatedData = async <T>(
+    page: number,
+    endpointKey: keyof typeof ENDPOINTS,
+    method: string = "getAll"
+): Promise<PageData<T>> => {
+    try {
+        // Get the endpoint from the ENDPOINTS object
+        const endpoint = ENDPOINTS[endpointKey] as EndpointMethods;
+        if (!endpoint || typeof endpoint[method] !== "function") {
+            throw new Error(`Endpoint ${endpointKey}.${method} not found`);
+        }
+
+        // Call the API method with the page parameter
+        const response = await endpoint[method](page);
+
+        // Validate the response structure
+        if (!response.data?.success || !response.data?.data) {
+            throw new Error(
+                response.data?.message || "Invalid response structure from API"
+            );
+        }
+
+        const apiData = response.data.data;
+
+        // Transform API response to PageData format
+        const pageData: PageData<T> = {
+            items: apiData.items || [],
+            hasMore: apiData.currentPage < apiData.lastPage,
+            lastPage: apiData.lastPage || 1,
+            currentPage: apiData.currentPage || 1,
+            totalCount: apiData.totalCount || apiData.items?.length || 0,
+            perPage: apiData.perPage || 10,
+        };
+
+        return pageData;
+    } catch (error) {
+        console.error(
+            `Error fetching data from ${endpointKey}.${method}:`,
+            error
+        );
+        throw error;
+    }
+};
+
+export const useInfinitePaginatedQuery = <T>(options: {
+    queryKey: string | string[];
+    endpointKey: keyof typeof ENDPOINTS;
+    method?: string;
+    enabled?: boolean;
+    staleTime?: number;
+    retry?: number;
+    retryDelay?: number;
+}) => {
+    const {
+        queryKey,
+        endpointKey,
+        method = "getAll",
+        enabled = true,
+        staleTime = 5 * 60 * 1000, // 5 minutes default
+        retry = 1,
+        retryDelay = 1000,
+    } = options;
+
+    // Use the imported useInfiniteQuery from react-query
+    return useInfiniteQuery({
+        queryKey: Array.isArray(queryKey) ? queryKey : [queryKey],
+        queryFn: async ({ pageParam = 1 }) => {
+            return fetchPaginatedData<T>(pageParam, endpointKey, method);
+        },
+        getNextPageParam: (lastPage: PageData<T>) => {
+            return lastPage.hasMore ? lastPage.currentPage + 1 : undefined;
+        },
+        initialPageParam: 1,
+        staleTime,
+        retry,
+        retryDelay,
+        enabled,
+    });
+};
+
+export const transformPaginatedDataToTableData = <
+    T extends { id: string | number }
+>(
+    paginatedData: { pages: Array<{ items: T[] }> } | undefined,
+    columnMapping: (item: T) => Record<string, any>
+): TableData[] => {
+    if (!paginatedData) return [];
+
+    return paginatedData.pages.flatMap((page) =>
+        page.items.map((item) => ({
+            id: item.id.toString(),
+            original: item,
+            columns: columnMapping(item),
+        }))
+    );
+};

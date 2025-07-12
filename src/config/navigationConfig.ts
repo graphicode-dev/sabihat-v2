@@ -1568,7 +1568,9 @@ export const generateStandardSublinks = (
 const fetchFeatures = async (): Promise<Feature[]> => {
     try {
         const response = await api.get("/public-operations/features");
-        return response.data.success ? response.data.data : [];
+        // Type assertion to handle the unknown type of response.data
+        const responseData = response.data as { success: boolean; data: Feature[] };
+        return responseData.success ? responseData.data : [];
     } catch (error) {
         console.error("Error fetching features:", error);
         return [];
@@ -1581,7 +1583,9 @@ const fetchActivities = async (featureId: number): Promise<Activity[]> => {
         const response = await api.get(
             `/public-operations/activities/${featureId}`
         );
-        return response.data.success ? response.data.data : [];
+        // Type assertion to handle the unknown type of response.data
+        const responseData = response.data as { success: boolean; data: Activity[] };
+        return responseData.success ? responseData.data : [];
     } catch (error) {
         console.error(
             `Error fetching activities for feature ${featureId}:`,

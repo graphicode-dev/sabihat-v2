@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import {
     TableData,
     TableColumn,
@@ -35,6 +35,11 @@ interface DynamicTableProps {
     hideToolbar?: boolean;
     customToolbar?: React.ReactNode;
     noPadding?: boolean;
+    // API pagination props
+    totalCount?: number;
+    currentPage?: number;
+    lastPage?: number;
+    onPageChange?: (page: number) => void;
 }
 
 export const DynamicTable = ({
@@ -54,9 +59,16 @@ export const DynamicTable = ({
     hideToolbar = false,
     customToolbar,
     noPadding = false,
+    // API pagination props
+    totalCount,
+    currentPage: apiCurrentPage,
+    lastPage,
+    onPageChange,
 }: DynamicTableProps) => {
     const [viewMode, setViewMode] = useState<ViewMode>(initialView);
-    const [currentPage, setCurrentPage] = useState(1);
+    // For internal pagination, use API current page if provided, otherwise default to 1
+    // If onPageChange is provided, we'll use the external pagination state
+    const [internalCurrentPage, setInternalCurrentPage] = useState(apiCurrentPage || 1);
     const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage);
     const [searchQuery, setSearchQuery] = useState("");
     const [tableData, setTableData] = useState<TableData[]>(
@@ -71,6 +83,10 @@ export const DynamicTable = ({
     );
     const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
     const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
+    
+    // Use the external current page if provided, otherwise use internal state
+    // This ensures we're always using the correct page state
+    const currentPage = apiCurrentPage !== undefined ? apiCurrentPage : internalCurrentPage;
 
     // Update tableData when data prop changes
     useMemo(() => {
@@ -187,16 +203,24 @@ export const DynamicTable = ({
         return sortData(filteredData, sortConfig);
     }, [filteredData, sortConfig]);
 
-    const totalPages = Math.max(1, Math.ceil(sortedData.length / itemsPerPage));
+    // Use API lastPage if provided, otherwise calculate from local data
+    const totalPages = lastPage || Math.max(1, Math.ceil(sortedData.length / itemsPerPage));
 
     // Reset to first page when search changes
-    useMemo(() => {
-        setCurrentPage(1);
-    }, [searchQuery]);
+    useEffect(() => {
+        // Use setTimeout to avoid state updates during render
+        setTimeout(() => {
+            setInternalCurrentPage(1);
+            // If we're using external pagination, also notify parent
+            if (onPageChange) onPageChange(1);
+        }, 0);
+    }, [searchQuery, onPageChange]);
 
     const currentData = useMemo(() => {
-        return paginateData(sortedData, currentPage, itemsPerPage);
-    }, [sortedData, currentPage, itemsPerPage]);
+        // If we're using API pagination, use the entire data as is
+        // Otherwise, paginate the data locally
+        return onPageChange ? sortedData : paginateData(sortedData, currentPage, itemsPerPage);
+    }, [sortedData, currentPage, itemsPerPage, onPageChange]);
 
     const handleRowSelection = useCallback((rowId: string) => {
         setTableData((currentTableData) =>
@@ -306,8 +330,8 @@ export const DynamicTable = ({
                             <h2 className="text-lg font-bold">{title}</h2>
                             <p className="text-sm text-left text-dark-200">
                                 {selectedCount > 0
-                                    ? `${selectedCount} of ${filteredData.length} selected`
-                                    : `${filteredData.length} record`}
+                                    ? `${selectedCount} of ${totalCount || filteredData.length} selected`
+                                    : `${totalCount || filteredData.length} record${(totalCount || filteredData.length) !== 1 ? 's' : ''}`}
                             </p>
                         </div>
 
@@ -352,14 +376,33 @@ export const DynamicTable = ({
                 {/* Toolbar */}
                 {!hideToolbar && (
                     <TableToolbar
-                        totalItems={filteredData.length}
+                        totalItems={totalCount || filteredData.length}
                         currentView={viewMode}
                         onViewChange={setViewMode}
                         onSearch={setSearchQuery}
                         columns={columns}
                         currentPage={currentPage}
                         totalPages={totalPages}
-                        onPageChange={setCurrentPage}
+                        onPageChange={(page: number) => {
+                            console.log(`DynamicTable: Page change requested to ${page}`);
+                            
+                            // Use setTimeout for ALL state updates to avoid updates during render
+                            setTimeout(() => {
+                                // Update internal state only if we're not using external pagination
+                                if (apiCurrentPage === undefined) {
+                                    console.log(`DynamicTable: Using internal pagination, updating internal state`);
+                                    setInternalCurrentPage(page);
+                                } else {
+                                    console.log(`DynamicTable: Using external pagination from props: ${apiCurrentPage}`);
+                                }
+                                
+                                // Always notify parent if onPageChange is provided
+                                if (onPageChange) {
+                                    console.log(`DynamicTable: Notifying parent of page change to ${page}`);
+                                    onPageChange(page);
+                                }
+                            }, 0);
+                        }}
                         itemsPerPage={itemsPerPage}
                         onItemsPerPageChange={setItemsPerPage}
                         onColumnVisibilityChange={handleColumnVisibilityChange}

@@ -65,7 +65,11 @@ const Pagination: React.FC<PaginationProps> = ({
                         <button
                             type="button"
                             title="Previous page"
-                            onClick={goToPreviousPage}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                console.log(`Clicking previous page, current page: ${currentPage}`);
+                                goToPreviousPage();
+                            }}
                             disabled={currentPage === 1}
                             className={`flex items-center justify-center w-10 h-10 rounded-full ${
                                 currentPage === 1
@@ -104,7 +108,11 @@ const Pagination: React.FC<PaginationProps> = ({
                                     >
                                         <button
                                             type="button"
-                                            onClick={() => setPage(page)}
+                                            onClick={(e) => {
+                                                e.preventDefault(); // Prevent default browser behavior
+                                                console.log(`Clicking page number: ${page}, current page: ${currentPage}`);
+                                                setPage(page);
+                                            }}
                                             className="flex items-center justify-center w-full h-full rounded-full font-bold"
                                         >
                                             {page < 10 ? `0${page}` : page}
@@ -132,7 +140,11 @@ const Pagination: React.FC<PaginationProps> = ({
                         <button
                             type="button"
                             title="Next page"
-                            onClick={goToNextPage}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                console.log(`Clicking next page, current page: ${currentPage}`);
+                                goToNextPage();
+                            }}
                             disabled={currentPage === totalPages}
                             className={`flex items-center justify-center w-10 h-10 rounded-full ${
                                 currentPage === totalPages

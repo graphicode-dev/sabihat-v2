@@ -1,8 +1,7 @@
-import api from "./api";
-
-import { getToken } from "../utils";
-
-const token = getToken();
+import api, { ApiResponseWrapper } from "./api";
+import { token } from "../utils";
+import { ApiResponse } from "../types";
+import { ContactMessage } from "../pages/dashboard/system-management-administration/contact-messages/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -40,5 +39,27 @@ export const ENDPOINTS = {
             api.post(`/change-password`, data, {
                 headers: { Authorization: `Bearer ${token}` },
             }),
+    },
+    contactMessages: {
+        getAll: (
+            page: number
+        ): Promise<ApiResponseWrapper<ApiResponse<ContactMessage>>> =>
+            api.get<ApiResponse<ContactMessage>>(
+                `/contact-messages?page=${page}`
+            ),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: ContactMessage;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: ContactMessage;
+            }>(`/contact-messages/${id}`),
     },
 };
