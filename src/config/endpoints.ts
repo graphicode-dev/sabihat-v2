@@ -3,6 +3,7 @@ import { token } from "../utils";
 import { ApiResponse } from "../types";
 import { ContactMessage } from "../pages/dashboard/system-management-administration/contact-messages/types";
 import { PartnerClassification } from "../pages/dashboard/system-management-administration/partners-classification/types";
+import { Tax } from "../pages/dashboard/system-management-administration/tax/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -79,5 +80,48 @@ export const ENDPOINTS = {
                 message: string;
                 data: PartnerClassification;
             }>(`/partners-classification/${id}`),
+    },
+    tax: {
+        getAll: (page: number): Promise<ApiResponseWrapper<ApiResponse<Tax>>> =>
+            api.get<ApiResponse<Tax>>(`/taxes?page=${page}`),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: Tax;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: Tax;
+            }>(`/taxes/${id}`),
+        add: (data: FormData) =>
+            api
+                .post(`/taxes`, data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    if (response.error) {
+                        throw response.error.details.errors;
+                    }
+                }),
+
+        update: (id: string, data: Tax) =>
+            api.put(`/taxes/${id}`, data, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            }),
+        delete: (id: string) =>
+            api.delete(`/taxes/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            }),
     },
 };

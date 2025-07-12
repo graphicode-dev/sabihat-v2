@@ -115,7 +115,6 @@ const api = {
             );
             return { data: response.data, error: null };
         } catch (error: any) {
-            console.error(`GET ${url} error:`, error);
             return handleApiError<T>(error);
         }
     },
@@ -133,7 +132,6 @@ const api = {
             );
             return { data: response.data, error: null };
         } catch (error: any) {
-            console.error(`POST ${url} error:`, error);
             return handleApiError<T>(error);
         }
     },
@@ -151,7 +149,6 @@ const api = {
             );
             return { data: response.data, error: null };
         } catch (error: any) {
-            console.error(`PUT ${url} error:`, error);
             return handleApiError<T>(error);
         }
     },
@@ -164,7 +161,6 @@ const api = {
             );
             return { data: response.data, error: null };
         } catch (error: any) {
-            console.error(`DELETE ${url} error:`, error);
             return handleApiError<T>(error);
         }
     },
@@ -176,10 +172,6 @@ const api = {
 // Helper function to handle API errors consistently
 function handleApiError<T>(error: any): ApiResponseWrapper<T> {
     if (error.response) {
-        // The request was made and the server responded with an error status
-        console.error("Error response data:", error.response.data);
-        console.error("Error response status:", error.response.status);
-
         if (error.response.data?.message === "Unauthorized") {
             window.location.href = "/dashboard/unauthorized";
         }
@@ -200,8 +192,6 @@ function handleApiError<T>(error: any): ApiResponseWrapper<T> {
             },
         };
     } else if (error.request) {
-        // The request was made but no response was received
-        console.error("No response received:", error.request);
         return {
             data: null,
             error: {
@@ -210,8 +200,6 @@ function handleApiError<T>(error: any): ApiResponseWrapper<T> {
             },
         };
     } else {
-        // Something happened in setting up the request
-        console.error("Error message:", error.message);
         return {
             data: null,
             error: {

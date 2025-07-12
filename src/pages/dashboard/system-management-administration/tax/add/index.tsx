@@ -8,20 +8,23 @@ import { z } from "zod";
 import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { useNavigate } from "react-router-dom";
+import { ENDPOINTS } from "../../../../../config/endpoints";
 
 type Tax = {
-    id?: string;
-    taxName: string;
-    taxType: string;
+    name: string;
+    type: string;
+    taxBase: string;
     amountValue: string;
+    ledgerAccountId: string;
     description: string;
 };
 
 const taxSchema = z.object({
-    id: z.string().optional(),
-    taxName: z.string(),
-    taxType: z.string(),
+    name: z.string(),
+    type: z.string(),
+    taxBase: z.string(),
     amountValue: z.string(),
+    ledgerAccountId: z.string(),
     description: z.string(),
 });
 
@@ -30,19 +33,22 @@ function TaxAddPage() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<Tax>({
-        taxName: "",
-        taxType: "",
+        name: "",
+        type: "",
+        taxBase: "",
         amountValue: "",
+        ledgerAccountId: "",
         description: "",
     });
 
     const { control, handleSubmit, reset, formState } = useForm<Tax>({
         resolver: zodResolver(taxSchema),
         defaultValues: {
-            id: "",
-            taxName: "",
-            taxType: "",
+            name: "",
+            type: "",
+            taxBase: "",
             amountValue: "",
+            ledgerAccountId: "",
             description: "",
         },
         mode: "onChange",
@@ -50,84 +56,52 @@ function TaxAddPage() {
 
     const onSubmit = async (formData: Tax) => {
         setIsLoading(true);
-        try {
-            // Create FormData object for file upload
-            const apiFormData = new FormData();
+        const apiFormData = new FormData();
 
-            // Always append all fields, even if they're empty strings
-            // This ensures the API receives all fields
-            apiFormData.append("taxName", formData.taxName);
-            apiFormData.append("taxType", formData.taxType);
-            apiFormData.append("amountValue", formData.amountValue);
-            apiFormData.append("description", formData.description);
+        apiFormData.append("name", formData.name);
+        apiFormData.append("type", formData.type);
+        apiFormData.append("taxBase", formData.taxBase);
+        apiFormData.append("amountValue", formData.amountValue);
+        apiFormData.append("ledgerAccountId", formData.ledgerAccountId);
+        apiFormData.append("description", formData.description);
 
-            // Simulate API call success
-            // In a real app, you would send apiFormData to your backend
-            // const response = await api.post('/company', apiFormData);
-
-            addToast({
-                message: "Tax added successfully",
-                type: "success",
-                title: "Success!",
-            });
-
-            reset();
-            navigate(-1);
-        } catch (error: any) {
-            console.error("Error adding tax:", error);
-            if (error?.errors) {
-                // Map API error fields to our frontend field names
-                const mappedErrors: any = {};
-
-                if (error.errors.taxName) {
-                    mappedErrors.taxName = error.errors.taxName[0];
-                }
-                if (error.errors.taxType) {
-                    mappedErrors.taxType = error.errors.taxType[0];
-                }
-                if (error.errors.amountValue) {
-                    mappedErrors.amountValue = error.errors.amountValue[0];
-                }
-                if (error.errors.description) {
-                    mappedErrors.description = error.errors.description[0];
-                }
-
-                console.log("Mapped errors:", mappedErrors);
-                setErrors(mappedErrors);
-            } else {
+        await ENDPOINTS.tax
+            .add(apiFormData)
+            .then(() => {
                 addToast({
-                    message: "An unexpected error occurred. Please try again.",
-                    type: "error",
-                    title: "Error!",
+                    message: "Tax added successfully",
+                    type: "success",
+                    title: "Success!",
                 });
-            }
-        } finally {
-            setIsLoading(false);
-        }
+                reset();
+                navigate(-1);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                return setErrors(error);
+            });
     };
 
     return (
         <PageLayout>
             <FormLayout handleSubmit={handleSubmit} handleFormSubmit={onSubmit}>
                 <FormFieldsLayout title="Add">
-                    {/* taxName */}
+                    {/* name */}
                     <FormInput
-                        name="taxName"
+                        name="name"
                         control={control}
-                        label="Tax Name"
+                        label="Name"
                         type="text"
-                        error={errors.taxName}
-                        required
+                        error={errors.name}
                     />
 
-                    {/* taxType */}
+                    {/* type */}
                     <FormInput
-                        name="taxType"
+                        name="type"
                         control={control}
-                        label="Tax Type"
+                        label="Type"
                         type="text"
-                        error={errors.taxType}
-                        required
+                        error={errors.type}
                     />
 
                     {/* amountValue */}
@@ -137,7 +111,24 @@ function TaxAddPage() {
                         label="Amount Value"
                         type="text"
                         error={errors.amountValue}
-                        required
+                    />
+
+                    {/* taxBase */}
+                    <FormInput
+                        name="taxBase"
+                        control={control}
+                        label="Tax Base"
+                        type="text"
+                        error={errors.taxBase}
+                    />
+
+                    {/* ledgerAccountId */}
+                    <FormInput
+                        name="ledgerAccountId"
+                        control={control}
+                        label="Ledger Account ID"
+                        type="text"
+                        error={errors.ledgerAccountId}
                     />
 
                     {/* description */}
@@ -147,7 +138,6 @@ function TaxAddPage() {
                         label="Description"
                         type="text"
                         error={errors.description}
-                        required
                     />
                 </FormFieldsLayout>
 
