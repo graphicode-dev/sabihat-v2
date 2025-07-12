@@ -1410,29 +1410,33 @@ export const toKebabCase = (str: string): string => {
 };
 
 // Function to properly format icon URLs
-const formatIconUrl = (iconPath: string, baseURL: string): string => {
+const formatIconUrl = (iconPath: string, baseURL: string, enableLogging: boolean = true): string => {
     // If iconPath is empty or undefined, return empty string
     if (!iconPath) {
-        console.log("Empty icon path received");
         return "";
     }
 
-    // If the icon path is already a full URL (starts with http:// or https://), return it as is
-    if (iconPath.startsWith("http://") || iconPath.startsWith("https://")) {
-        console.log("Icon is already a full URL:", iconPath);
+    // If the icon path is already a full URL, return it as is
+    if (
+        iconPath.startsWith("http://") ||
+        iconPath.startsWith("https://")
+    ) {
+        if (enableLogging) {
+            console.log("Icon is already a full URL:", iconPath);
+        }
         return iconPath;
     }
 
-    // If the icon path starts with a slash, append it directly to the baseURL
+    // If the icon path starts with a slash, append it to the base URL
     if (iconPath.startsWith("/")) {
-        const fullUrl = `${baseURL}${iconPath}`;
-        console.log("Formatted icon URL (with leading slash):", fullUrl);
-        return fullUrl;
+        return `${baseURL}${iconPath}`;
     }
 
-    // Otherwise, ensure there's a slash between baseURL and iconPath
+    // Otherwise, append the icon path to the base URL with a slash
     const fullUrl = `${baseURL}/${iconPath}`;
-    console.log("Formatted icon URL:", fullUrl);
+    if (enableLogging) {
+        console.log("Formatted icon URL:", fullUrl);
+    }
     return fullUrl;
 };
 
@@ -1587,25 +1591,49 @@ const fetchActivities = async (featureId: number): Promise<Activity[]> => {
     }
 };
 
+// Cache for navigation configuration
+let navigationCache: {
+    data: TabLink[] | null;
+    timestamp: number;
+    promise: Promise<TabLink[]> | null;
+} = {
+    data: null,
+    timestamp: 0,
+    promise: null
+};
+
+// Cache expiration time in milliseconds (5 minutes)
+const CACHE_EXPIRATION = 5 * 60 * 1000;
+
 const buildDynamicNavigation = async (): Promise<TabLink[]> => {
-    try {
-        // Fetch features from API
-        let features = await fetchFeatures();
-        console.log("Features fetched from API:", features);
+    // If there's an ongoing request, return that promise to prevent duplicate requests
+    if (navigationCache.promise) {
+        return navigationCache.promise;
+    }
 
-        // Check if ship_trip_management feature exists, if not add it from static data
-        const shipTripFeatureExists = features.some(
-            (f) => f.name === "ship_trip_management"
-        );
-        if (!shipTripFeatureExists) {
-            console.log("Adding static ship_trip_management feature");
-            features = [...features];
-        }
+    // Check if we have valid cached data
+    const now = Date.now();
+    if (navigationCache.data && (now - navigationCache.timestamp) < CACHE_EXPIRATION) {
+        return navigationCache.data;
+    }
 
-        const navigationConfig: TabLink[] = [];
-        // Get the base URL for icons
-        const baseURL = import.meta.env.VITE_API_BASE_URL || "";
-        console.log("Using base URL for icons:", baseURL);
+    // Create a new promise for the data fetch
+    navigationCache.promise = (async () => {
+        try {
+            // Fetch features from API
+            let features = await fetchFeatures();
+            
+            // Check if ship_trip_management feature exists, if not add it from static data
+            const shipTripFeatureExists = features.some(
+                (f) => f.name === "ship_trip_management"
+            );
+            if (!shipTripFeatureExists) {
+                features = [...features];
+            }
+
+            const navigationConfig: TabLink[] = [];
+            // Get the base URL for icons
+            const baseURL = import.meta.env.VITE_API_BASE_URL || "";
 
         for (const feature of features) {
             const activities = await fetchActivities(feature.id);
@@ -1613,7 +1641,7 @@ const buildDynamicNavigation = async (): Promise<TabLink[]> => {
 
             // Format the icon URL properly
             const iconUrl = feature.img
-                ? formatIconUrl(feature.img, baseURL)
+                ? formatIconUrl(feature.img, baseURL, false) // Pass false to disable logging
                 : "";
 
             const featureLinks = activities.map((activity) => {
@@ -1643,11 +1671,29 @@ const buildDynamicNavigation = async (): Promise<TabLink[]> => {
             });
         }
 
-        return navigationConfig;
-    } catch (error) {
-        console.error("Error building dynamic navigation:", error);
-        return [];
-    }
+            // Update cache with the new data
+            navigationCache.data = navigationConfig;
+            navigationCache.timestamp = Date.now();
+            return navigationConfig;
+        } catch (error) {
+            console.error("Error building dynamic navigation:", error);
+            return [];
+        } finally {
+            // Clear the promise reference when done
+            navigationCache.promise = null;
+        }
+    })();
+
+    return navigationCache.promise;
 };
 
-export { buildDynamicNavigation };
+// Function to clear the navigation cache manually if needed
+const clearNavigationCache = () => {
+    navigationCache = {
+        data: null,
+        timestamp: 0,
+        promise: null
+    };
+};
+
+export { buildDynamicNavigation, clearNavigationCache };
