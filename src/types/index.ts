@@ -25,6 +25,12 @@ export interface ApiResponse<T> {
     };
 }
 
+export interface DataResponse<T> {
+    success: boolean;
+    message: string;
+    data: T[];
+}
+
 export type Icon = {
     width?: number;
     height?: number;

@@ -4,16 +4,55 @@ import { useParams } from "react-router-dom";
 import { TableData } from "../../../../../types/table";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../../../hooks/useToast";
+import { useQuery } from "@tanstack/react-query";
+import { ENDPOINTS } from "../../../../../config/endpoints";
+import { PartnerClassification } from "../types";
+import Loading from "../../../../../components/ui/Loading";
+import Error from "../../../../../components/ui/Error";
+
+const usePartnerClassificationById = (id: string) => {
+    return useQuery({
+        queryKey: ["partnerClassification", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.partnersClassification.getOne(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
+
 function PartnersClassificationViewPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { addAlertToast, addToast } = useToast();
+
+    const {
+        data: contactMessage,
+        isLoading,
+        error,
+    } = usePartnerClassificationById(id || "");
+
+    const messageData =
+        (contactMessage?.data as PartnerClassification) ||
+        ({} as PartnerClassification);
+
     const data: TableData = {
-        id: "1",
+        id: messageData?.id?.toString() || "1",
         columns: {
-            nameClasses: "asdasdasd",
+            nameClass: messageData?.nameClass || "",
         },
     };
+
+    if (isLoading) return <Loading />;
+    if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
         <PageLayout>
@@ -24,8 +63,8 @@ function PartnersClassificationViewPage() {
                         {
                             fields: [
                                 {
-                                    label: "Name Classes",
-                                    value: data?.columns.nameClasses.toString(),
+                                    label: "Name Class",
+                                    value: data?.columns.nameClass.toString(),
                                 },
                             ],
                         },

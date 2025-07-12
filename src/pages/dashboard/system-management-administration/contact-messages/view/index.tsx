@@ -51,11 +51,7 @@ function ContactMessagesViewPage() {
     };
 
     if (isLoading) return <Loading />;
-    if (error) {
-        const errorMessage =
-            error instanceof Error ? error.message : "Unknown error";
-        return <Error message={errorMessage} />;
-    }
+    if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
         <PageLayout>

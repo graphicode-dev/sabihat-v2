@@ -2,6 +2,7 @@ import api, { ApiResponseWrapper } from "./api";
 import { token } from "../utils";
 import { ApiResponse } from "../types";
 import { ContactMessage } from "../pages/dashboard/system-management-administration/contact-messages/types";
+import { PartnerClassification } from "../pages/dashboard/system-management-administration/partners-classification/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -61,5 +62,22 @@ export const ENDPOINTS = {
                 message: string;
                 data: ContactMessage;
             }>(`/contact-messages/${id}`),
+    },
+    partnersClassification: {
+        getAll: () => api.get(`/partners-classification`),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: PartnerClassification;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: PartnerClassification;
+            }>(`/partners-classification/${id}`),
     },
 };

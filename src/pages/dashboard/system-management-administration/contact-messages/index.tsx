@@ -12,7 +12,6 @@ import Loading from "../../../../components/ui/Loading";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 
-// Define the custom hook for contact messages outside the component
 const useInfiniteContactMessages = (
     page: number = 1,
     options?: { enabled?: boolean }
@@ -25,11 +24,9 @@ const useInfiniteContactMessages = (
 };
 
 function ContactMessagesPage() {
-    // Get page from URL or default to 1
     const [searchParams, setSearchParams] = useSearchParams();
     const currentPage = Number(searchParams.get("page")) || 1;
 
-    // Use our custom hook to fetch contact messages with pagination
     const {
         data: messagesData,
         error,
@@ -37,12 +34,10 @@ function ContactMessagesPage() {
         fetchNextPage,
     } = useInfiniteContactMessages(currentPage);
 
-    // Handle page change
     const handlePageChange = (page: number) => {
         setSearchParams({ page: page.toString() });
     };
 
-    // Define table columns
     const columns: TableColumn[] = [
         {
             id: "fullName",
@@ -103,7 +98,6 @@ function ContactMessagesPage() {
         },
     ];
 
-    // Transform the data for the table using our generic helper function
     const flattenedData = transformPaginatedDataToTableData<ContactMessage>(
         messagesData,
         (item) => ({
@@ -116,7 +110,6 @@ function ContactMessagesPage() {
         })
     );
 
-    // Update URL when page changes
     useEffect(() => {
         if (currentPage > 1 && messagesData?.pages.length === 1) {
             fetchNextPage();
