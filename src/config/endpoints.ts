@@ -4,6 +4,7 @@ import { ApiResponse } from "../types";
 import { ContactMessage } from "../pages/dashboard/system-management-administration/contact-messages/types";
 import { PartnerClassification } from "../pages/dashboard/system-management-administration/partners-classification/types";
 import { Tax } from "../pages/dashboard/system-management-administration/tax/types";
+import { PaymentMethod } from "../pages/dashboard/system-management-administration/payment-methods";
 
 export const ENDPOINTS = {
     auth: {
@@ -123,5 +124,23 @@ export const ENDPOINTS = {
             api.delete(`/taxes/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             }),
+    },
+    paymentMethods: {
+        getAll: (page: number): Promise<ApiResponseWrapper<ApiResponse<PaymentMethod>>> =>
+            api.get<ApiResponse<PaymentMethod>>(`/payment-methods?page=${page}`),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: PaymentMethod;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: PaymentMethod;
+            }>(`/payment-methods/${id}`),
     },
 };

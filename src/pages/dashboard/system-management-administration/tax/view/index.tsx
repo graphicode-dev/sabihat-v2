@@ -61,19 +61,19 @@ function TaxViewPage() {
                             fields: [
                                 {
                                     label: "Tax Name",
-                                    value: data?.columns.taxName.toString(),
+                                    value: String(data?.columns?.taxName) || "",
                                 },
                                 {
                                     label: "Tax Type",
-                                    value: data?.columns.taxType.toString(),
+                                    value: String(data?.columns?.taxType) || "",
                                 },
                                 {
                                     label: "Amount Value",
-                                    value: data?.columns.amountValue.toString(),
+                                    value: String(data?.columns?.amountValue) || "",
                                 },
                                 {
                                     label: "Description",
-                                    value: data?.columns.description.toString(),
+                                    value: String(data?.columns?.description) || "",
                                 },
                             ],
                         },

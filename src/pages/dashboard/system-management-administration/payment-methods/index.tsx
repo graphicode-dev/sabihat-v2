@@ -1,10 +1,43 @@
 import { DynamicTable } from "../../../../components/table";
 import PageLayout from "../../../../layout/PageLayout";
-import { TableColumn, TableData } from "../../../../types/table";
-import { useNavigate } from "react-router-dom";
+import { TableColumn } from "../../../../types/table";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+    transformPaginatedDataToTableData,
+    useInfinitePaginatedQuery,
+} from "../../../../utils";
+import { PaymentMethod } from ".";
+import { useEffect } from "react";
+import Loading from "../../../../components/ui/Loading";
+import Error from "../../../../components/ui/Error";
+
+const useInfinitePaymentMethods = (
+    page: number = 1,
+    options?: { enabled?: boolean }
+) => {
+    return useInfinitePaginatedQuery<PaymentMethod>({
+        queryKey: ["payment-methods", page.toString()],
+        endpointKey: "paymentMethods",
+        enabled: options?.enabled ?? true,
+    });
+};
 
 function PaymentMethodsPage() {
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const currentPage = Number(searchParams.get("page")) || 1;
+
+    const {
+        data: paymentMethodsData,
+        error,
+        isLoading,
+        fetchNextPage,
+    } = useInfinitePaymentMethods(currentPage);
+
+    const handlePageChange = (page: number) => {
+        setSearchParams({ page: page.toString() });
+    };
+
     const columns: TableColumn[] = [
         {
             id: "accountName",
@@ -38,36 +71,30 @@ function PaymentMethodsPage() {
         },
     ];
 
-    const data: TableData[] = [
-        {
-            id: "1",
-            columns: {
-                accountName: "*******",
-                accountType: "*******",
-                currency: "*******",
-                accountNumber: "*******",
-                accountStatus: "*******",
-                note: "*******",
-            },
-        },
-        {
-            id: "2",
-            columns: {
-                accountName: "*******",
-                accountType: "*******",
-                currency: "*******",
-                accountNumber: "*******",
-                accountStatus: "*******",
-                note: "*******",
-            },
-        },
-    ];
+    const flattenedData = transformPaginatedDataToTableData<PaymentMethod>(
+        paymentMethodsData,
+        (item) => ({
+            accountType: item.accountType,
+            currency: item.currency,
+            accountNumber: item.accountNumber,
+            note: item.note,
+        })
+    );
+
+    useEffect(() => {
+        if (currentPage > 1 && paymentMethodsData?.pages.length === 1) {
+            fetchNextPage();
+        }
+    }, [currentPage, paymentMethodsData?.pages.length, fetchNextPage]);
+
+    if (isLoading) return <Loading />;
+    if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
         <PageLayout>
             <DynamicTable
                 title="All Payment Methods"
-                data={data}
+                data={flattenedData}
                 columns={columns}
                 onAddClick={() => {
                     navigate(
@@ -75,6 +102,11 @@ function PaymentMethodsPage() {
                     );
                 }}
                 addLabel="Add Payment Method"
+                itemsPerPage={paymentMethodsData?.pages[0]?.perPage}
+                currentPage={currentPage}
+                lastPage={paymentMethodsData?.pages[0]?.lastPage}
+                totalCount={paymentMethodsData?.pages[0]?.totalCount}
+                onPageChange={handlePageChange}
             />
         </PageLayout>
     );
