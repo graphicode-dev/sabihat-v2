@@ -1,7 +1,6 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
 import { useParams } from "react-router-dom";
-import { TableData } from "../../../../../types/table";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../../../hooks/useToast";
 import { useQuery } from "@tanstack/react-query";
@@ -44,13 +43,6 @@ function PartnersClassificationViewPage() {
         (contactMessage?.data as PartnerClassification) ||
         ({} as PartnerClassification);
 
-    const data: TableData = {
-        id: messageData?.id?.toString() || "1",
-        columns: {
-            nameClass: messageData?.nameClass || "",
-        },
-    };
-
     if (isLoading) return <Loading />;
     if (error) return <Error message={error?.message || "Unknown error"} />;
 
@@ -64,7 +56,7 @@ function PartnersClassificationViewPage() {
                             fields: [
                                 {
                                     label: "Name Class",
-                                    value: data?.columns.nameClass.toString(),
+                                    value: messageData?.nameClass.toString(),
                                 },
                             ],
                         },

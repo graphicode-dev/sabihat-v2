@@ -110,10 +110,12 @@ type EndpointMethods = {
     [key: string]: (...args: any[]) => Promise<any>;
 };
 
+type Methods = "getAll" | "getOne" | "add" | "update" | "delete";
+
 export const fetchPaginatedData = async <T>(
     page: number,
     endpointKey: keyof typeof ENDPOINTS,
-    method: string = "getAll"
+    method: Methods = "getAll"
 ): Promise<PageData<T>> => {
     try {
         // Get the endpoint from the ENDPOINTS object
@@ -157,7 +159,7 @@ export const fetchPaginatedData = async <T>(
 export const useInfinitePaginatedQuery = <T>(options: {
     queryKey: string | string[];
     endpointKey: keyof typeof ENDPOINTS;
-    method?: string;
+    method?: Methods;
     enabled?: boolean;
     staleTime?: number;
     retry?: number;

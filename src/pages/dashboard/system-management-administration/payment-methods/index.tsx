@@ -10,6 +10,7 @@ import { PaymentMethod } from ".";
 import { useEffect } from "react";
 import Loading from "../../../../components/ui/Loading";
 import Error from "../../../../components/ui/Error";
+import React from "react";
 
 const useInfinitePaymentMethods = (
     page: number = 1,
@@ -32,9 +33,11 @@ function PaymentMethodsPage() {
         error,
         isLoading,
         fetchNextPage,
+        isFetchingNextPage,
     } = useInfinitePaymentMethods(currentPage);
 
     const handlePageChange = (page: number) => {
+        if (page === currentPage) return;
         setSearchParams({ page: page.toString() });
     };
 
@@ -82,12 +85,16 @@ function PaymentMethodsPage() {
     );
 
     useEffect(() => {
-        if (currentPage > 1 && paymentMethodsData?.pages.length === 1) {
+        if (
+            currentPage > 1 &&
+            paymentMethodsData?.pages &&
+            paymentMethodsData?.pages.length < currentPage
+        ) {
             fetchNextPage();
         }
-    }, [currentPage, paymentMethodsData?.pages.length, fetchNextPage]);
+    }, [currentPage, paymentMethodsData?.pages, fetchNextPage]);
 
-    if (isLoading) return <Loading />;
+    if (isLoading && !paymentMethodsData) return <Loading />;
     if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
@@ -108,6 +115,11 @@ function PaymentMethodsPage() {
                 totalCount={paymentMethodsData?.pages[0]?.totalCount}
                 onPageChange={handlePageChange}
             />
+            {isFetchingNextPage && (
+                <div className="flex justify-center mt-4">
+                    <Loading />
+                </div>
+            )}
         </PageLayout>
     );
 }

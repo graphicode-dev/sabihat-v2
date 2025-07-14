@@ -384,24 +384,18 @@ export const DynamicTable = ({
                         currentPage={currentPage}
                         totalPages={totalPages}
                         onPageChange={(page: number) => {
-                            console.log(`DynamicTable: Page change requested to ${page}`);
+                            // Prevent redundant page changes
+                            if (page === currentPage) return;
                             
-                            // Use setTimeout for ALL state updates to avoid updates during render
-                            setTimeout(() => {
-                                // Update internal state only if we're not using external pagination
-                                if (apiCurrentPage === undefined) {
-                                    console.log(`DynamicTable: Using internal pagination, updating internal state`);
-                                    setInternalCurrentPage(page);
-                                } else {
-                                    console.log(`DynamicTable: Using external pagination from props: ${apiCurrentPage}`);
-                                }
-                                
-                                // Always notify parent if onPageChange is provided
-                                if (onPageChange) {
-                                    console.log(`DynamicTable: Notifying parent of page change to ${page}`);
-                                    onPageChange(page);
-                                }
-                            }, 0);
+                            // Update internal state only if we're not using external pagination
+                            if (apiCurrentPage === undefined) {
+                                setInternalCurrentPage(page);
+                            }
+                            
+                            // Notify parent if onPageChange is provided
+                            if (onPageChange) {
+                                onPageChange(page);
+                            }
                         }}
                         itemsPerPage={itemsPerPage}
                         onItemsPerPageChange={setItemsPerPage}

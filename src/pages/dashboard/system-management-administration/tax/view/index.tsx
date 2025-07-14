@@ -1,6 +1,5 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
-import { TableData } from "../../../../../types/table";
 import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from "../../../../../hooks/useToast";
 import { useQuery } from "@tanstack/react-query";
@@ -37,17 +36,6 @@ function TaxViewPage() {
 
     const taxData = (tax?.data as Tax) || ({} as Tax);
 
-    const data: TableData = {
-        id: "1",
-        columns: {
-            taxName: taxData.name,
-            taxType: taxData.type,
-            taxBase: taxData.taxBase,
-            amountValue: taxData.amountValue,
-            description: taxData.description,
-        },
-    };
-
     if (isLoading) return <Loading />;
     if (error) return <Error message={error?.message || "Unknown error"} />;
 
@@ -61,19 +49,19 @@ function TaxViewPage() {
                             fields: [
                                 {
                                     label: "Tax Name",
-                                    value: String(data?.columns?.taxName) || "",
+                                    value: String(taxData?.name) || "",
                                 },
                                 {
                                     label: "Tax Type",
-                                    value: String(data?.columns?.taxType) || "",
+                                    value: String(taxData?.type) || "",
                                 },
                                 {
                                     label: "Amount Value",
-                                    value: String(data?.columns?.amountValue) || "",
+                                    value: String(taxData?.amountValue) || "",
                                 },
                                 {
                                     label: "Description",
-                                    value: String(data?.columns?.description) || "",
+                                    value: String(taxData?.description) || "",
                                 },
                             ],
                         },

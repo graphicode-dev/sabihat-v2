@@ -32,9 +32,11 @@ function ContactMessagesPage() {
         error,
         isLoading,
         fetchNextPage,
+        isFetchingNextPage,
     } = useInfiniteContactMessages(currentPage);
 
     const handlePageChange = (page: number) => {
+        if (page === currentPage) return;
         setSearchParams({ page: page.toString() });
     };
 
@@ -111,12 +113,16 @@ function ContactMessagesPage() {
     );
 
     useEffect(() => {
-        if (currentPage > 1 && messagesData?.pages.length === 1) {
+        if (
+            currentPage > 1 &&
+            messagesData?.pages &&
+            messagesData?.pages.length < currentPage
+        ) {
             fetchNextPage();
         }
-    }, [currentPage, messagesData?.pages.length, fetchNextPage]);
+    }, [currentPage, messagesData?.pages, fetchNextPage]);
 
-    if (isLoading) return <Loading />;
+    if (isLoading && !messagesData) return <Loading />;
     if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
@@ -132,6 +138,12 @@ function ContactMessagesPage() {
                 totalCount={messagesData?.pages[0]?.totalCount}
                 onPageChange={handlePageChange}
             />
+
+            {isFetchingNextPage && (
+                <div className="flex justify-center mt-4">
+                    <Loading />
+                </div>
+            )}
         </PageLayout>
     );
 }

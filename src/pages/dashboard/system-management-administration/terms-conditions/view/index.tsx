@@ -1,22 +1,49 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
-import { TableData } from "../../../../../types/table";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useToast } from "../../../../../hooks/useToast";
+import { useQuery } from "@tanstack/react-query";
+import { ENDPOINTS } from "../../../../../config/endpoints";
+import Loading from "../../../../../components/ui/Loading";
+import Error from "../../../../../components/ui/Error";
+import { TermsConditions } from "../types";
+
+const useTermsConditionsById = (id: string) => {
+    return useQuery({
+        queryKey: ["termsConditions", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.termsConditions.getOne(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
 
 function TermsConditionsViewPage() {
     const navigate = useNavigate();
     const { id } = useParams();
     const { addToast, addAlertToast } = useToast();
 
-    const data: TableData = {
-        id: "1",
-        columns: {
-            title: "*****",
-            description: "*****",
-        },
-    };
+    const {
+        data: termsConditions,
+        error,
+        isLoading,
+    } = useTermsConditionsById(id || "");
+
+    const termsConditionsData =
+        (termsConditions?.data as TermsConditions) || ({} as TermsConditions);
+
+    if (isLoading) return <Loading />;
+    if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
         <PageLayout>
@@ -28,7 +55,7 @@ function TermsConditionsViewPage() {
                             fields: [
                                 {
                                     label: "Title",
-                                    value: data?.columns.title.toString(),
+                                    value: termsConditionsData?.title.toString(),
                                 },
                             ],
                         },
@@ -36,7 +63,7 @@ function TermsConditionsViewPage() {
                             fields: [
                                 {
                                     label: "Description",
-                                    value: data?.columns.description.toString(),
+                                    value: termsConditionsData?.description.toString(),
                                     colSpan: 3,
                                 },
                             ],
@@ -57,7 +84,8 @@ function TermsConditionsViewPage() {
                                 onClick: () => {
                                     addToast({
                                         type: "success",
-                                        message: "Terms & Conditions deleted successfully",
+                                        message:
+                                            "Terms & Conditions deleted successfully",
                                         title: "Success!",
                                     });
                                     navigate(-1);

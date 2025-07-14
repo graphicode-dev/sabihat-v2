@@ -32,11 +32,14 @@ function PoliciesPage() {
         error,
         isLoading,
         fetchNextPage,
+        isFetchingNextPage,
     } = useInfinitePolicies(currentPage);
 
     const handlePageChange = (page: number) => {
+        if (page === currentPage) return;
         setSearchParams({ page: page.toString() });
     };
+
     const columns: TableColumn[] = [
         {
             id: "1",
@@ -60,12 +63,16 @@ function PoliciesPage() {
     );
 
     useEffect(() => {
-        if (currentPage > 1 && policiesData?.pages.length === 1) {
+        if (
+            currentPage > 1 &&
+            policiesData?.pages &&
+            policiesData?.pages.length < currentPage
+        ) {
             fetchNextPage();
         }
-    }, [currentPage, policiesData?.pages.length, fetchNextPage]);
+    }, [currentPage, policiesData?.pages, fetchNextPage]);
 
-    if (isLoading) return <Loading />;
+    if (isLoading && !policiesData) return <Loading />;
     if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
@@ -84,6 +91,11 @@ function PoliciesPage() {
                 totalCount={policiesData?.pages[0]?.totalCount}
                 onPageChange={handlePageChange}
             />
+            {isFetchingNextPage && (
+                <div className="flex justify-center mt-4">
+                    <Loading />
+                </div>
+            )}
         </PageLayout>
     );
 }

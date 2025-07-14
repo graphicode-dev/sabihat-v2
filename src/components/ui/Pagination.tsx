@@ -67,8 +67,9 @@ const Pagination: React.FC<PaginationProps> = ({
                             title="Previous page"
                             onClick={(e) => {
                                 e.preventDefault();
-                                console.log(`Clicking previous page, current page: ${currentPage}`);
-                                goToPreviousPage();
+                                if (currentPage > 1) {
+                                    goToPreviousPage();
+                                }
                             }}
                             disabled={currentPage === 1}
                             className={`flex items-center justify-center w-10 h-10 rounded-full ${
@@ -110,8 +111,9 @@ const Pagination: React.FC<PaginationProps> = ({
                                             type="button"
                                             onClick={(e) => {
                                                 e.preventDefault(); // Prevent default browser behavior
-                                                console.log(`Clicking page number: ${page}, current page: ${currentPage}`);
-                                                setPage(page);
+                                                if (page !== currentPage) {
+                                                    setPage(page);
+                                                }
                                             }}
                                             className="flex items-center justify-center w-full h-full rounded-full font-bold"
                                         >
@@ -142,8 +144,9 @@ const Pagination: React.FC<PaginationProps> = ({
                             title="Next page"
                             onClick={(e) => {
                                 e.preventDefault();
-                                console.log(`Clicking next page, current page: ${currentPage}`);
-                                goToNextPage();
+                                if (currentPage < totalPages) {
+                                    goToNextPage();
+                                }
                             }}
                             disabled={currentPage === totalPages}
                             className={`flex items-center justify-center w-10 h-10 rounded-full ${

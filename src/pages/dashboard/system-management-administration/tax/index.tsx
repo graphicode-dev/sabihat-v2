@@ -29,9 +29,11 @@ function TaxPage() {
         error,
         isLoading,
         fetchNextPage,
+        isFetchingNextPage,
     } = useInfiniteTax(currentPage);
 
     const handlePageChange = (page: number) => {
+        if (page === currentPage) return;
         setSearchParams({ page: page.toString() });
     };
 
@@ -75,12 +77,16 @@ function TaxPage() {
     );
 
     useEffect(() => {
-        if (currentPage > 1 && taxData?.pages.length === 1) {
+        if (
+            currentPage > 1 &&
+            taxData?.pages &&
+            taxData?.pages.length < currentPage
+        ) {
             fetchNextPage();
         }
-    }, [currentPage, taxData?.pages.length, fetchNextPage]);
+    }, [currentPage, taxData?.pages, fetchNextPage]);
 
-    if (isLoading) return <Loading />;
+    if (isLoading && !taxData) return <Loading />;
     if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
@@ -99,6 +105,11 @@ function TaxPage() {
                 totalCount={taxData?.pages[0]?.totalCount}
                 onPageChange={handlePageChange}
             />
+            {isFetchingNextPage && (
+                <div className="flex justify-center mt-4">
+                    <Loading />
+                </div>
+            )}
         </PageLayout>
     );
 }

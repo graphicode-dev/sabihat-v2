@@ -1,5 +1,5 @@
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect, Dispatch, SetStateAction, useRef, useCallback } from "react";
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useEffect, Dispatch, SetStateAction, useRef, useCallback } from 'react';
 
 type PageSetter = Dispatch<SetStateAction<number>> | ((page: number) => void);
 
@@ -11,130 +11,94 @@ export const usePagination = (
     const navigate = useNavigate();
     const location = useLocation();
     const [searchParams] = useSearchParams();
-    // Use a ref to track if we're currently updating from URL to prevent circular updates
-    const isUpdatingFromURL = useRef(false);
+    // Use a ref to track if we're currently updating to prevent circular updates
+    const isUpdating = useRef(false);
     // Use a ref to track the last page we navigated to
     const lastNavigatedPage = useRef(currentPage);
 
-    const updateURL = useCallback((page: number) => {
-        // Don't update URL if we're already on this page (prevents unnecessary history entries)
-        if (lastNavigatedPage.current === page) {
-            return;
-        }
-
-        console.log(`usePagination: Updating URL to page ${page} for path ${location.pathname}`);
-        lastNavigatedPage.current = page;
+    // Sync URL with currentPage (when currentPage changes programmatically)
+    useEffect(() => {
+        // Skip if we're in the middle of an update from URL
+        if (isUpdating.current) return;
         
-        // Preserve all existing search params
+        // Skip if the URL already has the correct page
+        const pageFromURL = Number(searchParams.get('page')) || 1;
+        if (pageFromURL === currentPage) return;
+        
+        // Update URL without triggering another state update
         const newParams = new URLSearchParams(searchParams.toString());
-        newParams.set("page", page.toString());
-        // Store the current pathname in the URL params to track which page this pagination belongs to
-        newParams.set("path", encodeURIComponent(location.pathname));
-
-        // Use replace instead of push to avoid cluttering browser history with pagination changes
+        newParams.set('page', currentPage.toString());
+        
         navigate(`${location.pathname}?${newParams.toString()}`, {
             replace: true,
         });
-    }, [navigate, location.pathname, searchParams]);
+    }, [currentPage, navigate, location.pathname, searchParams]);
 
-    // Sync currentPage with URL when the page loads or URL changes
+    // Sync currentPage with URL (when URL changes externally)
     useEffect(() => {
-        const pageFromURL = Number(searchParams.get("page")) || 1;
-        const pathFromURL = searchParams.get("path");
-        const currentPathMatches = !pathFromURL || decodeURIComponent(pathFromURL) === location.pathname;
+        // Skip if we're in the middle of an update from state
+        if (isUpdating.current) return;
         
-        // Only update if:
-        // 1. The URL page is different from current page
-        // 2. We're not in the middle of updating from a click action
-        // 3. The path in the URL matches the current path (or no path is specified)
-        if (pageFromURL !== currentPage && !isUpdatingFromURL.current && currentPathMatches) {
-            console.log(`URL page changed to ${pageFromURL} for path ${location.pathname}, updating component state`);
-            isUpdatingFromURL.current = true;
+        const pageFromURL = Number(searchParams.get('page')) || 1;
+        
+        // Only update if the URL page is different from current page
+        if (pageFromURL !== currentPage) {
+            isUpdating.current = true;
             
-            // Update the component state with a slight delay to avoid race conditions
+            // Update the component state
+            setCurrentPage(pageFromURL);
+            lastNavigatedPage.current = pageFromURL;
+            
+            // Reset the flag after the update
             setTimeout(() => {
-                // Double-check that we still need to update
-                const latestPageFromURL = Number(searchParams.get("page")) || 1;
-                const latestPathFromURL = searchParams.get("path");
-                const pathStillMatches = !latestPathFromURL || decodeURIComponent(latestPathFromURL) === location.pathname;
-                
-                if (latestPageFromURL !== currentPage && pathStillMatches) {
-                    console.log(`Setting current page to ${latestPageFromURL} from URL for path ${location.pathname}`);
-                    setCurrentPage(latestPageFromURL);
-                    lastNavigatedPage.current = latestPageFromURL;
-                }
-                
-                // Reset the flag after the update has been processed
-                setTimeout(() => {
-                    isUpdatingFromURL.current = false;
-                    console.log(`URL sync complete, reset updating flag`);
-                }, 100); 
+                isUpdating.current = false;
             }, 50);
         }
-    }, [searchParams, currentPage, setCurrentPage, location.pathname]);
+    }, [searchParams, currentPage, setCurrentPage]);
 
     const goToNextPage = useCallback(() => {
-        if (currentPage < totalPages && !isUpdatingFromURL.current) {
+        if (currentPage < totalPages && !isUpdating.current) {
             const nextPage = currentPage + 1;
-            console.log(`Going to next page: ${nextPage}`);
-            isUpdatingFromURL.current = true;
-
-            // First update the state to avoid flashing
-            if (typeof setCurrentPage === "function") {
-                setCurrentPage(nextPage);
-            }
-
-            // Then update the URL
-            updateURL(nextPage);
-
+            isUpdating.current = true;
+            
+            // Update state first
+            setCurrentPage(nextPage);
+            
             // Reset the flag after a short delay
             setTimeout(() => {
-                isUpdatingFromURL.current = false;
-                console.log(`Next page navigation complete, reset updating flag`);
+                isUpdating.current = false;
             }, 50);
         }
-    }, [currentPage, totalPages, setCurrentPage, updateURL]);
+    }, [currentPage, totalPages, setCurrentPage]);
 
     const goToPreviousPage = useCallback(() => {
-        if (currentPage > 1 && !isUpdatingFromURL.current) {
+        if (currentPage > 1 && !isUpdating.current) {
             const prevPage = currentPage - 1;
-            console.log(`Going to previous page: ${prevPage}`);
-            isUpdatingFromURL.current = true;
-
-            // First update the state to avoid flashing
-            if (typeof setCurrentPage === "function") {
-                setCurrentPage(prevPage);
-            }
-
-            // Then update the URL
-            updateURL(prevPage);
-
+            isUpdating.current = true;
+            
+            // Update state
+            setCurrentPage(prevPage);
+            
             // Reset the flag after a short delay
             setTimeout(() => {
-                isUpdatingFromURL.current = false;
-                console.log(`Previous page navigation complete, reset updating flag`);
+                isUpdating.current = false;
             }, 50);
         }
-    }, [currentPage, setCurrentPage, updateURL]);
+    }, [currentPage, setCurrentPage]);
 
     const setPage = useCallback((page: number) => {
-        if (page > 0 && page <= totalPages && !isUpdatingFromURL.current) {
-            console.log(`Setting page directly to: ${page}`);
-            isUpdatingFromURL.current = true;
-
-            // First update the state to avoid flashing
+        if (page > 0 && page <= totalPages && !isUpdating.current && page !== currentPage) {
+            isUpdating.current = true;
+            
+            // Update state
             setCurrentPage(page);
-
-            // Then update the URL
-            updateURL(page);
-
+            
             // Reset the flag after a short delay
             setTimeout(() => {
-                isUpdatingFromURL.current = false;
-                console.log(`Set page navigation complete, reset updating flag`);
+                isUpdating.current = false;
             }, 50);
         }
-    }, [totalPages, setCurrentPage, updateURL]);
+    }, [totalPages, setCurrentPage, currentPage]);
 
     return {
         currentPage,

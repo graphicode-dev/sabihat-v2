@@ -1,7 +1,6 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
 import { useParams } from "react-router-dom";
-import { TableData } from "../../../../../types/table";
 import { useToast } from "../../../../../hooks/useToast";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -38,14 +37,6 @@ function PoliciesViewPage() {
 
     const policyData = (policy?.data as Policy) || ({} as Policy);
 
-    const data: TableData = {
-        id: policyData?.id?.toString() || "1",
-        columns: {
-            title: policyData?.title || "",
-            description: policyData?.description || "",
-        },
-    };
-
     if (isLoading) return <Loading />;
     if (error) return <Error message={error?.message || "Unknown error"} />;
 
@@ -59,7 +50,7 @@ function PoliciesViewPage() {
                             fields: [
                                 {
                                     label: "Title",
-                                    value: data?.columns.title.toString(),
+                                    value: policyData?.title.toString(),
                                 },
                             ],
                         },
@@ -67,7 +58,7 @@ function PoliciesViewPage() {
                             fields: [
                                 {
                                     label: "Description",
-                                    value: data?.columns.description.toString(),
+                                    value: policyData?.description.toString(),
                                     colSpan: 3,
                                 },
                             ],

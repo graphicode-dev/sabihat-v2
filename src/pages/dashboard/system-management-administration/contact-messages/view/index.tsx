@@ -1,7 +1,6 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
 import { useParams } from "react-router-dom";
-import { TableData } from "../../../../../types/table";
 import { ENDPOINTS } from "../../../../../config/endpoints";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../../../components/ui/Loading";
@@ -39,24 +38,13 @@ function ContactMessagesViewPage() {
     const messageData =
         (contactMessage?.data as ContactMessage) || ({} as ContactMessage);
 
-    const data: TableData = {
-        id: messageData?.id?.toString() || "1",
-        columns: {
-            fullName: messageData?.fullName || "",
-            email: messageData?.emailAddress || "",
-            phoneNumber: messageData?.phoneNumber || "",
-            message: messageData?.message || "",
-            attachFile: messageData?.contactMessageFile || "",
-        },
-    };
-
     if (isLoading) return <Loading />;
     if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
         <PageLayout>
             <ViewCard
-                subtitle={data?.columns.fullName.toString()}
+                subtitle={messageData?.fullName.toString()}
                 variant="default"
                 data={{
                     rows: [
@@ -65,18 +53,18 @@ function ContactMessagesViewPage() {
                                 {
                                     label: "Full Name",
                                     value:
-                                        data?.columns.fullName?.toString() ||
-                                        "",
+                                        messageData?.fullName?.toString() || "",
                                 },
                                 {
                                     label: "Email",
                                     value:
-                                        data?.columns.email?.toString() || "",
+                                        messageData?.emailAddress?.toString() ||
+                                        "",
                                 },
                                 {
                                     label: "Phone Number",
                                     value:
-                                        data?.columns.phoneNumber?.toString() ||
+                                        messageData?.phoneNumber?.toString() ||
                                         "",
                                 },
                             ],
@@ -86,7 +74,7 @@ function ContactMessagesViewPage() {
                                 {
                                     label: "Message",
                                     value:
-                                        data?.columns.message?.toString() || "",
+                                        messageData?.message?.toString() || "",
                                     colSpan: 3,
                                 },
                             ],
@@ -95,8 +83,8 @@ function ContactMessagesViewPage() {
                             fields: [
                                 {
                                     label: "Attach File",
-                                    value: data?.columns.attachFile
-                                        ? data.columns.attachFile.toString()
+                                    value: messageData?.contactMessageFile
+                                        ? messageData.contactMessageFile.toString()
                                         : "",
                                     type: "file",
                                 },

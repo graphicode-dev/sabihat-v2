@@ -6,6 +6,7 @@ import { PartnerClassification } from "../pages/dashboard/system-management-admi
 import { Tax } from "../pages/dashboard/system-management-administration/tax/types";
 import { PaymentMethod } from "../pages/dashboard/system-management-administration/payment-methods";
 import { Policy } from "../pages/dashboard/system-management-administration/policies/types";
+import { TermsConditions } from "../pages/dashboard/system-management-administration/terms-conditions/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -170,6 +171,41 @@ export const ENDPOINTS = {
         add: (data: FormData) =>
             api
                 .post(`/policies`, data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    if (response.error) {
+                        throw response.error.details.errors;
+                    }
+                }),
+    },
+    termsConditions: {
+        getAll: (
+            page: number
+        ): Promise<ApiResponseWrapper<ApiResponse<TermsConditions>>> =>
+            api.get<ApiResponse<TermsConditions>>(
+                `/terms-conditions?page=${page}`
+            ),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: TermsConditions;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: TermsConditions;
+            }>(`/terms-conditions/${id}`),
+        add: (data: FormData) =>
+            api
+                .post(`/terms-conditions`, data, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "multipart/form-data",
