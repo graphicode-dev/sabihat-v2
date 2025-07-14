@@ -5,6 +5,7 @@ import { ContactMessage } from "../pages/dashboard/system-management-administrat
 import { PartnerClassification } from "../pages/dashboard/system-management-administration/partners-classification/types";
 import { Tax } from "../pages/dashboard/system-management-administration/tax/types";
 import { PaymentMethod } from "../pages/dashboard/system-management-administration/payment-methods";
+import { Policy } from "../pages/dashboard/system-management-administration/policies/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -126,8 +127,12 @@ export const ENDPOINTS = {
             }),
     },
     paymentMethods: {
-        getAll: (page: number): Promise<ApiResponseWrapper<ApiResponse<PaymentMethod>>> =>
-            api.get<ApiResponse<PaymentMethod>>(`/payment-methods?page=${page}`),
+        getAll: (
+            page: number
+        ): Promise<ApiResponseWrapper<ApiResponse<PaymentMethod>>> =>
+            api.get<ApiResponse<PaymentMethod>>(
+                `/payment-methods?page=${page}`
+            ),
         getOne: (
             id: string
         ): Promise<
@@ -142,5 +147,38 @@ export const ENDPOINTS = {
                 message: string;
                 data: PaymentMethod;
             }>(`/payment-methods/${id}`),
+    },
+    policies: {
+        getAll: (
+            page: number
+        ): Promise<ApiResponseWrapper<ApiResponse<Policy>>> =>
+            api.get<ApiResponse<Policy>>(`/policies?page=${page}`),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: Policy;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: Policy;
+            }>(`/policies/${id}`),
+        add: (data: FormData) =>
+            api
+                .post(`/policies`, data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    if (response.error) {
+                        throw response.error.details.errors;
+                    }
+                }),
     },
 };

@@ -4,20 +4,50 @@ import { useParams } from "react-router-dom";
 import { TableData } from "../../../../../types/table";
 import { useToast } from "../../../../../hooks/useToast";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { ENDPOINTS } from "../../../../../config/endpoints";
+import { Policy } from "../../../../../pages/dashboard/system-management-administration/policies/types";
+import Loading from "../../../../../components/ui/Loading";
+import Error from "../../../../../components/ui/Error";
+
+const usePolicyById = (id: string) => {
+    return useQuery({
+        queryKey: ["policy", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.policies.getOne(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
 
 function PoliciesViewPage() {
     const { id } = useParams();
     const { addToast, addAlertToast } = useToast();
     const navigate = useNavigate();
 
+    const { data: policy, isLoading, error } = usePolicyById(id || "");
+
+    const policyData = (policy?.data as Policy) || ({} as Policy);
+
     const data: TableData = {
-        id: "1",
+        id: policyData?.id?.toString() || "1",
         columns: {
-            title: "*****",
-            description:
-                "****************************************************************************************************",
+            title: policyData?.title || "",
+            description: policyData?.description || "",
         },
     };
+
+    if (isLoading) return <Loading />;
+    if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
         <PageLayout>

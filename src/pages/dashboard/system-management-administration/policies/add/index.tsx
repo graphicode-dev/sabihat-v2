@@ -8,6 +8,7 @@ import { z } from "zod";
 import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { useNavigate } from "react-router-dom";
+import { ENDPOINTS } from "../../../../../config/endpoints";
 
 type Policies = {
     id?: string;
@@ -42,53 +43,27 @@ function PoliciesAddPage() {
 
     const onSubmit = async (formData: Policies) => {
         setIsLoading(true);
-        try {
-            // Create FormData object for file upload
-            const apiFormData = new FormData();
+        const apiFormData = new FormData();
 
-            // Always append all fields, even if they're empty strings
-            // This ensures the API receives all fields
-            apiFormData.append("title", formData.title);
-            apiFormData.append("description", formData.description);
+        apiFormData.append("title", formData.title);
+        apiFormData.append("description", formData.description);
 
-            // Simulate API call success
-            // In a real app, you would send apiFormData to your backend
-            // const response = await api.post('/company', apiFormData);
-
-            addToast({
-                message: "Policy added successfully",
-                type: "success",
-                title: "Success!",
-            });
-
-            reset();
-            navigate(-1);
-        } catch (error: any) {
-            console.error("Error adding policy:", error);
-            if (error?.errors) {
-                // Map API error fields to our frontend field names
-                const mappedErrors: any = {};
-
-                if (error.errors.title) {
-                    mappedErrors.title = error.errors.title[0];
-                }
-
-                if (error.errors.description) {
-                    mappedErrors.description = error.errors.description[0];
-                }
-
-                console.log("Mapped errors:", mappedErrors);
-                setErrors(mappedErrors);
-            } else {
+        await ENDPOINTS.policies
+            .add(apiFormData)
+            .then(() => {
                 addToast({
-                    message: "An unexpected error occurred. Please try again.",
-                    type: "error",
-                    title: "Error!",
+                    message: "Policy added successfully",
+                    type: "success",
+                    title: "Success!",
                 });
-            }
-        } finally {
-            setIsLoading(false);
-        }
+                reset();
+                navigate(-1);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                return setErrors(error);
+            });
     };
 
     return (

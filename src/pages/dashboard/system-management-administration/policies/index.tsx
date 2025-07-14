@@ -1,10 +1,42 @@
 import { DynamicTable } from "../../../../components/table";
 import PageLayout from "../../../../layout/PageLayout";
-import { TableColumn, TableData } from "../../../../types/table";
-import { useNavigate } from "react-router-dom";
+import { TableColumn } from "../../../../types/table";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+    transformPaginatedDataToTableData,
+    useInfinitePaginatedQuery,
+} from "../../../../utils";
+import { Policy } from "./types";
+import { useEffect } from "react";
+import Loading from "../../../../components/ui/Loading";
+import Error from "../../../../components/ui/Error";
+
+const useInfinitePolicies = (
+    page: number = 1,
+    options?: { enabled?: boolean }
+) => {
+    return useInfinitePaginatedQuery<Policy>({
+        queryKey: ["policies", page.toString()],
+        endpointKey: "policies",
+        enabled: options?.enabled ?? true,
+    });
+};
 
 function PoliciesPage() {
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const currentPage = Number(searchParams.get("page")) || 1;
+
+    const {
+        data: policiesData,
+        error,
+        isLoading,
+        fetchNextPage,
+    } = useInfinitePolicies(currentPage);
+
+    const handlePageChange = (page: number) => {
+        setSearchParams({ page: page.toString() });
+    };
     const columns: TableColumn[] = [
         {
             id: "1",
@@ -18,54 +50,39 @@ function PoliciesPage() {
         },
     ];
 
-    const data: TableData[] = [
-        {
-            id: "1",
-            columns: {
-                title: "*****",
-                description: "*****",
-            },
-        },
-        {
-            id: "2",
-            columns: {
-                title: "*****",
-                description: "*****",
-            },
-        },
-        {
-            id: "3",
-            columns: {
-                title: "*****",
-                description: "*****",
-            },
-        },
-        {
-            id: "4",
-            columns: {
-                title: "*****",
-                description: "*****",
-            },
-        },
-        {
-            id: "5",
-            columns: {
-                title: "*****",
-                description: "*****",
-            },
-        },
-    ];
+    const flattenedData = transformPaginatedDataToTableData<Policy>(
+        policiesData,
+        (item) => ({
+            title: item.title,
+            description: item.description,
+            createdAt: new Date(item.createdAt).toLocaleDateString(),
+        })
+    );
+
+    useEffect(() => {
+        if (currentPage > 1 && policiesData?.pages.length === 1) {
+            fetchNextPage();
+        }
+    }, [currentPage, policiesData?.pages.length, fetchNextPage]);
+
+    if (isLoading) return <Loading />;
+    if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
         <PageLayout>
             <DynamicTable
                 title="Policies"
-                data={data}
+                data={flattenedData}
                 columns={columns}
                 addLabel="Add Policy"
                 onAddClick={() =>
                     navigate("/system-management-administration/policies/add")
                 }
+                itemsPerPage={policiesData?.pages[0]?.perPage}
+                currentPage={currentPage}
+                lastPage={policiesData?.pages[0]?.lastPage}
+                totalCount={policiesData?.pages[0]?.totalCount}
+                onPageChange={handlePageChange}
             />
         </PageLayout>
     );
