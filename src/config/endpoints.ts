@@ -4,7 +4,7 @@ import { ApiResponse } from "../types";
 import { ContactMessage } from "../pages/dashboard/system-management-administration/contact-messages/types";
 import { PartnerClassification } from "../pages/dashboard/system-management-administration/partners-classification/types";
 import { Tax } from "../pages/dashboard/system-management-administration/tax/types";
-import { PaymentMethod } from "../pages/dashboard/system-management-administration/payment-methods";
+import { PaymentMethod } from "../pages/dashboard/system-management-administration/payment-methods/types";
 import { Policy } from "../pages/dashboard/system-management-administration/policies/types";
 import { TermsConditions } from "../pages/dashboard/system-management-administration/terms-conditions/types";
 
@@ -148,6 +148,19 @@ export const ENDPOINTS = {
                 message: string;
                 data: PaymentMethod;
             }>(`/payment-methods/${id}`),
+        add: (data: FormData) =>
+            api
+                .post(`/payment-methods`, data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    if (response.error) {
+                        throw response.error.details.errors;
+                    }
+                }),
     },
     policies: {
         getAll: (

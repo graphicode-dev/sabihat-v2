@@ -6,11 +6,10 @@ import {
     transformPaginatedDataToTableData,
     useInfinitePaginatedQuery,
 } from "../../../../utils";
-import { PaymentMethod } from ".";
+import { PaymentMethod } from "./types";
 import { useEffect } from "react";
 import Loading from "../../../../components/ui/Loading";
 import Error from "../../../../components/ui/Error";
-import React from "react";
 
 const useInfinitePaymentMethods = (
     page: number = 1,
@@ -77,9 +76,11 @@ function PaymentMethodsPage() {
     const flattenedData = transformPaginatedDataToTableData<PaymentMethod>(
         paymentMethodsData,
         (item) => ({
+            accountName: item.name,
             accountType: item.accountType,
-            currency: item.currency,
+            currency: item.currency ? item.currency.code : "-",
             accountNumber: item.accountNumber,
+            accountStatus: item.status ? "Active" : "Inactive",
             note: item.note,
         })
     );

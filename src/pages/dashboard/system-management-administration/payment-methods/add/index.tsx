@@ -9,26 +9,23 @@ import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { useNavigate } from "react-router-dom";
 import { SearchedDropDown } from "../../../../../components/SearchedDropDown";
+import { ENDPOINTS } from "../../../../../config/endpoints";
 
 type PaymentMethods = {
-    id?: string;
-    partner: string;
-    accountName: string;
+    name: string;
+    businessPartnerId: string;
+    currencyId: string;
     accountType: string;
-    currency: string;
     accountNumber: string;
-    accountStatus: string;
     note: string;
 };
 
 const paymentMethodsSchema = z.object({
-    id: z.string().optional(),
-    partner: z.string(),
-    accountName: z.string(),
+    name: z.string(),
+    businessPartnerId: z.string(),
+    currencyId: z.string(),
     accountType: z.string(),
-    currency: z.string(),
     accountNumber: z.string(),
-    accountStatus: z.string(),
     note: z.string(),
 });
 
@@ -37,12 +34,11 @@ function PaymentMethodsAddPage() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<PaymentMethods>({
-        partner: "",
-        accountName: "",
+        name: "",
+        businessPartnerId: "",
+        currencyId: "",
         accountType: "",
-        currency: "",
         accountNumber: "",
-        accountStatus: "",
         note: "",
     });
     const [selectedAccountType, setSelectedAccountType] = useState<
@@ -59,13 +55,11 @@ function PaymentMethodsAddPage() {
         {
             resolver: zodResolver(paymentMethodsSchema),
             defaultValues: {
-                id: "",
-                partner: "",
-                accountName: "",
+                name: "",
+                businessPartnerId: "",
+                currencyId: "",
                 accountType: "",
-                currency: "",
                 accountNumber: "",
-                accountStatus: "",
                 note: "",
             },
             mode: "onChange",
@@ -74,80 +68,64 @@ function PaymentMethodsAddPage() {
 
     const onSubmit = async (formData: PaymentMethods) => {
         setIsLoading(true);
-        try {
-            // Create FormData object for file upload
-            const apiFormData = new FormData();
+        const apiFormData = new FormData();
 
-            // Always append all fields, even if they're empty strings
-            // This ensures the API receives all fields
-            apiFormData.append("partner", formData.partner);
-            apiFormData.append("accountName", formData.accountName);
-            apiFormData.append("accountType", formData.accountType);
-            apiFormData.append("currency", formData.currency);
-            apiFormData.append("accountNumber", formData.accountNumber);
-            apiFormData.append("accountStatus", formData.accountStatus);
-            apiFormData.append("note", formData.note);
+        apiFormData.append("name", formData.name);
+        apiFormData.append("businessPartnerId", formData.businessPartnerId);
+        apiFormData.append("currencyId", formData.currencyId);
+        apiFormData.append("accountType", formData.accountType);
+        apiFormData.append("accountNumber", formData.accountNumber);
+        apiFormData.append("note", formData.note);
 
-            // Simulate API call success
-            // In a real app, you would send apiFormData to your backend
-            // const response = await api.post('/company', apiFormData);
-
-            addToast({
-                message: "Payment method added successfully",
-                type: "success",
-                title: "Success!",
-            });
-
-            reset();
-            setSelectedAccountType(null);
-            setSelectedCurrency(null);
-            setSelectedAccountStatus(null);
-            navigate(-1);
-        } catch (error: any) {
-            console.error("Error adding payment method:", error);
-            if (error?.errors) {
-                // Map API error fields to our frontend field names
-                const mappedErrors: any = {};
-
-                if (error.errors.nameClass) {
-                    mappedErrors.nameClass = error.errors.nameClass[0];
-                }
-
-                console.log("Mapped errors:", mappedErrors);
-                setErrors(mappedErrors);
-            } else {
+        await ENDPOINTS.paymentMethods
+            .add(apiFormData)
+            .then(() => {
                 addToast({
-                    message: "An unexpected error occurred. Please try again.",
-                    type: "error",
-                    title: "Error!",
+                    message: "Payment method added successfully",
+                    type: "success",
+                    title: "Success!",
                 });
-            }
-        } finally {
-            setIsLoading(false);
-        }
+                reset();
+                navigate(-1);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                return setErrors(error);
+            });
     };
 
     return (
         <PageLayout>
             <FormLayout handleSubmit={handleSubmit} handleFormSubmit={onSubmit}>
                 <FormFieldsLayout title="Add" cols="3">
-                    {/* partner */}
+                    {/* name */}
                     <FormInput
-                        name="partner"
+                        name="name"
                         control={control}
-                        label="Partner"
+                        label="Name"
                         type="text"
-                        error={errors.partner}
+                        error={errors.name}
                         colSpan={1}
                     />
 
-                    {/* accountName */}
+                    {/* businessPartnerId */}
                     <FormInput
-                        name="accountName"
+                        name="businessPartnerId"
                         control={control}
-                        label="Account Name"
+                        label="Business Partner Id"
                         type="text"
-                        error={errors.accountName}
+                        error={errors.businessPartnerId}
+                        colSpan={1}
+                    />
+
+                    {/* currencyId */}
+                    <FormInput
+                        name="currencyId"
+                        control={control}
+                        label="Currency Id"
+                        type="text"
+                        error={errors.currencyId}
                         colSpan={1}
                     />
 

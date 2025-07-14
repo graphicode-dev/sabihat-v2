@@ -1,27 +1,44 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
 import { useParams } from "react-router-dom";
-import { TableData } from "../../../../../types/table";
 import { useToast } from "../../../../../hooks/useToast";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { ENDPOINTS } from "../../../../../config/endpoints";
+import Loading from "../../../../../components/ui/Loading";
+import Error from "../../../../../components/ui/Error";
+import { PaymentMethod } from "../types";
+
+const usePaymentMethodById = (id: string) => {
+    return useQuery({
+        queryKey: ["payment-method", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.paymentMethods.getOne(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
 
 function PaymentMethodsViewPage() {
     const { id } = useParams();
     const { addToast, addAlertToast } = useToast();
     const navigate = useNavigate();
 
-    const data: TableData = {
-        id: "1",
-        columns: {
-            partner: "*******",
-            accountName: "*******",
-            accountType: "*******",
-            currency: "*******",
-            accountNumber: "*******",
-            accountStatus: "*******",
-            note: "*******",
-        },
-    };
+    const { data, error, isLoading } = usePaymentMethodById(id || "");
+    const paymentMethodData =
+        (data?.data as PaymentMethod) || ({} as PaymentMethod);
+
+    if (isLoading) return <Loading />;
+    if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
         <PageLayout>
@@ -33,27 +50,27 @@ function PaymentMethodsViewPage() {
                             fields: [
                                 {
                                     label: "Partner",
-                                    value: data?.columns.partner.toString(),
+                                    value: paymentMethodData?.businessPartner.toString(),
                                 },
                                 {
                                     label: "Account Name",
-                                    value: data?.columns.accountName.toString(),
+                                    value: paymentMethodData?.name.toString(),
                                 },
                                 {
                                     label: "Account Type",
-                                    value: data?.columns.accountType.toString(),
+                                    value: paymentMethodData?.accountType.toString(),
                                 },
                                 {
                                     label: "Currency",
-                                    value: data?.columns.currency.toString(),
+                                    value: paymentMethodData?.currency.toString(),
                                 },
                                 {
                                     label: "Account Number",
-                                    value: data?.columns.accountNumber.toString(),
+                                    value: paymentMethodData?.accountNumber.toString(),
                                 },
                                 {
                                     label: "Account Status",
-                                    value: data?.columns.accountStatus.toString(),
+                                    value: paymentMethodData?.status.toString(),
                                 },
                             ],
                         },
@@ -61,7 +78,7 @@ function PaymentMethodsViewPage() {
                             fields: [
                                 {
                                     label: "Note",
-                                    value: data?.columns.note.toString(),
+                                    value: paymentMethodData?.note.toString(),
                                     colSpan: 3,
                                 },
                             ],
@@ -82,7 +99,8 @@ function PaymentMethodsViewPage() {
                                 onClick: () => {
                                     addToast({
                                         type: "success",
-                                        message: "Payment method deleted successfully",
+                                        message:
+                                            "Payment method deleted successfully",
                                         title: "Success!",
                                     });
                                     navigate(-1);
