@@ -8,21 +8,16 @@ import { z } from "zod";
 import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { useNavigate } from "react-router-dom";
+import { ENDPOINTS } from "../../../../../config/endpoints";
 
 type Currency = {
-    id?: string;
-    currencyName?: string;
-    currencyCode?: string;
-    currencyRate?: string;
-    lastDate?: string;
+    name: string;
+    code: string;
 };
 
 const currencySchema = z.object({
-    id: z.string().optional(),
-    currencyName: z.string().optional(),
-    currencyCode: z.string().optional(),
-    currencyRate: z.string().optional(),
-    lastDate: z.string().optional(),
+    name: z.string(),
+    code: z.string(),
 });
 
 function CurrencyAddPage() {
@@ -30,128 +25,68 @@ function CurrencyAddPage() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<Currency>({
-        currencyName: "",
-        currencyCode: "",
-        currencyRate: "",
-        lastDate: "",
+        name: "",
+        code: "",
     });
 
     const { control, handleSubmit, reset, formState } = useForm<Currency>({
         resolver: zodResolver(currencySchema),
         defaultValues: {
-            id: "",
-            currencyName: "",
-            currencyCode: "",
-            currencyRate: "",
-            lastDate: "",
+            name: "",
+            code: "",
         },
         mode: "onChange",
     });
 
     const onSubmit = async (formData: Currency) => {
         setIsLoading(true);
-        try {
-            // Create FormData object for file upload
-            const apiFormData = new FormData();
+        const apiFormData = new FormData();
 
-            // Always append all fields, even if they're empty strings
-            // This ensures the API receives all fields
-            if (formData.currencyName) {
-                apiFormData.append("currencyName", formData.currencyName);
-            }
-            if (formData.currencyCode) {
-                apiFormData.append("currencyCode", formData.currencyCode);
-            }
-            if (formData.currencyRate) {
-                apiFormData.append("currencyRate", formData.currencyRate);
-            }
-            if (formData.lastDate) {
-                apiFormData.append("lastDate", formData.lastDate);
-            }
-
-            // Simulate API call success
-            // In a real app, you would send apiFormData to your backend
-            // const response = await api.post('/company', apiFormData);
-
-            addToast({
-                message: "Currency added successfully",
-                type: "success",
-                title: "Success!",
-            });
-
-            reset();
-            navigate(-1);
-        } catch (error: any) {
-            console.error("Error adding currency:", error);
-            if (error?.errors) {
-                // Map API error fields to our frontend field names
-                const mappedErrors: any = {};
-
-                if (error.errors.currencyName) {
-                    mappedErrors.currencyName = error.errors.currencyName[0];
-                }
-                if (error.errors.currencyCode) {
-                    mappedErrors.currencyCode = error.errors.currencyCode[0];
-                }
-                if (error.errors.currencyRate) {
-                    mappedErrors.currencyRate = error.errors.currencyRate[0];
-                }
-                if (error.errors.lastDate) {
-                    mappedErrors.lastDate = error.errors.lastDate[0];
-                }
-
-                console.log("Mapped errors:", mappedErrors);
-                setErrors(mappedErrors);
-            } else {
-                addToast({
-                    message: "An unexpected error occurred. Please try again.",
-                    type: "error",
-                    title: "Error!",
-                });
-            }
-        } finally {
-            setIsLoading(false);
+        if (formData.name) {
+            apiFormData.append("name", formData.name);
         }
+        if (formData.code) {
+            apiFormData.append("code", formData.code);
+        }
+
+        await ENDPOINTS.currency
+            .add(apiFormData)
+            .then(() => {
+                addToast({
+                    message: "Currency added successfully",
+                    type: "success",
+                    title: "Success!",
+                });
+                reset();
+                navigate(-1);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                return setErrors(error);
+            });
     };
 
     return (
         <PageLayout>
             <FormLayout handleSubmit={handleSubmit} handleFormSubmit={onSubmit}>
                 <FormFieldsLayout title="Add">
-                    {/* currencyName */}
+                    {/* name */}
                     <FormInput
-                        name="currencyName"
+                        name="name"
                         control={control}
-                        label="Currency Name"
+                        label="Name"
                         type="text"
-                        error={errors.currencyName}
+                        error={errors.name}
                     />
 
-                    {/* currencyCode */}
+                    {/* code */}
                     <FormInput
-                        name="currencyCode"
+                        name="code"
                         control={control}
-                        label="Currency Code"
+                        label="Code"
                         type="text"
-                        error={errors.currencyCode}
-                    />
-
-                    {/* currencyRate */}
-                    <FormInput
-                        name="currencyRate"
-                        control={control}
-                        label="Currency Rate"
-                        type="text"
-                        error={errors.currencyRate}
-                    />
-
-                    {/* lastDate */}
-                    <FormInput
-                        name="lastDate"
-                        control={control}
-                        label="Last Date"
-                        type="date"
-                        error={errors.lastDate}
+                        error={errors.code}
                     />
                 </FormFieldsLayout>
 

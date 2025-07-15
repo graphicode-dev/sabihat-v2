@@ -11,6 +11,20 @@ import {
     selectLoading,
 } from "../store/slices/auth/authSlice";
 import CalendarDemo from "../components/ui/Calendar/CalendarDemo";
+
+// Import custom components for direct routes
+const CurrencyRateViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/currency/view/rate/view"
+        )
+);
+const CurrencyRateAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/currency/view/rate/add"
+        )
+);
 const DashboardWrapper = lazy(
     () => import("../pages/dashboard/DashboardWrapper")
 );
@@ -210,6 +224,16 @@ function AppRoutes() {
                                     })
                                     .filter(Boolean) // Remove null entries
                         )}
+
+                        {/* Custom routes for specific components */}
+                        <Route
+                            path="system-management-administration/currency/view/:id/view_rate/:rowId"
+                            element={<CurrencyRateViewPage />}
+                        />
+                        <Route
+                            path="system-management-administration/currency/view/:id/add_rate"
+                            element={<CurrencyRateAddPage />}
+                        />
                     </Route>
                 </Route>
 

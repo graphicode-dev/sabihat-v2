@@ -76,6 +76,18 @@ const CurrencyEditPage = lazy(
             "../pages/dashboard/system-management-administration/currency/edit"
         )
 );
+const CurrencyRateViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/currency/view/rate/view"
+        )
+);
+const CurrencyRateAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/currency/view/rate/add"
+        )
+);
 // #endregion Currency
 
 // #region Payment Methods
@@ -1309,6 +1321,8 @@ const componentRegistry: Record<string, any> = {
     currency: {
         main: CurrencyPage,
         view: CurrencyViewPage,
+        view_rate: CurrencyRateViewPage,
+        add_rate: CurrencyRateAddPage,
         add: CurrencyAddPage,
         edit: CurrencyEditPage,
     },
@@ -1410,17 +1424,18 @@ export const toKebabCase = (str: string): string => {
 };
 
 // Function to properly format icon URLs
-const formatIconUrl = (iconPath: string, baseURL: string, enableLogging: boolean = true): string => {
+const formatIconUrl = (
+    iconPath: string,
+    baseURL: string,
+    enableLogging: boolean = true
+): string => {
     // If iconPath is empty or undefined, return empty string
     if (!iconPath) {
         return "";
     }
 
     // If the icon path is already a full URL, return it as is
-    if (
-        iconPath.startsWith("http://") ||
-        iconPath.startsWith("https://")
-    ) {
+    if (iconPath.startsWith("http://") || iconPath.startsWith("https://")) {
         if (enableLogging) {
             console.log("Icon is already a full URL:", iconPath);
         }
@@ -1569,7 +1584,10 @@ const fetchFeatures = async (): Promise<Feature[]> => {
     try {
         const response = await api.get("/public-operations/features");
         // Type assertion to handle the unknown type of response.data
-        const responseData = response.data as { success: boolean; data: Feature[] };
+        const responseData = response.data as {
+            success: boolean;
+            data: Feature[];
+        };
         return responseData.success ? responseData.data : [];
     } catch (error) {
         console.error("Error fetching features:", error);
@@ -1584,7 +1602,10 @@ const fetchActivities = async (featureId: number): Promise<Activity[]> => {
             `/public-operations/activities/${featureId}`
         );
         // Type assertion to handle the unknown type of response.data
-        const responseData = response.data as { success: boolean; data: Activity[] };
+        const responseData = response.data as {
+            success: boolean;
+            data: Activity[];
+        };
         return responseData.success ? responseData.data : [];
     } catch (error) {
         console.error(
@@ -1603,7 +1624,7 @@ let navigationCache: {
 } = {
     data: null,
     timestamp: 0,
-    promise: null
+    promise: null,
 };
 
 // Cache expiration time in milliseconds (5 minutes)
@@ -1617,7 +1638,10 @@ const buildDynamicNavigation = async (): Promise<TabLink[]> => {
 
     // Check if we have valid cached data
     const now = Date.now();
-    if (navigationCache.data && (now - navigationCache.timestamp) < CACHE_EXPIRATION) {
+    if (
+        navigationCache.data &&
+        now - navigationCache.timestamp < CACHE_EXPIRATION
+    ) {
         return navigationCache.data;
     }
 
@@ -1626,7 +1650,7 @@ const buildDynamicNavigation = async (): Promise<TabLink[]> => {
         try {
             // Fetch features from API
             let features = await fetchFeatures();
-            
+
             // Check if ship_trip_management feature exists, if not add it from static data
             const shipTripFeatureExists = features.some(
                 (f) => f.name === "ship_trip_management"
@@ -1639,41 +1663,41 @@ const buildDynamicNavigation = async (): Promise<TabLink[]> => {
             // Get the base URL for icons
             const baseURL = import.meta.env.VITE_API_BASE_URL || "";
 
-        for (const feature of features) {
-            const activities = await fetchActivities(feature.id);
-            const featureKebab = toKebabCase(feature.name);
+            for (const feature of features) {
+                const activities = await fetchActivities(feature.id);
+                const featureKebab = toKebabCase(feature.name);
 
-            // Format the icon URL properly
-            const iconUrl = feature.img
-                ? formatIconUrl(feature.img, baseURL, false) // Pass false to disable logging
-                : "";
+                // Format the icon URL properly
+                const iconUrl = feature.img
+                    ? formatIconUrl(feature.img, baseURL, false) // Pass false to disable logging
+                    : "";
 
-            const featureLinks = activities.map((activity) => {
-                const activityKebab = toKebabCase(activity.name);
-                return {
-                    title: activity.displayName,
-                    path: `/${featureKebab}/${activityKebab}`,
-                    component: getComponentForActivity(activity.name),
-                    subLinks: generateStandardSublinks(
-                        feature.name,
-                        activity.name
-                    ),
-                };
-            });
+                const featureLinks = activities.map((activity) => {
+                    const activityKebab = toKebabCase(activity.name);
+                    return {
+                        title: activity.displayName,
+                        path: `/${featureKebab}/${activityKebab}`,
+                        component: getComponentForActivity(activity.name),
+                        subLinks: generateStandardSublinks(
+                            feature.name,
+                            activity.name
+                        ),
+                    };
+                });
 
-            navigationConfig.push({
-                icon: iconUrl,
-                title: feature.displayName,
-                path: `/${featureKebab}`,
-                sideBar: {
-                    titleSection: {
-                        icon: iconUrl,
-                        title: feature.displayName,
+                navigationConfig.push({
+                    icon: iconUrl,
+                    title: feature.displayName,
+                    path: `/${featureKebab}`,
+                    sideBar: {
+                        titleSection: {
+                            icon: iconUrl,
+                            title: feature.displayName,
+                        },
+                        links: featureLinks,
                     },
-                    links: featureLinks,
-                },
-            });
-        }
+                });
+            }
 
             // Update cache with the new data
             navigationCache.data = navigationConfig;
@@ -1696,7 +1720,7 @@ const clearNavigationCache = () => {
     navigationCache = {
         data: null,
         timestamp: 0,
-        promise: null
+        promise: null,
     };
 };
 

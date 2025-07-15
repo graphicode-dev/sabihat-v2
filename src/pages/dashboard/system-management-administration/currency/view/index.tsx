@@ -1,96 +1,126 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
-import { useParams } from "react-router-dom";
-import { TableColumn, TableData } from "../../../../../types/table";
+import { useParams, useSearchParams } from "react-router-dom";
+import { TableColumn } from "../../../../../types/table";
 import { DynamicTable } from "../../../../../components/table";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../../../hooks/useToast";
+import { useQuery } from "@tanstack/react-query";
+import { ENDPOINTS } from "../../../../../config/endpoints";
+import Loading from "../../../../../components/ui/Loading";
+import Error from "../../../../../components/ui/Error";
+import { Currency, CurrencyRate } from "../types";
+import {
+    transformPaginatedDataToTableData,
+    useInfinitePaginatedQuery,
+} from "../../../../../utils";
+import { useEffect } from "react";
+
+const useInfiniteCurrencyRates = (
+    page: number = 1,
+    currencyId: string,
+    options?: { enabled?: boolean }
+) => {
+    return useInfinitePaginatedQuery<CurrencyRate>({
+        queryKey: ["currencyRates", currencyId, page.toString()],
+        endpointKey: "currencyRate",
+        enabled: options?.enabled ?? true,
+        additionalParams: [currencyId],
+    });
+};
+
+const useCurrencyById = (id: string) => {
+    return useQuery({
+        queryKey: ["currency", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.currency.getOne(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
 
 function CurrencyViewPage() {
+    const { id } = useParams();
     const navigate = useNavigate();
     const { addAlertToast, addToast } = useToast();
-    const { id } = useParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const currentPage = Number(searchParams.get("page")) || 1;
 
-    const OLD_HISTORY_COLUMNS: TableColumn[] = [
+    const {
+        data: currencyRatesData,
+        error: currencyRatesError,
+        isLoading: currencyRatesLoading,
+        fetchNextPage,
+        isFetchingNextPage,
+    } = useInfiniteCurrencyRates(currentPage, id || "");
+
+    const flattenedData = transformPaginatedDataToTableData<CurrencyRate>(
+        currencyRatesData,
+        (item) => ({
+            currencyRate: item.rate,
+            effectiveDate: item.createdAt,
+        })
+    );
+
+    const {
+        data: currency,
+        isLoading: currencyLoading,
+        error: currencyError,
+    } = useCurrencyById(id || "");
+
+    const currencyData = (currency?.data as Currency) || ({} as Currency);
+
+    const handlePageChange = (page: number) => {
+        if (page === currentPage) return;
+        setSearchParams({ page: page.toString() });
+    };
+
+    const TABLE_COLUMNS: TableColumn[] = [
         {
-            id: "1",
+            id: "currencyName",
             header: "Currency Name",
             accessorKey: "currencyName",
         },
         {
-            id: "2",
+            id: "currencyCode",
             header: "Currency Code",
             accessorKey: "currencyCode",
         },
         {
-            id: "3",
+            id: "currencyRate",
             header: "Currency Rate",
             accessorKey: "currencyRate",
         },
         {
-            id: "4",
-            header: "Last Date",
-            accessorKey: "lastDate",
+            id: "effectiveDate",
+            header: "Effective Date",
+            accessorKey: "effectiveDate",
         },
     ];
 
-    const OLD_HISTORY_DATA: TableData[] = [
-        {
-            id: "1",
-            columns: {
-                currencyName: "**********",
-                currencyCode: "**********",
-                currencyRate: "**********",
-                lastDate: "**********",
-            },
-        },
-        {
-            id: "2",
-            columns: {
-                currencyName: "**********",
-                currencyCode: "**********",
-                currencyRate: "**********",
-                lastDate: "**********",
-            },
-        },
-        {
-            id: "3",
-            columns: {
-                currencyName: "**********",
-                currencyCode: "**********",
-                currencyRate: "**********",
-                lastDate: "**********",
-            },
-        },
-        {
-            id: "4",
-            columns: {
-                currencyName: "**********",
-                currencyCode: "**********",
-                currencyRate: "**********",
-                lastDate: "**********",
-            },
-        },
-        {
-            id: "5",
-            columns: {
-                currencyName: "**********",
-                currencyCode: "**********",
-                currencyRate: "**********",
-                lastDate: "**********",
-            },
-        },
-    ];
+    useEffect(() => {
+        if (
+            currentPage > 1 &&
+            currencyRatesData?.pages &&
+            currencyRatesData?.pages.length < currentPage
+        ) {
+            fetchNextPage();
+        }
+    }, [currentPage, currencyRatesData?.pages, fetchNextPage]);
 
-    const data: TableData = {
-        id: "1",
-        columns: {
-            currencyName: "**********",
-            currencyCode: "**********",
-            currencyRate: "**********",
-            lastDate: "**********",
-        },
-    };
+    if (currencyLoading || (currencyRatesLoading && !currencyRatesData))
+        return <Loading />;
+    if (currencyError || currencyRatesError)
+        return <Error message={currencyError?.message || "Unknown error"} />;
 
     return (
         <PageLayout className="flex flex-col gap-2" showBorder noPadding>
@@ -103,19 +133,19 @@ function CurrencyViewPage() {
                                 fields: [
                                     {
                                         label: "Currency Name",
-                                        value: data?.columns.currencyName.toString(),
+                                        value: currencyData?.name.toString(),
                                     },
                                     {
                                         label: "Currency Code",
-                                        value: data?.columns.currencyCode.toString(),
+                                        value: currencyData?.code.toString(),
                                     },
                                     {
                                         label: "Currency Rate",
-                                        value: data?.columns.currencyRate.toString(),
+                                        value: currencyData?.lastRate.rate.toString(),
                                     },
                                     {
-                                        label: "Last Date",
-                                        value: data?.columns.lastDate.toString(),
+                                        label: "Effective Date",
+                                        value: currencyData?.lastRate.createdAt.toString(),
                                     },
                                 ],
                             },
@@ -161,10 +191,30 @@ function CurrencyViewPage() {
             <div className="p-5">
                 <DynamicTable
                     title="Old History"
-                    data={OLD_HISTORY_DATA}
-                    columns={OLD_HISTORY_COLUMNS}
-                    disableRowClick
+                    data={flattenedData}
+                    columns={TABLE_COLUMNS}
+                    addLabel="Add Rate"
+                    onAddClick={() =>
+                        navigate(
+                            `/system-management-administration/currency/view/${id}/add_rate`
+                        )
+                    }
+                    onRowClick={(rowId) =>
+                        navigate(
+                            `/system-management-administration/currency/view/${id}/view_rate/${rowId}`
+                        )
+                    }
+                    itemsPerPage={currencyRatesData?.pages[0]?.perPage}
+                    currentPage={currentPage}
+                    lastPage={currencyRatesData?.pages[0]?.lastPage}
+                    totalCount={currencyRatesData?.pages[0]?.totalCount}
+                    onPageChange={handlePageChange}
                 />
+                {isFetchingNextPage && (
+                    <div className="flex justify-center mt-4">
+                        <Loading />
+                    </div>
+                )}
             </div>
         </PageLayout>
     );

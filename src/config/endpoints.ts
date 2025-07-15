@@ -7,6 +7,10 @@ import { Tax } from "../pages/dashboard/system-management-administration/tax/typ
 import { PaymentMethod } from "../pages/dashboard/system-management-administration/payment-methods/types";
 import { Policy } from "../pages/dashboard/system-management-administration/policies/types";
 import { TermsConditions } from "../pages/dashboard/system-management-administration/terms-conditions/types";
+import {
+    Currency,
+    CurrencyRate,
+} from "../pages/dashboard/system-management-administration/currency/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -219,6 +223,75 @@ export const ENDPOINTS = {
         add: (data: FormData) =>
             api
                 .post(`/terms-conditions`, data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    if (response.error) {
+                        throw response.error.details.errors;
+                    }
+                }),
+    },
+    currency: {
+        getAll: (
+            page: number
+        ): Promise<ApiResponseWrapper<ApiResponse<Currency>>> =>
+            api.get<ApiResponse<Currency>>(`/currencies?page=${page}`),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: Currency;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: Currency;
+            }>(`/currencies/${id}`),
+        add: (data: FormData) =>
+            api
+                .post(`/currencies`, data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    if (response.error) {
+                        throw response.error.details.errors;
+                    }
+                }),
+    },
+    currencyRate: {
+        getAll: (
+            page: number,
+            currencyId: string
+        ): Promise<ApiResponseWrapper<ApiResponse<CurrencyRate>>> =>
+            api.get<ApiResponse<CurrencyRate>>(
+                `/currencies/rates/currency/${currencyId}?page=${page}`
+            ),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: CurrencyRate;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: CurrencyRate;
+            }>(`/currencies/rates/${id}`),
+        add: (data: FormData) =>
+            api
+                .post(`/currencies/rates`, data, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "multipart/form-data",

@@ -115,7 +115,8 @@ type Methods = "getAll" | "getOne" | "add" | "update" | "delete";
 export const fetchPaginatedData = async <T>(
     page: number,
     endpointKey: keyof typeof ENDPOINTS,
-    method: Methods = "getAll"
+    method: Methods = "getAll",
+    additionalParams?: any[]
 ): Promise<PageData<T>> => {
     try {
         // Get the endpoint from the ENDPOINTS object
@@ -124,8 +125,10 @@ export const fetchPaginatedData = async <T>(
             throw new Error(`Endpoint ${endpointKey}.${method} not found`);
         }
 
-        // Call the API method with the page parameter
-        const response = await endpoint[method](page);
+        // Call the API method with the page parameter and any additional parameters
+        const response = additionalParams
+            ? await endpoint[method](page, ...additionalParams)
+            : await endpoint[method](page);
 
         // Validate the response structure
         if (!response.data?.success || !response.data?.data) {
@@ -164,6 +167,7 @@ export const useInfinitePaginatedQuery = <T>(options: {
     staleTime?: number;
     retry?: number;
     retryDelay?: number;
+    additionalParams?: any[];
 }) => {
     const {
         queryKey,
@@ -173,13 +177,19 @@ export const useInfinitePaginatedQuery = <T>(options: {
         staleTime = 5 * 60 * 1000, // 5 minutes default
         retry = 1,
         retryDelay = 1000,
+        additionalParams,
     } = options;
 
     // Use the imported useInfiniteQuery from react-query
     return useInfiniteQuery({
         queryKey: Array.isArray(queryKey) ? queryKey : [queryKey],
         queryFn: async ({ pageParam = 1 }) => {
-            return fetchPaginatedData<T>(pageParam, endpointKey, method);
+            return fetchPaginatedData<T>(
+                pageParam,
+                endpointKey,
+                method,
+                additionalParams
+            );
         },
         getNextPageParam: (lastPage: PageData<T>) => {
             return lastPage.hasMore ? lastPage.currentPage + 1 : undefined;
