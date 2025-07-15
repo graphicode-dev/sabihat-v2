@@ -2,10 +2,34 @@ import { useNavigate } from "react-router-dom";
 import { DynamicTable } from "../../../../components/table";
 import Tabs from "../../../../components/ui/Tabs";
 import PageLayout from "../../../../layout/PageLayout";
-import { TableColumn, TableData } from "../../../../types/table";
+import { TableColumn } from "../../../../types/table";
+import { useQuery } from "@tanstack/react-query";
+import { ENDPOINTS } from "../../../../config/endpoints";
+import { DataResponse } from "../../../../types";
+import Loading from "../../../../components/ui/Loading";
+import Error from "../../../../components/ui/Error";
+import { TicketStatus } from "./types";
+
+const useTicketRules = () => {
+    return useQuery({
+        queryKey: ["ticketRules"],
+        queryFn: async () => {
+            const response = await ENDPOINTS.ticketRules.getAll();
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            const typedResponse = response.data as DataResponse<TicketStatus>;
+            return typedResponse.data || [];
+        },
+    });
+};
 
 function TicketRulesPage() {
     const navigate = useNavigate();
+    const { data: ticketRules = [], error, isLoading } = useTicketRules();
+
     const voidColumns: TableColumn[] = [
         {
             id: "ruleName",
@@ -32,379 +56,64 @@ function TicketRulesPage() {
             header: "Penalty Value",
             accessorKey: "penaltyValue",
         },
-    ];
-    const voidData: TableData[] = [
         {
-            id: "1",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
+            id: "penaltyBaseAmount",
+            header: "Penalty Base Amount",
+            accessorKey: "penaltyBaseAmount",
         },
         {
-            id: "2",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-        {
-            id: "3",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-        {
-            id: "4",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-        {
-            id: "5",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
+            id: "taxRefund",
+            header: "Tax Refund",
+            accessorKey: "taxRefund",
         },
     ];
 
-    const refundColumns: TableColumn[] = [
-        {
-            id: "ruleName",
-            header: "Rule Name",
-            accessorKey: "ruleName",
-        },
-        {
-            id: "timing",
-            header: "Timing",
-            accessorKey: "timing",
-        },
-        {
-            id: "departureTolerance",
-            header: "Departure Tolerance",
-            accessorKey: "departureTolerance",
-        },
-        {
-            id: "penaltyType",
-            header: "Penalty Type",
-            accessorKey: "penaltyType",
-        },
-        {
-            id: "penaltyValue",
-            header: "Penalty Value",
-            accessorKey: "penaltyValue",
-        },
-    ];
-    const refundData: TableData[] = [
-        {
-            id: "1",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-        {
-            id: "2",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-        {
-            id: "3",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-        {
-            id: "4",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-        {
-            id: "5",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-    ];
-
-    const noShowColumns: TableColumn[] = [
-        {
-            id: "ruleName",
-            header: "Rule Name",
-            accessorKey: "ruleName",
-        },
-        {
-            id: "timing",
-            header: "Timing",
-            accessorKey: "timing",
-        },
-        {
-            id: "departureTolerance",
-            header: "Departure Tolerance",
-            accessorKey: "departureTolerance",
-        },
-        {
-            id: "penaltyType",
-            header: "Penalty Type",
-            accessorKey: "penaltyType",
-        },
-        {
-            id: "penaltyValue",
-            header: "Penalty Value",
-            accessorKey: "penaltyValue",
-        },
-    ];
-    const noShowData: TableData[] = [
-        {
-            id: "1",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-        {
-            id: "2",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-        {
-            id: "3",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-        {
-            id: "4",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-        {
-            id: "5",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-    ];
-
-    const reissueColumns: TableColumn[] = [
-        {
-            id: "ruleName",
-            header: "Rule Name",
-            accessorKey: "ruleName",
-        },
-        {
-            id: "timing",
-            header: "Timing",
-            accessorKey: "timing",
-        },
-        {
-            id: "departureTolerance",
-            header: "Departure Tolerance",
-            accessorKey: "departureTolerance",
-        },
-        {
-            id: "penaltyType",
-            header: "Penalty Type",
-            accessorKey: "penaltyType",
-        },
-        {
-            id: "penaltyValue",
-            header: "Penalty Value",
-            accessorKey: "penaltyValue",
-        },
-    ];
-    const reissueData: TableData[] = [
-        {
-            id: "1",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-        {
-            id: "2",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-        {
-            id: "3",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-        {
-            id: "4",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-        {
-            id: "5",
-            columns: {
-                ruleName: "*****",
-                timing: "*****",
-                departureTolerance: "*****",
-                penaltyType: "*****",
-                penaltyValue: "*****",
-            },
-        },
-    ];
+    if (isLoading) return <Loading />;
+    if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
         <PageLayout>
             <Tabs>
-                <Tabs.Item label="Void" value="void">
-                    <DynamicTable
-                        title="All Void"
-                        data={voidData}
-                        columns={voidColumns}
-                        addLabel="Add Void"
-                        onAddClick={() => {
-                            navigate(
-                                `/system-management-administration/ticket-rules/void/add`
-                            );
-                        }}
-                        onRowClick={(rowId) =>
-                            navigate(
-                                `/system-management-administration/ticket-rules/void/view/${rowId}`
-                            )
-                        }
-                        hideBorder
-                    />
-                </Tabs.Item>
-                <Tabs.Item label="Refund" value="refund">
-                    <DynamicTable
-                        title="All Refund"
-                        data={refundData}
-                        columns={refundColumns}
-                        addLabel="Add Refund"
-                        onAddClick={() => {
-                            navigate(
-                                `/system-management-administration/ticket-rules/refund/add`
-                            );
-                        }}
-                        onRowClick={(rowId) =>
-                            navigate(
-                                `/system-management-administration/ticket-rules/refund/view/${rowId}`
-                            )
-                        }
-                        hideBorder
-                    />
-                </Tabs.Item>
-                <Tabs.Item label="No Show" value="noShow">
-                    <DynamicTable
-                        title="All No Show"
-                        data={noShowData}
-                        columns={noShowColumns}
-                        addLabel="Add No Show"
-                        onAddClick={() => {
-                            navigate(
-                                `/system-management-administration/ticket-rules/no-show/add`
-                            );
-                        }}
-                        onRowClick={(rowId) =>
-                            navigate(
-                                `/system-management-administration/ticket-rules/no-show/view/${rowId}`
-                            )
-                        }
-                        hideBorder
-                    />
-                </Tabs.Item>
-                <Tabs.Item label="Reissue" value="reissue">
-                    <DynamicTable
-                        title="All Reissue"
-                        data={reissueData}
-                        columns={reissueColumns}
-                        addLabel="Add Reissue"
-                        onAddClick={() => {
-                            navigate(
-                                `/system-management-administration/ticket-rules/reissue/add`
-                            );
-                        }}
-                        onRowClick={(rowId) =>
-                            navigate(
-                                `/system-management-administration/ticket-rules/reissue/view/${rowId}`
-                            )
-                        }
-                        hideBorder
-                    />
-                </Tabs.Item>
+                {ticketRules.map((item) => (
+                    <Tabs.Item
+                        key={item.id}
+                        label={item.name}
+                        value={item.name}
+                    >
+                        <DynamicTable
+                            title="All Void"
+                            data={
+                                item.ticketRules?.map((item) => ({
+                                    id: item.id.toString(),
+                                    columns: {
+                                        ruleName: item.ruleName,
+                                        timing: item.timing,
+                                        departureTolerance:
+                                            item.departureTolerance,
+                                        penaltyType: item.penaltyType,
+                                        penaltyValue: item.penaltyValue,
+                                        penaltyBaseAmount:
+                                            item.penaltyBaseAmount,
+                                        taxRefund: item.taxRefund,
+                                    },
+                                })) || []
+                            }
+                            columns={voidColumns}
+                            addLabel="Add Void"
+                            onAddClick={() => {
+                                navigate(
+                                    `/system-management-administration/ticket-rules/${item.name}/add?ticketStatusId=${item.id}`
+                                );
+                            }}
+                            onRowClick={(rowId) =>
+                                navigate(
+                                    `/system-management-administration/ticket-rules/${item.name}/view/${rowId}`
+                                )
+                            }
+                            hideBorder
+                        />
+                    </Tabs.Item>
+                ))}
             </Tabs>
         </PageLayout>
     );

@@ -8,14 +8,11 @@ import { Load } from "../types";
 import Loading from "../../../../../components/ui/Loading";
 import Error from "../../../../../components/ui/Error";
 
-const useLoadTypeById = (loadTypeId: string, loadId: string) => {
+const useLoadTypeById = (id: string) => {
     return useQuery({
-        queryKey: ["loadType", loadTypeId, loadId],
+        queryKey: ["loadType", id],
         queryFn: async () => {
-            const response = await ENDPOINTS.loadTypes.getOne(
-                loadTypeId,
-                loadId
-            );
+            const response = await ENDPOINTS.loadTypes.getOne(id);
 
             if (response.error) {
                 return Promise.reject(response.error.message);
@@ -26,21 +23,16 @@ const useLoadTypeById = (loadTypeId: string, loadId: string) => {
         staleTime: 5 * 60 * 1000,
         retry: 1,
         retryDelay: 1000,
-        enabled: !!loadTypeId && !!loadId,
+        enabled: !!id,
     });
 };
 
 function LoadTypeViewPage() {
     const { addToast, addAlertToast } = useToast();
     const navigate = useNavigate();
-    const { name, id, loadTypeId } = useParams();
+    const { name, id } = useParams();
 
-    const {
-        data: loadType,
-        isLoading,
-        error,
-    } = useLoadTypeById(loadTypeId || "", id || "");
-    console.log(loadType);
+    const { data: loadType, isLoading, error } = useLoadTypeById(id || "");
 
     const loadTypeData = (loadType?.data as Load) || ({} as Load);
 

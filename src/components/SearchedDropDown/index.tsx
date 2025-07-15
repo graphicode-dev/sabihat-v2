@@ -18,6 +18,7 @@ interface SearchedDropDownProps {
     required?: boolean;
     control: Control<any>;
     name: string;
+    error?: string;
 }
 
 export function SearchedDropDown({
@@ -34,6 +35,7 @@ export function SearchedDropDown({
     required,
     control,
     name,
+    error,
 }: SearchedDropDownProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -76,14 +78,23 @@ export function SearchedDropDown({
                         width === "full" ? "w-full" : "w-fit"
                     } ${className}`}
                 >
-                    <FormFieldWrapper label={label} required={required}>
+                    <FormFieldWrapper
+                        label={label}
+                        required={required}
+                        className="text-left"
+                        error={error}
+                    >
                         <button
                             type="button"
                             className={`peer form-input overflow-hidden`}
                             onClick={() => !disabled && setIsOpen(!isOpen)}
                             disabled={disabled}
                         >
-                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-500" />
+                            <ChevronDown
+                                className={`absolute right-3 ${
+                                    error ? "top-1/3" : "top-1/2"
+                                }  -translate-y-1/2 text-primary-500`}
+                            />
                             <span className="mr-2 block text-left truncate">
                                 {value
                                     ? options.find(
@@ -160,6 +171,11 @@ export function SearchedDropDown({
                                     )}
                                 </div>
                             </div>
+                        )}
+                        {error && (
+                            <span className="form-error text-left ml-5">
+                                *{error}
+                            </span>
                         )}
                     </FormFieldWrapper>
                 </div>

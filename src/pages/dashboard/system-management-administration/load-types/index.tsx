@@ -45,7 +45,11 @@ function LoadTypesPage() {
         <PageLayout>
             <Tabs>
                 {loadTypesData.map((item) => (
-                    <Tabs.Item key={item.id} label={item.name} value={item.id.toString()}>
+                    <Tabs.Item
+                        key={item.id}
+                        label={item.name}
+                        value={item.id.toString()}
+                    >
                         <DynamicTable
                             title="Load Types"
                             data={
@@ -65,7 +69,7 @@ function LoadTypesPage() {
                             }}
                             onRowClick={(rowId) =>
                                 navigate(
-                                    `/system-management-administration/load-types/${item.name}/view/${rowId}?loadTypeId=${item.id}`
+                                    `/system-management-administration/load-types/${item.name}/view/${rowId}`
                                 )
                             }
                             hideBorder

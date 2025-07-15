@@ -2,15 +2,16 @@ import PageLayout from "../../../../../layout/PageLayout";
 import FormLayout from "../../../../../layout/FormLayout";
 import { FormButtons } from "../../../../../components/form";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { useNavigate } from "react-router-dom";
 import { SearchedDropDown } from "../../../../../components/SearchedDropDown";
+import { dirtyFields, logFormData } from "../../../../../utils";
 
-type Reissue = {
+type NoShow = {
     id?: string;
     ruleName: string;
     timing: string;
@@ -21,7 +22,7 @@ type Reissue = {
     taxRefund: string;
 };
 
-const reissueSchema = z.object({
+const noShowSchema = z.object({
     id: z.string().optional(),
     ruleName: z.string(),
     timing: z.string(),
@@ -32,7 +33,17 @@ const reissueSchema = z.object({
     taxRefund: z.string(),
 });
 
-function ReissueAddPage() {
+function TicketRulesEditPage() {
+    const fetchedData = {
+        id: "1",
+        ruleName: "No Show",
+        timing: "Before Departure",
+        departureTolerance: "1 hour",
+        penaltyType: "Fixed",
+        penaltyValue: "10",
+        penaltyBaseAmount: "100",
+        taxRefund: "Yes",
+    };
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
@@ -55,22 +66,22 @@ function ReissueAddPage() {
         null
     );
 
-    const { control, handleSubmit, reset, formState } = useForm<Reissue>({
-        resolver: zodResolver(reissueSchema),
+    const { control, handleSubmit, reset, formState } = useForm<NoShow>({
+        resolver: zodResolver(noShowSchema),
         defaultValues: {
-            id: "",
-            ruleName: "",
-            timing: "",
-            departureTolerance: "",
-            penaltyType: "",
-            penaltyValue: "",
-            penaltyBaseAmount: "",
-            taxRefund: "",
+            id: fetchedData?.id,
+            ruleName: fetchedData?.ruleName,
+            timing: fetchedData?.timing,
+            departureTolerance: fetchedData?.departureTolerance,
+            penaltyType: fetchedData?.penaltyType,
+            penaltyValue: fetchedData?.penaltyValue,
+            penaltyBaseAmount: fetchedData?.penaltyBaseAmount,
+            taxRefund: fetchedData?.taxRefund,
         },
         mode: "onChange",
     });
 
-    const onSubmit = async (formData: Reissue) => {
+    const onSubmit = async (formData: NoShow) => {
         setIsLoading(true);
         try {
             // Create FormData object for file upload
@@ -78,23 +89,45 @@ function ReissueAddPage() {
 
             // Always append all fields, even if they're empty strings
             // This ensures the API receives all fields
-            apiFormData.append("ruleName", formData.ruleName);
-            apiFormData.append("timing", formData.timing);
-            apiFormData.append(
-                "departureTolerance",
+            if (
+                dirtyFields(formState).includes("ruleName") &&
+                formData.ruleName
+            )
+                apiFormData.append("ruleName", formData.ruleName);
+            if (dirtyFields(formState).includes("timing") && formData.timing)
+                apiFormData.append("timing", formData.timing);
+            if (
+                dirtyFields(formState).includes("departureTolerance") &&
                 formData.departureTolerance
-            );
-            apiFormData.append("penaltyType", formData.penaltyType);
-            apiFormData.append("penaltyValue", formData.penaltyValue);
-            apiFormData.append("penaltyBaseAmount", formData.penaltyBaseAmount);
-            apiFormData.append("taxRefund", formData.taxRefund);
+            )
+                apiFormData.append("penaltyType", formData.penaltyType);
+            if (
+                dirtyFields(formState).includes("penaltyType") &&
+                formData.penaltyType
+            )
+                apiFormData.append("penaltyValue", formData.penaltyValue);
+            if (
+                dirtyFields(formState).includes("penaltyValue") &&
+                formData.penaltyValue
+            )
+                apiFormData.append(
+                    "penaltyBaseAmount",
+                    formData.penaltyBaseAmount
+                );
+            if (
+                dirtyFields(formState).includes("penaltyBaseAmount") &&
+                formData.penaltyBaseAmount
+            )
+                apiFormData.append("taxRefund", formData.taxRefund);
+
+            logFormData(apiFormData);
 
             // Simulate API call success
             // In a real app, you would send apiFormData to your backend
             // const response = await api.post('/company', apiFormData);
 
             addToast({
-                message: "Reissue added successfully",
+                message: "No Show updated successfully",
                 type: "success",
                 title: "Success!",
             });
@@ -102,7 +135,7 @@ function ReissueAddPage() {
             reset();
             navigate(-1);
         } catch (error: any) {
-            console.error("Error adding reissue:", error);
+            console.error("Error adding no show:", error);
             if (error?.errors) {
                 // Map API error fields to our frontend field names
                 const mappedErrors: any = {};
@@ -144,10 +177,23 @@ function ReissueAddPage() {
         }
     };
 
+    useEffect(() => {
+        if (fetchedData) {
+            reset(fetchedData);
+            setSelectedRuleName(fetchedData.ruleName);
+            setSelectedTiming(fetchedData.timing);
+            setSelectedDepartureTolerance(fetchedData.departureTolerance);
+            setSelectedPenaltyType(fetchedData.penaltyType);
+            setSelectedPenaltyValue(fetchedData.penaltyValue);
+            setSelectedPenaltyBaseAmount(fetchedData.penaltyBaseAmount);
+            setSelectedTaxRefund(fetchedData.taxRefund);
+        }
+    }, [reset]);
+
     return (
         <PageLayout>
             <FormLayout handleSubmit={handleSubmit} handleFormSubmit={onSubmit}>
-                <FormFieldsLayout title="Add">
+                <FormFieldsLayout title="Edit">
                     {/* Rule Name */}
                     <SearchedDropDown
                         name="ruleName"
@@ -155,8 +201,8 @@ function ReissueAddPage() {
                         label="Rule Name"
                         options={[
                             {
-                                key: "Reissue",
-                                value: "Reissue",
+                                key: "Void",
+                                value: "Void",
                             },
                             {
                                 key: "No Show",
@@ -313,7 +359,7 @@ function ReissueAddPage() {
 
                 <FormButtons
                     isLoading={isLoading}
-                    submitText="add"
+                    submitText="Update"
                     disabled={!formState.isDirty}
                 />
             </FormLayout>
@@ -321,4 +367,4 @@ function ReissueAddPage() {
     );
 }
 
-export default ReissueAddPage;
+export default TicketRulesEditPage;

@@ -13,6 +13,24 @@ import {
 import CalendarDemo from "../components/ui/Calendar/CalendarDemo";
 
 // Import custom components for direct routes
+const TicketRulesViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/ticket-rules/view"
+        )
+);
+const TicketRulesEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/ticket-rules/edit"
+        )
+);
+const TicketRulesAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/ticket-rules/add"
+        )
+);
 const LoadTypeViewPage = lazy(
     () =>
         import(
@@ -264,6 +282,18 @@ function AppRoutes() {
                         <Route
                             path={`system-management-administration/load-types/:name/add`}
                             element={<LoadTypeAddPage />}
+                        />
+                        <Route
+                            path={`system-management-administration/ticket-rules/:name/view/:id`}
+                            element={<TicketRulesViewPage />}
+                        />
+                        <Route
+                            path={`system-management-administration/ticket-rules/:name/edit/:id`}
+                            element={<TicketRulesEditPage />}
+                        />
+                        <Route
+                            path={`system-management-administration/ticket-rules/:name/add`}
+                            element={<TicketRulesAddPage />}
                         />
                     </Route>
                 </Route>

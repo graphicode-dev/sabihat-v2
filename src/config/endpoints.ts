@@ -13,6 +13,7 @@ import {
 } from "../pages/dashboard/system-management-administration/currency/types";
 import { Promotion } from "../pages/dashboard/system-management-administration/promotion/types";
 import { Load } from "../pages/dashboard/system-management-administration/load-types/types";
+import { TicketRule } from "../pages/dashboard/system-management-administration/ticket-rules/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -346,8 +347,7 @@ export const ENDPOINTS = {
                 },
             }),
         getOne: (
-            loadTypeId: string,
-            loadId: string
+            id: string
         ): Promise<
             ApiResponseWrapper<{
                 success: boolean;
@@ -359,10 +359,45 @@ export const ENDPOINTS = {
                 success: boolean;
                 message: string;
                 data: Load;
-            }>(`/loads-types/${loadTypeId}/load/${loadId}`),
+            }>(`/load-types/${id}`),
         add: (data: FormData) =>
             api
                 .post(`/load-types`, data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    if (response.error) {
+                        throw response.error.details.errors;
+                    }
+                }),
+    },
+    ticketRules: {
+        getAll: () =>
+            api.get("ticket-rules", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: TicketRule;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: TicketRule;
+            }>(`/ticket-rules/${id}`),
+        add: (data: FormData) =>
+            api
+                .post(`/ticket-rules`, data, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "multipart/form-data",

@@ -1,35 +1,45 @@
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
-import { TableData } from "../../../../../types/table";
 import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from "../../../../../hooks/useToast";
+import { useQuery } from "@tanstack/react-query";
+import { ENDPOINTS } from "../../../../../config/endpoints";
+import { TicketRule } from "../types";
+import Loading from "../../../../../components/ui/Loading";
+import Error from "../../../../../components/ui/Error";
 
-function VoidViewPage() {
-    const navigate = useNavigate();
-    const { id } = useParams();
-    const { addAlertToast, addToast } = useToast();
+const useTicketRuleById = (id: string) => {
+    return useQuery({
+        queryKey: ["ticketRule", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.ticketRules.getOne(id);
 
-    const data: TableData = {
-        id: "1",
-        columns: {
-            ruleName:
-                "******************************************************************",
-            timing: "******************************************************************",
-            departureTolerance:
-                "******************************************************************",
-            penaltyType:
-                "******************************************************************",
-            penaltyValue:
-                "******************************************************************",
-            penaltyBaseAmount:
-                "******************************************************************",
-            penaltyBaseAmountType:
-                "******************************************************************",
-            taxRefund:
-                "******************************************************************",
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
         },
-    };
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
 
+function TicketRulesViewPage() {
+    const { addToast, addAlertToast } = useToast();
+    const navigate = useNavigate();
+    const { name, id } = useParams();
+
+    const { data: ticketRule, isLoading, error } = useTicketRuleById(id || "");
+    console.log(ticketRule);
+
+    const ticketRuleData =
+        (ticketRule?.data as TicketRule) || ({} as TicketRule);
+
+    if (isLoading) return <Loading />;
+    if (error) return <Error message={error?.message || "Unknown error"} />;
     return (
         <PageLayout>
             <ViewCard
@@ -40,35 +50,35 @@ function VoidViewPage() {
                             fields: [
                                 {
                                     label: "Rule Name",
-                                    value: data?.columns.ruleName.toString(),
+                                    value: ticketRuleData?.ruleName.toString(),
                                 },
                                 {
                                     label: "Timing",
-                                    value: data?.columns.timing.toString(),
+                                    value: ticketRuleData?.timing.toString(),
                                 },
                                 {
                                     label: "Departure Tolerance",
-                                    value: data?.columns.departureTolerance.toString(),
+                                    value: ticketRuleData?.departureTolerance.toString(),
                                 },
                                 {
                                     label: "Penalty Type",
-                                    value: data?.columns.penaltyType.toString(),
+                                    value: ticketRuleData?.penaltyType.toString(),
                                 },
                                 {
                                     label: "Penalty Value",
-                                    value: data?.columns.penaltyValue.toString(),
+                                    value: ticketRuleData?.penaltyValue.toString(),
                                 },
                                 {
                                     label: "Penalty Base Amount",
-                                    value: data?.columns.penaltyBaseAmount.toString(),
+                                    value: ticketRuleData?.penaltyBaseAmount.toString(),
                                 },
                                 {
                                     label: "Penalty Base Amount Type",
-                                    value: data?.columns.penaltyBaseAmountType.toString(),
+                                    value: ticketRuleData?.penaltyBaseAmount.toString(),
                                 },
                                 {
                                     label: "Tax Refund",
-                                    value: data?.columns.taxRefund.toString(),
+                                    value: ticketRuleData?.taxRefund.toString(),
                                 },
                             ],
                         },
@@ -76,19 +86,19 @@ function VoidViewPage() {
                 }}
                 onEdit={() =>
                     navigate(
-                        `/system-management-administration/ticket-rules/void/edit/${id}`
+                        `/system-management-administration/ticket-rules/${name}/edit/${id}`
                     )
                 }
                 onDelete={() => {
                     addAlertToast(
-                        "Are you sure you want to delete this void rule?",
+                        `Are you sure you want to delete this ${name?.toUpperCase()}?`,
                         [
                             {
                                 text: "OK",
                                 onClick: () => {
                                     addToast({
                                         type: "success",
-                                        message: "Void rule deleted successfully",
+                                        message: `${name?.toUpperCase()} deleted successfully`,
                                         title: "Success!",
                                     });
                                     navigate(-1);
@@ -103,11 +113,10 @@ function VoidViewPage() {
                         ]
                     );
                 }}
-                gridCols={5}
                 buttons
             />
         </PageLayout>
     );
 }
 
-export default VoidViewPage;
+export default TicketRulesViewPage;

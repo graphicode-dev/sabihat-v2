@@ -1,18 +1,17 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import FormLayout from "../../../../../layout/FormLayout";
-import { FormButtons } from "../../../../../components/form";
+import { FormButtons, FormInput } from "../../../../../components/form";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { SearchedDropDown } from "../../../../../components/SearchedDropDown";
-import { dirtyFields, logFormData } from "../../../../../utils";
+import { ENDPOINTS } from "../../../../../config/endpoints";
 
-type NoShow = {
-    id?: string;
+type TicketRule = {
     ruleName: string;
     timing: string;
     departureTolerance: string;
@@ -22,8 +21,7 @@ type NoShow = {
     taxRefund: string;
 };
 
-const noShowSchema = z.object({
-    id: z.string().optional(),
+const ticketRuleSchema = z.object({
     ruleName: z.string(),
     timing: z.string(),
     departureTolerance: z.string(),
@@ -33,20 +31,23 @@ const noShowSchema = z.object({
     taxRefund: z.string(),
 });
 
-function NoShowEditPage() {
-    const fetchedData = {
-        id: "1",
-        ruleName: "No Show",
-        timing: "Before Departure",
-        departureTolerance: "1 hour",
-        penaltyType: "Fixed",
-        penaltyValue: "10",
-        penaltyBaseAmount: "100",
-        taxRefund: "Yes",
-    };
+function TicketRulesAddPage() {
+    const { name, ticketStatusId } = useParams<{
+        name: string;
+        ticketStatusId: string;
+    }>();
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+    const [errors, setErrors] = useState<TicketRule>({
+        ruleName: "",
+        timing: "",
+        departureTolerance: "",
+        penaltyType: "",
+        penaltyValue: "",
+        penaltyBaseAmount: "",
+        taxRefund: "",
+    });
     const [selectedRuleName, setSelectedRuleName] = useState<string | null>(
         null
     );
@@ -56,144 +57,59 @@ function NoShowEditPage() {
     const [selectedPenaltyType, setSelectedPenaltyType] = useState<
         string | null
     >(null);
-    const [selectedPenaltyValue, setSelectedPenaltyValue] = useState<
-        string | null
-    >(null);
-    const [selectedPenaltyBaseAmount, setSelectedPenaltyBaseAmount] = useState<
-        string | null
-    >(null);
     const [selectedTaxRefund, setSelectedTaxRefund] = useState<string | null>(
         null
     );
 
-    const { control, handleSubmit, reset, formState } = useForm<NoShow>({
-        resolver: zodResolver(noShowSchema),
+    const { control, handleSubmit, reset, formState } = useForm<TicketRule>({
+        resolver: zodResolver(ticketRuleSchema),
         defaultValues: {
-            id: fetchedData?.id,
-            ruleName: fetchedData?.ruleName,
-            timing: fetchedData?.timing,
-            departureTolerance: fetchedData?.departureTolerance,
-            penaltyType: fetchedData?.penaltyType,
-            penaltyValue: fetchedData?.penaltyValue,
-            penaltyBaseAmount: fetchedData?.penaltyBaseAmount,
-            taxRefund: fetchedData?.taxRefund,
+            ruleName: "",
+            timing: "",
+            departureTolerance: "",
+            penaltyType: "",
+            penaltyValue: "",
+            penaltyBaseAmount: "",
+            taxRefund: "",
         },
         mode: "onChange",
     });
 
-    const onSubmit = async (formData: NoShow) => {
+    const onSubmit = async (formData: TicketRule) => {
         setIsLoading(true);
-        try {
-            // Create FormData object for file upload
-            const apiFormData = new FormData();
+        const apiFormData = new FormData();
 
-            // Always append all fields, even if they're empty strings
-            // This ensures the API receives all fields
-            if (
-                dirtyFields(formState).includes("ruleName") &&
-                formData.ruleName
-            )
-                apiFormData.append("ruleName", formData.ruleName);
-            if (dirtyFields(formState).includes("timing") && formData.timing)
-                apiFormData.append("timing", formData.timing);
-            if (
-                dirtyFields(formState).includes("departureTolerance") &&
-                formData.departureTolerance
-            )
-                apiFormData.append("penaltyType", formData.penaltyType);
-            if (
-                dirtyFields(formState).includes("penaltyType") &&
-                formData.penaltyType
-            )
-                apiFormData.append("penaltyValue", formData.penaltyValue);
-            if (
-                dirtyFields(formState).includes("penaltyValue") &&
-                formData.penaltyValue
-            )
-                apiFormData.append(
-                    "penaltyBaseAmount",
-                    formData.penaltyBaseAmount
-                );
-            if (
-                dirtyFields(formState).includes("penaltyBaseAmount") &&
-                formData.penaltyBaseAmount
-            )
-                apiFormData.append("taxRefund", formData.taxRefund);
+        apiFormData.append("ticketStatusId", String(ticketStatusId));
+        apiFormData.append("ruleName", formData.ruleName);
+        apiFormData.append("timing", formData.timing);
+        apiFormData.append("departureTolerance", formData.departureTolerance);
+        apiFormData.append("penaltyType", formData.penaltyType);
+        apiFormData.append("penaltyValue", formData.penaltyValue);
+        apiFormData.append("penaltyBaseAmount", formData.penaltyBaseAmount);
+        apiFormData.append("taxRefund", formData.taxRefund);
 
-            logFormData(apiFormData);
-
-            // Simulate API call success
-            // In a real app, you would send apiFormData to your backend
-            // const response = await api.post('/company', apiFormData);
-
-            addToast({
-                message: "No Show updated successfully",
-                type: "success",
-                title: "Success!",
-            });
-
-            reset();
-            navigate(-1);
-        } catch (error: any) {
-            console.error("Error adding no show:", error);
-            if (error?.errors) {
-                // Map API error fields to our frontend field names
-                const mappedErrors: any = {};
-
-                if (error.errors.ruleName) {
-                    mappedErrors.ruleName = error.errors.ruleName[0];
-                }
-                if (error.errors.timing) {
-                    mappedErrors.timing = error.errors.timing[0];
-                }
-                if (error.errors.departureTolerance) {
-                    mappedErrors.departureTolerance =
-                        error.errors.departureTolerance[0];
-                }
-                if (error.errors.penaltyType) {
-                    mappedErrors.penaltyType = error.errors.penaltyType[0];
-                }
-                if (error.errors.penaltyValue) {
-                    mappedErrors.penaltyValue = error.errors.penaltyValue[0];
-                }
-                if (error.errors.penaltyBaseAmount) {
-                    mappedErrors.penaltyBaseAmount =
-                        error.errors.penaltyBaseAmount[0];
-                }
-                if (error.errors.taxRefund) {
-                    mappedErrors.taxRefund = error.errors.taxRefund[0];
-                }
-
-                console.log("Mapped errors:", mappedErrors);
-            } else {
+        await ENDPOINTS.ticketRules
+            .add(apiFormData)
+            .then(() => {
                 addToast({
-                    message: "An unexpected error occurred. Please try again.",
-                    type: "error",
-                    title: "Error!",
+                    message: `${name?.toUpperCase()} added successfully`,
+                    type: "success",
+                    title: "Success!",
                 });
-            }
-        } finally {
-            setIsLoading(false);
-        }
+                reset();
+                navigate(-1);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                setErrors(error);
+            });
     };
-
-    useEffect(() => {
-        if (fetchedData) {
-            reset(fetchedData);
-            setSelectedRuleName(fetchedData.ruleName);
-            setSelectedTiming(fetchedData.timing);
-            setSelectedDepartureTolerance(fetchedData.departureTolerance);
-            setSelectedPenaltyType(fetchedData.penaltyType);
-            setSelectedPenaltyValue(fetchedData.penaltyValue);
-            setSelectedPenaltyBaseAmount(fetchedData.penaltyBaseAmount);
-            setSelectedTaxRefund(fetchedData.taxRefund);
-        }
-    }, [reset]);
 
     return (
         <PageLayout>
             <FormLayout handleSubmit={handleSubmit} handleFormSubmit={onSubmit}>
-                <FormFieldsLayout title="Edit">
+                <FormFieldsLayout title="Add">
                     {/* Rule Name */}
                     <SearchedDropDown
                         name="ruleName"
@@ -222,6 +138,7 @@ function NoShowEditPage() {
                             setSelectedRuleName(value);
                         }}
                         placeholder="Select rule name"
+                        error={errors.ruleName}
                     />
 
                     {/* Timing */}
@@ -244,6 +161,7 @@ function NoShowEditPage() {
                             setSelectedTiming(value);
                         }}
                         placeholder="Select timing"
+                        error={errors.timing}
                     />
 
                     {/* Departure Tolerance */}
@@ -266,6 +184,7 @@ function NoShowEditPage() {
                             setSelectedDepartureTolerance(value);
                         }}
                         placeholder="Select departure tolerance"
+                        error={errors.departureTolerance}
                     />
 
                     {/* Penalty Type */}
@@ -288,50 +207,27 @@ function NoShowEditPage() {
                             setSelectedPenaltyType(value);
                         }}
                         placeholder="Select penalty type"
+                        error={errors.penaltyType}
                     />
 
                     {/* Penalty Value */}
-                    <SearchedDropDown
+                    <FormInput
                         name="penaltyValue"
                         control={control}
                         label="Penalty Value"
-                        options={[
-                            {
-                                key: "Fixed",
-                                value: "Fixed",
-                            },
-                            {
-                                key: "Percentage",
-                                value: "Percentage",
-                            },
-                        ]}
-                        value={selectedPenaltyValue}
-                        onChange={(value) => {
-                            setSelectedPenaltyValue(value);
-                        }}
-                        placeholder="Select penalty value"
+                        placeholder="Enter penalty value"
+                        type="number"
+                        error={errors.penaltyValue}
                     />
 
                     {/* Penalty Base Amount */}
-                    <SearchedDropDown
+                    <FormInput
                         name="penaltyBaseAmount"
                         control={control}
                         label="Penalty Base Amount"
-                        options={[
-                            {
-                                key: "Fixed",
-                                value: "Fixed",
-                            },
-                            {
-                                key: "Percentage",
-                                value: "Percentage",
-                            },
-                        ]}
-                        value={selectedPenaltyBaseAmount}
-                        onChange={(value) => {
-                            setSelectedPenaltyBaseAmount(value);
-                        }}
-                        placeholder="Select penalty base amount"
+                        placeholder="Enter penalty base amount"
+                        type="number"
+                        error={errors.penaltyBaseAmount}
                     />
 
                     {/* Tax Refund */}
@@ -354,12 +250,13 @@ function NoShowEditPage() {
                             setSelectedTaxRefund(value);
                         }}
                         placeholder="Select tax refund"
+                        error={errors.taxRefund}
                     />
                 </FormFieldsLayout>
 
                 <FormButtons
                     isLoading={isLoading}
-                    submitText="Update"
+                    submitText="add"
                     disabled={!formState.isDirty}
                 />
             </FormLayout>
@@ -367,4 +264,4 @@ function NoShowEditPage() {
     );
 }
 
-export default NoShowEditPage;
+export default TicketRulesAddPage;

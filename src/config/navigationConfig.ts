@@ -290,78 +290,7 @@ const TicketRulesPage = lazy(
             "../pages/dashboard/system-management-administration/ticket-rules"
         )
 );
-const TicketRulesVoidViewPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/ticket-rules/view/view-void"
-        )
-);
-const TicketRulesVoidAddPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/ticket-rules/add/add-void"
-        )
-);
-const TicketRulesVoidEditPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/ticket-rules/edit/edit-void"
-        )
-);
-const TicketRulesRefundViewPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/ticket-rules/view/view-refund"
-        )
-);
-const TicketRulesRefundAddPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/ticket-rules/add/add-refund"
-        )
-);
-const TicketRulesRefundEditPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/ticket-rules/edit/edit-refund"
-        )
-);
-const TicketRulesNoShowViewPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/ticket-rules/view/view-noShow"
-        )
-);
-const TicketRulesNoShowAddPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/ticket-rules/add/add-noShow"
-        )
-);
-const TicketRulesNoShowEditPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/ticket-rules/edit/edit-noShow"
-        )
-);
-const TicketRulesReissueViewPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/ticket-rules/view/view-reissue"
-        )
-);
-const TicketRulesReissueAddPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/ticket-rules/add/add-reissue"
-        )
-);
-const TicketRulesReissueEditPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/ticket-rules/edit/edit-reissue"
-        )
-);
+
 // #endregion Ticket Rules
 
 // #region Promotion
@@ -1302,18 +1231,6 @@ const componentRegistry: Record<string, any> = {
     },
     ticket_rules: {
         main: TicketRulesPage,
-        view_void: TicketRulesVoidViewPage,
-        view_refund: TicketRulesRefundViewPage,
-        view_noShow: TicketRulesNoShowViewPage,
-        view_reissue: TicketRulesReissueViewPage,
-        add_void: TicketRulesVoidAddPage,
-        add_refund: TicketRulesRefundAddPage,
-        add_noShow: TicketRulesNoShowAddPage,
-        add_reissue: TicketRulesReissueAddPage,
-        edit_void: TicketRulesVoidEditPage,
-        edit_refund: TicketRulesRefundEditPage,
-        edit_noShow: TicketRulesNoShowEditPage,
-        edit_reissue: TicketRulesReissueEditPage,
     },
     promotion: {
         main: PromotionPage,
