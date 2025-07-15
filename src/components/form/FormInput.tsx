@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import Calendar from "../ui/Calendar";
-import { format } from "date-fns";
+import { formatDate } from "../ui/Calendar";
 import FormFieldWrapper from "./FormFieldWrapper";
 import PhoneInput from "react-phone-input-2";
 import OTP from "../auth/OTP";
@@ -164,10 +164,10 @@ const FormInput = <T extends FieldValues>({
                             return (
                                 <div className="relative w-full">
                                     <div
-                                        className={`peer flex items-center justify-between rounded-full px-4 py-2  ${
-                                            error ? "border-red-500" : ""
-                                        } ${
-                                            disabled
+                                        className={`peer flex items-center justify-between rounded-full px-4 py-2 ${
+                                            error
+                                                ? "form-error cursor-pointer"
+                                                : disabled
                                                 ? "border-gray-300 bg-dark-50 cursor-not-allowed opacity-50"
                                                 : "cursor-pointer"
                                         }`}
@@ -184,18 +184,19 @@ const FormInput = <T extends FieldValues>({
                                                 !field.value
                                                     ? "text-gray-400"
                                                     : "text-gray-900"
-                                            }`}
+                                            } ${error ? "text-red-500" : ""}`}
                                         >
                                             {field.value
-                                                ? format(
-                                                      new Date(field.value),
-                                                      "PP"
+                                                ? formatDate.dateTime(
+                                                      new Date(field.value)
                                                   )
                                                 : placeholder || "Select date"}
                                         </span>
                                         <CalendarIcon
                                             className={`h-5 w-5 ${
-                                                disabled
+                                                error
+                                                    ? "text-red-500"
+                                                    : disabled
                                                     ? "text-gray-400"
                                                     : "text-primary-500"
                                             }`}

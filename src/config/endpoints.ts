@@ -11,6 +11,7 @@ import {
     Currency,
     CurrencyRate,
 } from "../pages/dashboard/system-management-administration/currency/types";
+import { Promotion } from "../pages/dashboard/system-management-administration/promotion/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -292,6 +293,39 @@ export const ENDPOINTS = {
         add: (data: FormData) =>
             api
                 .post(`/currencies/rates`, data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    if (response.error) {
+                        throw response.error.details.errors;
+                    }
+                }),
+    },
+    promotion: {
+        getAll: (
+            page: number
+        ): Promise<ApiResponseWrapper<ApiResponse<Promotion>>> =>
+            api.get<ApiResponse<Promotion>>(`/promotions?page=${page}`),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: Promotion;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: Promotion;
+            }>(`/promotions/${id}`),
+        add: (data: FormData) =>
+            api
+                .post(`/promotions`, data, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "multipart/form-data",

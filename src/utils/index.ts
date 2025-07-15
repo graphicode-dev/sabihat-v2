@@ -212,7 +212,7 @@ export const transformPaginatedDataToTableData = <
 
     return paginatedData.pages.flatMap((page) =>
         page.items.map((item) => ({
-            id: item.id.toString(),
+            id: item?.id?.toString() || "",
             original: item,
             columns: columnMapping(item),
         }))

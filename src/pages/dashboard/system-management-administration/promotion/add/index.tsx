@@ -10,21 +10,28 @@ import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { useNavigate } from "react-router-dom";
 import { SearchedDropDown } from "../../../../../components/SearchedDropDown";
 import { logFormData } from "../../../../../utils";
+import { formatDate } from "../../../../../components/ui/Calendar";
+import { ENDPOINTS } from "../../../../../config/endpoints";
 
 type Promotion = {
-    id?: string;
     name: string;
-    promotionType: string;
-    promotionValue: string;
+    type: string;
+    value: string;
     fromDate: Date;
     toDate: Date;
 };
+type PromotionError = {
+    name: string;
+    type: string;
+    value: string;
+    fromDate: string;
+    toDate: string;
+};
 
 const promotionSchema = z.object({
-    id: z.string().optional(),
     name: z.string(),
-    promotionType: z.string(),
-    promotionValue: z.string(),
+    type: z.string(),
+    value: z.string(),
     fromDate: z.date(),
     toDate: z.date(),
 });
@@ -33,12 +40,12 @@ function PromotionAddPage() {
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState<Promotion>({
+    const [errors, setErrors] = useState<PromotionError>({
         name: "",
-        promotionType: "",
-        promotionValue: "",
-        fromDate: new Date(),
-        toDate: new Date(),
+        type: "",
+        value: "",
+        fromDate: "",
+        toDate: "",
     });
     const [selectedPromotionType, setSelectedPromotionType] = useState<
         string | null
@@ -47,10 +54,9 @@ function PromotionAddPage() {
     const { control, handleSubmit, reset, formState } = useForm<Promotion>({
         resolver: zodResolver(promotionSchema),
         defaultValues: {
-            id: "",
             name: "",
-            promotionType: "",
-            promotionValue: "",
+            type: "",
+            value: "",
             fromDate: new Date(),
             toDate: new Date(),
         },
@@ -59,72 +65,37 @@ function PromotionAddPage() {
 
     const onSubmit = async (formData: Promotion) => {
         setIsLoading(true);
-        try {
-            // Create FormData object for file upload
-            const apiFormData = new FormData();
+        const apiFormData = new FormData();
 
-            // Always append all fields, even if they're empty strings
-            // This ensures the API receives all fields
-            apiFormData.append("name", formData.name);
-            apiFormData.append("promotion_type", formData.promotionType);
-            apiFormData.append("promotion_value", formData.promotionValue);
-            apiFormData.append("from_date", formData.fromDate.toString());
-            apiFormData.append("to_date", formData.toDate.toString());
+        apiFormData.append("name", formData.name);
+        apiFormData.append("type", formData.type);
+        apiFormData.append("value", formData.value);
 
-            logFormData(apiFormData);
+        // Format dates using the centralized utility
+        const formattedFromDate = formatDate.apiFormat(formData.fromDate);
+        const formattedToDate = formatDate.apiFormat(formData.toDate);
 
-            // Simulate API call success
-            // In a real app, you would send apiFormData to your backend
-            // const response = await api.post('/company', apiFormData);
+        apiFormData.append("fromDate", formattedFromDate);
+        apiFormData.append("toDate", formattedToDate);
 
-            addToast({
-                message: "Promotion added successfully",
-                type: "success",
-                title: "Success!",
-            });
+        logFormData(apiFormData);
 
-            reset();
-            setSelectedPromotionType(null);
-            navigate(-1);
-        } catch (error: any) {
-            console.error("Error adding promotion:", error);
-            if (error?.errors) {
-                // Map API error fields to our frontend field names
-                const mappedErrors: any = {};
-
-                if (error.errors.name) {
-                    mappedErrors.name = error.errors.name[0];
-                }
-
-                if (error.errors.promotionType) {
-                    mappedErrors.promotionType = error.errors.promotionType[0];
-                }
-
-                if (error.errors.promotionValue) {
-                    mappedErrors.promotionValue =
-                        error.errors.promotionValue[0];
-                }
-
-                if (error.errors.fromDate) {
-                    mappedErrors.fromDate = error.errors.fromDate[0];
-                }
-
-                if (error.errors.toDate) {
-                    mappedErrors.toDate = error.errors.toDate[0];
-                }
-
-                console.log("Mapped errors:", mappedErrors);
-                setErrors(mappedErrors);
-            } else {
+        await ENDPOINTS.promotion
+            .add(apiFormData)
+            .then(() => {
                 addToast({
-                    message: "An unexpected error occurred. Please try again.",
-                    type: "error",
-                    title: "Error!",
+                    message: "Promotion added successfully",
+                    type: "success",
+                    title: "Success!",
                 });
-            }
-        } finally {
-            setIsLoading(false);
-        }
+                reset();
+                navigate(-1);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                return setErrors(error);
+            });
     };
 
     return (
@@ -140,16 +111,13 @@ function PromotionAddPage() {
                         error={errors.name}
                     />
 
-                    {/* promotion_type */}
+                    {/* promotion type */}
                     <SearchedDropDown
-                        name="promotionType"
+                        name="type"
                         control={control}
                         options={[
-                            { key: "1", value: "1" },
-                            { key: "2", value: "2" },
-                            { key: "3", value: "3" },
-                            { key: "4", value: "4" },
-                            { key: "5", value: "5" },
+                            { key: "fixed", value: "fixed" },
+                            { key: "percentage", value: "percentage" },
                         ]}
                         value={selectedPromotionType}
                         onChange={(value) => {
@@ -158,29 +126,31 @@ function PromotionAddPage() {
                         label="Promotion Type"
                     />
 
-                    {/* promotion_value */}
+                    {/* promotion value */}
                     <FormInput
-                        name="promotionValue"
+                        name="value"
                         control={control}
                         label="Promotion Value"
-                        type="text"
-                        error={errors.promotionValue}
+                        type="number"
+                        error={errors.value}
                     />
 
-                    {/* from_date */}
+                    {/* from date */}
                     <FormInput
                         name="fromDate"
                         control={control}
                         label="From Date"
                         type="date"
+                        error={errors.fromDate}
                     />
 
-                    {/* to_date */}
+                    {/* to date */}
                     <FormInput
                         name="toDate"
                         control={control}
                         label="To Date"
                         type="date"
+                        error={errors.toDate}
                     />
                 </FormFieldsLayout>
 

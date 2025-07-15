@@ -1,29 +1,48 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
 import { useParams } from "react-router-dom";
-import { TableData } from "../../../../../types/table";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../../../hooks/useToast";
+import { useQuery } from "@tanstack/react-query";
+import { ENDPOINTS } from "../../../../../config/endpoints";
+import { Promotion } from "../types";
+import Loading from "../../../../../components/ui/Loading";
+import Error from "../../../../../components/ui/Error";
+
+const usePromotionById = (id: string) => {
+    return useQuery({
+        queryKey: ["promotion", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.promotion.getOne(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
 
 function PromotionViewPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { addAlertToast, addToast } = useToast();
 
-    const data: TableData = {
-        id: "1",
-        columns: {
-            name: "************************************************************************",
-            promotion_type:
-                "************************************************************************",
-            promotion_value:
-                "************************************************************************",
-            from_date:
-                "************************************************************************",
-            to_date:
-                "************************************************************************",
-        },
-    };
+    const {
+        data: promotion,
+        error,
+        isLoading,
+    } = usePromotionById(id as string);
+
+    const promotionData = (promotion?.data as Promotion) || ({} as Promotion);
+
+    if (isLoading) return <Loading />;
+    if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
         <PageLayout>
@@ -35,23 +54,23 @@ function PromotionViewPage() {
                             fields: [
                                 {
                                     label: "Name",
-                                    value: data?.columns.name.toString(),
+                                    value: promotionData?.name.toString(),
                                 },
                                 {
                                     label: "Promotion Type",
-                                    value: data?.columns.promotion_type.toString(),
+                                    value: promotionData?.type.toString(),
                                 },
                                 {
                                     label: "Promotion Value",
-                                    value: data?.columns.promotion_value.toString(),
+                                    value: promotionData?.value.toString(),
                                 },
                                 {
                                     label: "From Date",
-                                    value: data?.columns.from_date.toString(),
+                                    value: promotionData?.fromDate.toString(),
                                 },
                                 {
                                     label: "To Date",
-                                    value: data?.columns.to_date.toString(),
+                                    value: promotionData?.toDate.toString(),
                                 },
                             ],
                         },
@@ -71,7 +90,8 @@ function PromotionViewPage() {
                                 onClick: () => {
                                     addToast({
                                         type: "success",
-                                        message: "Promotion deleted successfully",
+                                        message:
+                                            "Promotion deleted successfully",
                                         title: "Success!",
                                     });
                                     navigate(-1);
@@ -86,7 +106,6 @@ function PromotionViewPage() {
                         ]
                     );
                 }}
-                gridCols={5}
                 buttons
             />
         </PageLayout>

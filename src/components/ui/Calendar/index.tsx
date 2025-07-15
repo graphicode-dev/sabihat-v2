@@ -2,6 +2,30 @@ import { useState } from "react";
 import { cva } from "class-variance-authority";
 import { twMerge } from "tailwind-merge";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { format as dateFnsFormat } from "date-fns";
+
+// Utility function for date formatting that can be used throughout the app
+export const formatDate = {
+    // Format date as YYYY-MM-DD HH:MM:SS (for API requests)
+    apiFormat: (date: Date): string => {
+        return dateFnsFormat(date, "yyyy-MM-dd HH:mm:ss");
+    },
+
+    // Format date as readable date (e.g., Jan 15, 2023)
+    readableDate: (date: Date): string => {
+        return dateFnsFormat(date, "PP");
+    },
+
+    // Format date as short date in dd/mm/yy format
+    shortDate: (date: Date): string => {
+        return dateFnsFormat(date, "dd/MM/yy");
+    },
+
+    // Format date with time (e.g., Jan 15, 2023 14:30)
+    dateTime: (date: Date): string => {
+        return dateFnsFormat(date, "PPp");
+    },
+};
 
 interface CalendarProps {
     initialDate?: Date;
@@ -48,9 +72,7 @@ const Calendar = ({
     highlightedDates = [],
     className,
 }: CalendarProps) => {
-    const [selectedDate, setSelectedDate] = useState<Date | null>(
-        new Date()
-    ); // January 18, 2023 as default selected
+    const [selectedDate, setSelectedDate] = useState<Date | null>(new Date()); // January 18, 2023 as default selected
     const [currentDate, setCurrentDate] = useState(new Date()); // January 2023 as default view
 
     // Get the current month and year
