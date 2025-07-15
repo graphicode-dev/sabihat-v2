@@ -13,6 +13,25 @@ import {
 import CalendarDemo from "../components/ui/Calendar/CalendarDemo";
 
 // Import custom components for direct routes
+const LoadTypeViewPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/load-types/view"
+        )
+);
+const LoadTypeEditPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/load-types/edit"
+        )
+);
+const LoadTypeAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/system-management-administration/load-types/add"
+        )
+);
+
 const CurrencyRateViewPage = lazy(
     () =>
         import(
@@ -233,6 +252,18 @@ function AppRoutes() {
                         <Route
                             path="system-management-administration/currency/view/:id/add_rate"
                             element={<CurrencyRateAddPage />}
+                        />
+                        <Route
+                            path={`system-management-administration/load-types/:name/view/:id`}
+                            element={<LoadTypeViewPage />}
+                        />
+                        <Route
+                            path={`system-management-administration/load-types/:name/edit/:id`}
+                            element={<LoadTypeEditPage />}
+                        />
+                        <Route
+                            path={`system-management-administration/load-types/:name/add`}
+                            element={<LoadTypeAddPage />}
                         />
                     </Route>
                 </Route>

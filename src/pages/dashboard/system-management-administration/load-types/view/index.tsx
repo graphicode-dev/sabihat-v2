@@ -1,20 +1,51 @@
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
-import { TableData } from "../../../../../types/table";
 import { useToast } from "../../../../../hooks/useToast";
 import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { ENDPOINTS } from "../../../../../config/endpoints";
+import { Load } from "../types";
+import Loading from "../../../../../components/ui/Loading";
+import Error from "../../../../../components/ui/Error";
 
-function CargoViewPage() {
+const useLoadTypeById = (loadTypeId: string, loadId: string) => {
+    return useQuery({
+        queryKey: ["loadType", loadTypeId, loadId],
+        queryFn: async () => {
+            const response = await ENDPOINTS.loadTypes.getOne(
+                loadTypeId,
+                loadId
+            );
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!loadTypeId && !!loadId,
+    });
+};
+
+function LoadTypeViewPage() {
     const { addToast, addAlertToast } = useToast();
     const navigate = useNavigate();
-    const { id } = useParams();
+    const { name, id, loadTypeId } = useParams();
 
-    const data: TableData = {
-        id: "1",
-        columns: {
-            typeName: "*****",
-        },
-    };
+    const {
+        data: loadType,
+        isLoading,
+        error,
+    } = useLoadTypeById(loadTypeId || "", id || "");
+    console.log(loadType);
+
+    const loadTypeData = (loadType?.data as Load) || ({} as Load);
+
+    if (isLoading) return <Loading />;
+    if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
         <PageLayout>
@@ -26,7 +57,7 @@ function CargoViewPage() {
                             fields: [
                                 {
                                     label: "Type Name",
-                                    value: data?.columns.typeName.toString(),
+                                    value: loadTypeData?.loadName.toString(),
                                 },
                             ],
                         },
@@ -34,19 +65,19 @@ function CargoViewPage() {
                 }}
                 onEdit={() =>
                     navigate(
-                        `/system-management-administration/load-types/cargo/edit/${id}`
+                        `/system-management-administration/load-types/${name}/edit/${id}`
                     )
                 }
                 onDelete={() => {
                     addAlertToast(
-                        "Are you sure you want to delete this cargo?",
+                        `Are you sure you want to delete this ${name?.toUpperCase()}?`,
                         [
                             {
                                 text: "OK",
                                 onClick: () => {
                                     addToast({
                                         type: "success",
-                                        message: "Cargo deleted successfully",
+                                        message: `${name?.toUpperCase()} deleted successfully`,
                                         title: "Success!",
                                     });
                                     navigate(-1);
@@ -67,4 +98,4 @@ function CargoViewPage() {
     );
 }
 
-export default CargoViewPage;
+export default LoadTypeViewPage;

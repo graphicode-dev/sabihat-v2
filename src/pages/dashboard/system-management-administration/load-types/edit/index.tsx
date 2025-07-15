@@ -11,28 +11,28 @@ import { useNavigate } from "react-router-dom";
 import { SearchedDropDown } from "../../../../../components/SearchedDropDown";
 import { dirtyFields, logFormData } from "../../../../../utils";
 
-type Vehicle = {
+type Cargo = {
     id?: string;
     typeName: string;
 };
 
-const vehicleSchema = z.object({
+const cargoSchema = z.object({
     id: z.string().optional(),
     typeName: z.string(),
 });
 
-function VehicleEditPage() {
+function LoadTypeEditPage() {
     const fetchedData = {
         id: "1",
-        typeName: "Vehicle",
+        typeName: "Cargo",
     };
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [selectedTypeName, setSelectedTypeName] = useState<string>("");
 
-    const { control, handleSubmit, reset, formState } = useForm<Vehicle>({
-        resolver: zodResolver(vehicleSchema),
+    const { control, handleSubmit, reset, formState } = useForm<Cargo>({
+        resolver: zodResolver(cargoSchema),
         defaultValues: {
             id: fetchedData.id,
             typeName: fetchedData.typeName,
@@ -40,7 +40,7 @@ function VehicleEditPage() {
         mode: "onChange",
     });
 
-    const onSubmit = async (formData: Vehicle) => {
+    const onSubmit = async (formData: Cargo) => {
         setIsLoading(true);
         try {
             // Create FormData object for file upload
@@ -55,12 +55,13 @@ function VehicleEditPage() {
                 apiFormData.append("typeNames", formData.typeName);
 
             logFormData(apiFormData);
+
             // Simulate API call success
             // In a real app, you would send apiFormData to your backend
             // const response = await api.post('/company', apiFormData);
 
             addToast({
-                message: "Vehicle updated successfully",
+                message: "Cargo updated successfully",
                 type: "success",
                 title: "Success!",
             });
@@ -68,7 +69,7 @@ function VehicleEditPage() {
             reset();
             navigate(-1);
         } catch (error: any) {
-            console.error("Error adding vehicle:", error);
+            console.error("Error adding cargo:", error);
             if (error?.errors) {
                 // Map API error fields to our frontend field names
                 const mappedErrors: any = {};
@@ -108,16 +109,16 @@ function VehicleEditPage() {
                         label="Type Name"
                         options={[
                             {
-                                key: "Vehicle",
-                                value: "Vehicle",
+                                key: "Passenger",
+                                value: "Passenger",
                             },
                             {
                                 key: "Cargo",
                                 value: "Cargo",
                             },
                             {
-                                key: "Vehicle and Cargo",
-                                value: "Vehicle and Cargo",
+                                key: "Cargo and Cargo",
+                                value: "Cargo and Cargo",
                             },
                         ]}
                         value={selectedTypeName}
@@ -138,4 +139,4 @@ function VehicleEditPage() {
     );
 }
 
-export default VehicleEditPage;
+export default LoadTypeEditPage;

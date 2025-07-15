@@ -280,60 +280,7 @@ const LoadTypesPage = lazy(
     () =>
         import("../pages/dashboard/system-management-administration/load-types")
 );
-const LoadTypesPassengerViewPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/load-types/view/view-passenger"
-        )
-);
-const LoadTypesCargoViewPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/load-types/view/view-cargo"
-        )
-);
-const LoadTypesVehicleViewPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/load-types/view/view-vehicle"
-        )
-);
-const LoadTypesPassengerAddPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/load-types/add/add-passenger"
-        )
-);
-const LoadTypesCargoAddPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/load-types/add/add-cargo"
-        )
-);
-const LoadTypesVehicleAddPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/load-types/add/add-vehicle"
-        )
-);
-const LoadTypesVehicleEditPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/load-types/edit/edit-vehicle"
-        )
-);
-const LoadTypesPassengerEditPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/load-types/edit/edit-passenger"
-        )
-);
-const LoadTypesCargoEditPage = lazy(
-    () =>
-        import(
-            "../pages/dashboard/system-management-administration/load-types/edit/edit-cargo"
-        )
-);
+
 // #endregion Load Types
 
 // #region Ticket Rules
@@ -1352,15 +1299,6 @@ const componentRegistry: Record<string, any> = {
     },
     load_types: {
         main: LoadTypesPage,
-        view_passenger: LoadTypesPassengerViewPage,
-        view_cargo: LoadTypesCargoViewPage,
-        view_vehicle: LoadTypesVehicleViewPage,
-        add_passenger: LoadTypesPassengerAddPage,
-        add_cargo: LoadTypesCargoAddPage,
-        add_vehicle: LoadTypesVehicleAddPage,
-        edit_passenger: LoadTypesPassengerEditPage,
-        edit_cargo: LoadTypesCargoEditPage,
-        edit_vehicle: LoadTypesVehicleEditPage,
     },
     ticket_rules: {
         main: TicketRulesPage,
