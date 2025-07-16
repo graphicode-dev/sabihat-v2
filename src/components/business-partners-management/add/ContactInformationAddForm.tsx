@@ -56,55 +56,66 @@ function ContactInformationAddForm({
 
     // Process and extract contact information errors from context
     const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-    
+
     // Function to check if a specific contact has errors
     const hasContactErrors = (index: number): boolean => {
         if (!contextErrors || !contextErrors.contactInformation) return false;
-        
+
         // Check if we have errors for this specific contact index
-        const contactErrorKeys = Object.keys(formErrors).filter(key => 
+        const contactErrorKeys = Object.keys(formErrors).filter((key) =>
             key.startsWith(`contact_${index}_`)
         );
-        
+
         return contactErrorKeys.length > 0;
     };
-    
+
     // Function to clear errors for a specific contact
     const clearContactErrors = (index: number) => {
         const newErrors = { ...formErrors };
-        Object.keys(newErrors).forEach(key => {
+        Object.keys(newErrors).forEach((key) => {
             if (key.startsWith(`contact_${index}_`)) {
                 delete newErrors[key];
             }
         });
         setFormErrors(newErrors);
     };
-    
+
     // Function to get error message for a specific contact field
-    const getContactErrorMessage = (index: number, field: keyof ContactInformation): string => {
+    const getContactErrorMessage = (
+        index: number,
+        field: keyof ContactInformation
+    ): string => {
         const errorKey = `contact_${index}_${field}`;
-        return formErrors[errorKey] || '';
+        return formErrors[errorKey] || "";
     };
-    
+
     // Update form errors when context errors change
     useEffect(() => {
         const newErrors: Record<string, string> = {};
-        
+
         // Check if we have contact information errors in the context
         if (contextErrors && contextErrors.contactInformation) {
             // If contactInformation errors are an array (for multiple contacts)
             if (Array.isArray(contextErrors.contactInformation)) {
                 // Extract errors from each contact
-                contextErrors.contactInformation.forEach((contactErrors, index) => {
-                    if (contactErrors && typeof contactErrors === 'object') {
-                        Object.entries(contactErrors).forEach(([key, value]) => {
-                            // Format the error key to include the index
-                            newErrors[`contact_${index}_${key}`] = value as string;
-                        });
+                contextErrors.contactInformation.forEach(
+                    (contactErrors, index) => {
+                        if (
+                            contactErrors &&
+                            typeof contactErrors === "object"
+                        ) {
+                            Object.entries(contactErrors).forEach(
+                                ([key, value]) => {
+                                    // Format the error key to include the index
+                                    newErrors[`contact_${index}_${key}`] =
+                                        value as string;
+                                }
+                            );
+                        }
                     }
-                });
+                );
             }
-            
+
             setFormErrors(newErrors);
         }
     }, [contextErrors]);
@@ -116,12 +127,21 @@ function ContactInformationAddForm({
             accessorKey: "name",
             cell: ({ row }: { row: any }) => {
                 const index = parseInt(row.id);
-                const hasError = getContactErrorMessage(index, 'name');
+                const hasError = getContactErrorMessage(index, "name");
                 return (
-                    <div className={`flex items-center ${hasError ? 'text-red-500' : ''}`}>
+                    <div
+                        className={`flex items-center ${
+                            hasError ? "text-red-500" : ""
+                        }`}
+                    >
                         {row.original?.name || row.columns?.name}
                         {hasError && (
-                            <span className="ml-1 text-red-500" title={hasError}>⚠️</span>
+                            <span
+                                className="ml-1 text-red-500"
+                                title={hasError}
+                            >
+                                ⚠️
+                            </span>
                         )}
                     </div>
                 );
@@ -133,12 +153,21 @@ function ContactInformationAddForm({
             accessorKey: "title",
             cell: ({ row }: { row: any }) => {
                 const index = parseInt(row.id);
-                const hasError = getContactErrorMessage(index, 'title');
+                const hasError = getContactErrorMessage(index, "title");
                 return (
-                    <div className={`flex items-center ${hasError ? 'text-red-500' : ''}`}>
+                    <div
+                        className={`flex items-center ${
+                            hasError ? "text-red-500" : ""
+                        }`}
+                    >
                         {row.original?.title || row.columns?.title}
                         {hasError && (
-                            <span className="ml-1 text-red-500" title={hasError}>⚠️</span>
+                            <span
+                                className="ml-1 text-red-500"
+                                title={hasError}
+                            >
+                                ⚠️
+                            </span>
                         )}
                     </div>
                 );
@@ -150,21 +179,39 @@ function ContactInformationAddForm({
             accessorKey: "phoneNumber",
             cell: ({ row }: { row: any }) => {
                 const index = parseInt(row.id);
-                const hasPhoneCodeError = getContactErrorMessage(index, 'phoneCode');
-                const hasPhoneNumberError = getContactErrorMessage(index, 'phoneNumber');
+                const hasPhoneCodeError = getContactErrorMessage(
+                    index,
+                    "phoneCode"
+                );
+                const hasPhoneNumberError = getContactErrorMessage(
+                    index,
+                    "phoneNumber"
+                );
                 const hasError = hasPhoneCodeError || hasPhoneNumberError;
-                const errorMessage = hasPhoneCodeError || hasPhoneNumberError || '';
-                
+                const errorMessage =
+                    hasPhoneCodeError || hasPhoneNumberError || "";
+
                 // Format phone number with country code
-                const phoneCode = row.original?.phoneCode || row.columns?.phoneCode || '';
-                const phoneNumber = row.original?.phoneNumber || row.columns?.phoneNumber || '';
+                const phoneCode =
+                    row.original?.phoneCode || row.columns?.phoneCode || "";
+                const phoneNumber =
+                    row.original?.phoneNumber || row.columns?.phoneNumber || "";
                 const formattedPhone = phoneCode + phoneNumber;
-                
+
                 return (
-                    <div className={`flex items-center ${hasError ? 'text-red-500' : ''}`}>
+                    <div
+                        className={`flex items-center ${
+                            hasError ? "text-red-500" : ""
+                        }`}
+                    >
                         {formattedPhone}
                         {hasError && (
-                            <span className="ml-1 text-red-500" title={errorMessage}>⚠️</span>
+                            <span
+                                className="ml-1 text-red-500"
+                                title={errorMessage}
+                            >
+                                ⚠️
+                            </span>
                         )}
                     </div>
                 );
@@ -176,12 +223,21 @@ function ContactInformationAddForm({
             accessorKey: "email",
             cell: ({ row }: { row: any }) => {
                 const index = parseInt(row.id);
-                const hasError = getContactErrorMessage(index, 'email');
+                const hasError = getContactErrorMessage(index, "email");
                 return (
-                    <div className={`flex items-center ${hasError ? 'text-red-500' : ''}`}>
+                    <div
+                        className={`flex items-center ${
+                            hasError ? "text-red-500" : ""
+                        }`}
+                    >
                         {row.original?.email || row.columns?.email}
                         {hasError && (
-                            <span className="ml-1 text-red-500" title={hasError}>⚠️</span>
+                            <span
+                                className="ml-1 text-red-500"
+                                title={hasError}
+                            >
+                                ⚠️
+                            </span>
                         )}
                     </div>
                 );
@@ -193,12 +249,21 @@ function ContactInformationAddForm({
             accessorKey: "hotline",
             cell: ({ row }: { row: any }) => {
                 const index = parseInt(row.id);
-                const hasError = getContactErrorMessage(index, 'hotline');
+                const hasError = getContactErrorMessage(index, "hotline");
                 return (
-                    <div className={`flex items-center ${hasError ? 'text-red-500' : ''}`}>
+                    <div
+                        className={`flex items-center ${
+                            hasError ? "text-red-500" : ""
+                        }`}
+                    >
                         {row.original?.hotline || row.columns?.hotline}
                         {hasError && (
-                            <span className="ml-1 text-red-500" title={hasError}>⚠️</span>
+                            <span
+                                className="ml-1 text-red-500"
+                                title={hasError}
+                            >
+                                ⚠️
+                            </span>
                         )}
                     </div>
                 );
@@ -332,26 +397,19 @@ function ContactInformationAddForm({
         >
             <div id="contact-form">
                 <FormFieldsLayout cols="6">
-                    {/* Display any general contact errors */}
-                    {Object.keys(formErrors).length > 0 && (
-                        <div className="col-span-6 text-red-500 text-sm mb-2">
-                            Please fix the validation errors below
-                        </div>
-                    )}
-                    
                     {/* Name */}
                     <FormInput
                         name="name"
                         control={control}
                         label="Contact Name"
-                        error={getContactErrorMessage(0, 'name') || formState.errors.name?.message?.toString()}
+                        // error={getContactErrorMessage(0, 'name') || formState.errors.name?.message?.toString()}
                     />
                     {/* Title */}
                     <FormInput
                         name="title"
                         control={control}
                         label="Position"
-                        error={getContactErrorMessage(0, 'title') || formState.errors.title?.message?.toString()}
+                        // error={getContactErrorMessage(0, 'title') || formState.errors.title?.message?.toString()}
                     />
                     {/* Phone */}
                     <FormInput
@@ -359,32 +417,29 @@ function ContactInformationAddForm({
                         control={control}
                         label="Phone Number"
                         type="tel"
-                        error={getContactErrorMessage(0, 'phoneNumber') || formState.errors.phoneNumber?.message?.toString()}
+                        // error={getContactErrorMessage(0, 'phoneNumber') || formState.errors.phoneNumber?.message?.toString()}
                         onPhoneExtracted={handlePhoneExtracted}
                     />
                     {/* Hidden phone code field */}
-                    <input 
-                        type="hidden" 
-                        {...control.register("phoneCode")} 
-                    />
-                    {getContactErrorMessage(0, 'phoneCode') && (
+                    {/* <input type="hidden" {...control.register("phoneCode")} />
+                    {getContactErrorMessage(0, "phoneCode") && (
                         <div className="col-span-6 text-red-500 text-sm">
-                            {getContactErrorMessage(0, 'phoneCode')}
+                            {getContactErrorMessage(0, "phoneCode")}
                         </div>
-                    )}
+                    )} */}
                     {/* Email */}
                     <FormInput
                         name="email"
                         control={control}
                         label="Email"
-                        error={getContactErrorMessage(0, 'email') || formState.errors.email?.message?.toString()}
+                        // error={getContactErrorMessage(0, 'email') || formState.errors.email?.message?.toString()}
                     />
                     {/* Hotline */}
                     <FormInput
                         name="hotline"
                         control={control}
                         label="Hotline"
-                        error={getContactErrorMessage(0, 'hotline') || formState.errors.hotline?.message?.toString()}
+                        // error={getContactErrorMessage(0, 'hotline') || formState.errors.hotline?.message?.toString()}
                     />
                     <FormButtons
                         isLoading={false}
@@ -407,7 +462,7 @@ function ContactInformationAddForm({
                     setContacts(newContacts);
                     updateContactInformation(newContacts);
                     setTableKey((prev) => prev + 1);
-                    
+
                     // Clear errors for this contact
                     clearContactErrors(index);
                 }}
@@ -415,7 +470,7 @@ function ContactInformationAddForm({
                     // Get the contact to edit
                     const contactIndex = parseInt(id);
                     const contact = contacts[contactIndex];
-                    
+
                     // Set form values
                     reset({
                         name: contact.name,
@@ -425,22 +480,26 @@ function ContactInformationAddForm({
                         email: contact.email,
                         hotline: contact.hotline || "",
                     });
-                    
+
                     // Remove the contact from the list
-                    const newContacts = contacts.filter((_, index) => index !== contactIndex);
+                    const newContacts = contacts.filter(
+                        (_, index) => index !== contactIndex
+                    );
                     setContacts(newContacts);
                     updateContactInformation(newContacts);
                     setTableKey((prev) => prev + 1);
-                    
+
                     // Clear errors for this contact
                     clearContactErrors(contactIndex);
-                    
+
                     // Scroll to form
-                    document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
+                    document
+                        .getElementById("contact-form")
+                        ?.scrollIntoView({ behavior: "smooth" });
                 }}
                 rowClassName={(row) => {
                     const index = parseInt(row.id);
-                    return hasContactErrors(index) ? 'bg-red-50' : '';
+                    return hasContactErrors(index) ? "bg-red-50" : "";
                 }}
             />
 
