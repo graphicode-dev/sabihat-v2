@@ -3,36 +3,29 @@ import FormFieldsLayout from "../../../layout/FormFieldsLayout";
 import FormLayout from "../../../layout/FormLayout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "../../../hooks/useToast";
+import { useEffect } from "react";
 import { z } from "zod";
 import { DynamicTable } from "../../table";
 import { TableColumn, TableData } from "../../../types/table";
 import ToggleButton from "../../ui/ToggleButton";
-
-type User = {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    address: string;
-    userStatus: boolean;
-};
+import { usePartnerForm } from "../../../contexts/PartnerFormContext";
 
 type UsersFormData = {
-    users: Record<string, boolean>; // Map of user IDs to their status
+    users: Record<string, boolean>;
 };
 
 const usersSchema = z.object({
     users: z.record(z.string(), z.boolean()),
 });
 
-function UsersAddForm() {
-    const { addToast } = useToast();
-    const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
-    const [userData, setUserData] = useState<User[]>([]);
+type UsersAddFormProps = {
+    handleChangeTab: (tab: string) => void;
+};
+
+function UsersAddForm({ handleChangeTab }: UsersAddFormProps) {
+    // Get form data and errors from context
+    const { users, updateUsers, submitForm, isSubmitting, lockTab } =
+        usePartnerForm();
 
     // Initialize form with user data
     const { control, handleSubmit, formState, setValue, watch } =
@@ -47,111 +40,33 @@ function UsersAddForm() {
     // Watch the form values for changes
     const formValues = watch();
 
-    // Load initial user data
+    // Initialize form values with user statuses from context
     useEffect(() => {
-        // In a real app, you would fetch this data from an API
-        const initialData: User[] = [
-            {
-                id: "1",
-                name: "*****",
-                email: "*****",
-                phone: "*****",
-                address: "*****",
-                userStatus: true,
-            },
-            {
-                id: "2",
-                name: "*****",
-                email: "*****",
-                phone: "*****",
-                address: "*****",
-                userStatus: true,
-            },
-            {
-                id: "3",
-                name: "*****",
-                email: "*****",
-                phone: "*****",
-                address: "*****",
-                userStatus: true,
-            },
-            {
-                id: "4",
-                name: "*****",
-                email: "*****",
-                phone: "*****",
-                address: "*****",
-                userStatus: false,
-            },
-            {
-                id: "5",
-                name: "*****",
-                email: "*****",
-                phone: "*****",
-                address: "*****",
-                userStatus: false,
-            },
-        ];
+        // Create a record of user statuses
+        const userStatuses: Record<string, boolean> = {};
 
-        setUserData(initialData);
-
-        // Initialize form values with user statuses
-        const initialStatuses: Record<string, boolean> = {};
-        initialData.forEach((user) => {
-            initialStatuses[user.id] = user.userStatus;
-        });
-
-        setValue("users", initialStatuses);
-    }, [setValue]);
-
-    const onSubmit = async (formData: UsersFormData) => {
-        setIsLoading(true);
-        try {
-            // Create FormData object for API submission
-            const apiFormData = new FormData();
-
-            // Convert the users object to a format suitable for your API
-            Object.entries(formData.users).forEach(([userId, status]) => {
-                apiFormData.append(`users[${userId}]`, status.toString());
+        // If we have users in context, set default active status
+        if (users && users.length > 0) {
+            users.forEach((_, index) => {
+                // Default all users to active since UserForm doesn't have an active property
+                userStatuses[index.toString()] = true;
             });
-
-            // Simulate API call success
-            // In a real app, you would send apiFormData to your backend
-            // const response = await api.post('/users/update-status', apiFormData);
-
-            console.log("Form data to submit:", formData.users);
-
-            addToast({
-                message: "User statuses updated successfully",
-                type: "success",
-                title: "Success!",
-            });
-
-            // Don't reset the form as we want to keep the current state
-            navigate(-1);
-        } catch (error: any) {
-            console.error("Error updating Users:", error);
-            if (error?.errors) {
-                // Handle API validation errors if needed
-                console.log("API errors:", error.errors);
-            } else {
-                addToast({
-                    message: "An unexpected error occurred. Please try again.",
-                    type: "error",
-                    title: "Error!",
-                });
-            }
-        } finally {
-            setIsLoading(false);
+        } else {
+            // Default empty user if none exist
+            userStatuses["0"] = false;
         }
+
+        setValue("users", userStatuses);
+    }, [users, setValue]);
+
+    const onSubmit = async (_formData: UsersFormData) => {
+        updateUsers(users);
+
+        // Submit the entire form
+        await submitForm();
     };
 
     const onToggle = (id: string, checked: boolean) => {
-        console.log("Toggle for user ID:", id, "New status:", checked);
-        addToast({
-            type: "success",
-            message: `Toggle for user ID: ${id} New status: ${checked}`,
-        });
         // Update the form state with the new status
         setValue(`users.${id}`, checked, {
             shouldDirty: true, // Mark form as dirty to enable submit button
@@ -171,31 +86,31 @@ function UsersAddForm() {
             accessorKey: "email",
         },
         {
-            id: "phone",
+            id: "phoneNumber",
             header: "Phone",
-            accessorKey: "phone",
+            accessorKey: "phoneNumber",
         },
         {
-            id: "address",
-            header: "Address",
-            accessorKey: "address",
+            id: "role",
+            header: "Role",
+            accessorKey: "role",
         },
         {
-            id: "userStatus",
+            id: "active",
             header: "User Status",
-            accessorKey: "userStatus",
+            accessorKey: "active",
             cell: ({ row }: { row: any }) => {
-                const userId = row.original.id;
+                const userIndex = row.original.id;
                 // Use Controller to connect the toggle button to the form
                 return (
                     <Controller
                         control={control}
-                        name={`users.${userId}`}
+                        name={`users.${userIndex}`}
                         render={({ field }) => (
                             <ToggleButton
                                 initialChecked={field.value}
                                 onToggle={(checked) =>
-                                    onToggle(userId, checked)
+                                    onToggle(userIndex, checked)
                                 }
                             />
                         )}
@@ -204,17 +119,31 @@ function UsersAddForm() {
             },
         },
     ];
-    // Transform userData into the format expected by DynamicTable
-    const data: TableData[] = userData.map((user) => ({
-        id: user.id,
+    // Transform users from context into the format expected by DynamicTable
+    const data: TableData[] = users.map((user, index) => ({
+        id: index.toString(),
         columns: {
-            name: user.name,
-            email: user.email,
-            phone: user.phone,
-            address: user.address,
-            userStatus: formValues.users?.[user.id] ?? user.userStatus,
+            name: user.name || "",
+            email: user.email || "",
+            phoneNumber: user.phoneNumber || "",
+            role: user.role || "",
+            active: formValues.users?.[index.toString()] ?? true,
         },
     }));
+
+    // If no users exist, add an empty row
+    if (data.length === 0) {
+        data.push({
+            id: "0",
+            columns: {
+                name: "",
+                email: "",
+                phoneNumber: "",
+                role: "",
+                active: false,
+            },
+        });
+    }
 
     return (
         <FormLayout
@@ -233,9 +162,12 @@ function UsersAddForm() {
             </FormFieldsLayout>
 
             <FormButtons
-                isLoading={isLoading}
+                isLoading={isSubmitting}
                 disabled={!formState.isDirty}
-                submitText="Save Changes"
+                cancelText="Back"
+                submitText="Submit"
+                onCancel={() => handleChangeTab("contactInformation")}
+                removeCancel={lockTab}
             />
         </FormLayout>
     );

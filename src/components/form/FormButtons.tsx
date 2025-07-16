@@ -7,6 +7,7 @@ interface FormButtonProps {
     cancelText?: string;
     disabled?: boolean;
     removeCancel?: boolean;
+    onConfirm?: () => void;
     onCancel?: () => void;
 }
 
@@ -17,6 +18,7 @@ function FormButtons({
     cancelText,
     disabled,
     removeCancel,
+    onConfirm,
     onCancel,
 }: FormButtonProps) {
     const navigate = useNavigate();
@@ -72,9 +74,10 @@ function FormButtons({
 
             {/* Submit Button */}
             <button
-                type="submit"
+                type={onConfirm ? "button" : "submit"}
                 disabled={isLoading || disabled}
                 className="form-button-submit disabled:opacity-50 "
+                onClick={onConfirm}
             >
                 {isLoading
                     ? `${

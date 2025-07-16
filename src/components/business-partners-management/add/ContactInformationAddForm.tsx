@@ -4,132 +4,94 @@ import FormFieldsLayout from "../../../layout/FormFieldsLayout";
 import FormLayout from "../../../layout/FormLayout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "../../../hooks/useToast";
+import { useEffect } from "react";
 import { z } from "zod";
-
-type Error = {
-    name: string;
-    title: string;
-    phone: string;
-    email: string;
-    hotline: string;
-};
-
-type ContactInformation = {
-    id?: string;
-    name: string;
-    title: string;
-    phone: string;
-    email: string;
-    hotline: string;
-};
+import { usePartnerForm } from "../../../contexts/PartnerFormContext";
+import { ContactInformation } from "../../../pages/dashboard/business-partners-management/partners/types";
 
 const contactInformationSchema = z.object({
-    id: z.string().optional(),
     name: z.string(),
-    title: z.string(),
-    phone: z.string(),
+    phoneCode: z.string(),
+    phoneNumber: z.string(),
     email: z.string(),
+    title: z.string(),
     hotline: z.string(),
 });
-function ContactInformationAddForm() {
-    const { addToast } = useToast();
-    const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState<Error>({
-        name: "",
-        title: "",
-        phone: "",
-        email: "",
-        hotline: "",
-    });
 
-    const { control, handleSubmit, reset, formState } =
+type ContactInformationAddFormProps = {
+    handleChangeTab: (tab: string) => void;
+};
+
+function ContactInformationAddForm({
+    handleChangeTab,
+}: ContactInformationAddFormProps) {
+    // Get form data and errors from context
+    const {
+        contactInformation,
+        updateContactInformation,
+        isSubmitting,
+        errors: contextErrors,
+        lockTab
+    } = usePartnerForm();
+
+    // Extract errors for this form - get the first contact's errors if available
+    const formErrors: ContactInformation =
+        contextErrors.contactInformation &&
+        Array.isArray(contextErrors.contactInformation) &&
+        contextErrors.contactInformation.length > 0
+            ? (contextErrors.contactInformation[0] as ContactInformation)
+            : {
+                  name: "",
+                  phoneCode: "",
+                  phoneNumber: "",
+                  email: "",
+                  title: "",
+                  hotline: "",
+              };
+
+    // We'll work with the first contact information entry
+    const currentContact = contactInformation[0] || {
+        name: "",
+        phoneCode: "",
+        phoneNumber: "",
+        email: "",
+        title: "",
+        hotline: "",
+    };
+
+    const { control, handleSubmit, formState, setValue } =
         useForm<ContactInformation>({
             resolver: zodResolver(contactInformationSchema),
             defaultValues: {
-                id: "",
-                name: "",
-                title: "",
-                phone: "",
-                email: "",
-                hotline: "",
+                name: currentContact.name || "",
+                phoneCode: currentContact.phoneCode || "",
+                phoneNumber: currentContact.phoneNumber || "",
+                email: currentContact.email || "",
+                title: currentContact.title || "",
+                hotline: currentContact.hotline || "",
             },
             mode: "onChange",
         });
 
-    const onSubmit = async (formData: ContactInformation) => {
-        setIsLoading(true);
-        try {
-            // Create FormData object for file upload
-            const apiFormData = new FormData();
-
-            // Always append all fields, even if they're empty strings
-            // This ensures the API receives all fields
-            if (formData.name) {
-                apiFormData.append("name", formData.name);
-            }
-            if (formData.title) {
-                apiFormData.append("title", formData.title);
-            }
-            if (formData.phone) {
-                apiFormData.append("phone", formData.phone);
-            }
-            if (formData.email) {
-                apiFormData.append("email", formData.email);
-            }
-            if (formData.hotline) {
-                apiFormData.append("hotline", formData.hotline);
-            }
-
-            // Simulate API call success
-            // In a real app, you would send apiFormData to your backend
-            // const response = await api.post('/company', apiFormData);
-
-            addToast({
-                message: "Contact Information updated successfully",
-                type: "success",
-                title: "Success!",
-            });
-
-            reset();
-            navigate(-1);
-        } catch (error: any) {
-            console.error("Error updating Contact Information:", error);
-            if (error?.errors) {
-                // Map API error fields to our frontend field names
-                const mappedErrors: any = {};
-
-                if (error.errors.name) {
-                    mappedErrors.name = error.errors.name[0];
-                }
-                if (error.errors.title) {
-                    mappedErrors.title = error.errors.title[0];
-                }
-                if (error.errors.phone) {
-                    mappedErrors.phone = error.errors.phone[0];
-                }
-                if (error.errors.email) {
-                    mappedErrors.email = error.errors.email[0];
-                }
-                if (error.errors.hotline) {
-                    mappedErrors.hotline = error.errors.hotline[0];
-                }
-
-                console.log("Mapped errors:", mappedErrors);
-                setErrors(mappedErrors);
-            } else {
-                addToast({
-                    message: "An unexpected error occurred. Please try again.",
-                    type: "error",
-                    title: "Error!",
-                });
-            }
-        } finally {
-            setIsLoading(false);
+    // Update form values when context data changes
+    useEffect(() => {
+        if (contactInformation.length > 0) {
+            const contact = contactInformation[0];
+            setValue("name", contact.name || "");
+            setValue("phoneCode", contact.phoneCode || "");
+            setValue("phoneNumber", contact.phoneNumber || "");
+            setValue("email", contact.email || "");
+            setValue("title", contact.title || "");
+            setValue("hotline", contact.hotline || "");
         }
+    }, [contactInformation, setValue]);
+
+    const onSubmit = async (formData: ContactInformation) => {
+        // Update the context with the form data - wrap in array since context expects array
+        updateContactInformation([formData]);
+
+        // Navigate to the next tab
+        handleChangeTab("users");
     };
 
     return (
@@ -143,25 +105,25 @@ function ContactInformationAddForm() {
                 <FormInput
                     name="name"
                     control={control}
-                    label="Name"
-                    error={errors.name}
+                    label="Contact Name"
+                    error={formErrors.name}
                 />
 
                 {/* Title */}
                 <FormInput
                     name="title"
                     control={control}
-                    label="Title"
-                    error={errors.title}
+                    label="Position"
+                    error={formErrors.title}
                 />
 
                 {/* Phone */}
                 <FormInput
-                    name="phone"
+                    name="phoneNumber"
                     control={control}
-                    label="Phone"
+                    label="Phone Number"
                     type="tel"
-                    error={errors.phone}
+                    error={formErrors.phoneNumber}
                 />
 
                 {/* Email */}
@@ -169,7 +131,7 @@ function ContactInformationAddForm() {
                     name="email"
                     control={control}
                     label="Email"
-                    error={errors.email}
+                    error={formErrors.email}
                 />
 
                 {/* Hotline */}
@@ -177,11 +139,22 @@ function ContactInformationAddForm() {
                     name="hotline"
                     control={control}
                     label="Hotline"
-                    error={errors.hotline}
+                    error={formErrors.hotline}
                 />
             </FormFieldsLayout>
 
-            <FormButtons isLoading={isLoading} disabled={!formState.isDirty} />
+            <FormButtons
+                isLoading={isSubmitting}
+                disabled={!formState.isDirty}
+                cancelText="Back"
+                submitText="Next"
+                className="mt-4"
+                onConfirm={() => handleChangeTab("users")}
+                onCancel={() =>
+                    handleChangeTab("quota-management-credit-limit")
+                }
+                removeCancel={lockTab}
+            />
         </FormLayout>
     );
 }

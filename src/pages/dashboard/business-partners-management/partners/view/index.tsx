@@ -3,79 +3,94 @@ import PageLayout from "../../../../../layout/PageLayout";
 import defaultAvatar from "../../../../../assets/images/default-user.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from "../../../../../hooks/useToast";
+import { useQuery } from "@tanstack/react-query";
+import { Partner, PartnerUser } from "../types";
+import Loading from "../../../../../components/ui/Loading";
+import Error from "../../../../../components/ui/Error";
+import { ENDPOINTS } from "../../../../../config/endpoints";
+import { DataResponse } from "../../../../../types";
+import { TableData } from "../../../../../types/table";
+
+const usePartnerById = (id: string) => {
+    return useQuery({
+        queryKey: ["partner", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.partners.getOne(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
+
+const usePartnerUsers = (id: string) => {
+    return useQuery({
+        queryKey: ["partnerUsers", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.partnerUsers.getAll(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            // Access the data array from the response
+            const typedResponse = response.data as DataResponse<PartnerUser>;
+            return typedResponse.data || [];
+        },
+    });
+};
 
 function PartnersViewPage() {
+    const navigate = useNavigate();
     const { id } = useParams();
     const { addAlertToast, addToast } = useToast();
-    const navigate = useNavigate();
 
-    const data = {
-        partner: {
-            avatar: defaultAvatar,
-            name: "Partner Name",
-        },
-        partnersMaster: {
-            name: "*****",
-            phone: "*****",
-            address: "*****",
-            layer: "*****",
-        },
-        creditLimit: {
-            limitAmount: "*****",
-            limitTicket: "*****",
-        },
-        contactInformation: {
-            name: "*****",
-            title: "*****",
-            phone: "*****",
-            email: "*****",
-            hotLine: "*****",
-        },
-        users: [
-            {
-                name: "User1",
-                phone: "*****",
-                email: "*****",
-                address: "*****",
-                layer: "*****",
+    const {
+        data: partner,
+        error: partnerError,
+        isLoading: partnerLoading,
+    } = usePartnerById(id as string);
+    const {
+        data: partnerUsers = [],
+        error: partnerUsersError,
+        isLoading: partnerUsersLoading,
+    } = usePartnerUsers(id as string);
+
+    const partnerData = (partner?.data as Partner) || ({} as Partner);
+    const partnerUsersData: TableData[] =
+        partnerUsers?.map((item) => ({
+            id: item.id.toString(),
+            columns: {
+                name: item.name,
+                email: item.email,
+                phoneCode: item.phoneCode,
+                phoneNumber: item.phoneNumber,
+                phoneVerifiedAt: item.phoneVerifiedAt,
+                address: item.address,
+                image: item.image,
+                businessPartnerId: item.businessPartnerId,
+                isSalesman: item.isSalesman,
+                createdAt: item.createdAt,
             },
-            {
-                name: "User2",
-                phone: "*****",
-                email: "*****",
-                address: "*****",
-                layer: "*****",
-            },
-            {
-                name: "User3",
-                phone: "*****",
-                email: "*****",
-                address: "*****",
-                layer: "*****",
-            },
-            {
-                name: "User4",
-                phone: "*****",
-                email: "*****",
-                address: "*****",
-                layer: "*****",
-            },
-            {
-                name: "User5",
-                phone: "*****",
-                email: "*****",
-                address: "*****",
-                layer: "*****",
-            },
-        ],
-    };
+        })) || [];
+
+    if (partnerLoading || partnerUsersLoading) return <Loading />;
+    if (partnerError || partnerUsersError)
+        return <Error message={partnerError?.message || "Unknown error"} />;
 
     return (
         <PageLayout showBorder>
             <ViewCard
                 variant="user"
-                title={data.partner.name}
-                image={data.partner.avatar}
+                title={partnerData.name}
+                image={defaultAvatar}
                 onEdit={() =>
                     navigate(
                         `/business-partners-management/partners/edit/${id}`
@@ -90,8 +105,7 @@ function PartnersViewPage() {
                                 onClick: () => {
                                     addToast({
                                         type: "success",
-                                        message:
-                                            "Partner deleted successfully",
+                                        message: "Partner deleted successfully",
                                         title: "Success!",
                                     });
                                     navigate(-1);
@@ -119,58 +133,58 @@ function PartnersViewPage() {
                             fields: [
                                 {
                                     label: "Name",
-                                    value: data.partnersMaster.name,
+                                    value: partnerData.name,
                                 },
                                 {
                                     label: "Phone",
-                                    value: data.partnersMaster.phone,
+                                    value: partnerData.phoneNumber,
                                 },
-                                {
-                                    label: "Address",
-                                    value: data.partnersMaster.address,
-                                },
-                                {
-                                    label: "Layer",
-                                    value: data.partnersMaster.layer,
-                                },
+                                // {
+                                //     label: "Address",
+                                //     value: partnerData.address,
+                                // },
+                                // {
+                                //     label: "Layer",
+                                //     value: partnerData.layer,
+                                // },
                             ],
                         },
-                        {
-                            title: "Credit Limit",
-                            fields: [
-                                {
-                                    label: "Limit Amount",
-                                    value: data.creditLimit.limitAmount,
-                                },
-                                {
-                                    label: "Limit Ticket",
-                                    value: data.creditLimit.limitTicket,
-                                },
-                            ],
-                        },
+                        // {
+                        //     title: "Credit Limit",
+                        //     fields: [
+                        //         {
+                        //             label: "Limit Amount",
+                        //             value: partnerData.creditLimit.limitAmount,
+                        //         },
+                        //         {
+                        //             label: "Limit Ticket",
+                        //             value: partnerData.creditLimit.limitTicket,
+                        //         },
+                        //     ],
+                        // },
                         {
                             title: "Contact Information",
                             fields: [
                                 {
                                     label: "Name",
-                                    value: data.contactInformation.name,
+                                    value: partnerData.name,
                                 },
                                 {
                                     label: "Title",
-                                    value: data.contactInformation.title,
+                                    value: partnerData.title,
                                 },
                                 {
                                     label: "Phone",
-                                    value: data.contactInformation.phone,
+                                    value: partnerData.phoneNumber,
                                 },
                                 {
                                     label: "Email",
-                                    value: data.contactInformation.email,
+                                    value: partnerData.email,
                                 },
-                                {
-                                    label: "Hot Line",
-                                    value: data.contactInformation.hotLine,
-                                },
+                                // {
+                                //     label: "Hot Line",
+                                //     value: partnerData.hotLine,
+                                // },
                             ],
                         },
                         {
@@ -194,35 +208,48 @@ function PartnersViewPage() {
                                                         Address
                                                     </th>
                                                     <th className="py-2 px-4 text-left text-sm font-medium text-dark-200">
-                                                        Layer
+                                                        Is Salesman
+                                                    </th>
+                                                    <th className="py-2 px-4 text-left text-sm font-medium text-dark-200">
+                                                        Created At
                                                     </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {data.users.map(
+                                                {partnerUsersData.map(
                                                     (user, index) => (
                                                         <tr
                                                             key={index}
                                                             className="border-b border-dark-50"
                                                         >
                                                             <td className="py-2 px-4 text-dark-500 font-medium">
-                                                                {user.name ||
+                                                                {user.columns
+                                                                    .name ||
                                                                     "••••••••••••••••"}
                                                             </td>
                                                             <td className="py-2 px-4 text-dark-500 font-medium">
-                                                                {user.phone ||
+                                                                {user.columns
+                                                                    .phoneNumber ||
                                                                     "••••••••••••••••"}
                                                             </td>
                                                             <td className="py-2 px-4 text-dark-500 font-medium">
-                                                                {user.email ||
+                                                                {user.columns
+                                                                    .email ||
                                                                     "••••••••••••••••"}
                                                             </td>
                                                             <td className="py-2 px-4 text-dark-500 font-medium">
-                                                                {user.address ||
+                                                                {user.columns
+                                                                    .address ||
                                                                     "••••••••••••••••"}
                                                             </td>
                                                             <td className="py-2 px-4 text-dark-500 font-medium">
-                                                                {user.layer ||
+                                                                {user.columns
+                                                                    .isSalesman ||
+                                                                    "••••••••••••••••"}
+                                                            </td>
+                                                            <td className="py-2 px-4 text-dark-500 font-medium">
+                                                                {user.columns
+                                                                    .createdAt ||
                                                                     "••••••••••••••••"}
                                                             </td>
                                                         </tr>

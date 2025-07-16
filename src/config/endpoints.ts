@@ -14,6 +14,7 @@ import {
 import { Promotion } from "../pages/dashboard/system-management-administration/promotion/types";
 import { Load } from "../pages/dashboard/system-management-administration/load-types/types";
 import { TicketRule } from "../pages/dashboard/system-management-administration/ticket-rules/types";
+import { Partner } from "../pages/dashboard/business-partners-management/partners/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -52,6 +53,7 @@ export const ENDPOINTS = {
                 headers: { Authorization: `Bearer ${token}` },
             }),
     },
+    // System Management & Administration
     contactMessages: {
         getAll: (
             page: number
@@ -408,5 +410,47 @@ export const ENDPOINTS = {
                         throw response.error.details.errors;
                     }
                 }),
+    },
+    // Business Partners Management
+    partners: {
+        getAll: () =>
+            api.get("business-partners", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: Partner;
+            }>
+        > =>
+            api.get<{ success: boolean; message: string; data: Partner }>(
+                `/business-partners/${id}`
+            ),
+        add: (data: FormData) =>
+            api
+                .post(`/business-partners`, data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    if (response.error) {
+                        throw response.error.details.errors;
+                    }
+                }),
+    },
+    partnerUsers: {
+        getAll: (id: string) =>
+            api.get(`/users/business-partner/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }),
     },
 };

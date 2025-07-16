@@ -1,7 +1,5 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { useLocation, useNavigate, Navigate } from "react-router-dom";
-import { selectUser } from "../../store/slices/auth/authSlice";
-import { store } from "../../store";
 
 // Define Tab Item Props
 type TabItemProps<T extends string> = {
@@ -18,17 +16,19 @@ type TabItemProps<T extends string> = {
 type TabsProps<T extends string> = {
     children: ReactElement<TabItemProps<T>>[];
     hideBorder?: boolean;
+    disableTabOnClick?: boolean;
 };
 
 // Tabs Component
 function Tabs<T extends string>({
     children,
     hideBorder = false,
+    disableTabOnClick = false,
 }: TabsProps<T>) {
     const navigate = useNavigate();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-    const user = selectUser(store.getState());
+    // const user = selectUser(store.getState());
 
     // Filter tabs based on role and entity
     const filteredChildren = React.Children.toArray(children) as ReactElement<
@@ -37,10 +37,9 @@ function Tabs<T extends string>({
     const visibleTabs = filteredChildren.filter((child) => {
         // Check role restrictions if present
         if (child.props.role) {
-            const requiredRoles = Array.isArray(child.props.role)
-                ? child.props.role
-                : [child.props.role];
-
+            // const requiredRoles = Array.isArray(child.props.role)
+            //     ? child.props.role
+            //     : [child.props.role];
             // if (!requiredRoles.includes(user?.role || "")) {
             //     return false; // Role doesn't match
             // }
@@ -52,11 +51,9 @@ function Tabs<T extends string>({
             // if (user?.role === "admin") {
             //     return true; // Admin can see all tabs
             // }
-
             // const requiredEntities = Array.isArray(child.props.entity)
             //     ? child.props.entity
             //     : [child.props.entity];
-
             // If user has no entity or entity doesn't match, hide tab
             // if (!requiredEntities.includes(user?.entityType || "")) {
             //     return false; // Entity doesn't match
@@ -154,16 +151,19 @@ function Tabs<T extends string>({
                                     activeTab === child.props.value
                                         ? "tab-active"
                                         : "tab-inactive"
-                                }`}
+                                } `}
                                 aria-current={
                                     activeTab === child.props.value
                                         ? "page"
                                         : undefined
                                 }
                                 onClick={() => {
-                                    setActiveTab(child.props.value);
-                                    updateTab(child.props.value);
+                                    if (!disableTabOnClick) {
+                                        setActiveTab(child.props.value);
+                                        updateTab(child.props.value);
+                                    }
                                 }}
+                                disabled={disableTabOnClick}
                             >
                                 {child.props.label}
                             </button>

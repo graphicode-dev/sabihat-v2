@@ -264,11 +264,11 @@ const FormInput = <T extends FieldValues>({
                                                 selectedCountry.dialCode.length
                                             );
 
-                                        console.log("Phone Extraction:", {
-                                            fullNumber: phoneValue,
-                                            phoneCode,
-                                            phoneNumber: phoneNumberOnly,
-                                        });
+                                        // console.log("Phone Extraction:", {
+                                        //     fullNumber: phoneValue,
+                                        //     phoneCode,
+                                        //     phoneNumber: phoneNumberOnly,
+                                        // });
 
                                         // Update React Hook Form field value with full number
                                         // This is important - we need to keep the full number in the field

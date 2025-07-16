@@ -1239,6 +1239,31 @@ const componentRegistry: Record<string, any> = {
         edit: PromotionEditPage,
     },
 
+    // Business Partners Management
+    partners: {
+        main: BusinessPartnersPage,
+        view: BusinessPartnersViewPage,
+        edit: BusinessPartnersEditPage,
+        add: BusinessPartnersAddPage,
+    },
+    commissions: {
+        main: BusinessPartnersCommissionsPage,
+        view: BusinessPartnersCommissionsViewPage,
+        edit: BusinessPartnersCommissionsEditPage,
+        add: BusinessPartnersCommissionsAddPage,
+    },
+    markup_discounts: {
+        main: BusinessPartnersMarkupDiscountsPage,
+        view: BusinessPartnersMarkupDiscountsViewPage,
+        edit: BusinessPartnersMarkupDiscountsEditPage,
+        add: BusinessPartnersMarkupDiscountsAddPage,
+    },
+    authorities: {
+        main: BusinessPartnersAuthoritiesPage,
+        view: BusinessPartnersAuthoritiesViewPage,
+        edit: BusinessPartnersAuthoritiesEditPage,
+    },
+
     // Ship Trip Management
     cabins: {
         main: CabinsPage,

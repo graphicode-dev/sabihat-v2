@@ -4,100 +4,61 @@ import FormFieldsLayout from "../../../layout/FormFieldsLayout";
 import FormLayout from "../../../layout/FormLayout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "../../../hooks/useToast";
+import { useEffect } from "react";
 import { z } from "zod";
-
-type Error = {
-    limitAmount: string;
-    ticketQuota: string;
-};
-
-type QuotaManagement = {
-    id?: string;
-    limitAmount: string;
-    ticketQuota: string;
-};
+import { usePartnerForm } from "../../../contexts/PartnerFormContext";
+import { QuotaManagement } from "../../../pages/dashboard/business-partners-management/partners/types";
 
 const quotaManagementSchema = z.object({
-    id: z.string().optional(),
     limitAmount: z.string(),
     ticketQuota: z.string(),
 });
 
-function QuotaManagementAddForm() {
-    const { addToast } = useToast();
-    const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState<Error>({
+type QuotaManagementAddFormProps = {
+    handleChangeTab: (tab: string) => void;
+};
+
+function QuotaManagementAddForm({
+    handleChangeTab,
+}: QuotaManagementAddFormProps) {
+    const {
+        quotaManagement,
+        updateQuotaManagement,
+        isSubmitting,
+        errors: contextErrors,
+        lockTab,
+    } = usePartnerForm();
+
+    // Extract errors for this form
+    const formErrors: QuotaManagement = contextErrors.quotaManagement || {
         limitAmount: "",
         ticketQuota: "",
-    });
+    };
 
-    const { control, handleSubmit, reset, formState } =
+    const { control, handleSubmit, formState, setValue } =
         useForm<QuotaManagement>({
             resolver: zodResolver(quotaManagementSchema),
             defaultValues: {
-                id: "",
-                limitAmount: "",
-                ticketQuota: "",
+                limitAmount: quotaManagement.limitAmount || "",
+                ticketQuota: quotaManagement.ticketQuota || "",
             },
             mode: "onChange",
         });
 
+    // Update form values when context data changes
+    useEffect(() => {
+        setValue("limitAmount", quotaManagement.limitAmount || "");
+        setValue("ticketQuota", quotaManagement.ticketQuota || "");
+
+        // Quota type selection will be implemented in a future update
+    }, [quotaManagement, setValue]);
+
     const onSubmit = async (formData: QuotaManagement) => {
-        setIsLoading(true);
-        try {
-            // Create FormData object for file upload
-            const apiFormData = new FormData();
+        // Update the context with the form data
+        updateQuotaManagement(formData);
 
-            // Always append all fields, even if they're empty strings
-            // This ensures the API receives all fields
-            if (formData.limitAmount) {
-                apiFormData.append("limitAmount", formData.limitAmount);
-            }
-            if (formData.ticketQuota) {
-                apiFormData.append("ticketQuota", formData.ticketQuota);
-            }
-
-            // Simulate API call success
-            // In a real app, you would send apiFormData to your backend
-            // const response = await api.post('/company', apiFormData);
-
-            addToast({
-                message: "Quota Management updated successfully",
-                type: "success",
-                title: "Success!",
-            });
-
-            reset();
-            navigate(-1);
-        } catch (error: any) {
-            console.error("Error updating Quota Management:", error);
-            if (error?.errors) {
-                // Map API error fields to our frontend field names
-                const mappedErrors: any = {};
-
-                if (error.errors.limitAmount) {
-                    mappedErrors.limitAmount = error.errors.limitAmount[0];
-                }
-                if (error.errors.ticketQuota) {
-                    mappedErrors.ticketQuota = error.errors.ticketQuota[0];
-                }
-
-                console.log("Mapped errors:", mappedErrors);
-                setErrors(mappedErrors);
-            } else {
-                addToast({
-                    message: "An unexpected error occurred. Please try again.",
-                    type: "error",
-                    title: "Error!",
-                });
-            }
-        } finally {
-            setIsLoading(false);
-        }
+        // Navigate to the next tab
+        handleChangeTab("contactInformation");
     };
 
     return (
@@ -107,12 +68,13 @@ function QuotaManagementAddForm() {
             removeBorder
         >
             <FormFieldsLayout>
-                {/* Limit Amount */}
+                {/* Quota Amount */}
                 <FormInput
                     name="limitAmount"
                     control={control}
-                    label="Limit Amount"
-                    error={errors.limitAmount}
+                    label="Quota Amount"
+                    type="number"
+                    error={formErrors.limitAmount}
                 />
 
                 {/* Ticket Quota */}
@@ -120,11 +82,19 @@ function QuotaManagementAddForm() {
                     name="ticketQuota"
                     control={control}
                     label="Ticket Quota"
-                    error={errors.ticketQuota}
+                    error={formErrors.ticketQuota}
                 />
             </FormFieldsLayout>
 
-            <FormButtons isLoading={isLoading} disabled={!formState.isDirty} />
+            <FormButtons
+                isLoading={isSubmitting}
+                disabled={!formState.isDirty}
+                cancelText="Back"
+                submitText="Next"
+                className="mt-4"
+                onCancel={() => handleChangeTab("partnersMaster")}
+                removeCancel={lockTab}
+            />
         </FormLayout>
     );
 }
