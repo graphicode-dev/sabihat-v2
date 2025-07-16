@@ -40,6 +40,11 @@ interface DynamicTableProps {
     currentPage?: number;
     lastPage?: number;
     onPageChange?: (page: number) => void;
+    // Row actions
+    onEdit?: (rowId: string) => void;
+    onDelete?: (rowId: string) => void;
+    // Row styling
+    rowClassName?: (row: { id: string }) => string;
 }
 
 export const DynamicTable = ({
@@ -64,6 +69,10 @@ export const DynamicTable = ({
     currentPage: apiCurrentPage,
     lastPage,
     onPageChange,
+    // Row actions
+    onEdit,
+    onDelete,
+    rowClassName,
 }: DynamicTableProps) => {
     const [viewMode, setViewMode] = useState<ViewMode>(initialView);
     // For internal pagination, use API current page if provided, otherwise default to 1
@@ -303,6 +312,9 @@ export const DynamicTable = ({
             onColumnResize: handleColumnResize,
             onRowClick,
             disableRowClick,
+            onEdit,
+            onDelete,
+            rowClassName,
         };
 
         switch (viewMode) {

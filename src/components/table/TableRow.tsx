@@ -10,6 +10,9 @@ interface TableRowProps {
     handleRowSelection: (rowId: string, selected: boolean) => void;
     onRowClick?: (rowId: string) => void;
     disableRowClick?: boolean;
+    onEdit?: (rowId: string) => void;
+    onDelete?: (rowId: string) => void;
+    className?: string;
 }
 
 function TableRow({
@@ -19,6 +22,9 @@ function TableRow({
     handleRowSelection,
     onRowClick,
     disableRowClick,
+    onEdit,
+    onDelete,
+    className,
 }: TableRowProps) {
     const navigate = useNavigate();
     const location = useLocation();
@@ -49,11 +55,27 @@ function TableRow({
         e.stopPropagation();
     };
 
+    // Handle edit button click
+    const handleEditClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (onEdit) {
+            onEdit(row.id);
+        }
+    };
+
+    // Handle delete button click
+    const handleDeleteClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (onDelete) {
+            onDelete(row.id);
+        }
+    };
+
     return (
         <tr
             className={`text-left ${
                 row.selected ? "bg-primary-50" : ""
-            } hover:bg-gray-50 cursor-pointer`}
+            } hover:bg-gray-50 cursor-pointer ${className || ''}`}
             onClick={disableRowClick ? undefined : handleRowClick}
         >
             <td
@@ -115,6 +137,31 @@ function TableRow({
                     )}
                 </td>
             ))}
+            {/* Add action buttons if edit or delete functions are provided */}
+            {(onEdit || onDelete) && (
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <div className="flex justify-end space-x-2">
+                        {onEdit && (
+                            <button
+                                onClick={handleEditClick}
+                                className="text-blue-600 hover:text-blue-900"
+                                title="Edit"
+                            >
+                                Edit
+                            </button>
+                        )}
+                        {onDelete && (
+                            <button
+                                onClick={handleDeleteClick}
+                                className="text-red-600 hover:text-red-900"
+                                title="Delete"
+                            >
+                                Delete
+                            </button>
+                        )}
+                    </div>
+                </td>
+            )}
         </tr>
     );
 }

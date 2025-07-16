@@ -146,7 +146,7 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
             contactInformation: false,
         };
 
-        console.log("Processing API errors:", apiErrors);
+        // console.log("Processing API errors:", apiErrors);
 
         // Check if apiErrors is an object with field-specific errors
         if (apiErrors && typeof apiErrors === "object") {
@@ -228,7 +228,7 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
             let hasContactErrors = false;
 
             // Log all keys to help with debugging
-            console.log("All API error keys:", Object.keys(apiErrors));
+            // console.log("All API error keys:", Object.keys(apiErrors));
 
             // First, identify all contact information errors
             const contactErrorKeys = Object.keys(apiErrors).filter(
@@ -237,7 +237,7 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
                     key.includes("contact_information")
             );
 
-            console.log("Contact error keys:", contactErrorKeys);
+            // console.log("Contact error keys:", contactErrorKeys);
 
             // Process each contact error key
             contactErrorKeys.forEach((key) => {
@@ -279,9 +279,9 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
                                 .join("");
                     }
 
-                    console.log(
-                        `Processing contact error: index=${index}, field=${fieldName}`
-                    );
+                    // console.log(
+                    //     `Processing contact error: index=${index}, field=${fieldName}`
+                    // );
 
                     // Ensure the array has enough elements
                     while (contactErrors.length <= index) {
@@ -331,7 +331,7 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
         );
     };
 
-    console.log("contactInformation", contactInformation);
+    // console.log("contactInformation", contactInformation);
 
     // Submit form function
     const submitForm = async (
@@ -363,10 +363,10 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
         // Use directContacts if provided, otherwise use contactInformation from state
         const contactsToSubmit = directContacts || contactInformation;
 
-        console.log(
-            "Processing contact information for submission:",
-            contactsToSubmit
-        );
+        // console.log(
+        //     "Processing contact information for submission:",
+        //     contactsToSubmit
+        // );
 
         // Check if we have contacts to submit
         if (Array.isArray(contactsToSubmit) && contactsToSubmit.length > 0) {
@@ -380,9 +380,9 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
                                 ? value.toString()
                                 : ""
                         );
-                        console.log(
-                            `Added to form: contactInformation[${index}][${key}] = ${value}`
-                        );
+                        // console.log(
+                        //     `Added to form: contactInformation[${index}][${key}] = ${value}`
+                        // );
                     });
                 } else {
                     console.error(

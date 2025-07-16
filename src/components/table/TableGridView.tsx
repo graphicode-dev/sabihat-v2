@@ -13,6 +13,9 @@ interface TableGridViewProps {
     onColumnResize: (index: number, width: number) => void;
     onRowClick?: (rowId: string) => void;
     disableRowClick?: boolean;
+    onEdit?: (rowId: string) => void;
+    onDelete?: (rowId: string) => void;
+    rowClassName?: (row: { id: string }) => string;
 }
 
 export const TableGridView = ({
@@ -26,6 +29,9 @@ export const TableGridView = ({
     onColumnResize,
     onRowClick,
     disableRowClick,
+    onEdit,
+    onDelete,
+    rowClassName,
 }: TableGridViewProps) => {
     // Check if all rows are selected
     const allSelected = data.length > 0 && data.every((row) => row.selected);
@@ -69,6 +75,9 @@ export const TableGridView = ({
                                 handleRowSelection={handleRowSelection}
                                 onRowClick={onRowClick}
                                 disableRowClick={disableRowClick}
+                                onEdit={onEdit}
+                                onDelete={onDelete}
+                                className={rowClassName ? rowClassName(row) : ''}
                             />
                         ))
                     )}
