@@ -14,7 +14,12 @@ import {
 import { Promotion } from "../pages/dashboard/system-management-administration/promotion/types";
 import { Load } from "../pages/dashboard/system-management-administration/load-types/types";
 import { TicketRule } from "../pages/dashboard/system-management-administration/ticket-rules/types";
-import { Partner } from "../pages/dashboard/business-partners-management/partners/types";
+import {
+    ContactInformation,
+    CreditLimit,
+    Partner,
+    TicketQuotaManagement,
+} from "../pages/dashboard/business-partners-management/partners/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -452,5 +457,55 @@ export const ENDPOINTS = {
                     Authorization: `Bearer ${token}`,
                 },
             }),
+    },
+    contactInformation: {
+        getAll: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: ContactInformation[];
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: ContactInformation[];
+            }>(`/business-partners/${id}/contact-info`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }),
+    },
+    quotaManagement: {
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: TicketQuotaManagement;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: TicketQuotaManagement;
+            }>(`/business-partners/${id}/quota-management`),
+    },
+    creditLimit: {
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: CreditLimit;
+            }>
+        > =>
+            api.get<{ success: boolean; message: string; data: CreditLimit }>(
+                `/business-partners/${id}/credit-limit`
+            ),
     },
 };

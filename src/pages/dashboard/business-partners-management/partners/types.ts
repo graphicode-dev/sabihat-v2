@@ -58,3 +58,13 @@ export interface ContactInformation {
     email: string;
     hotline: string;
 }
+
+export interface TicketQuotaManagement {
+    ticketQuota: string;
+    createdAt: string;
+}
+
+export interface CreditLimit {
+    limitAmount: string;
+    createdAt: string;
+}

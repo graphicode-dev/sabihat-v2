@@ -4,7 +4,12 @@ import defaultAvatar from "../../../../../assets/images/default-user.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from "../../../../../hooks/useToast";
 import { useQuery } from "@tanstack/react-query";
-import { Partner, PartnerUser } from "../types";
+import {
+    CreditLimit,
+    Partner,
+    PartnerUser,
+    TicketQuotaManagement,
+} from "../types";
 import Loading from "../../../../../components/ui/Loading";
 import Error from "../../../../../components/ui/Error";
 import { ENDPOINTS } from "../../../../../config/endpoints";
@@ -16,6 +21,42 @@ const usePartnerById = (id: string) => {
         queryKey: ["partner", id],
         queryFn: async () => {
             const response = await ENDPOINTS.partners.getOne(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
+const useQuotaManagementById = (id: string) => {
+    return useQuery({
+        queryKey: ["quotaManagement", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.quotaManagement.getOne(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
+const useCreditLimitById = (id: string) => {
+    return useQuery({
+        queryKey: ["creditLimit", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.creditLimit.getOne(id);
 
             if (response.error) {
                 return Promise.reject(response.error.message);
@@ -46,6 +87,24 @@ const usePartnerUsers = (id: string) => {
         },
     });
 };
+const useContactInformation = (id: string) => {
+    return useQuery({
+        queryKey: ["contactInformation", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.contactInformation.getAll(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data?.data || [];
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
 
 function PartnersViewPage() {
     const navigate = useNavigate();
@@ -58,12 +117,36 @@ function PartnersViewPage() {
         isLoading: partnerLoading,
     } = usePartnerById(id as string);
     const {
+        data: quotaManagement,
+        error: quotaManagementError,
+        isLoading: quotaManagementLoading,
+    } = useQuotaManagementById(id as string);
+    const {
+        data: creditLimit,
+        error: creditLimitError,
+        isLoading: creditLimitLoading,
+    } = useCreditLimitById(id as string);
+    const {
+        data: contactInformation,
+        error: contactInformationError,
+        isLoading: contactInformationLoading,
+    } = useContactInformation(id as string);
+    console.log(contactInformation);
+    const {
         data: partnerUsers = [],
         error: partnerUsersError,
         isLoading: partnerUsersLoading,
     } = usePartnerUsers(id as string);
 
     const partnerData = (partner?.data as Partner) || ({} as Partner);
+
+    const quotaManagementData =
+        (quotaManagement?.data as TicketQuotaManagement) ||
+        ({} as TicketQuotaManagement);
+
+    const creditLimitData =
+        (creditLimit?.data as CreditLimit) || ({} as CreditLimit);
+
     const partnerUsersData: TableData[] =
         partnerUsers?.map((item) => ({
             id: item.id.toString(),
@@ -81,8 +164,21 @@ function PartnersViewPage() {
             },
         })) || [];
 
-    if (partnerLoading || partnerUsersLoading) return <Loading />;
-    if (partnerError || partnerUsersError)
+    if (
+        partnerLoading ||
+        partnerUsersLoading ||
+        quotaManagementLoading ||
+        creditLimitLoading ||
+        contactInformationLoading
+    )
+        return <Loading />;
+    if (
+        partnerError ||
+        partnerUsersError ||
+        quotaManagementError ||
+        creditLimitError ||
+        contactInformationError
+    )
         return <Error message={partnerError?.message || "Unknown error"} />;
 
     return (
@@ -149,43 +245,44 @@ function PartnersViewPage() {
                                 // },
                             ],
                         },
-                        // {
-                        //     title: "Credit Limit",
-                        //     fields: [
-                        //         {
-                        //             label: "Limit Amount",
-                        //             value: partnerData.creditLimit.limitAmount,
-                        //         },
-                        //         {
-                        //             label: "Limit Ticket",
-                        //             value: partnerData.creditLimit.limitTicket,
-                        //         },
-                        //     ],
-                        // },
                         {
-                            title: "Contact Information",
+                            title: "Credit Limit",
                             fields: [
                                 {
-                                    label: "Name",
-                                    value: partnerData.name,
+                                    label: "Limit Amount",
+                                    value: creditLimitData.limitAmount,
                                 },
                                 {
-                                    label: "Title",
-                                    value: partnerData.title,
+                                    label: "Ticket Quota",
+                                    value: quotaManagementData.ticketQuota,
+                                },
+                            ],
+                        },
+                        {
+                            title: "Contact Information",
+                            fields: contactInformation?.flatMap((item) => [
+                                {
+                                    label: "Name",
+                                    value: item.name,
                                 },
                                 {
                                     label: "Phone",
-                                    value: partnerData.phoneNumber,
+                                    value:
+                                        item.phoneCode + " " + item.phoneNumber,
                                 },
                                 {
                                     label: "Email",
-                                    value: partnerData.email,
+                                    value: item.email,
                                 },
-                                // {
-                                //     label: "Hot Line",
-                                //     value: partnerData.hotLine,
-                                // },
-                            ],
+                                {
+                                    label: "Title",
+                                    value: item.title,
+                                },
+                                {
+                                    label: "Hotline",
+                                    value: item.hotline,
+                                },
+                            ]),
                         },
                         {
                             title: "Users",
@@ -263,6 +360,7 @@ function PartnersViewPage() {
                         },
                     ],
                 }}
+                gridCols={5}
                 hideBorder
             />
         </PageLayout>

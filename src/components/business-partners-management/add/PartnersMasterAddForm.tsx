@@ -66,6 +66,16 @@ function PartnersMasterAddForm({
             mode: "onChange",
         });
 
+    // Handle phone extraction
+    const handlePhoneExtracted = (phoneData: {
+        fullNumber: string;
+        phoneCode: string;
+        phoneNumber: string;
+    }) => {
+        setValue("phoneCode", phoneData.phoneCode);
+        setValue("phoneNumber", phoneData.fullNumber);
+    };
+
     // Update form values when context data changes
     useEffect(() => {
         setValue("name", partnerMaster.name || "");
@@ -78,8 +88,14 @@ function PartnersMasterAddForm({
     }, [partnerMaster, setValue]);
 
     const onSubmit = async (formData: PartnersMaster) => {
+        const phoneCodeLength = formData.phoneCode?.length || 0;
+        const phoneNumberOnly = formData.phoneNumber.substring(phoneCodeLength);
+
         // Update the context with the form data
-        updatePartnerMaster(formData);
+        updatePartnerMaster({
+            ...formData,
+            phoneNumber: phoneNumberOnly,
+        });
 
         // Navigate to the next tab
         handleChangeTab("quota-management-credit-limit");
@@ -107,6 +123,7 @@ function PartnersMasterAddForm({
                     label="Phone Number"
                     type="tel"
                     error={formErrors.phoneNumber}
+                    onPhoneExtracted={handlePhoneExtracted}
                 />
 
                 {/* Email */}

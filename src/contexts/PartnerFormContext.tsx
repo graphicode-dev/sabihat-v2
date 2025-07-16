@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../hooks/useToast";
 import { ENDPOINTS } from "../config/endpoints";
@@ -21,7 +21,6 @@ interface FormErrors {
     partnerMaster?: PartnersMasterError;
     quotaManagement?: QuotaManagement;
     contactInformation?: ContactInformation[];
-    users?: Record<string, string>[];
     general?: string;
 }
 
@@ -30,7 +29,6 @@ interface TabErrors {
     partnerMaster: boolean;
     quotaManagement: boolean;
     contactInformation: boolean;
-    users: boolean;
 }
 
 // Define the context value type
@@ -38,15 +36,13 @@ interface PartnerFormContextType {
     partnerMaster: PartnersMaster;
     quotaManagement: QuotaManagement;
     contactInformation: ContactInformation[];
-    users: UserForm[];
     errors: FormErrors;
     tabsWithErrors: TabErrors;
     isSubmitting: boolean;
     updatePartnerMaster: (data: Partial<PartnersMaster>) => void;
     updateQuotaManagement: (data: Partial<QuotaManagement>) => void;
     updateContactInformation: (data: ContactInformation[]) => void;
-    updateUsers: (data: UserForm[]) => void;
-    submitForm: () => Promise<void>;
+    submitForm: (directContacts?: ContactInformation[]) => Promise<void>;
     resetErrors: () => void;
     lockTab: boolean;
 }
@@ -83,27 +79,13 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const [contactInformation, setContactInformation] = useState<
         ContactInformation[]
-    >([
-        {
-            name: "",
-            phoneCode: "",
-            phoneNumber: "",
-            email: "",
-            title: "",
-            hotline: "",
-        },
-    ]);
-
-    const [users, setUsers] = useState<UserForm[]>([
-        { name: "", email: "", phoneNumber: "", role: "" },
-    ]);
+    >([]);
 
     const [errors, setErrors] = useState<FormErrors>({});
     const [tabsWithErrors, setTabsWithErrors] = useState<TabErrors>({
         partnerMaster: false,
         quotaManagement: false,
         contactInformation: false,
-        users: false,
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -120,17 +102,12 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
         setContactInformation(data);
     };
 
-    const updateUsers = (data: UserForm[]) => {
-        setUsers(data);
-    };
-
     const resetErrors = () => {
         setErrors({});
         setTabsWithErrors({
             partnerMaster: false,
             quotaManagement: false,
             contactInformation: false,
-            users: false,
         });
     };
 
@@ -150,9 +127,6 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
             case "contactInformation":
                 urlTabParam = "contactInformation";
                 break;
-            case "users":
-                urlTabParam = "users";
-                break;
             default:
                 urlTabParam = "partnersMaster";
         }
@@ -170,7 +144,6 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
             partnerMaster: false,
             quotaManagement: false,
             contactInformation: false,
-            users: false,
         };
 
         console.log("Processing API errors:", apiErrors);
@@ -254,7 +227,21 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
             const contactErrors: ContactInformation[] = [];
             let hasContactErrors = false;
 
-            Object.keys(apiErrors).forEach((key) => {
+            // Log all keys to help with debugging
+            console.log("All API error keys:", Object.keys(apiErrors));
+
+            // First, identify all contact information errors
+            const contactErrorKeys = Object.keys(apiErrors).filter(
+                (key) =>
+                    key.includes("contactInformation") ||
+                    key.includes("contact_information")
+            );
+
+            console.log("Contact error keys:", contactErrorKeys);
+
+            // Process each contact error key
+            contactErrorKeys.forEach((key) => {
+                // Match different possible formats of contact information error keys
                 const dotMatches =
                     key.match(/^contactInformation\.(\d+)\.(\w+)$/) ||
                     key.match(/^contact_information\.(\d+)\.(\w+)$/);
@@ -262,14 +249,39 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
                     key.match(/^contactInformation\[(\d+)\]\.(\w+)$/) ||
                     key.match(/^contact_information\[(\d+)\]\.(\w+)$/);
 
-                const matches = dotMatches || bracketMatches;
+                // Also match snake_case variations that might come from the API
+                const snakeCaseMatches =
+                    key.match(/^contactInformation\.(\d+)\.(\w+)$/) ||
+                    key.match(/^contact_information\.(\d+)\.(\w+_\w+)$/); // For snake_case fields
+
+                const matches =
+                    dotMatches || bracketMatches || snakeCaseMatches;
 
                 if (matches && matches.length === 3) {
                     hasContactErrors = true;
                     tabs.contactInformation = true;
 
                     const index = parseInt(matches[1]);
-                    const fieldName = matches[2];
+                    // Convert snake_case to camelCase if needed
+                    let fieldName = matches[2];
+                    if (fieldName.includes("_")) {
+                        // Convert snake_case (phone_code) to camelCase (phoneCode)
+                        const parts = fieldName.split("_");
+                        fieldName =
+                            parts[0] +
+                            parts
+                                .slice(1)
+                                .map(
+                                    (part) =>
+                                        part.charAt(0).toUpperCase() +
+                                        part.slice(1)
+                                )
+                                .join("");
+                    }
+
+                    console.log(
+                        `Processing contact error: index=${index}, field=${fieldName}`
+                    );
 
                     // Ensure the array has enough elements
                     while (contactErrors.length <= index) {
@@ -300,47 +312,6 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
                 formErrors.contactInformation = contactErrors;
             }
 
-            // Process users errors (array of objects)
-            const userErrors: Record<string, string>[] = [];
-            let hasUserErrors = false;
-
-            Object.keys(apiErrors).forEach((key) => {
-                // Match both users.0.field and users[0].field formats
-                // Also match user_accounts.0.field format from API
-                const dotMatches =
-                    key.match(/^users\.(\d+)\.(\w+)$/) ||
-                    key.match(/^user_accounts\.(\d+)\.(\w+)$/);
-                const bracketMatches =
-                    key.match(/^users\[(\d+)\]\.(\w+)$/) ||
-                    key.match(/^user_accounts\[(\d+)\]\.(\w+)$/);
-
-                const matches = dotMatches || bracketMatches;
-
-                if (matches && matches.length === 3) {
-                    hasUserErrors = true;
-                    tabs.users = true;
-
-                    const index = parseInt(matches[1]);
-                    const fieldName = matches[2];
-
-                    // Ensure the array has enough elements
-                    while (userErrors.length <= index) {
-                        userErrors.push({});
-                    }
-
-                    // Handle array of error messages
-                    if (Array.isArray(apiErrors[key])) {
-                        userErrors[index][fieldName] = apiErrors[key][0];
-                    } else {
-                        userErrors[index][fieldName] = apiErrors[key];
-                    }
-                }
-            });
-
-            if (hasUserErrors) {
-                formErrors.users = userErrors;
-            }
-
             // Check for general errors
             if (apiErrors.message || apiErrors.error) {
                 formErrors.general = apiErrors.message || apiErrors.error;
@@ -360,8 +331,12 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
         );
     };
 
+    console.log("contactInformation", contactInformation);
+
     // Submit form function
-    const submitForm = async (): Promise<void> => {
+    const submitForm = async (
+        directContacts?: ContactInformation[]
+    ): Promise<void> => {
         setIsSubmitting(true);
         resetErrors();
 
@@ -385,24 +360,40 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
         });
 
         // Add contact information data
-        contactInformation.forEach((contact, index) => {
-            Object.entries(contact).forEach(([key, value]) => {
-                formData.append(
-                    `contactInformation[${index}][${key}]`,
-                    value !== null ? value.toString() : ""
-                );
-            });
-        });
+        // Use directContacts if provided, otherwise use contactInformation from state
+        const contactsToSubmit = directContacts || contactInformation;
 
-        // Add users data
-        users.forEach((user, index) => {
-            Object.entries(user).forEach(([key, value]) => {
-                formData.append(
-                    `users[${index}][${key}]`,
-                    value !== null ? value.toString() : ""
-                );
+        console.log(
+            "Processing contact information for submission:",
+            contactsToSubmit
+        );
+
+        // Check if we have contacts to submit
+        if (Array.isArray(contactsToSubmit) && contactsToSubmit.length > 0) {
+            // Process each contact
+            contactsToSubmit.forEach((contact, index) => {
+                if (contact && typeof contact === "object") {
+                    Object.entries(contact).forEach(([key, value]) => {
+                        formData.append(
+                            `contactInformation[${index}][${key}]`,
+                            value !== null && value !== undefined
+                                ? value.toString()
+                                : ""
+                        );
+                        console.log(
+                            `Added to form: contactInformation[${index}][${key}] = ${value}`
+                        );
+                    });
+                } else {
+                    console.error(
+                        `Invalid contact at index ${index}:`,
+                        contact
+                    );
+                }
             });
-        });
+        } else {
+            console.warn("No contact information to submit");
+        }
 
         await ENDPOINTS.partners
             .add(formData)
@@ -440,25 +431,16 @@ export const PartnerFormProvider: React.FC<{ children: React.ReactNode }> = ({
         partnerMaster,
         quotaManagement,
         contactInformation,
-        users,
         errors,
         tabsWithErrors,
         isSubmitting,
         updatePartnerMaster,
         updateQuotaManagement,
         updateContactInformation,
-        updateUsers,
         submitForm,
         resetErrors,
         lockTab,
     };
-
-    useEffect(() => {
-        console.log("partnerMaster", partnerMaster);
-        console.log("quotaManagement", quotaManagement);
-        console.log("contactInformation", contactInformation);
-        console.log("users", users);
-    }, [partnerMaster, quotaManagement, contactInformation, users]);
 
     return (
         <PartnerFormContext.Provider value={contextValue}>

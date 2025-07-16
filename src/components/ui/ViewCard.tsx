@@ -212,22 +212,22 @@ const ViewCard: React.FC<ViewCardProps> = ({
     const getGridCols = () => {
         switch (gridCols) {
             case 1:
-                return "grid-cols-1";
+                return "xl:grid-cols-1";
 
             case 2:
-                return "grid-cols-2";
+                return "xl:grid-cols-2";
 
             case 3:
-                return "grid-cols-3";
+                return "xl:grid-cols-3";
 
             case 4:
-                return "grid-cols-4";
+                return "xl:grid-cols-4";
 
             case 5:
-                return "grid-cols-5";
+                return "xl:grid-cols-5";
 
             default:
-                return "grid-cols-3";
+                return "xl:grid-cols-3";
         }
     };
 
@@ -506,7 +506,7 @@ const ViewCard: React.FC<ViewCardProps> = ({
                                                 row.customRender()
                                             ) : (
                                                 <div
-                                                    className={`grid grid-cols-1 md:${getGridCols()} gap-4`}
+                                                    className={`grid grid-cols-1 ${getGridCols()} gap-4`}
                                                 >
                                                     {row.fields?.map(
                                                         (field, fieldIndex) => (

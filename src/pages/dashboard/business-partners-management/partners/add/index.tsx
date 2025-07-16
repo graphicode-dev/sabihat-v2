@@ -3,7 +3,6 @@ import PageLayout from "../../../../../layout/PageLayout";
 import PartnersMasterAddForm from "../../../../../components/business-partners-management/add/PartnersMasterAddForm";
 import QuotaManagementAddForm from "../../../../../components/business-partners-management/add/QuotaManagementAddForm";
 import ContactInformationAddForm from "../../../../../components/business-partners-management/add/ContactInformationAddForm";
-import UsersAddForm from "../../../../../components/business-partners-management/add/UsersAddForm";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
     PartnerFormProvider,
@@ -31,8 +30,6 @@ function PartnersAddContent() {
             currentTab !== "contactInformation"
         ) {
             handleChangeTab("contactInformation");
-        } else if (tabsWithErrors.users && currentTab !== "users") {
-            handleChangeTab("users");
         }
     }, [tabsWithErrors]);
 
@@ -61,9 +58,6 @@ function PartnersAddContent() {
                     <ContactInformationAddForm
                         handleChangeTab={handleChangeTab}
                     />
-                </Tabs.Item>
-                <Tabs.Item label="Users" value="users">
-                    <UsersAddForm handleChangeTab={handleChangeTab} />
                 </Tabs.Item>
             </Tabs>
         </PageLayout>
