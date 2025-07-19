@@ -20,6 +20,12 @@ import {
     Partner,
     TicketQuotaManagement,
 } from "../pages/dashboard/business-partners-management/partners/types";
+import {
+    AboutUsType,
+    CompanyType,
+    ContactUsType,
+    SettingType,
+} from "../pages/dashboard/system-management-administration/company-profile/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -59,6 +65,62 @@ export const ENDPOINTS = {
             }),
     },
     // System Management & Administration
+    companyInfo: {
+        getAll: (): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: CompanyType;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: CompanyType;
+            }>(`/company-profile/company-info`),
+    },
+    companyContactUs: {
+        getAll: (): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: ContactUsType;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: ContactUsType;
+            }>(`/company-profile/contact-us`),
+    },
+    companyAboutUs: {
+        getAll: (): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: AboutUsType;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: AboutUsType;
+            }>(`/company-profile/about-us`),
+    },
+    companySetting: {
+        getAll: (): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: SettingType;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: SettingType;
+            }>(`/company-profile/setting`),
+    },
     contactMessages: {
         getAll: (
             page: number

@@ -1,19 +1,16 @@
 import ViewCard from "../../../../components/ui/ViewCard";
 import PageLayout from "../../../../layout/PageLayout";
-import defaultUser from "../../../../assets/images/default-user.png";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../../hooks/useToast";
+import CompanyInfo from "../../../../components/system-management-administration/company-profile/CompanyInfo";
+import ContactUs from "../../../../components/system-management-administration/company-profile/ContactUs";
+import AboutUs from "../../../../components/system-management-administration/company-profile/AboutUs";
+import Setting from "../../../../components/system-management-administration/company-profile/Setting";
 
 function CompanyProfilePage() {
     const navigate = useNavigate();
     const { addAlertToast, addToast } = useToast();
-    const userData = {
-        id: "1",
-        avatar: defaultUser,
-        name: "Company Name",
-        address: "street, city, country",
-        taxId: "••••••••••••••••",
-    };
+
     return (
         <PageLayout>
             <ViewCard
@@ -51,40 +48,7 @@ function CompanyProfilePage() {
                                 ]
                             );
                         },
-                        children: (
-                            <div>
-                                {/* Company Info Tab - First Image */}
-                                <div className="flex items-center gap-4 mb-8">
-                                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                                        <span className="text-xs">logo</span>
-                                    </div>
-                                    <h2 className="text-lg font-medium">
-                                        Company Name
-                                    </h2>
-                                </div>
-
-                                <div className="separator" />
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                                    <div>
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Address
-                                        </h3>
-                                        <p className="text-base font-medium">
-                                            {userData.address}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Tax Id
-                                        </h3>
-                                        <p className="text-base font-medium">
-                                            {userData.taxId}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        ),
+                        children: <CompanyInfo />,
                     },
                     {
                         label: "Contact Us",
@@ -118,85 +82,7 @@ function CompanyProfilePage() {
                                 ]
                             );
                         },
-                        children: (
-                            <div>
-                                {/* Contact Us Tab - Second Image */}
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
-                                    <div>
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Facebook
-                                        </h3>
-                                        <p className="text-base font-medium">
-                                            ••••••••••••••••
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Whatsapp
-                                        </h3>
-                                        <p className="text-base font-medium">
-                                            ••••••••••••••••
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Instagram
-                                        </h3>
-                                        <p className="text-base font-medium">
-                                            ••••••••••••••••
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            LinkedIn
-                                        </h3>
-                                        <p className="text-base font-medium">
-                                            ••••••••••••••••
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Twitter
-                                        </h3>
-                                        <p className="text-base font-medium">
-                                            ••••••••••••••••
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Snapchat
-                                        </h3>
-                                        <p className="text-base font-medium">
-                                            ••••••••••••••••
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Email Address
-                                        </h3>
-                                        <p className="text-base font-medium">
-                                            ••••••••••••••••
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Hotline
-                                        </h3>
-                                        <p className="text-base font-medium">
-                                            ••••••••••••••••
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Phone Number
-                                        </h3>
-                                        <p className="text-base font-medium">
-                                            ••••••••••••••••
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        ),
+                        children: <ContactUs />,
                     },
                     {
                         label: "About Us",
@@ -230,45 +116,7 @@ function CompanyProfilePage() {
                                 ]
                             );
                         },
-                        children: (
-                            <div>
-                                {/* About Us Tab - Third Image */}
-                                <div className="flex flex-col gap-8 w-full">
-                                    <div className="text-left">
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Who We Are Statement
-                                        </h3>
-                                        <p className="text-base font-medium break-all">
-                                            ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
-                                        </p>
-                                    </div>
-                                    <div className="text-left">
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Vision
-                                        </h3>
-                                        <p className="text-base font-medium break-all">
-                                            ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
-                                        </p>
-                                    </div>
-                                    <div className="text-left">
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Mission
-                                        </h3>
-                                        <p className="text-base font-medium break-all">
-                                            ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
-                                        </p>
-                                    </div>
-                                    <div className="text-left">
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Purpose
-                                        </h3>
-                                        <p className="text-base font-medium break-all">
-                                            ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        ),
+                        children: <AboutUs />,
                     },
                     {
                         label: "Settings",
@@ -302,29 +150,7 @@ function CompanyProfilePage() {
                                 ]
                             );
                         },
-                        children: (
-                            <div>
-                                {/* Setting Tab - Fourth Image */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                                    <div>
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Tax
-                                        </h3>
-                                        <p className="text-base font-medium">
-                                            ••••••••••••••••
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-gray-500 mb-1">
-                                            Currency
-                                        </h3>
-                                        <p className="text-base font-medium">
-                                            ••••••••••••••••
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        ),
+                        children: <Setting />,
                     },
                 ]}
             />
