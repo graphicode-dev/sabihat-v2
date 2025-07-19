@@ -1,49 +1,71 @@
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
 import { useParams } from "react-router-dom";
-import { TableData } from "../../../../../types/table";
-import defaultUser from "../../../../../assets/images/default-user.png";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../../../hooks/useToast";
+import { useQuery } from "@tanstack/react-query";
+import { ENDPOINTS } from "../../../../../config/endpoints";
+import Loading from "../../../../../components/ui/Loading";
+import Error from "../../../../../components/ui/Error";
+import { UserProfile } from "../types";
+
+const useUserProfilesById = (id: string) => {
+    return useQuery({
+        queryKey: ["user-profiles", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.users.getOne(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
 
 function UserProfilesViewPage() {
     const navigate = useNavigate();
-    const { addAlertToast, addToast } = useToast();
     const { id } = useParams();
-    const data: TableData = {
-        id: id?.toString() || "",
-        avatar: defaultUser,
-        columns: {
-            name: "John Doe",
-            email: "john.doe@example.com",
-            phone: "123-456-7890",
-            address: "123 Main St, Anytown, USA",
-            role: "Admin",
-        },
-    };
+    const { addAlertToast, addToast } = useToast();
+
+    const {
+        data: userProfiles,
+        error,
+        isLoading,
+    } = useUserProfilesById(id as string);
+
+    const userProfilesData =
+        (userProfiles?.data as UserProfile) || ({} as UserProfile);
+
+    if (isLoading) return <Loading />;
+    if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
         <PageLayout>
             <ViewCard
-                title={data?.columns.name.toString()}
-                subtitle={data?.columns.role.toString()}
+                title={userProfilesData?.name.toString()}
                 variant="user"
-                image={data?.avatar}
+                image={userProfilesData?.image}
                 data={{
                     rows: [
                         {
                             fields: [
                                 {
                                     label: "Email",
-                                    value: data?.columns.email.toString(),
+                                    value: userProfilesData?.email.toString(),
                                 },
                                 {
                                     label: "Phone",
-                                    value: data?.columns.phone.toString(),
+                                    value: userProfilesData?.phoneNumber.toString(),
                                 },
                                 {
                                     label: "Address",
-                                    value: data?.columns.address.toString(),
+                                    value: userProfilesData?.address.toString(),
                                 },
                             ],
                         },

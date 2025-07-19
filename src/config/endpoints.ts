@@ -26,6 +26,7 @@ import {
     ContactUsType,
     SettingType,
 } from "../pages/dashboard/system-management-administration/company-profile/types";
+import { UserProfile } from "../pages/dashboard/system-management-administration/user-profiles/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -467,6 +468,46 @@ export const ENDPOINTS = {
         add: (data: FormData) =>
             api
                 .post(`/ticket-rules`, data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    if (response.error) {
+                        throw response.error.details.errors;
+                    }
+                }),
+    },
+    users: {
+        getAll: (
+            page: number
+        ): Promise<ApiResponseWrapper<ApiResponse<UserProfile>>> =>
+            api.get<ApiResponse<UserProfile>>(
+                `/users/business-partners/my-users?page=${page}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            ),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: UserProfile;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: UserProfile;
+            }>(`/users/${id}`),
+        add: (data: FormData) =>
+            api
+                .post(`/users`, data, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "multipart/form-data",

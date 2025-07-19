@@ -9,55 +9,30 @@ import { useToast } from "../../../../../hooks/useToast";
 import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { useNavigate } from "react-router-dom";
 import { SearchedDropDown } from "../../../../../components/SearchedDropDown";
-
-type Error = {
-    name?: string;
-    email?: string;
-    phone?: string;
-    address?: string;
-    password?: string;
-    photo?: string;
-    layerId?: string;
-    partnerId?: string;
-    salesRoleId?: string;
-    paymentLayerId?: string;
-    checkInLayerId?: string;
-    cargoLayerId?: string;
-    auditingLayerId?: string;
-};
+import { ENDPOINTS } from "../../../../../config/endpoints";
 
 type UserProfiles = {
-    id?: string;
     name: string;
     email: string;
-    phone: string;
-    address: string;
+    phone_code: string;
+    phone_number: string;
     password: string;
-    photo: File | null;
-    layerId: string;
-    partnerId: string;
-    salesRoleId: string;
-    paymentLayerId: string;
-    checkInLayerId: string;
-    cargoLayerId: string;
-    auditingLayerId: string;
+    address: string;
+    is_salesman: number;
+    business_partner_id: number;
+    roles: string[];
 };
 
 const userProfilesSchema = z.object({
-    id: z.string().optional(),
     name: z.string(),
     email: z.string(),
-    phone: z.string(),
-    address: z.string(),
+    phone_code: z.string(),
+    phone_number: z.string(),
     password: z.string(),
-    photo: z.instanceof(File).nullable(),
-    layerId: z.string(),
-    partnerId: z.string(),
-    salesRoleId: z.string(),
-    paymentLayerId: z.string(),
-    checkInLayerId: z.string(),
-    cargoLayerId: z.string(),
-    auditingLayerId: z.string(),
+    address: z.string(),
+    is_salesman: z.number(),
+    business_partner_id: z.number(),
+    roles: z.array(z.string()),
 });
 
 const ModuleRoleField = ({
@@ -79,20 +54,16 @@ function UserProfilesAddPage() {
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState<Error>({
+    const [errors, setErrors] = useState<UserProfiles>({
         name: "",
         email: "",
-        phone: "",
-        address: "",
+        phone_code: "",
+        phone_number: "",
         password: "",
-        photo: "",
-        layerId: "",
-        partnerId: "",
-        salesRoleId: "",
-        paymentLayerId: "",
-        checkInLayerId: "",
-        cargoLayerId: "",
-        auditingLayerId: "",
+        address: "",
+        is_salesman: 0,
+        business_partner_id: 0,
+        roles: [],
     });
     const [selectedLayer, setSelectedLayer] = useState<string | null>(null);
     const [selectedPartner, setSelectedPartner] = useState<string | null>(null);
@@ -112,126 +83,83 @@ function UserProfilesAddPage() {
         string | null
     >(null);
 
-    const { control, handleSubmit, reset, formState } = useForm<UserProfiles>({
-        resolver: zodResolver(userProfilesSchema),
-        defaultValues: {
-            name: "",
-            email: "",
-            phone: "",
-            address: "",
-            password: "",
-            photo: null,
-            layerId: "",
-            partnerId: "",
-            salesRoleId: "",
-            paymentLayerId: "",
-            checkInLayerId: "",
-            cargoLayerId: "",
-            auditingLayerId: "",
-        },
+    const { control, handleSubmit, reset, formState, setValue } =
+        useForm<UserProfiles>({
+            resolver: zodResolver(userProfilesSchema),
+            defaultValues: {
+                name: "",
+                email: "",
+                phone_code: "",
+                phone_number: "",
+                password: "",
+                address: "",
+                is_salesman: 0,
+                business_partner_id: 0,
+                roles: [],
+            },
 
-        mode: "onChange",
-    });
+            mode: "onChange",
+        });
+
+    // Handle phone extraction
+    const handlePhoneExtracted = (phoneData: {
+        fullNumber: string;
+        phoneCode: string;
+        phoneNumber: string;
+    }) => {
+        setValue("phone_code", phoneData.phoneCode);
+        setValue("phone_number", phoneData.fullNumber);
+    };
 
     const onSubmit = async (formData: UserProfiles) => {
         setIsLoading(true);
-        try {
-            const validatedData = userProfilesSchema.parse(formData);
-            console.log("Validated data:", validatedData);
+        const validatedData = userProfilesSchema.parse(formData);
+        console.log("Validated data:", validatedData);
 
-            const apiFormData = new FormData();
+        const phoneCodeLength = formData.phone_code?.length || 0;
+        const phoneNumberOnly =
+            formData.phone_number.substring(phoneCodeLength);
 
-            apiFormData.append("name", formData.name);
-            apiFormData.append("email", formData.email);
-            apiFormData.append("phone", formData.phone);
-            apiFormData.append("address", formData.address);
-            apiFormData.append("password", formData.password);
-            if (formData.photo instanceof File) {
-                apiFormData.append("photo", formData.photo);
-            }
-            apiFormData.append("layerId", formData.layerId);
-            apiFormData.append("partnerId", formData.partnerId);
-            apiFormData.append("salesRoleId", formData.salesRoleId);
-            apiFormData.append("paymentLayerId", formData.paymentLayerId);
-            apiFormData.append("checkInLayerId", formData.checkInLayerId);
-            apiFormData.append("cargoLayerId", formData.cargoLayerId);
-            apiFormData.append("auditingLayerId", formData.auditingLayerId);
+        const apiFormData = new FormData();
 
-            addToast({
-                message: "User profile created successfully",
-                type: "success",
-                title: "Success!",
-            });
+        apiFormData.append(
+            "user",
+            JSON.stringify({
+                name: formData.name,
+                email: formData.email,
+                phone_code: formData.phone_code,
+                phone_number: phoneNumberOnly,
+                address: formData.address,
+                password: formData.password,
+                is_salesman: formData.is_salesman,
+                business_partner_id: formData.business_partner_id,
+                roles: formData.roles,
+            })
+        );
 
-            reset();
-            setSelectedLayer(null);
-            setSelectedPartner(null);
-            setSelectedSalesRole(null);
-            setSelectedPaymentLayerId(null);
-            setSelectedCheckInLayerId(null);
-            setSelectedCargoLayerId(null);
-            setSelectedAuditingLayerId(null);
-            navigate(-1);
-        } catch (error: any) {
-            console.error("Error creating user profile:", error);
-            if (error?.errors) {
-                // Map API error fields to our frontend field names
-                const mappedErrors: any = {};
-                if (error.errors.name) {
-                    mappedErrors.name = error.errors.name[0];
-                }
-                if (error.errors.email) {
-                    mappedErrors.email = error.errors.email[0];
-                }
-                if (error.errors.phone) {
-                    mappedErrors.phone = error.errors.phone[0];
-                }
-                if (error.errors.address) {
-                    mappedErrors.address = error.errors.address[0];
-                }
-                if (error.errors.password) {
-                    mappedErrors.password = error.errors.password[0];
-                }
-                if (error.errors.photo) {
-                    mappedErrors.photo = error.errors.photo[0];
-                }
-                if (error.errors.layerId) {
-                    mappedErrors.layerId = error.errors.layerId[0];
-                }
-                if (error.errors.partnerId) {
-                    mappedErrors.partnerId = error.errors.partnerId[0];
-                }
-                if (error.errors.salesRoleId) {
-                    mappedErrors.salesRoleId = error.errors.salesRoleId[0];
-                }
-                if (error.errors.paymentLayerId) {
-                    mappedErrors.paymentLayerId =
-                        error.errors.paymentLayerId[0];
-                }
-                if (error.errors.checkInLayerId) {
-                    mappedErrors.checkInLayerId =
-                        error.errors.checkInLayerId[0];
-                }
-                if (error.errors.cargoLayerId) {
-                    mappedErrors.cargoLayerId = error.errors.cargoLayerId[0];
-                }
-                if (error.errors.auditingLayerId) {
-                    mappedErrors.auditingLayerId =
-                        error.errors.auditingLayerId[0];
-                }
-
-                console.log("Mapped errors:", mappedErrors);
-                setErrors(mappedErrors);
-            } else {
+        await ENDPOINTS.users
+            .add(apiFormData)
+            .then(() => {
                 addToast({
-                    message: "An unexpected error occurred. Please try again.",
-                    type: "error",
-                    title: "Error!",
+                    message: "User profile created successfully",
+                    type: "success",
+                    title: "Success!",
                 });
-            }
-        } finally {
-            setIsLoading(false);
-        }
+                reset();
+                setSelectedLayer(null);
+                setSelectedPartner(null);
+                setSelectedSalesRole(null);
+                setSelectedPaymentLayerId(null);
+                setSelectedCheckInLayerId(null);
+                setSelectedCargoLayerId(null);
+                setSelectedAuditingLayerId(null);
+                navigate(-1);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                return setErrors(error);
+            });
     };
 
     return (
@@ -256,11 +184,12 @@ function UserProfilesAddPage() {
                     />
                     {/* Phone */}
                     <FormInput
-                        name="phone"
+                        name="phone_number"
                         control={control}
                         label="Phone"
                         type="tel"
-                        error={errors.phone}
+                        error={errors.phone_number}
+                        onPhoneExtracted={handlePhoneExtracted}
                     />
                     {/* Address */}
                     <FormInput
@@ -277,14 +206,6 @@ function UserProfilesAddPage() {
                         label="Password"
                         type="password"
                         error={errors.password}
-                    />
-                    {/* Photo */}
-                    <FormInput
-                        name="photo"
-                        control={control}
-                        type="file"
-                        error={errors.photo}
-                        fileLabel="Upload Image"
                     />
                 </FormFieldsLayout>
 
