@@ -1,33 +1,48 @@
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
-import { TableData } from "../../../../../types/table";
 import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from "../../../../../hooks/useToast";
+import { useQuery } from "@tanstack/react-query";
+import { ENDPOINTS } from "../../../../../config/endpoints";
+import Loading from "../../../../../components/ui/Loading";
+import Error from "../../../../../components/ui/Error";
+import { Commission } from "../types";
+
+const useCommissionById = (id: string) => {
+    return useQuery({
+        queryKey: ["commission", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.commissions.getOne(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
 
 function CommissionsViewPage() {
     const { id } = useParams();
-    const { addAlertToast, addToast } = useToast();
     const navigate = useNavigate();
+    const { addAlertToast, addToast } = useToast();
 
-    const data: TableData = {
-        id: "1",
-        columns: {
-            partnerLayer: "*****",
-            partner: "*****",
-            class: "*****",
-            servicesType: "*****",
-            passengerType: "*****",
-            ticketType: "*****",
-            cabin: "*****",
-            portFrom: "*****",
-            portTo: "*****",
-            visitType: "*****",
-            commissionType: "*****",
-            commissionValue: "*****",
-            effectiveDate: "*****",
-            endDate: "*****",
-        },
-    };
+    const {
+        data: commission,
+        error,
+        isLoading,
+    } = useCommissionById(id as string);
+
+    const commissionData =
+        (commission?.data as Commission) || ({} as Commission);
+
+    if (isLoading) return <Loading />;
+    if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
         <PageLayout showBorder>
@@ -39,59 +54,59 @@ function CommissionsViewPage() {
                             fields: [
                                 {
                                     label: "Partner Layer",
-                                    value: data.columns.partnerLayer.toString(),
+                                    value: commissionData.businessPartner.layer.name.toString(),
                                 },
                                 {
                                     label: "Partner",
-                                    value: data.columns.partner.toString(),
+                                    value: commissionData.businessPartner.name.toString(),
                                 },
                                 {
                                     label: "Class",
-                                    value: data.columns.class.toString(),
+                                    value: commissionData.partnersClassification.nameClass.toString(),
                                 },
-                                {
-                                    label: "Services Type",
-                                    value: data.columns.servicesType.toString(),
-                                },
-                                {
-                                    label: "Passenger Type",
-                                    value: data.columns.passengerType.toString(),
-                                },
+                                // {
+                                //     label: "Services Type",
+                                //     value: commissionData.servicesType.toString(),
+                                // },
+                                // {
+                                //     label: "Passenger Type",
+                                //     value: commissionData.passengerType.toString(),
+                                // },
                                 {
                                     label: "Ticket Type",
-                                    value: data.columns.ticketType.toString(),
+                                    value: commissionData.ticketType.toString(),
                                 },
                                 {
                                     label: "Cabin",
-                                    value: data.columns.cabin.toString(),
+                                    value: commissionData.cabin.name.toString(),
                                 },
                                 {
                                     label: "Port From",
-                                    value: data.columns.portFrom.toString(),
+                                    value: commissionData.portFrom.name.toString(),
                                 },
                                 {
                                     label: "Port To",
-                                    value: data.columns.portTo.toString(),
+                                    value: commissionData.portTo.name.toString(),
                                 },
                                 {
                                     label: "Visit Type",
-                                    value: data.columns.visitType.toString(),
+                                    value: commissionData.visitType.toString(),
                                 },
                                 {
                                     label: "Commission Type",
-                                    value: data.columns.commissionType.toString(),
+                                    value: commissionData.commissionType.toString(),
                                 },
                                 {
                                     label: "Commission Value",
-                                    value: data.columns.commissionValue.toString(),
+                                    value: commissionData.commissionValue.toString(),
                                 },
                                 {
                                     label: "Effective Date",
-                                    value: data.columns.effectiveDate.toString(),
+                                    value: commissionData.effectiveDate.toString(),
                                 },
                                 {
                                     label: "End Date",
-                                    value: data.columns.endDate.toString(),
+                                    value: commissionData.endDate.toString(),
                                 },
                             ],
                         },

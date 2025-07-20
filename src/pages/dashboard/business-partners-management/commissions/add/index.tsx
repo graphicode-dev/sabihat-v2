@@ -9,41 +9,38 @@ import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { FormButtons, FormInput } from "../../../../../components/form";
 import { SearchedDropDown } from "../../../../../components/SearchedDropDown";
 import PageLayout from "../../../../../layout/PageLayout";
+import { ENDPOINTS } from "../../../../../config/endpoints";
 
 type Commissions = {
-    id?: string;
-    partnerLayer: string;
-    partner: string;
-    class: string;
-    servicesType: string;
-    passengerType: string;
+    businessPartnerId: string;
+    partnersClassificationId: string;
+    loadTypeId: string;
+    loadId: string;
+    cabinId: string;
+    portFromId: string;
+    portToId: string;
     ticketType: string;
-    cabin: string;
-    portFrom: string;
-    portTo: string;
     visitType: string;
     commissionType: string;
     commissionValue: string;
-    effectiveDate: string;
-    endDate: string;
+    effectiveDate: Date | null;
+    endDate: Date | null;
 };
 
 const commissionsSchema = z.object({
-    id: z.string().optional(),
-    partnerLayer: z.string(),
-    partner: z.string(),
-    class: z.string(),
-    servicesType: z.string(),
-    passengerType: z.string(),
+    businessPartnerId: z.string(),
+    partnersClassificationId: z.string(),
+    loadTypeId: z.string(),
+    loadId: z.string(),
+    cabinId: z.string(),
+    portFromId: z.string(),
+    portToId: z.string(),
     ticketType: z.string(),
-    cabin: z.string(),
-    portFrom: z.string(),
-    portTo: z.string(),
     visitType: z.string(),
     commissionType: z.string(),
     commissionValue: z.string(),
-    effectiveDate: z.string(),
-    endDate: z.string(),
+    effectiveDate: z.date().nullable(),
+    endDate: z.date().nullable(),
 });
 
 function CommissionsAddPage() {
@@ -51,32 +48,22 @@ function CommissionsAddPage() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<Commissions>({
-        partnerLayer: "",
-        partner: "",
-        class: "",
-        servicesType: "",
-        passengerType: "",
+        businessPartnerId: "",
+        partnersClassificationId: "",
+        loadTypeId: "",
+        loadId: "",
+        cabinId: "",
+        portFromId: "",
+        portToId: "",
         ticketType: "",
-        cabin: "",
-        portFrom: "",
-        portTo: "",
         visitType: "",
         commissionType: "",
         commissionValue: "",
-        effectiveDate: "",
-        endDate: "",
+        effectiveDate: null,
+        endDate: null,
     });
-    const [selectedPartnerLayer, setSelectedPartnerLayer] = useState<
-        string | null
-    >(null);
     const [selectedPartner, setSelectedPartner] = useState<string | null>(null);
     const [selectedClass, setSelectedClass] = useState<string | null>(null);
-    const [selectedServicesType, setSelectedServicesType] = useState<
-        string | null
-    >(null);
-    const [selectedPassengerType, setSelectedPassengerType] = useState<
-        string | null
-    >(null);
     const [selectedTicketType, setSelectedTicketType] = useState<string | null>(
         null
     );
@@ -98,194 +85,75 @@ function CommissionsAddPage() {
     const { control, handleSubmit, reset, formState } = useForm<Commissions>({
         resolver: zodResolver(commissionsSchema),
         defaultValues: {
-            id: "",
-            partnerLayer: "",
-            partner: "",
-            class: "",
-            servicesType: "",
-            passengerType: "",
+            businessPartnerId: "",
+            partnersClassificationId: "",
+            loadTypeId: "",
+            loadId: "",
+            cabinId: "",
+            portFromId: "",
+            portToId: "",
             ticketType: "",
-            cabin: "",
-            portFrom: "",
-            portTo: "",
             visitType: "",
             commissionType: "",
             commissionValue: "",
-            effectiveDate: "",
-            endDate: "",
+            effectiveDate: null,
+            endDate: null,
         },
         mode: "onChange",
     });
 
     const onSubmit = async (formData: Commissions) => {
         setIsLoading(true);
-        try {
-            // Create FormData object for file upload
-            const apiFormData = new FormData();
+        const apiFormData = new FormData();
 
-            // Always append all fields, even if they're empty strings
-            // This ensures the API receives all fields
-            if (formData.partnerLayer) {
-                apiFormData.append("partnerLayer", formData.partnerLayer);
-            }
-            if (formData.partner) {
-                apiFormData.append("partner", formData.partner);
-            }
-            if (formData.class) {
-                apiFormData.append("class", formData.class);
-            }
-            if (formData.servicesType) {
-                apiFormData.append("servicesType", formData.servicesType);
-            }
-            if (formData.passengerType) {
-                apiFormData.append("passengerType", formData.passengerType);
-            }
-            if (formData.ticketType) {
-                apiFormData.append("ticketType", formData.ticketType);
-            }
-            if (formData.cabin) {
-                apiFormData.append("cabin", formData.cabin);
-            }
-            if (formData.portFrom) {
-                apiFormData.append("portFrom", formData.portFrom);
-            }
-            if (formData.portTo) {
-                apiFormData.append("portTo", formData.portTo);
-            }
-            if (formData.visitType) {
-                apiFormData.append("visitType", formData.visitType);
-            }
-            if (formData.commissionType) {
-                apiFormData.append("commissionType", formData.commissionType);
-            }
-            if (formData.commissionValue) {
-                apiFormData.append("commissionValue", formData.commissionValue);
-            }
-            if (formData.effectiveDate) {
-                apiFormData.append("effectiveDate", formData.effectiveDate);
-            }
-            if (formData.endDate) {
-                apiFormData.append("endDate", formData.endDate);
-            }
+        apiFormData.append("businessPartnerId", formData.businessPartnerId);
+        apiFormData.append(
+            "partnersClassificationId",
+            formData.partnersClassificationId
+        );
+        apiFormData.append("loadTypeId", formData.loadTypeId);
+        apiFormData.append("loadId", formData.loadId);
+        apiFormData.append("cabinId", formData.cabinId);
+        apiFormData.append("portFromId", formData.portFromId);
+        apiFormData.append("portToId", formData.portToId);
+        apiFormData.append("ticketType", formData.ticketType);
+        apiFormData.append("visitType", formData.visitType);
+        apiFormData.append("commissionType", formData.commissionType);
+        apiFormData.append("commissionValue", formData.commissionValue);
+        apiFormData.append(
+            "effectiveDate",
+            formData.effectiveDate?.toISOString() as string
+        );
+        apiFormData.append(
+            "endDate",
+            formData.endDate?.toISOString() as string
+        );
 
-            // Simulate API call success
-            // In a real app, you would send apiFormData to your backend
-            // const response = await api.post('/company', apiFormData);
-
-            addToast({
-                message: "Commission added successfully",
-                type: "success",
-                title: "Success!",
-            });
-
-            reset();
-            navigate(-1);
-        } catch (error: any) {
-            console.error("Error adding commission:", error);
-            if (error?.errors) {
-                // Map API error fields to our frontend field names
-                const mappedErrors: any = {};
-
-                if (error.errors.partnerLayer) {
-                    mappedErrors.partnerLayer = error.errors.partnerLayer[0];
-                }
-                if (error.errors.partner) {
-                    mappedErrors.partner = error.errors.partner[0];
-                }
-                if (error.errors.class) {
-                    mappedErrors.class = error.errors.class[0];
-                }
-                if (error.errors.servicesType) {
-                    mappedErrors.servicesType = error.errors.servicesType[0];
-                }
-                if (error.errors.passengerType) {
-                    mappedErrors.passengerType = error.errors.passengerType[0];
-                }
-                if (error.errors.ticketType) {
-                    mappedErrors.ticketType = error.errors.ticketType[0];
-                }
-                if (error.errors.cabin) {
-                    mappedErrors.cabin = error.errors.cabin[0];
-                }
-                if (error.errors.portFrom) {
-                    mappedErrors.portFrom = error.errors.portFrom[0];
-                }
-                if (error.errors.portTo) {
-                    mappedErrors.portTo = error.errors.portTo[0];
-                }
-                if (error.errors.visitType) {
-                    mappedErrors.visitType = error.errors.visitType[0];
-                }
-                if (error.errors.commissionType) {
-                    mappedErrors.commissionType =
-                        error.errors.commissionType[0];
-                }
-                if (error.errors.commissionValue) {
-                    mappedErrors.commissionValue =
-                        error.errors.commissionValue[0];
-                }
-                if (error.errors.effectiveDate) {
-                    mappedErrors.effectiveDate = error.errors.effectiveDate[0];
-                }
-                if (error.errors.endDate) {
-                    mappedErrors.endDate = error.errors.endDate[0];
-                }
-
-                console.log("Mapped errors:", mappedErrors);
-                setErrors(mappedErrors);
-            } else {
+        await ENDPOINTS.commissions
+            .add(apiFormData)
+            .then(() => {
                 addToast({
-                    message: "An unexpected error occurred. Please try again.",
-                    type: "error",
-                    title: "Error!",
+                    message: "Commission added successfully",
+                    type: "success",
+                    title: "Success!",
                 });
-            }
-        } finally {
-            setIsLoading(false);
-        }
+                reset();
+                navigate(-1);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                return setErrors(error);
+            });
     };
 
     return (
         <PageLayout>
             <FormLayout handleSubmit={handleSubmit} handleFormSubmit={onSubmit}>
                 <FormFieldsLayout>
-                    {/* Partner Layer */}
-                    <SearchedDropDown
-                        name="partnerLayer"
-                        control={control}
-                        label="Partner Layer"
-                        options={[
-                            {
-                                key: "1",
-                                value: "Layer 1",
-                            },
-                            {
-                                key: "2",
-                                value: "Layer 2",
-                            },
-                            {
-                                key: "3",
-                                value: "Layer 3",
-                            },
-                            {
-                                key: "4",
-                                value: "Layer 4",
-                            },
-                            {
-                                key: "5",
-                                value: "Layer 5",
-                            },
-                        ]}
-                        value={selectedPartnerLayer}
-                        onChange={(value) => {
-                            setSelectedPartnerLayer(value);
-                        }}
-                        placeholder="Select Partner Layer"
-                    />
-
                     {/* Partner */}
                     <SearchedDropDown
-                        name="partner"
+                        name="businessPartnerId"
                         control={control}
                         label="Partner"
                         options={[
@@ -300,11 +168,11 @@ function CommissionsAddPage() {
                             setSelectedPartner(value);
                         }}
                         placeholder="Select Partner"
+                        error={errors.businessPartnerId}
                     />
-
                     {/* Class */}
                     <SearchedDropDown
-                        name="class"
+                        name="partnersClassificationId"
                         control={control}
                         label="Class"
                         options={[
@@ -319,46 +187,8 @@ function CommissionsAddPage() {
                             setSelectedClass(value);
                         }}
                         placeholder="Select Class"
+                        error={errors.partnersClassificationId}
                     />
-
-                    {/* Services Type */}
-                    <SearchedDropDown
-                        name="servicesType"
-                        control={control}
-                        label="Services Type"
-                        options={[
-                            { key: "1", value: "Services Type 1" },
-                            { key: "2", value: "Services Type 2" },
-                            { key: "3", value: "Services Type 3" },
-                            { key: "4", value: "Services Type 4" },
-                            { key: "5", value: "Services Type 5" },
-                        ]}
-                        value={selectedServicesType}
-                        onChange={(value) => {
-                            setSelectedServicesType(value);
-                        }}
-                        placeholder="Select Services Type"
-                    />
-
-                    {/* Passenger Type */}
-                    <SearchedDropDown
-                        name="passengerType"
-                        control={control}
-                        label="Passenger Type"
-                        options={[
-                            { key: "1", value: "Passenger Type 1" },
-                            { key: "2", value: "Passenger Type 2" },
-                            { key: "3", value: "Passenger Type 3" },
-                            { key: "4", value: "Passenger Type 4" },
-                            { key: "5", value: "Passenger Type 5" },
-                        ]}
-                        value={selectedPassengerType}
-                        onChange={(value) => {
-                            setSelectedPassengerType(value);
-                        }}
-                        placeholder="Select Passenger Type"
-                    />
-
                     {/* Ticket Type */}
                     <SearchedDropDown
                         name="ticketType"
@@ -376,11 +206,11 @@ function CommissionsAddPage() {
                             setSelectedTicketType(value);
                         }}
                         placeholder="Select Ticket Type"
+                        error={errors.ticketType}
                     />
-
                     {/* Cabin */}
                     <SearchedDropDown
-                        name="cabin"
+                        name="cabinId"
                         control={control}
                         label="Cabin"
                         options={[
@@ -395,11 +225,11 @@ function CommissionsAddPage() {
                             setSelectedCabin(value);
                         }}
                         placeholder="Select Cabin"
+                        error={errors.cabinId}
                     />
-
                     {/* Port From */}
                     <SearchedDropDown
-                        name="portFrom"
+                        name="portFromId"
                         control={control}
                         label="Port From"
                         options={[
@@ -414,11 +244,11 @@ function CommissionsAddPage() {
                             setSelectedPortFrom(value);
                         }}
                         placeholder="Select Port From"
+                        error={errors.portFromId}
                     />
-
                     {/* portTo */}
                     <SearchedDropDown
-                        name="portTo"
+                        name="portToId"
                         control={control}
                         label="Port To"
                         options={[
@@ -433,8 +263,8 @@ function CommissionsAddPage() {
                             setSelectedPortTo(value);
                         }}
                         placeholder="Select Port To"
+                        error={errors.portToId}
                     />
-
                     {/* visitType */}
                     <SearchedDropDown
                         name="visitType"
@@ -452,8 +282,8 @@ function CommissionsAddPage() {
                             setSelectedVisitType(value);
                         }}
                         placeholder="Select Visit Type"
+                        error={errors.visitType}
                     />
-
                     {/* commissionType */}
                     <SearchedDropDown
                         name="commissionType"
@@ -471,8 +301,8 @@ function CommissionsAddPage() {
                             setSelectedCommissionType(value);
                         }}
                         placeholder="Select Commission Type"
+                        error={errors.commissionType}
                     />
-
                     {/* commissionValue */}
                     <SearchedDropDown
                         name="commissionValue"
@@ -490,8 +320,8 @@ function CommissionsAddPage() {
                             setSelectedCommissionValue(value);
                         }}
                         placeholder="Select Commission Value"
+                        error={errors.commissionValue}
                     />
-
                     {/* effectiveDate */}
                     <FormInput
                         name="effectiveDate"
@@ -499,9 +329,8 @@ function CommissionsAddPage() {
                         label="Effective Date"
                         placeholder="Enter Effective Date"
                         type="date"
-                        error={errors.effectiveDate}
+                        error={errors.effectiveDate?.toString()}
                     />
-
                     {/* endDate */}
                     <FormInput
                         name="endDate"
@@ -509,7 +338,7 @@ function CommissionsAddPage() {
                         label="End Date"
                         placeholder="Enter End Date"
                         type="date"
-                        error={errors.endDate}
+                        error={errors.endDate?.toString()}
                     />
                 </FormFieldsLayout>
 

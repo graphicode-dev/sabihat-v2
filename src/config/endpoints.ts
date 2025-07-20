@@ -12,7 +12,10 @@ import {
     CurrencyRate,
 } from "../pages/dashboard/system-management-administration/currency/types";
 import { Promotion } from "../pages/dashboard/system-management-administration/promotion/types";
-import { Load, LoadType } from "../pages/dashboard/system-management-administration/load-types/types";
+import {
+    Load,
+    LoadType,
+} from "../pages/dashboard/system-management-administration/load-types/types";
 import { TicketRule } from "../pages/dashboard/system-management-administration/ticket-rules/types";
 import {
     ContactInformation,
@@ -27,6 +30,7 @@ import {
     SettingType,
 } from "../pages/dashboard/system-management-administration/company-profile/types";
 import { UserProfile } from "../pages/dashboard/system-management-administration/user-profiles/types";
+import { Commission } from "../pages/dashboard/business-partners-management/commissions/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -632,5 +636,38 @@ export const ENDPOINTS = {
             api.get<{ success: boolean; message: string; data: CreditLimit }>(
                 `/business-partners/${id}/credit-limit`
             ),
+    },
+    commissions: {
+        getAll: (
+            page: number
+        ): Promise<ApiResponseWrapper<ApiResponse<Commission>>> =>
+            api.get<ApiResponse<Commission>>(`/commissions?page=${page}`),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: Commission;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: Commission;
+            }>(`/commissions/${id}`),
+        add: (data: FormData) =>
+            api
+                .post(`/commissions`, data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    if (response.error) {
+                        throw response.error.details.errors;
+                    }
+                }),
     },
 };
