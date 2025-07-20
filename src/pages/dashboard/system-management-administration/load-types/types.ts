@@ -1,7 +1,12 @@
 export type Load = {
     id: number;
     loadName: string;
-    loadTypeId: number;
+    loadType: {
+        id: number;
+        name: string;
+        createdAt: string;
+        updatedAt: string;
+    };
     createdAt: string;
     updatedAt: string;
 };
@@ -11,5 +16,4 @@ export type LoadType = {
     name: string;
     createdAt: string;
     updatedAt: string;
-    loads: Load[];
 };

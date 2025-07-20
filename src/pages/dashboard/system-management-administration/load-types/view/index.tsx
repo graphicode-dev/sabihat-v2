@@ -4,7 +4,7 @@ import { useToast } from "../../../../../hooks/useToast";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { ENDPOINTS } from "../../../../../config/endpoints";
-import { Load } from "../types";
+import { Load, LoadType } from "../types";
 import Loading from "../../../../../components/ui/Loading";
 import Error from "../../../../../components/ui/Error";
 
@@ -27,17 +27,53 @@ const useLoadTypeById = (id: string) => {
     });
 };
 
+const useLoadById = (id: string) => {
+    return useQuery({
+        queryKey: ["load", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.loads.getOne(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
+
 function LoadTypeViewPage() {
     const { addToast, addAlertToast } = useToast();
     const navigate = useNavigate();
     const { name, id } = useParams();
 
-    const { data: loadType, isLoading, error } = useLoadTypeById(id || "");
+    const {
+        data: loadType,
+        isLoading: loadTypeLoading,
+        error: loadTypeError,
+    } = useLoadTypeById(id || "");
+    const {
+        data: load,
+        isLoading: loadLoading,
+        error: loadError,
+    } = useLoadById(id || "");
 
-    const loadTypeData = (loadType?.data as Load) || ({} as Load);
+    const loadTypeData = (loadType?.data as LoadType) || ({} as LoadType);
+    const loadData = (load?.data as Load) || ({} as Load);
 
-    if (isLoading) return <Loading />;
-    if (error) return <Error message={error?.message || "Unknown error"} />;
+    if (loadTypeLoading || loadLoading) return <Loading />;
+    if (loadTypeError || loadError)
+        return (
+            <Error
+                message={
+                    (loadTypeError || loadError)?.message || "Unknown error"
+                }
+            />
+        );
 
     return (
         <PageLayout>
@@ -49,7 +85,11 @@ function LoadTypeViewPage() {
                             fields: [
                                 {
                                     label: "Type Name",
-                                    value: loadTypeData?.loadName.toString(),
+                                    value: loadTypeData?.name.toString(),
+                                },
+                                {
+                                    label: "Load Name",
+                                    value: loadData?.loadName.toString(),
                                 },
                             ],
                         },

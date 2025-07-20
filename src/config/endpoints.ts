@@ -12,7 +12,7 @@ import {
     CurrencyRate,
 } from "../pages/dashboard/system-management-administration/currency/types";
 import { Promotion } from "../pages/dashboard/system-management-administration/promotion/types";
-import { Load } from "../pages/dashboard/system-management-administration/load-types/types";
+import { Load, LoadType } from "../pages/dashboard/system-management-administration/load-types/types";
 import { TicketRule } from "../pages/dashboard/system-management-administration/ticket-rules/types";
 import {
     ContactInformation,
@@ -422,13 +422,13 @@ export const ENDPOINTS = {
             ApiResponseWrapper<{
                 success: boolean;
                 message: string;
-                data: Load;
+                data: LoadType;
             }>
         > =>
             api.get<{
                 success: boolean;
                 message: string;
-                data: Load;
+                data: LoadType;
             }>(`/load-types/${id}`),
         add: (data: FormData) =>
             api
@@ -443,6 +443,28 @@ export const ENDPOINTS = {
                         throw response.error.details.errors;
                     }
                 }),
+    },
+    loads: {
+        getAll: (loadTypeId: string, page: number) =>
+            api.get(`/loads?load_type_id=${loadTypeId}&page=${page}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: Load;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: Load;
+            }>(`/loads/${id}`),
     },
     ticketRules: {
         getAll: () =>
