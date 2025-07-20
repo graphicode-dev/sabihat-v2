@@ -20,11 +20,7 @@ const useContactUs = () => {
 };
 
 function ContactUs() {
-    const {
-        data: contactUsData = {} as ContactUsType,
-        error,
-        isLoading,
-    } = useContactUs();
+    const { data: contactUsData = [], error, isLoading } = useContactUs();
 
     if (isLoading) return <Loading />;
     if (error) return <Error message={error?.message || "Unknown error"} />;
@@ -33,44 +29,16 @@ function ContactUs() {
         <div>
             {/* Contact Us Tab - Second Image */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
-                <div>
-                    <h3 className="text-sm text-gray-500 mb-1">Facebook</h3>
-                    <p className="text-base font-medium">••••••••••••••••</p>
-                </div>
-                <div>
-                    <h3 className="text-sm text-gray-500 mb-1">Whatsapp</h3>
-                    <p className="text-base font-medium">••••••••••••••••</p>
-                </div>
-                <div>
-                    <h3 className="text-sm text-gray-500 mb-1">Instagram</h3>
-                    <p className="text-base font-medium">••••••••••••••••</p>
-                </div>
-                <div>
-                    <h3 className="text-sm text-gray-500 mb-1">LinkedIn</h3>
-                    <p className="text-base font-medium">••••••••••••••••</p>
-                </div>
-                <div>
-                    <h3 className="text-sm text-gray-500 mb-1">Twitter</h3>
-                    <p className="text-base font-medium">••••••••••••••••</p>
-                </div>
-                <div>
-                    <h3 className="text-sm text-gray-500 mb-1">Snapchat</h3>
-                    <p className="text-base font-medium">••••••••••••••••</p>
-                </div>
-                <div>
-                    <h3 className="text-sm text-gray-500 mb-1">
-                        Email Address
-                    </h3>
-                    <p className="text-base font-medium">••••••••••••••••</p>
-                </div>
-                <div>
-                    <h3 className="text-sm text-gray-500 mb-1">Hotline</h3>
-                    <p className="text-base font-medium">••••••••••••••••</p>
-                </div>
-                <div>
-                    <h3 className="text-sm text-gray-500 mb-1">Phone Number</h3>
-                    <p className="text-base font-medium">••••••••••••••••</p>
-                </div>
+                {contactUsData.map((contactUs: ContactUsType) => (
+                    <div key={contactUs.id}>
+                        <h3 className="text-sm text-gray-500 mb-1">
+                            {contactUs.name}
+                        </h3>
+                        <p className="text-base font-medium">
+                            {contactUs.value}
+                        </p>
+                    </div>
+                ))}
             </div>
         </div>
     );

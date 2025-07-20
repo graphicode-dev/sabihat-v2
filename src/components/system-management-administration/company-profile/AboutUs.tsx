@@ -35,28 +35,10 @@ function AboutUs() {
             <div className="flex flex-col gap-8 w-full">
                 <div className="text-left">
                     <h3 className="text-sm text-gray-500 mb-1">
-                        Who We Are Statement
+                        {aboutUsData.name}
                     </h3>
                     <p className="text-base font-medium break-all">
-                        ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
-                    </p>
-                </div>
-                <div className="text-left">
-                    <h3 className="text-sm text-gray-500 mb-1">Vision</h3>
-                    <p className="text-base font-medium break-all">
-                        ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
-                    </p>
-                </div>
-                <div className="text-left">
-                    <h3 className="text-sm text-gray-500 mb-1">Mission</h3>
-                    <p className="text-base font-medium break-all">
-                        ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
-                    </p>
-                </div>
-                <div className="text-left">
-                    <h3 className="text-sm text-gray-500 mb-1">Purpose</h3>
-                    <p className="text-base font-medium break-all">
-                        ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
+                        {aboutUsData.value}
                     </p>
                 </div>
             </div>

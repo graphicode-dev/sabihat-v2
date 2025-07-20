@@ -85,13 +85,13 @@ export const ENDPOINTS = {
             ApiResponseWrapper<{
                 success: boolean;
                 message: string;
-                data: ContactUsType;
+                data: ContactUsType[];
             }>
         > =>
             api.get<{
                 success: boolean;
                 message: string;
-                data: ContactUsType;
+                data: ContactUsType[];
             }>(`/company-profile/contact-us`),
     },
     companyAboutUs: {
