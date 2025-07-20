@@ -31,6 +31,7 @@ import {
 } from "../pages/dashboard/system-management-administration/company-profile/types";
 import { UserProfile } from "../pages/dashboard/system-management-administration/user-profiles/types";
 import { Commission } from "../pages/dashboard/business-partners-management/commissions/types";
+import { MarkUp } from "../pages/dashboard/business-partners-management/markup-discounts/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -659,6 +660,39 @@ export const ENDPOINTS = {
         add: (data: FormData) =>
             api
                 .post(`/commissions`, data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    if (response.error) {
+                        throw response.error.details.errors;
+                    }
+                }),
+    },
+    markupDiscounts: {
+        getAll: (
+            page: number
+        ): Promise<ApiResponseWrapper<ApiResponse<MarkUp>>> =>
+            api.get<ApiResponse<MarkUp>>(`/markup-discounts?page=${page}`),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: MarkUp;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: MarkUp;
+            }>(`/markup-discounts/${id}`),
+        add: (data: FormData) =>
+            api
+                .post(`/markup-discounts`, data, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "multipart/form-data",

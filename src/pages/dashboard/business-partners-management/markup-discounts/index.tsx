@@ -1,10 +1,44 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { DynamicTable } from "../../../../components/table";
 import PageLayout from "../../../../layout/PageLayout";
-import { TableColumn, TableData } from "../../../../types/table";
+import { TableColumn } from "../../../../types/table";
+import { MarkUp } from "./types";
+import {
+    transformPaginatedDataToTableData,
+    useInfinitePaginatedQuery,
+} from "../../../../utils";
+import Error from "../../../../components/ui/Error";
+import Loading from "../../../../components/ui/Loading";
+import { useEffect } from "react";
+
+const useInfiniteMarkupDiscounts = (
+    page: number = 1,
+    options?: { enabled?: boolean }
+) => {
+    return useInfinitePaginatedQuery<MarkUp>({
+        queryKey: ["markupDiscount", page.toString()],
+        endpointKey: "markupDiscounts",
+        enabled: options?.enabled ?? true,
+    });
+};
 
 function MarkUpPage() {
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const currentPage = Number(searchParams.get("page")) || 1;
+
+    const {
+        data: markupDiscountData,
+        error,
+        isLoading,
+        fetchNextPage,
+        isFetchingNextPage,
+    } = useInfiniteMarkupDiscounts(currentPage);
+
+    const handlePageChange = (page: number) => {
+        if (page === currentPage) return;
+        setSearchParams({ page: page.toString() });
+    };
     const columns: TableColumn[] = [
         {
             id: "partner",
@@ -32,64 +66,36 @@ function MarkUpPage() {
             accessorKey: "visitType",
         },
     ];
-    const data: TableData[] = [
-        {
-            id: "1",
-            columns: {
-                partner: "*****",
-                class: "*****",
-                commissionType: "*****",
-                commissionValue: "*****",
-                visitType: "*****",
-            },
-        },
-        {
-            id: "2",
-            columns: {
-                partner: "*****",
-                class: "*****",
-                commissionType: "*****",
-                commissionValue: "*****",
-                visitType: "*****",
-            },
-        },
-        {
-            id: "3",
-            columns: {
-                partner: "*****",
-                class: "*****",
-                commissionType: "*****",
-                commissionValue: "*****",
-                visitType: "*****",
-            },
-        },
-        {
-            id: "4",
-            columns: {
-                partner: "*****",
-                class: "*****",
-                commissionType: "*****",
-                commissionValue: "*****",
-                visitType: "*****",
-            },
-        },
-        {
-            id: "5",
-            columns: {
-                partner: "*****",
-                class: "*****",
-                commissionType: "*****",
-                commissionValue: "*****",
-                visitType: "*****",
-            },
-        },
-    ];
+
+    const flattenedData = transformPaginatedDataToTableData<MarkUp>(
+        markupDiscountData,
+        (item) => ({
+            partner: item.businessPartner.name,
+            class: item.partnersClassification.nameClass,
+            commissionType: item.markupDiscountType,
+            commissionValue: item.markupDiscountValue,
+            visitType: item.visitType,
+        })
+    );
+
+    useEffect(() => {
+        if (
+            currentPage > 1 &&
+            markupDiscountData?.pages &&
+            markupDiscountData?.pages.length < currentPage
+        ) {
+            fetchNextPage();
+        }
+    }, [currentPage, markupDiscountData?.pages, fetchNextPage]);
+
+    if (isLoading && !markupDiscountData) return <Loading />;
+    if (error) return <Error message={error?.message || "Unknown error"} />;
 
     return (
         <PageLayout>
             <DynamicTable
                 title="All  Markup & Discounts Board"
-                data={data}
+                data={flattenedData}
                 columns={columns}
                 addLabel="Add Markup & Discounts Board"
                 onAddClick={() => {
@@ -103,7 +109,18 @@ function MarkUpPage() {
                     )
                 }
                 hideBorder
+                itemsPerPage={markupDiscountData?.pages[0]?.perPage}
+                currentPage={currentPage}
+                lastPage={markupDiscountData?.pages[0]?.lastPage}
+                totalCount={markupDiscountData?.pages[0]?.totalCount}
+                onPageChange={handlePageChange}
             />
+
+            {isFetchingNextPage && (
+                <div className="flex justify-center mt-4">
+                    <Loading />
+                </div>
+            )}
         </PageLayout>
     );
 }
