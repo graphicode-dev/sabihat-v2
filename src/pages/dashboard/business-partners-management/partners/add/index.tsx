@@ -5,15 +5,19 @@ import QuotaManagementAddForm from "../../../../../components/business-partners-
 import ContactInformationAddForm from "../../../../../components/business-partners-management/add/ContactInformationAddForm";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-    PartnerFormProvider,
-    usePartnerForm,
-} from "../../../../../contexts/PartnerFormContext";
+    GenericFormProvider,
+    useGenericForm,
+    TabConfig,
+    SubmitConfig,
+} from "../../../../../contexts/GenericFormContext";
 import { useEffect } from "react";
+import { ENDPOINTS } from "../../../../../config/endpoints";
+
 
 function PartnersAddContent() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { tabsWithErrors, lockTab } = usePartnerForm();
+    const { tabsWithErrors, lockTab } = useGenericForm();
     const searchParams = new URLSearchParams(location.search);
     const currentTab = searchParams.get("tab") || "partnersMaster";
 
@@ -66,10 +70,74 @@ function PartnersAddContent() {
 
 // Wrapper component that provides the context
 function PartnersAddPage() {
+    // Define tab configurations for partner form
+    const tabConfigs: TabConfig[] = [
+        {
+            id: "partnerMaster",
+            urlParam: "partnersMaster",
+            initialState: {
+                name: "",
+                phoneCode: "",
+                phoneNumber: "",
+                email: "",
+                address: "",
+                layerId: "",
+                image: null,
+            },
+            errorSchema: {
+                name: "",
+                phoneCode: "",
+                phoneNumber: "",
+                email: "",
+                address: "",
+                layerId: "",
+                image: "",
+            },
+        },
+        {
+            id: "quotaManagement",
+            urlParam: "quota-management-credit-limit",
+            initialState: {
+                limitAmount: "",
+                ticketQuota: "",
+            },
+            errorSchema: {
+                limitAmount: "",
+                ticketQuota: "",
+            },
+        },
+        {
+            id: "contactInformation",
+            urlParam: "contactInformation",
+            initialState: [
+                {
+                    name: "",
+                    title: "",
+                    phoneCode: "",
+                    phoneNumber: "",
+                    email: "",
+                    hotline: "",
+                },
+            ],
+            errorSchema: [],
+        },
+    ];
+
+    // Define submit configuration
+    const submitConfig: SubmitConfig = {
+        endpoint: (formData) => ENDPOINTS.partners.add(formData as any),
+        successMessage: "Partner added successfully",
+        errorMessage: "Failed to add partner",
+        successRedirect: "/dashboard/business-partners-management/partners",
+    };
+
     return (
-        <PartnerFormProvider>
+        <GenericFormProvider
+            tabConfigs={tabConfigs}
+            submitConfig={submitConfig}
+        >
             <PartnersAddContent />
-        </PartnerFormProvider>
+        </GenericFormProvider>
     );
 }
 

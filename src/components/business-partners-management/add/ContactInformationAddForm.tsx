@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { z } from "zod";
-import { usePartnerForm } from "../../../contexts/PartnerFormContext";
+import { useGenericForm } from "../../../contexts/GenericFormContext";
 import { ContactInformation } from "../../../pages/dashboard/business-partners-management/partners/types";
 import { DynamicTable } from "../../table";
 import { TableColumn, TableData } from "../../../types/table";
@@ -34,13 +34,16 @@ function ContactInformationAddForm({
     const [tableKey, setTableKey] = useState<number>(0);
 
     const {
-        contactInformation,
-        updateContactInformation,
+        formData,
+        updateFormSection,
         isSubmitting,
         errors: contextErrors,
         lockTab,
         submitForm,
-    } = usePartnerForm();
+    } = useGenericForm();
+
+    // Get the contact information data from the form data
+    const contactInformation = formData.contactInformation || [];
 
     // Initialize contacts from context data when component mounts
     useEffect(() => {
@@ -284,16 +287,18 @@ function ContactInformationAddForm({
                       hotline: contact.hotline,
                   },
               }))
-            : (contactInformation || []).map((contact, index) => ({
-                  id: index.toString(),
-                  columns: {
-                      name: contact.name,
-                      title: contact.title,
-                      phoneNumber: `${contact.phoneCode} ${contact.phoneNumber}`,
-                      email: contact.email,
-                      hotline: contact.hotline,
-                  },
-              }));
+            : (contactInformation || []).map(
+                  (contact: ContactInformation, index: number) => ({
+                      id: index.toString(),
+                      columns: {
+                          name: contact.name,
+                          title: contact.title,
+                          phoneNumber: `${contact.phoneCode} ${contact.phoneNumber}`,
+                          email: contact.email,
+                          hotline: contact.hotline,
+                      },
+                  })
+              );
 
     const { control, handleSubmit, formState, reset, setValue } =
         useForm<ContactInformation>({
@@ -370,7 +375,7 @@ function ContactInformationAddForm({
         const contactsCopy = JSON.parse(JSON.stringify(contacts));
 
         // Force update the context with all contacts
-        updateContactInformation(contactsCopy);
+        updateFormSection("contactInformation", contactsCopy);
 
         // Give React a moment to update the state
         await new Promise((resolve) => setTimeout(resolve, 0));
@@ -460,7 +465,7 @@ function ContactInformationAddForm({
                     const index = parseInt(id);
                     const newContacts = contacts.filter((_, i) => i !== index);
                     setContacts(newContacts);
-                    updateContactInformation(newContacts);
+                    updateFormSection("contactInformation", newContacts);
                     setTableKey((prev) => prev + 1);
 
                     // Clear errors for this contact
@@ -486,7 +491,7 @@ function ContactInformationAddForm({
                         (_, index) => index !== contactIndex
                     );
                     setContacts(newContacts);
-                    updateContactInformation(newContacts);
+                    updateFormSection("contactInformation", newContacts);
                     setTableKey((prev) => prev + 1);
 
                     // Clear errors for this contact

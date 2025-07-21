@@ -494,6 +494,12 @@ const BusinessPartnersAuthoritiesEditPage = lazy(
             "../pages/dashboard/business-partners-management/authorities/edit"
         )
 );
+const BusinessPartnersAuthoritiesAddPage = lazy(
+    () =>
+        import(
+            "../pages/dashboard/business-partners-management/authorities/add"
+        )
+);
 // #endregion Authorities
 
 // #endregion Business Partners Management
@@ -1262,6 +1268,7 @@ const componentRegistry: Record<string, any> = {
         main: BusinessPartnersAuthoritiesPage,
         view: BusinessPartnersAuthoritiesViewPage,
         edit: BusinessPartnersAuthoritiesEditPage,
+        add: BusinessPartnersAuthoritiesAddPage,
     },
 
     // Ship Trip Management

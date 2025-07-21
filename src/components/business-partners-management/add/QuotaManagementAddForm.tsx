@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { z } from "zod";
-import { usePartnerForm } from "../../../contexts/PartnerFormContext";
+import { useGenericForm } from "../../../contexts/GenericFormContext";
 import { QuotaManagement } from "../../../pages/dashboard/business-partners-management/partners/types";
 
 const quotaManagementSchema = z.object({
@@ -22,12 +22,15 @@ function QuotaManagementAddForm({
     handleChangeTab,
 }: QuotaManagementAddFormProps) {
     const {
-        quotaManagement,
-        updateQuotaManagement,
+        formData,
+        updateFormSection,
         isSubmitting,
         errors: contextErrors,
         lockTab,
-    } = usePartnerForm();
+    } = useGenericForm();
+    
+    // Get the quota management data from the form data
+    const quotaManagement = formData.quotaManagement || {};
 
     // Extract errors for this form
     const formErrors: QuotaManagement = contextErrors.quotaManagement || {
@@ -55,7 +58,7 @@ function QuotaManagementAddForm({
 
     const onSubmit = async (formData: QuotaManagement) => {
         // Update the context with the form data
-        updateQuotaManagement(formData);
+        updateFormSection("quotaManagement", formData);
 
         // Navigate to the next tab
         handleChangeTab("contactInformation");

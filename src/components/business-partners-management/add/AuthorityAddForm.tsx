@@ -1,38 +1,34 @@
-import { FormInput } from "../../form";
-import { FormButtons } from "../../form";
-import FormFieldsLayout from "../../../layout/FormFieldsLayout";
-import FormLayout from "../../../layout/FormLayout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
+import FormLayout from "../../../layout/FormLayout";
+import FormFieldsLayout from "../../../layout/FormFieldsLayout";
+import { FormButtons, FormInput } from "../../form";
 import { useGenericForm } from "../../../contexts/GenericFormContext";
 import {
-    PartnersMaster,
-    PartnersMasterError,
-} from "../../../pages/dashboard/business-partners-management/partners/types";
-import { useEffect } from "react";
+    AuthorityError,
+    AuthorityFormData,
+} from "../../../pages/dashboard/business-partners-management/authorities/types";
 
-const partnersMasterSchema = z.object({
+const authoritySchema = z.object({
     name: z.string(),
     phoneCode: z.string(),
     phoneNumber: z.string(),
     email: z.string(),
     address: z.string(),
-    layerId: z.string(),
-    image: z.instanceof(File).nullable(),
 });
 
-type PartnersMasterAddFormProps = {
+type AuthorityAddFormProps = {
     handleChangeTab: (tab: string) => void;
 };
 
-function PartnersMasterAddForm({
+function AuthorityAddForm({
     handleChangeTab,
-}: PartnersMasterAddFormProps) {
+}: AuthorityAddFormProps) {
     const navigate = useNavigate();
 
-    // Get form data and errors from context
     const {
         formData,
         updateFormSection,
@@ -40,36 +36,30 @@ function PartnersMasterAddForm({
         errors: contextErrors,
     } = useGenericForm();
 
-    // Get the partner master data from the form data
-    const partnerMaster = formData.partnerMaster || {};
+    const authority = formData.authority || {};
 
-    // Extract errors for this form
-    const formErrors: PartnersMasterError = contextErrors.partnerMaster || {
-        name: "",
-        phoneCode: "",
-        phoneNumber: "",
-        email: "",
-        address: "",
-        layerId: "",
-        image: "",
-    };
+    const formErrors: AuthorityError =
+        contextErrors.authority || {
+            name: "",
+            phoneCode: "",
+            phoneNumber: "",
+            email: "",
+            address: "",
+        };
 
     const { control, handleSubmit, formState, setValue } =
-        useForm<PartnersMaster>({
-            resolver: zodResolver(partnersMasterSchema),
+        useForm<AuthorityFormData>({
+            resolver: zodResolver(authoritySchema),
             defaultValues: {
-                name: partnerMaster.name,
-                phoneCode: partnerMaster.phoneCode,
-                phoneNumber: partnerMaster.phoneNumber,
-                email: partnerMaster.email,
-                address: partnerMaster.address,
-                layerId: partnerMaster.layerId,
-                image: partnerMaster.image,
+                name: authority.name,
+                phoneCode: authority.phoneCode,
+                phoneNumber: authority.phoneNumber,
+                email: authority.email,
+                address: authority.address,
             },
             mode: "onChange",
         });
 
-    // Handle phone extraction
     const handlePhoneExtracted = (phoneData: {
         fullNumber: string;
         phoneCode: string;
@@ -79,29 +69,26 @@ function PartnersMasterAddForm({
         setValue("phoneNumber", phoneData.fullNumber);
     };
 
-    // Update form values when context data changes
     useEffect(() => {
-        setValue("name", partnerMaster.name || "");
-        setValue("phoneCode", partnerMaster.phoneCode || "");
-        setValue("phoneNumber", partnerMaster.phoneNumber || "");
-        setValue("email", partnerMaster.email || "");
-        setValue("address", partnerMaster.address || "");
-        setValue("layerId", partnerMaster.layerId || "");
-        setValue("image", partnerMaster.image || null);
-    }, [partnerMaster, setValue]);
+        setValue("name", authority.name || "");
+        setValue("phoneCode", authority.phoneCode || "");
+        setValue("phoneNumber", authority.phoneNumber || "");
+        setValue("email", authority.email || "");
+        setValue("address", authority.address || "");
+    }, [authority, setValue]);
 
-    const onSubmit = async (formData: PartnersMaster) => {
+    const onSubmit = async (formData: AuthorityFormData) => {
         const phoneCodeLength = formData.phoneCode?.length || 0;
         const phoneNumberOnly = formData.phoneNumber.substring(phoneCodeLength);
 
         // Update the context with the form data
-        updateFormSection("partnerMaster", {
+        updateFormSection("authority", {
             ...formData,
             phoneNumber: phoneNumberOnly,
         });
 
         // Navigate to the next tab
-        handleChangeTab("quota-management-credit-limit");
+        handleChangeTab("contactInformation");
     };
 
     return (
@@ -116,6 +103,7 @@ function PartnersMasterAddForm({
                     name="name"
                     control={control}
                     label="Name"
+                    placeholder="Enter Name"
                     error={formErrors.name}
                 />
 
@@ -123,8 +111,9 @@ function PartnersMasterAddForm({
                 <FormInput
                     name="phoneNumber"
                     control={control}
-                    label="Phone Number"
+                    label="Phone"
                     type="tel"
+                    placeholder="Enter Phone"
                     error={formErrors.phoneNumber}
                     onPhoneExtracted={handlePhoneExtracted}
                 />
@@ -134,7 +123,7 @@ function PartnersMasterAddForm({
                     name="email"
                     control={control}
                     label="Email"
-                    type="email"
+                    placeholder="Enter Email"
                     error={formErrors.email}
                 />
 
@@ -143,23 +132,8 @@ function PartnersMasterAddForm({
                     name="address"
                     control={control}
                     label="Address"
+                    placeholder="Enter Address"
                     error={formErrors.address}
-                />
-
-                {/* Layer ID */}
-                <FormInput
-                    name="layerId"
-                    control={control}
-                    label="Layer ID"
-                    error={formErrors.layerId}
-                />
-
-                {/* Image */}
-                <FormInput
-                    name="image"
-                    control={control}
-                    type="file"
-                    error={formErrors.image}
                 />
             </FormFieldsLayout>
 
@@ -175,4 +149,4 @@ function PartnersMasterAddForm({
     );
 }
 
-export default PartnersMasterAddForm;
+export default AuthorityAddForm;

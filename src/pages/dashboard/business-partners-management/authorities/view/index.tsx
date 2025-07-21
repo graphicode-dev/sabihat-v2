@@ -1,39 +1,81 @@
 import ViewCard from "../../../../../components/ui/ViewCard";
 import PageLayout from "../../../../../layout/PageLayout";
-import defaultAvatar from "../../../../../assets/images/default-user.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from "../../../../../hooks/useToast";
+import { useQuery } from "@tanstack/react-query";
+import { ENDPOINTS } from "../../../../../config/endpoints";
+import { Authority } from "../types";
+import Loading from "../../../../../components/ui/Loading";
+import Error from "../../../../../components/ui/Error";
+
+const useAuthorityById = (id: string) => {
+    return useQuery({
+        queryKey: ["authority", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.authorities.getOne(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
+
+const useAuthorityContactInformationById = (id: string) => {
+    return useQuery({
+        queryKey: ["authorityContactInformation", id],
+        queryFn: async () => {
+            const response =
+                await ENDPOINTS.authoritiesContactInformation.getOne(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data?.data || [];
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
 
 function AuthoritiesViewPage() {
-    const { id } = useParams();
     const navigate = useNavigate();
-    const { addToast, addAlertToast } = useToast();
+    const { id } = useParams();
+    const { addAlertToast, addToast } = useToast();
 
-    const data = {
-        user: {
-            avatar: defaultAvatar,
-            name: "*****",
-        },
-        authorityMaster: {
-            name: "*****",
-            phone: "*****",
-            address: "*****",
-        },
-        contactInformation: {
-            name: "*****",
-            title: "*****",
-            phone: "*****",
-            email: "*****",
-            hotline: "*****",
-        },
-    };
+    const {
+        data: authority,
+        error: authorityError,
+        isLoading: authorityLoading,
+    } = useAuthorityById(id as string);
+    const {
+        data: authorityContactInformation = [],
+        error: authorityContactInformationError,
+        isLoading: authorityContactInformationLoading,
+    } = useAuthorityContactInformationById(id as string);
+
+    const authorityData = (authority?.data as Authority) || ({} as Authority);
+    const authorityContactInformationData = authorityContactInformation || [];
+
+    if (authorityLoading || authorityContactInformationLoading)
+        return <Loading />;
+    if (authorityError || authorityContactInformationError)
+        return <Error message={authorityError?.message || "Unknown error"} />;
 
     return (
         <PageLayout showBorder>
             <ViewCard
                 variant="user"
-                image={data.user.avatar}
-                title={data.user.name}
+                title={authorityData.name}
                 onEdit={() =>
                     navigate(
                         `/business-partners-management/authorities/edit/${id}`
@@ -67,52 +109,71 @@ function AuthoritiesViewPage() {
                 buttons
                 hideBorder
             />
+
             <ViewCard
                 hideHeaderTitle
                 variant="default"
                 data={{
                     rows: [
                         {
-                            title: "Authortiy master",
+                            title: "Authority master",
                             fields: [
                                 {
                                     label: "Name",
-                                    value: data.authorityMaster.name,
+                                    value: authorityData.name,
                                 },
                                 {
                                     label: "Phone",
-                                    value: data.authorityMaster.phone,
+                                    value:
+                                        authorityData.phoneCode +
+                                        authorityData.phoneNumber,
                                 },
                                 {
                                     label: "Address",
-                                    value: data.authorityMaster.address,
+                                    value: authorityData.address,
                                 },
                             ],
                         },
+                    ],
+                }}
+                hideBorder
+            />
+
+            <ViewCard
+                hideHeaderTitle
+                variant="default"
+                gridCols={5}
+                data={{
+                    rows: [
                         {
                             title: "Contact Information",
-                            fields: [
-                                {
-                                    label: "Name",
-                                    value: data.contactInformation.name,
-                                },
-                                {
-                                    label: "Title",
-                                    value: data.contactInformation.title,
-                                },
-                                {
-                                    label: "Phone",
-                                    value: data.contactInformation.phone,
-                                },
-                                {
-                                    label: "Email",
-                                    value: data.contactInformation.email,
-                                },
-                                {
-                                    label: "Hotline",
-                                    value: data.contactInformation.hotline,
-                                },
-                            ],
+                            fields: authorityContactInformationData?.flatMap(
+                                (item) => [
+                                    {
+                                        label: "Name",
+                                        value: item.name,
+                                    },
+                                    {
+                                        label: "Phone",
+                                        value:
+                                            item.phoneCode +
+                                            " " +
+                                            item.phoneNumber,
+                                    },
+                                    {
+                                        label: "Email",
+                                        value: item.email,
+                                    },
+                                    {
+                                        label: "Title",
+                                        value: item.title,
+                                    },
+                                    {
+                                        label: "Hotline",
+                                        value: item.hotline,
+                                    },
+                                ]
+                            ),
                         },
                     ],
                 }}

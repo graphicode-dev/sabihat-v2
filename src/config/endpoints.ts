@@ -32,6 +32,10 @@ import {
 import { UserProfile } from "../pages/dashboard/system-management-administration/user-profiles/types";
 import { Commission } from "../pages/dashboard/business-partners-management/commissions/types";
 import { MarkUp } from "../pages/dashboard/business-partners-management/markup-discounts/types";
+import {
+    Authority,
+    AuthorityContactInformation,
+} from "../pages/dashboard/business-partners-management/authorities/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -703,5 +707,54 @@ export const ENDPOINTS = {
                         throw response.error.details.errors;
                     }
                 }),
+    },
+    authorities: {
+        getAll: (
+            page: number
+        ): Promise<ApiResponseWrapper<ApiResponse<Authority>>> =>
+            api.get<ApiResponse<Authority>>(`/authorities?page=${page}`),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: Authority;
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: Authority;
+            }>(`/authorities/${id}`),
+        add: (data: FormData) =>
+            api
+                .post(`/authorities`, data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    if (response.error) {
+                        throw response.error.details.errors;
+                    }
+                }),
+    },
+    authoritiesContactInformation: {
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: AuthorityContactInformation[];
+            }>
+        > =>
+            api.get<{
+                success: boolean;
+                message: string;
+                data: AuthorityContactInformation[];
+            }>(`/authorities/${id}/contact-info`),
     },
 };
