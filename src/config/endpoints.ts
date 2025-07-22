@@ -36,6 +36,7 @@ import {
     Authority,
     AuthorityContactInformation,
 } from "../pages/dashboard/business-partners-management/authorities/types";
+import { Port } from "../pages/dashboard/ship-trip-management/port/types";
 
 export const ENDPOINTS = {
     auth: {
@@ -756,5 +757,39 @@ export const ENDPOINTS = {
                 message: string;
                 data: AuthorityContactInformation[];
             }>(`/authorities/${id}/contact-info`),
+    },
+    // Ship And Trip Management
+    port: {
+        getAll: () =>
+            api.get("ports", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }),
+        getOne: (
+            id: string
+        ): Promise<
+            ApiResponseWrapper<{
+                success: boolean;
+                message: string;
+                data: Port;
+            }>
+        > =>
+            api.get<{ success: boolean; message: string; data: Port }>(
+                `/ports/${id}`
+            ),
+        add: (data: FormData) =>
+            api
+                .post(`/ports`, data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    if (response.error) {
+                        throw response.error.details.errors;
+                    }
+                }),
     },
 };

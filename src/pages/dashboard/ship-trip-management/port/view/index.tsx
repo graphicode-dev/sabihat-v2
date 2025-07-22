@@ -1,36 +1,49 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { TableData } from "../../../../../types/table";
 import PageLayout from "../../../../../layout/PageLayout";
 import ViewCard from "../../../../../components/ui/ViewCard";
 import { useToast } from "../../../../../hooks/useToast";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { ENDPOINTS } from "../../../../../config/endpoints";
+import { Port } from "../types";
+import Loading from "../../../../../components/ui/Loading";
+import Error from "../../../../../components/ui/Error";
+
+const usePortById = (id: string) => {
+    return useQuery({
+        queryKey: ["port", id],
+        queryFn: async () => {
+            const response = await ENDPOINTS.port.getOne(id);
+
+            if (response.error) {
+                return Promise.reject(response.error.message);
+            }
+
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: 1,
+        retryDelay: 1000,
+        enabled: !!id,
+    });
+};
 
 function PortViewPage() {
     const { id } = useParams();
     const { addToast, addAlertToast } = useToast();
     const navigate = useNavigate();
-    const [userData, setUserData] = useState<TableData | null>(null);
 
-    useEffect(() => {
-        // Fetch user data from API
-        const fetchUserData = async () => {
-            const user = data.find((item: TableData) => item.id === id);
-            setUserData(user || null);
-        };
-        fetchUserData();
-    }, []);
+    const {
+        data: port,
+        isLoading: portLoading,
+        error: portError,
+    } = usePortById(id || "");
 
-    const data = Array.from({ length: 100 }, (_, index) => {
-        return {
-            id: (index + 1).toString(),
-            columns: {
-                "Port Name": "*******",
-                "Abbreviation Code": "*******",
-                Country: "*******",
-            },
-        };
-    });
+    const portData = (port?.data as Port) || ({} as Port);
+
+    if (portLoading) return <Loading />;
+    if (portError)
+        return <Error message={portError?.message || "Unknown error"} />;
 
     return (
         <PageLayout>
@@ -42,19 +55,15 @@ function PortViewPage() {
                             fields: [
                                 {
                                     label: "Port Name",
-                                    value: userData?.columns[
-                                        "Port Name"
-                                    ]?.toString(),
+                                    value: portData?.name?.toString(),
                                 },
                                 {
                                     label: "Abbreviation Code",
-                                    value: userData?.columns[
-                                        "Abbreviation Code"
-                                    ]?.toString(),
+                                    value: portData?.abbreviationCode?.toString(),
                                 },
                                 {
                                     label: "Country",
-                                    value: userData?.columns.Country?.toString(),
+                                    value: portData?.country?.name?.toString(),
                                 },
                             ],
                         },
@@ -72,8 +81,7 @@ function PortViewPage() {
                                 onClick: () => {
                                     addToast({
                                         type: "success",
-                                        message:
-                                            "Port deleted successfully",
+                                        message: "Port deleted successfully",
                                         title: "Success!",
                                     });
                                     navigate(-1);

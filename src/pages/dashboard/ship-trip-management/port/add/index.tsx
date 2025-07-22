@@ -9,19 +9,18 @@ import FormFieldsLayout from "../../../../../layout/FormFieldsLayout";
 import { FormButtons, FormInput } from "../../../../../components/form";
 import { SearchedDropDown } from "../../../../../components/SearchedDropDown";
 import PageLayout from "../../../../../layout/PageLayout";
+import { ENDPOINTS } from "../../../../../config/endpoints";
 
 type Port = {
-    id?: string;
-    portName: string;
+    name: string;
+    countryId: string;
     abbreviationCode: string;
-    country: string;
 };
 
 const portSchema = z.object({
-    id: z.string().optional(),
-    portName: z.string(),
+    name: z.string(),
+    countryId: z.string(),
     abbreviationCode: z.string(),
-    country: z.string(),
 });
 
 function PortAddPage() {
@@ -29,9 +28,9 @@ function PortAddPage() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<Port>({
-        portName: "",
+        name: "",
+        countryId: "",
         abbreviationCode: "",
-        country: "",
     });
 
     const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
@@ -39,88 +38,56 @@ function PortAddPage() {
     const { control, handleSubmit, reset, formState } = useForm<Port>({
         resolver: zodResolver(portSchema),
         defaultValues: {
-            id: "",
-            portName: "",
+            name: "",
+            countryId: "",
             abbreviationCode: "",
-            country: "",
         },
         mode: "onChange",
     });
 
     const onSubmit = async (formData: Port) => {
         setIsLoading(true);
-        try {
-            // Create FormData object for file upload
-            const apiFormData = new FormData();
 
-            // Always append all fields, even if they're empty strings
-            // This ensures the API receives all fields
-            if (formData.portName) {
-                apiFormData.append("portName", formData.portName);
-            }
-            if (formData.abbreviationCode) {
-                apiFormData.append(
-                    "abbreviationCode",
-                    formData.abbreviationCode
-                );
-            }
-            if (formData.country) {
-                apiFormData.append("country", formData.country);
-            }
+        const apiFormData = new FormData();
 
-            // Simulate API call success
-            // In a real app, you would send apiFormData to your backend
-            // const response = await api.post('/company', apiFormData);
-
-            addToast({
-                message: "Port updated successfully",
-                type: "success",
-                title: "Success!",
-            });
-
-            reset();
-            navigate(-1);
-        } catch (error: any) {
-            console.error("Error updating port:", error);
-            if (error?.errors) {
-                // Map API error fields to our frontend field names
-                const mappedErrors: any = {};
-
-                if (error.errors.portName) {
-                    mappedErrors.portName = error.errors.portName[0];
-                }
-                if (error.errors.abbreviationCode) {
-                    mappedErrors.abbreviationCode =
-                        error.errors.abbreviationCode[0];
-                }
-                if (error.errors.country) {
-                    mappedErrors.country = error.errors.country[0];
-                }
-
-                console.log("Mapped errors:", mappedErrors);
-                setErrors(mappedErrors);
-            } else {
-                addToast({
-                    message: "An unexpected error occurred. Please try again.",
-                    type: "error",
-                    title: "Error!",
-                });
-            }
-        } finally {
-            setIsLoading(false);
+        if (formData.name) {
+            apiFormData.append("name", formData.name);
         }
+        if (formData.abbreviationCode) {
+            apiFormData.append("abbreviationCode", formData.abbreviationCode);
+        }
+        if (formData.countryId) {
+            apiFormData.append("countryId", formData.countryId);
+        }
+
+        await ENDPOINTS.port
+            .add(apiFormData)
+            .then(() => {
+                addToast({
+                    message: "Port added successfully",
+                    type: "success",
+                    title: "Success!",
+                });
+                reset();
+                navigate(-1);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                return setErrors(error);
+            });
     };
 
     return (
         <PageLayout>
             <FormLayout handleSubmit={handleSubmit} handleFormSubmit={onSubmit}>
                 <FormFieldsLayout title="Add">
-                    {/* portName */}
+                    {/* name */}
                     <FormInput
-                        name="portName"
+                        name="name"
                         control={control}
                         label="Port Name"
-                        error={errors.portName}
+                        error={errors.name}
                     />
 
                     {/* abbreviationCode */}
@@ -133,7 +100,7 @@ function PortAddPage() {
 
                     {/* country */}
                     <SearchedDropDown
-                        name="country"
+                        name="countryId"
                         control={control}
                         label="Country"
                         options={[
@@ -148,6 +115,7 @@ function PortAddPage() {
                             setSelectedCountry(value);
                         }}
                         placeholder="Select Country"
+                        error={errors.countryId}
                     />
                 </FormFieldsLayout>
 
